@@ -40,15 +40,23 @@
     </label>
 
     <span @click="termPopup=true">약관보기</span>
-
-    <button class="btn-bottom">가입하기</button>
+    <form @submit="checkForm">
+      <div v-if="activeButton()">
+        <button @click="PopUpEmailModal" class="btn-bottom" >가입하기</button>
+      </div>
+      <div v-else>
+        <button class="btn-bottom disabled" >가입하기</button>
+      </div>
+    </form>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   data: () => {
     return {
+      errors:[],
       email: "",
       password: "",
       passwordConfirm: "",
@@ -67,6 +75,47 @@ export default {
       passwordConfirmType: "password",
       termPopup: false
     };
+  },
+  methods:{
+    join(){
+      axios({
+        url:'http://192.168.43.197:3000/#/user/join/',
+        method:'post',
+        data:{
+          nickName:this.nickName,
+          eamil: this.email,
+          password: this.password,
+          passwordConfirmation: this.passwordConfirmation,
+        }
+      })
+        .then(res=>{
+          console.log(res)
+          this.$router.push({ name:'Join' })
+        })
+        .catch(err=>{
+          console.log(err)
+        })
+    },
+    activeButton: function(){
+      if(this.email && this.password && this.passwordConfirm && this.nickName){
+        return true;
+      }else{ return false; }
+    },
+    checkForm(e) {
+      e.preventDefault();
+      this.errors = [];
+      if (!this.validateEmail(this.email)) {
+        alert("이메일 형식을 확인하세요.");
+      }
+      if (!this.errors.length) return true;
+    },
+    validateEmail(email) {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+    },
+    PopUpEmailModal: function(){
+      alert('회원가입 인증메일이 발송되었습니다.')
+    }
   }
 };
 </script>
