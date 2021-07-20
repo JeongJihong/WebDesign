@@ -25,9 +25,10 @@ import java.time.LocalDateTime;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String uid;
+    private Long uid;
 
     @JsonIgnore
+    private String nickname;
     private String password;
     private String email;
 
