@@ -40,7 +40,7 @@
     </label>
 
     <span @click="termPopup=true">약관보기</span>
-    <form @submit="checkForm">
+    <form @submit="checkForm" @submit.prevent="join">
       <div v-if="activeButton()">
         <button @click="PopUpEmailModal" class="btn-bottom" >가입하기</button>
       </div>
@@ -54,6 +54,7 @@
 <script>
 import axios from 'axios'
 export default {
+  name:'Signup',
   data: () => {
     return {
       errors:[],
@@ -79,18 +80,18 @@ export default {
   methods:{
     join(){
       axios({
-        url:'http://192.168.43.197:3000/#/user/join/',
+        url:'http://192.168.43.197:3000/account/signup',
         method:'post',
         data:{
           nickName:this.nickName,
           eamil: this.email,
           password: this.password,
-          passwordConfirmation: this.passwordConfirmation,
+          passwordConfirm: this.passwordConfirm,
         }
       })
         .then(res=>{
           console.log(res)
-          this.$router.push({ name:'Join' })
+          this.$router.push({ name:'Login' })
         })
         .catch(err=>{
           console.log(err)

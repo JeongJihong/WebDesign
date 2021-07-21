@@ -36,6 +36,7 @@
       <button
         class="btn btn--back btn--login"
         @click="onLogin"
+        @submit.prevent="login"
         :disabled="!isSubmit"
         :class="{disabled : !isSubmit}"
       >로그인</button>
@@ -49,6 +50,16 @@
         <kakaoLogin :component="component" />
         <GoogleLogin :component="component" />
       </div>
+      <!-- 뷰부트스트랩 -->
+      <div class="text-center">
+        <b-button variant="primary">
+          Profile
+          <b-badge variant="light">9 <span class="sr-only">unread messages</span></b-badge>
+        </b-button>
+      </div>
+      하나더
+      
+      <!--  -->
       <div class="add-option">
         <div class="text">
           <p>혹시</p>
@@ -68,6 +79,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import "../../components/css/user.scss";
 import PV from "password-validator";
 import * as EmailValidator from "email-validator";
@@ -76,6 +88,7 @@ import GoogleLogin from "../../components/user/snsLogin/Google.vue";
 import UserApi from "../../api/UserApi";
 
 export default {
+  name:'Login',
   components: {
     KakaoLogin,
     GoogleLogin
@@ -135,12 +148,12 @@ export default {
           data,
           res => {
             //통신을 통해 전달받은 값 콘솔에 출력
-            //console.log(res);
+            console.log(res);
 
             //요청이 끝나면 버튼 활성화
             this.isSubmit = true;
 
-            this.$router.push("/feed/main");
+            // this.$router.push("/feed/main");
           },
           error => {
             //요청이 끝나면 버튼 활성화
@@ -148,7 +161,26 @@ export default {
           }
         );
       }
-    }
+    },
+    login(){
+      axios({
+        url:'http://192.168.43.197:3000/account/login',
+        method:'post',
+        data:{
+          username:this.username,
+          password:this.password,
+        },
+      })
+        .then(res=>{
+          // localStorage.setItem('jwt', res.data.token)
+          console.log('login', localStorage)
+          this.$emit('login',this.username)
+          this.$router.push({ name:'FeedMain' })
+        })
+        .catch(err=>{
+          alert(JSON.stringify(err.data))
+        })
+    },
   },
   data: () => {
     return {
