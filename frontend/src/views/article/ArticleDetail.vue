@@ -24,7 +24,7 @@
         ></b-carousel-slide>
       </b-carousel>
     </div>
-    <p style="margin:10px">Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem, quibusdam eum. Officiis accusantium eum beatae dolore labore pariatur, cupiditate veritatis ipsa. Necessitatibus id laboriosam voluptatibus veritatis delectus, rem error quidem.</p>
+    <p style="margin:10px">Lorem ipsum dosdlor sit amet consectetur adipisicing elit. Autem, quibusdam eum. Officiis accusantium eum beatae dolore labore pariatur, cupiditate veritatis ipsa. Necessitatibus id laboriosam voluptatibus veritatis delectus, rem error quidem.</p>
     <p>?명이 좋아해요! <b-avatar src="https://placekitten.com/300/300" size="2rem"></b-avatar><b-button style="height:35px">스크랩하기</b-button></p>
     <hr>
     <div class="d-flex justify-content-left align-items-center">
