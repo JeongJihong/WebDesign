@@ -39,12 +39,12 @@ export default [
         path: "/404",
         name: "notFound",
         component: PageNotFound
-      },
+    },
     {
-    path: '*',
-    redirect: "/404"
-    // 아래처럼 바로 NotFound 경로를 매칭해도 됨
-    // component: NotFound
+        path: '*',
+        redirect: "/404"
+        // 아래처럼 바로 NotFound 경로를 매칭해도 됨
+        // component: NotFound
     },
     {
         path : '/account/changepassword',
