@@ -1,23 +1,21 @@
 
 
-import Login from './views/user/Login.vue'
-import Join from './views/user/Join.vue'
-import Resetpassword from './views/user/Resetpassword.vue'
+import Login from './views/account/Login.vue'
+import Signup from './views/account/Signup.vue'
+import changePassword from './views/account/changePassword.vue'
 import FeedMain from './views/feed/IndexFeed.vue'
 import Components from './views/Components.vue'
 import PageNotFound from '@/views/PageNotFound'
 export default [
-
-
     {
-        path : '/',
+        path : '/account/Login',
         name : 'Login',
         component : Login
     },
     {
-        path : '/user/join',
-        name : 'Join',
-        component : Join
+        path : '/account/Signup',
+        name : 'Signup',
+        component : Signup
     },
     {
         path : '/feed/main',
@@ -41,8 +39,8 @@ export default [
     // component: NotFound
     },
     {
-        path : '/user/Resetpassword',
-        name : 'Resetpassword',
-        component : Resetpassword
+        path : '/account/changePassword',
+        name : 'changePassword',
+        component : changePassword
     },
 ]
