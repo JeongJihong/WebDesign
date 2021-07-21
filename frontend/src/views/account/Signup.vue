@@ -78,7 +78,7 @@ export default {
     };
   },
   methods:{
-    join(){
+    signup(){
       axios({
         url:'http://192.168.43.197:3000/account/signup',
         method:'post',
