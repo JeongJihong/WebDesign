@@ -16,6 +16,7 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import sun.security.util.Password;
 
 
 @Log
@@ -30,21 +31,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder(){
 //        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
         return new BCryptPasswordEncoder();
+
     }
 
     //authenticationManager를 Bean에 등록
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception{
-        return super.authenticationManagerBean();
-    }
+//    @Bean
+//    @Override
+//    public AuthenticationManager authenticationManagerBean() throws Exception{
+//        return super.authenticationManagerBean();
+//    }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception{
         super.configure(auth);
         auth.inMemoryAuthentication()
-                .withUser(User.withUsername("user").password("{noop}user").roles("USER"))
-                .withUser(User.withUsername("admin").password("{noop}admin").roles("USER", "ADMIN"));
+                .withUser(User.withUsername("user").password("{noop}password").roles("USER"))
+                .withUser(User.withUsername("admin").password("{noop}password").roles("USER", "ADMIN"));
 
     }
 

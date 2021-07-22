@@ -1,5 +1,6 @@
 package com.web.curation.config.security;
 
+import com.web.curation.model.user.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ import io.jsonwebtoken.Jws;
 @Component
 public class JwtTokenProvider {
 
-    private String secretKey = "snsproject";
+    private String secretKey = "webfirewood";
 
     //토큰 유효 시간 30분
     private long tokenValidTime = 30 * 60 * 1000L;
@@ -54,7 +55,9 @@ public class JwtTokenProvider {
     //JWT token에서 인증 정보 조회
     public Authentication getAuthentication(String token){
         UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserPk(token));
-        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+        Authentication temp = new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+        return temp;
+//        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
     //토근에서 회원 정보 추출
@@ -64,6 +67,7 @@ public class JwtTokenProvider {
 
     //Request의 Header에서 token 값을 가져옴
     public String resolveToken(HttpServletRequest request){
+        System.out.println("request : " + request.getHeader("X-AUTH-TOKEN"));
         return request.getHeader("X-AUTH-TOKEN");
     }
 

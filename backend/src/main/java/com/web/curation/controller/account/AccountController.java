@@ -11,8 +11,12 @@ import com.web.curation.model.BasicResponse;
 import com.web.curation.model.user.SignupRequest;
 import com.web.curation.model.user.User;
 
+import io.swagger.annotations.ApiImplicitParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -49,36 +53,16 @@ public class AccountController {
 
         User member = userDao.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-Mail 입니다."));
-        System.out.println(member.getPassword());
-        System.out.println("{noop}"+password);
-//        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-
         if(!passwordEncoder.matches(password, member.getPassword())){
             throw new IllegalArgumentException("잘못된 비밀번호입니다.");
         }
-        return jwtTokenProvider.createToken(member.getUsername(), member.getRoles());
+        return jwtTokenProvider.createToken(member.getEmail(), member.getRoles());
 
-//        Optional<User> userOpt = userDao.findUserByEmailAndPassword(email, password);
-//
-//        ResponseEntity response = null;
-//
-//        if (userOpt.isPresent()) {
-//            final BasicResponse result = new BasicResponse();
-//            result.status = true;
-//            result.data = "success";
-//            response = new ResponseEntity<>(result, HttpStatus.OK);
-//        } else {
-//            response = new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-//        }
-//
-//        return response;
     }
 
     @PostMapping("/account/signup")
     @ApiOperation(value = "가입하기")
     public Object signup(@Valid @RequestBody SignupRequest request) {
-        System.out.println(request.getNickname());
-        System.out.println(request.getEmail());
         return userDao.save(User.builder()
                 .uid(null)
                 .introduction(null)
@@ -88,23 +72,7 @@ public class AccountController {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .roles(Collections.singletonList("ROLE_USER"))
                 .build()).getUid();
-        // 이메일, 닉네임 중복처리 필수
-        // 회원가입단을 생성해 보세요.
-//        ResponseEntity response = null;
-//        // 중복되는 이메일이 있는지 확인 (닉네임 중복 아직)
-//        if(userDao.getUserByEmail(request.getEmail()) != null){
-//            response = new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-//        }else{
-//            //데이터베이스에 정보 삽입
-//            userDao.save(new User(null, request.getEmail(), request.getNickname(), request.getPassword(), LocalDateTime.now()));
-//            final BasicResponse result = new BasicResponse();
-//            result.status = true;
-//            result.data = "success";
-//            //Response OK 반환
-//            response = new ResponseEntity<>("OK",HttpStatus.OK);
-//        }
 
-//        return response;
     }
 
     @PatchMapping("/account/changePassword")
@@ -125,5 +93,14 @@ public class AccountController {
         response = new ResponseEntity<>("OK", HttpStatus.OK);
         return response;
     }
+    @GetMapping("/account/checkJWT")
+    public String list(){
+        //권한체크
+        Authentication user = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails user2 = (UserDetails) user.getPrincipal();
+        return user.getAuthorities().toString()+" / "+user2.getUsername()+" / "+user2.getPassword();
+
+    }
+
 
 }
