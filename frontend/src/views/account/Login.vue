@@ -164,7 +164,7 @@ export default {
     },
     login(){
       axios({
-        url:'http://192.168.43.197:3000/account/login',
+        url:'http://192.168.43.197:3306/account/login',
         method:'post',
         data:{
           username:this.username,
