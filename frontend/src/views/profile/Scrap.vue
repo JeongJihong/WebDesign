@@ -1,5 +1,5 @@
 <template>
-  <div>패스워드 변경페이지</div>
+  <h1>스크랩</h1>
 </template>
 
 <script>
