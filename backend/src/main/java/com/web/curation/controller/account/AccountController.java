@@ -93,4 +93,24 @@ public class AccountController {
         return response;
     }
 
+    @PatchMapping("/account/profile")
+    @ApiOperation(value = "유저 프로필 정보 변경")
+    public Object changeUserProfile(@RequestParam(required = true) final Long uid,
+                                    @RequestParam(required = true) final String nickname,
+                                    @RequestParam(required = true) final String introduction){
+        //유저ID, 새로운 닉네임, 새로운 소개글을 받아온다
+        Optional<User> userOpt = userDao.findByUid(uid);
+        System.out.println(userOpt.get().getEmail());
+        //User객체에 기존의 정보 담아가지고 오고 새로운 닉네임과 소개글로 세팅한다
+        userOpt.get().setNickname(nickname);
+        userOpt.get().setIntroduction(introduction);
+        //디비에 저장 (바뀐 부분만 데이터베이스에 Update된다)
+        userDao.save(userOpt.get());
+        final BasicResponse result = new BasicResponse();
+        result.status = true;
+        result.data = "success";
+        ResponseEntity response = null;
+        response = new ResponseEntity<>("OK", HttpStatus.OK);
+        return response;
+    }
 }
