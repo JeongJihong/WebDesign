@@ -34,7 +34,7 @@ public class AccountController {
     @GetMapping("/account/login")
     @ApiOperation(value = "로그인")
     public Object login(@RequestParam(required = true) final String email,
-            @RequestParam(required = true) final String password) {
+                        @RequestParam(required = true) final String password) {
 
         Optional<User> userOpt = userDao.findUserByEmailAndPassword(email, password);
 
@@ -63,7 +63,7 @@ public class AccountController {
             response = new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }else{
             //데이터베이스에 정보 삽입
-            userDao.save(new User(null, request.getEmail(), request.getNickname(), request.getPassword(), LocalDateTime.now()));
+            userDao.save(new User(null, request.getEmail(), request.getNickname(), request.getPassword(), null, null));
             final BasicResponse result = new BasicResponse();
             result.status = true;
             result.data = "success";
