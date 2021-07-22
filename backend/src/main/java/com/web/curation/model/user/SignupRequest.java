@@ -24,6 +24,11 @@ public class SignupRequest {
     @NotNull
     String nickname;
 
+    @ApiModelProperty(value = "소개글",name = "introduction")
+    String introduction;
+
+    @ApiModelProperty(value = "썸네일 주소",name = "thumbnail")
+    String thumbnail;
 
     public String getEmail() {
         return email;
@@ -38,7 +43,6 @@ public class SignupRequest {
         return password;
     }
 
-
     public void setPassword(String password) {
         this.password = password;
     }
@@ -50,4 +54,21 @@ public class SignupRequest {
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
+
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
+    }
+
+    public String getIntroduction() {
+        return introduction;
+    }
+
+    public void setIntroduction(String introduction) {
+        this.introduction = introduction;
+    }
+
 }

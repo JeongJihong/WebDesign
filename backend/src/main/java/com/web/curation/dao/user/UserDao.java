@@ -1,4 +1,3 @@
-
 package com.web.curation.dao.user;
 
 import java.util.Optional;
@@ -12,6 +11,7 @@ public interface UserDao extends JpaRepository<User, String> {
 
     Optional<User> findByEmail(String email);
 
+    Optional<User> findByUid(Long uid);
     Optional<User> findUserByEmailAndPassword(String email, String password);
 
 
