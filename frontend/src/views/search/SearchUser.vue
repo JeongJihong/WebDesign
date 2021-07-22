@@ -47,7 +47,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 /* 프로필 이미지 들어가기 전 디버깅 용 */
 .dot {
   height: 50px;
