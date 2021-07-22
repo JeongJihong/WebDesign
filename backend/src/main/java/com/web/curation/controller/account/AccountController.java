@@ -63,7 +63,7 @@ public class AccountController {
             response = new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }else{
             //데이터베이스에 정보 삽입
-            userDao.save(new User(null, request.getEmail(), request.getNickname(), request.getPassword(), null, null));
+            userDao.save(new User(null, request.getNickname(), request.getEmail(), request.getPassword(), null, null));
             final BasicResponse result = new BasicResponse();
             result.status = true;
             result.data = "success";
