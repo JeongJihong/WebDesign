@@ -24,6 +24,7 @@ public class SignupRequest {
     @NotNull
     String nickname;
 
+
     public String getEmail() {
         return email;
     }
