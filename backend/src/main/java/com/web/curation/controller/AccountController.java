@@ -3,6 +3,7 @@ package com.web.curation.controller;
 import com.web.curation.config.security.JwtTokenProvider;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
+import com.web.curation.model.user.LoginRequest;
 import com.web.curation.model.user.SignupRequest;
 import com.web.curation.model.user.User;
 import io.swagger.annotations.ApiOperation;
@@ -40,14 +41,13 @@ public class AccountController {
 
 
 
-    @GetMapping("/account/login")
+    @PostMapping("/account/login")
     @ApiOperation(value = "로그인")
-    public Object login(@RequestParam(required = true) final String email,
-                        @RequestParam(required = true) final String password) {
+    public Object login(@RequestBody LoginRequest request) {
 
-        User member = userDao.findByEmail(email)
+        User member = userDao.findByEmail(request.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-Mail 입니다."));
-        if(!passwordEncoder.matches(password, member.getPassword())){
+        if(!passwordEncoder.matches(request.getPassword(), member.getPassword())){
             throw new IllegalArgumentException("잘못된 비밀번호입니다.");
         }
         return jwtTokenProvider.createToken(member.getEmail(), member.getRoles());
