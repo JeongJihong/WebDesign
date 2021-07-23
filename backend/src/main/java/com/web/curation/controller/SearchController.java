@@ -35,7 +35,7 @@ public class SearchController {
     @PostMapping("/search")
     @ApiOperation(value = "검색 시 정보 저장")
     public ResponseEntity<String> saveSearch(@RequestBody Search request){
-        Optional<User> userOpt = searchDao.findByNickName(request.getName());
+        Optional<User> userOpt = searchDao.findByName(request.getName());
         System.out.println(userOpt.get().getEmail());
 //        searchDao.save(userOpt.get().getUid(), request.getId(),
 //                LocalDateTime.now(), null, request.getName());
@@ -43,8 +43,7 @@ public class SearchController {
         searchDao.save(Search.builder()
                 .searchid(userOpt.get().getUid())
                 .id(request.getId())
-                .createTime(LocalDateTime.now())
-                .updateTime(null)
+                .searchDate(LocalDateTime.now())
                 .name(request.getName())
                 .build());
         return new ResponseEntity<>("Success", HttpStatus.OK);
@@ -63,11 +62,11 @@ public class SearchController {
         List<Search> list = searchDao.findById(id);
         List<Search> timeList = new ArrayList<>();
         for(int i = 0; i < list.size(); i++){
-            if(list.get(i).getUpdateTime() == null){
-                timeList.add(list.get(i));
-            }else{
-                timeList.add(list.get(i));
-            }
+//            if(list.get(i).getUpdateTime() == null){
+//                timeList.add(list.get(i));
+//            }else{
+//                timeList.add(list.get(i));
+//            }
         }
 //        Collections.sort(timeList);
 //        return new ResponseEntity<>(timeList, HttpStatus.OK);

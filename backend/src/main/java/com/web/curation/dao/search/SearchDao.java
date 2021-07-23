@@ -12,6 +12,6 @@ public interface SearchDao extends JpaRepository<Search, String> {
 
     List<Search> findByNameIsContaining(String name);
     List<Search> findById(Long id);
-    Optional<User> findByNickName(String nickname);
+    Optional<User> findByName(String nickname);
 
 }
