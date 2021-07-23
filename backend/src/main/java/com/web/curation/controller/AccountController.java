@@ -1,32 +1,26 @@
-package com.web.curation.controller.account;
-
-import java.util.Collections;
-import java.util.Optional;
-
-import javax.validation.Valid;
+package com.web.curation.controller;
 
 import com.web.curation.config.security.JwtTokenProvider;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.user.SignupRequest;
 import com.web.curation.model.user.User;
-
-import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import io.swagger.annotations.ApiOperation;
+import javax.validation.Valid;
+import java.util.Collections;
+import java.util.Optional;
 
 @ApiResponses(value = { @ApiResponse(code = 401, message = "Unauthorized", response = BasicResponse.class),
         @ApiResponse(code = 403, message = "Forbidden", response = BasicResponse.class),
@@ -63,6 +57,7 @@ public class AccountController {
     @PostMapping("/account/signup")
     @ApiOperation(value = "가입하기")
     public Object signup(@Valid @RequestBody SignupRequest request) {
+
         return userDao.save(User.builder()
                 .uid(null)
                 .introduction(null)
@@ -96,11 +91,13 @@ public class AccountController {
             return response;
     }
     @GetMapping("/account/checkJWT")
+    @ApiOperation(value = "token통해서 정보 가져오기")
     public String list(){
         //권한체크
         Authentication user = SecurityContextHolder.getContext().getAuthentication();
         UserDetails user2 = (UserDetails) user.getPrincipal();
-        return user.getAuthorities().toString()+" / "+user2.getUsername()+" / "+user2.getPassword();
+        Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
+        return userOpt.get().getUid() + " / " + user2.getUsername() + " / " + user2.getAuthorities().toString();
 
     }
 
