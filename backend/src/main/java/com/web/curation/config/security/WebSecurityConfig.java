@@ -4,7 +4,6 @@ package com.web.curation.config.security;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -12,11 +11,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import sun.security.util.Password;
+
 
 
 @Log
@@ -29,17 +26,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     //암호화에 필요한 PasswordEncoder를 Bean에 등록
     @Bean
     public PasswordEncoder passwordEncoder(){
-//        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
         return new BCryptPasswordEncoder();
 
     }
 
-    //authenticationManager를 Bean에 등록
-//    @Bean
-//    @Override
-//    public AuthenticationManager authenticationManagerBean() throws Exception{
-//        return super.authenticationManagerBean();
-//    }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception{

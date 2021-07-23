@@ -57,7 +57,6 @@ public class JwtTokenProvider {
         UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserPk(token));
         Authentication temp = new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
         return temp;
-//        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
     //토근에서 회원 정보 추출
@@ -67,7 +66,6 @@ public class JwtTokenProvider {
 
     //Request의 Header에서 token 값을 가져옴
     public String resolveToken(HttpServletRequest request){
-        System.out.println("request : " + request.getHeader("X-AUTH-TOKEN"));
         return request.getHeader("X-AUTH-TOKEN");
     }
 
