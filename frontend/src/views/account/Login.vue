@@ -33,11 +33,14 @@
         <label for="password">비밀번호</label>
         <div class="error-text" v-if="error.password">{{error.password}}</div>
       </div>
-      <button
-        class="btn btn-primary shadow-none"
-        @click="login"
-        :disabled="!isSubmit"
-      >로그인</button>
+      <div>
+        <button
+          class="btn btn-primary shadow-none"
+          @click="login"
+          :disabled="!isSubmit"
+          style="height: 2.7rem; width: 100%;"
+        >로그인</button>
+      </div>
       <!-- <button
         class="btn btn--back btn--login"
         @click="onLogin"
@@ -55,16 +58,7 @@
         <kakaoLogin :component="component" />
         <GoogleLogin :component="component" />
       </div>
-      <!-- 뷰부트스트랩 -->
-      <!-- <div class="text-center">
-        <b-button variant="primary">
-          Profile
-          <b-badge variant="light">9 <span class="sr-only">unread messages</span></b-badge>
-        </b-button>
-      </div>
-      하나더 -->
       
-      <!--  -->
       <div class="add-option">
         <div class="text">
           <p>혹시</p>
@@ -175,19 +169,16 @@ export default {
     },
     login(){
       axios({
-        url:`http://127.0.0.1:8080/account/login?email=${this.email}&password=${this.password}`,
-        method:'get',
-        // data:{
-        //   // username:this.username,
-        //   email: this.email,
-        //   password: this.password
-        // },
+        url:'http://127.0.0.1:8080/account/login',
+        method:'post',
+        data:{
+          email: this.email,
+          password: this.password
+        },
       })
         .then(res=>{
-          // localStorage.setItem('jwt', res.data.token)
-          console.log(res.data)
+          // console.log(res.data)
           localStorage.setItem('jwt', res.data)
-          // console.log('login', localStorage)
           this.$emit('login',this.username)
           this.$router.push({ name:'FeedMain' })
         })
