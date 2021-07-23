@@ -120,4 +120,12 @@ public class AccountController {
         response = new ResponseEntity<>("OK", HttpStatus.OK);
         return response;
     }
+
+    @DeleteMapping("/account/profile")
+    @ApiOperation(value = "회원 탈퇴")
+    public Object changeUserProfile(@RequestParam(required = true) final Long uid){
+        userDao.deleteById(uid);
+        ResponseEntity response = new ResponseEntity<>("회원정보 삭제 완료", HttpStatus.OK);
+        return response;
+    }
 }
