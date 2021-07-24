@@ -28,6 +28,7 @@ export default [
         component : Signup
     },
     {
+        mode : 'history',
         path : '/feed/main',
         name : 'FeedMain',
         component : FeedMain
