@@ -7,7 +7,7 @@
         </button>
         <h2>본인프로필명</h2>
       </div>
-      <button>
+      <button @click="goToProfileUpdate">
         프로필 수정
       </button>
     </div>
@@ -16,12 +16,12 @@
       <div class="mx-4">
         <h4>이름</h4>
         <div class="d-flex" style="justify-content: space-between">
-          <button class="d-flex">
+          <button class="d-flex" @click="goToFollowList">
             <h4>팔로우</h4>
             <h4 style="color:blue;">12</h4>
           </button>
           &nbsp;&nbsp;&nbsp;&nbsp;
-          <button class="d-flex">
+          <button class="d-flex" @click="goToFollowList">
             <h4>팔로워</h4>
             <h4 style="color:blue;">123</h4>
           </button>
@@ -49,8 +49,21 @@
 </template>
 
 <script>
+
+
 export default {
-  
+  methods: {
+    goToProfileUpdate () {
+      this.$router.push({
+        name: 'ProfileUpdate',
+      })
+    },
+    goToFollowList () {
+      this.$router.push({
+        name: 'FollowList',
+      })
+    }
+  }
 }
 </script>
 

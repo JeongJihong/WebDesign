@@ -6,7 +6,7 @@
         <button><b-icon icon="arrow-left" class="me-4"></b-icon></button>
         <span class="fw-bold">프로필 정보 수정</span>
       </span>
-      <b-link href="#" class="text-decoration-none">저장하기</b-link>
+      <button href="#" class="text-decoration-none" @click="updateProfileInfo">저장하기</button>
     </div>
 
     <!-- 프로필 수정 -->
@@ -38,8 +38,49 @@
 </template>
 
 <script>
-export default {
+import axios from 'axios'
 
+export default {
+  name: 'ProfileUpdate',
+  setToken: function () {
+      const token = localStorage.getItem('jwt')
+      const config = {
+        Authorization: `JWT ${token}`,
+      }
+      return config
+    },
+  data () {
+    return{
+      userInfo: {
+        introduction: '',
+        nickname: '',
+        uid: '',
+      }
+    }
+  },
+  methods: {
+    updateProfileInfo: function () {
+      axios({
+        method: 'patch',
+        url: `http://127.0.0.1:8080/account/profile/`,
+        data: this.userInfo,
+        //headers: this.setToken(),
+      })
+      .then(() => {
+        this.$router.push({name:'ProfileDetail'})
+      })
+      .catch((err) => {
+        alert(err)
+      })
+    }
+  },
+  created () {
+    axios({
+      method: 'get',
+      url: `http://127.0.0.1:8080/account/profile/`,
+      //headers: this.setToken(),
+    })
+  }
 }
 </script>
 
