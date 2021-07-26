@@ -16,16 +16,19 @@ import ArticleDetail from '@/views/article/ArticleDetail.vue'
 
 export default [
     {
+        mode : 'history',
         path : '/account/login',
         name : 'Login',
         component : Login
     },
     {
+        mode : 'history',
         path : '/account/signup',
         name : 'Signup',
         component : Signup
     },
     {
+        mode : 'history',
         path : '/feed/main',
         name : 'FeedMain',
         component : FeedMain

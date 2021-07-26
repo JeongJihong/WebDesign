@@ -1,5 +1,3 @@
-
-
 <template>
   <div class="user" id="login">
     <div class="wrapC">
@@ -12,7 +10,7 @@
         <input
           v-model="email"
           v-bind:class="{error : error.email, complete:!error.email&&email.length!==0}"
-          @keyup.enter="login"
+          @keyup.enter="login({ email, password })"
           id="email"
           placeholder="이메일을 입력하세요."
           type="text"
@@ -27,24 +25,20 @@
           type="password"
           v-bind:class="{error : error.password, complete:!error.password&&password.length!==0}"
           id="password"
-          @keyup.enter="login"
+          @keyup.enter="login({ email, password })"
           placeholder="비밀번호를 입력하세요."
         />
         <label for="password">비밀번호</label>
         <div class="error-text" v-if="error.password">{{error.password}}</div>
       </div>
-      <button
-        class="btn btn-primary shadow-none"
-        @click="login"
-        :disabled="!isSubmit"
-      >로그인</button>
-      <!-- <button
-        class="btn btn--back btn--login"
-        @click="onLogin"
-        @submit.prevent="login"
-        :disabled="!isSubmit"
-        :class="{disabled : !isSubmit}"
-      >로그인</button> -->
+      <div>
+        <button
+          class="btn btn-primary shadow-none"
+          @click="login({ email, password })"
+          :disabled="!isSubmit"
+          style="height: 2.7rem; width: 100%;"
+        >로그인</button>
+      </div>
 
       <div class="sns-login">
         <div class="text">
@@ -55,16 +49,7 @@
         <kakaoLogin :component="component" />
         <GoogleLogin :component="component" />
       </div>
-      <!-- 뷰부트스트랩 -->
-      <!-- <div class="text-center">
-        <b-button variant="primary">
-          Profile
-          <b-badge variant="light">9 <span class="sr-only">unread messages</span></b-badge>
-        </b-button>
-      </div>
-      하나더 -->
       
-      <!--  -->
       <div class="add-option">
         <div class="text">
           <p>혹시</p>
@@ -85,13 +70,13 @@
 </template>
 
 <script>
-import axios from 'axios'
 import "../../components/css/user.scss";
 import PV from "password-validator";
 import * as EmailValidator from "email-validator";
 import KakaoLogin from "../../components/user/snsLogin/Kakao.vue";
 import GoogleLogin from "../../components/user/snsLogin/Google.vue";
-import UserApi from "../../api/UserApi";
+
+import { mapActions, mapState } from 'vuex'
 
 export default {
   name:'Login',
@@ -112,12 +97,22 @@ export default {
       .has()
       .letters();
   },
+  computed: {
+    ...mapState([
+      'loginState'
+    ])
+  },
   watch: {
     password: function(v) {
       this.checkForm();
     },
     email: function(v) {
       this.checkForm();
+    },
+    loginState: function() {
+      if (this.loginState === true) {
+        this.$router.push({ name: "FeedMain" })
+      }
     }
   },
   methods: {
@@ -139,62 +134,9 @@ export default {
       });
       this.isSubmit = isSubmit;
     },
-    onLogin() {
-      /*
-      if (this.isSubmit) {
-        this.isSubmit = true;
-        
-        let { email, password } = this;
-        let data = {
-          email,
-          password
-        };
-
-        //요청 후에는 버튼 비활성화
-        this.isSubmit = false;
-
-        UserApi.requestLogin(
-          data,
-          res => {
-            //통신을 통해 전달받은 값 콘솔에 출력
-            console.log(res);
-
-            //요청이 끝나면 버튼 활성화
-            this.isSubmit = true;
-
-            // this.$router.push("/feed/main");
-          },
-          error => {
-            //요청이 끝나면 버튼 활성화
-            this.isSubmit = true;
-          }
-        );
-        
-      }
-      */
-    },
-    login(){
-      axios({
-        url:`http://127.0.0.1:8080/account/login?email=${this.email}&password=${this.password}`,
-        method:'get',
-        // data:{
-        //   // username:this.username,
-        //   email: this.email,
-        //   password: this.password
-        // },
-      })
-        .then(res=>{
-          // localStorage.setItem('jwt', res.data.token)
-          console.log(res.data)
-          localStorage.setItem('jwt', res.data)
-          // console.log('login', localStorage)
-          this.$emit('login',this.username)
-          this.$router.push({ name:'FeedMain' })
-        })
-        .catch(err=>{
-          alert(JSON.stringify(err.data))
-        })
-    },
+    ...mapActions([
+      'login'
+    ])
   },
   data: () => {
     return {
@@ -211,5 +153,3 @@ export default {
   }
 };
 </script>
-
-
