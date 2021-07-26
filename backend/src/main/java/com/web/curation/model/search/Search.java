@@ -3,7 +3,6 @@ package com.web.curation.model.search;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,4 +30,11 @@ public class Search {
     private LocalDateTime searchDate;
     @Column(name = "name", length = 255)
     private String name;
+
+
+    @Builder
+    public Search(Long searchid, String name){
+        this.searchid = searchid;
+        this.name = name;
+    }
 }
