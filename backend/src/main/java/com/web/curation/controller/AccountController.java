@@ -6,6 +6,7 @@ import com.web.curation.model.BasicResponse;
 import com.web.curation.model.user.LoginRequest;
 import com.web.curation.model.user.SignupRequest;
 import com.web.curation.model.user.User;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -19,6 +20,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.text.html.Option;
 import javax.validation.Valid;
 import java.util.Collections;
 import java.util.Optional;
@@ -127,5 +129,27 @@ public class AccountController {
         userDao.deleteById(uid);
         ResponseEntity response = new ResponseEntity<>("회원정보 삭제 완료", HttpStatus.OK);
         return response;
+    }
+
+    @GetMapping("/account/checkEmail")
+    @ApiOperation(value = "이메일 중복 확인")
+    public ResponseEntity<String> checkEmail(@RequestParam(required = true) String email){
+        Optional<User> user = userDao.findByEmail(email);
+        if(user.isPresent()){
+            return new ResponseEntity<>("Fail", HttpStatus.IM_USED);
+        }else{
+            return new ResponseEntity<>("Success", HttpStatus.OK);
+        }
+    }
+
+    @GetMapping("/account/checkNickname")
+    @ApiOperation(value = "닉네임 중복 확인")
+    public ResponseEntity<String> checkNickname(@RequestParam(required = true) String nickname){
+        Optional<User> user = userDao.findByNickname(nickname);
+        if(user.isPresent()){
+            return new ResponseEntity<>("Fail",HttpStatus.IM_USED);
+        }else{
+            return new ResponseEntity<>("Success", HttpStatus.OK);
+        }
     }
 }
