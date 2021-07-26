@@ -8,6 +8,10 @@ Vue.use(Vuex)
 
 const state = {
     isUser: false,
+
+    // 로그인 관련 - 두호
+    token: '',
+    loginState: false,
 }
 
 export default new Vuex.Store({
