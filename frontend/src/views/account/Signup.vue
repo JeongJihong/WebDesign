@@ -9,7 +9,7 @@
     <h1>가입하기</h1>
     <div class="form-wrap">
       <div class="input-with-label">
-        <input v-model="nickName" id="nickname" placeholder="닉네임을 입력하세요." type="text" />
+        <input v-model="nickname" id="nickname" placeholder="닉네임을 입력하세요." type="text" />
         <label for="nickname">닉네임</label>
       </div>
 
@@ -40,7 +40,7 @@
     </label>
 
     <span @click="termPopup=true">약관보기</span>
-    <form @submit="checkForm">
+    <form @submit="checkForm" @submit.prevent="signup">
       <div v-if="activeButton()">
         <button @click="PopUpEmailModal" class="btn-bottom" >가입하기</button>
       </div>
@@ -54,19 +54,20 @@
 <script>
 import axios from 'axios'
 export default {
+  name:'Signup',
   data: () => {
     return {
       errors:[],
       email: "",
       password: "",
       passwordConfirm: "",
-      nickName: "",
+      nickname: "",
       isTerm: false,
       isLoading: false,
       error: {
         email: false,
         password: false,
-        nickName: false,
+        nickname: false,
         passwordConfirm: false,
         term: false
       },
@@ -77,27 +78,26 @@ export default {
     };
   },
   methods:{
-    join(){
+    signup(){
       axios({
-        url:'http://192.168.43.197:3000/#/user/join/',
+        url:'http://127.0.0.1:8080/account/signup',
         method:'post',
         data:{
-          nickName:this.nickName,
-          eamil: this.email,
+          nickname:this.nickname,
+          email: this.email,
           password: this.password,
-          passwordConfirmation: this.passwordConfirmation,
         }
       })
         .then(res=>{
           console.log(res)
-          this.$router.push({ name:'Join' })
+          this.$router.push({ name:'Login' })
         })
         .catch(err=>{
           console.log(err)
         })
     },
     activeButton: function(){
-      if(this.email && this.password && this.passwordConfirm && this.nickName){
+      if(this.email && this.password && this.passwordConfirm && this.nickname){
         return true;
       }else{ return false; }
     },

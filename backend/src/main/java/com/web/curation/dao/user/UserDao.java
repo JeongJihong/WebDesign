@@ -1,4 +1,3 @@
-
 package com.web.curation.dao.user;
 
 import java.util.Optional;
@@ -6,9 +5,17 @@ import java.util.Optional;
 import com.web.curation.model.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserDao extends JpaRepository<User, String> {
-    User getUserByEmail(String email);
+import javax.swing.text.html.Option;
 
-    Optional<User> findUserByEmailAndPassword(String email, String password);
+public interface UserDao extends JpaRepository<User, Long> {
+
+    Optional<User> findByEmail(String email);
+
+    Optional<User> findByUid(Long uid);
+
+    Optional<User> findByNickname(String name);
+
+
+
 
 }

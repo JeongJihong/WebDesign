@@ -6,6 +6,7 @@
 export default {
 
 }
+// /account/changePassword
 </script>
 
 <style>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/S05P12B302.iml" filepath="$PROJECT_DIR$/.idea/S05P12B302.iml" />
+      <module fileurl="file://$PROJECT_DIR$/backend/webcuration.iml" filepath="$PROJECT_DIR$/backend/webcuration.iml" />
+    </modules>
+  </component>
+</project>
