@@ -146,6 +146,7 @@ public class AccountController {
     @ApiOperation(value = "닉네임 중복 확인")
     public ResponseEntity<String> checkNickname(@RequestParam(required = true) String nickname){
         Optional<User> user = userDao.findByNickname(nickname);
+        //
         if(user.isPresent()){
             return new ResponseEntity<>("Fail",HttpStatus.IM_USED);
         }else{
