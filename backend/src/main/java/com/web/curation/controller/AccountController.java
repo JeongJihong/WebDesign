@@ -101,6 +101,21 @@ public class AccountController {
 
     }
 
+    @GetMapping("/account/profile")
+    @ApiOperation(value = "본인의 프로필 정보 확인")
+    public Object getMyProfileInfo() {
+        ResponseEntity response = null;
+        response = new ResponseEntity<>("OK", HttpStatus.OK);
+        return response;
+    }
+
+    @GetMapping("/account/profile/{nickname}")
+    @ApiOperation(value = "다른 유저의 프로필 정보 확인")
+    public Object getOthersProfileInfo(@PathVariable final String nickname) {
+        ResponseEntity response = null;
+        response = new ResponseEntity<>(userDao.findByNickname(nickname), HttpStatus.OK);
+        return response;
+    }
 
     @PatchMapping("/account/profile")
     @ApiOperation(value = "유저 프로필 정보 변경")
