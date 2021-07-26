@@ -1,11 +1,9 @@
 package com.web.curation.controller;
 
 import com.web.curation.dao.follow.FollowDao;
-import com.web.curation.dao.search.SearchDao;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.follow.Follow;
-import com.web.curation.model.search.Search;
 import com.web.curation.model.user.User;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -15,11 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sun.net.www.MimeTable;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
