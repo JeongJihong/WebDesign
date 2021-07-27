@@ -31,11 +31,10 @@ public class Article {
 
     @UpdateTimestamp
     private LocalDateTime updatedtime;
-    private String content;
+    private String review;
 
     @OneToMany(cascade={CascadeType.ALL})
     @JoinColumn(name="articleid", insertable = false)
-    @JoinColumn(name="articleid")
     private List<Image> images = new ArrayList<>();
 
     @OneToMany(cascade={CascadeType.ALL})
