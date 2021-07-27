@@ -1,5 +1,6 @@
 package com.web.curation.model.comment;
 
+import com.web.curation.model.article.Article;
 import lombok.*;
 
 import javax.persistence.*;
@@ -22,12 +23,12 @@ public class Comment{
     private Long commentid;
 
     private Long articleid;
-    private Long uid;
+    private Long id;
     @CreationTimestamp
-    @Column(name = "commentdate", nullable = true)
-    private LocalDateTime commentdate;
+    @Column(name = "createdtime", nullable = true)
+    private LocalDateTime createdtime;
     @CreationTimestamp
     @Column(name = "updatedtime", nullable = true)
     private LocalDateTime updatedtime;
-    private String content;
+    private String comment;
 }
