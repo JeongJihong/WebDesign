@@ -1,6 +1,5 @@
 package com.web.curation.model.comment;
 
-import com.web.curation.model.article.Article;
 import lombok.*;
 
 import javax.persistence.*;
