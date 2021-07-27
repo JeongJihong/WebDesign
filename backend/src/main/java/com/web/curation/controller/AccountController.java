@@ -1,5 +1,6 @@
 package com.web.curation.controller;
 
+import com.google.api.Http;
 import com.web.curation.config.security.JwtTokenProvider;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
@@ -100,18 +101,23 @@ public class AccountController {
         if(user.getPrincipal() == "anonymousUser"){
             System.out.println("Error");
         }
-
         UserDetails user2 = (UserDetails) user.getPrincipal();
         Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
         return userOpt.get().getUid() + " / " + user2.getUsername() + " / " + user2.getAuthorities().toString();
-
     }
 
     @GetMapping("/account/profile")
     @ApiOperation(value = "유저의 프로필 정보 확인")
-    public Object getOthersProfileInfo(@PathVariable final Long uid) {
+    public Object getOthersProfileInfo() {
+        Authentication user = SecurityContextHolder.getContext().getAuthentication();
         ResponseEntity response = null;
-        response = new ResponseEntity<>(userDao.findByUid(uid), HttpStatus.OK);
+        if(user.getPrincipal() == "anonymousUser"){
+            response = new ResponseEntity<>("Fail", HttpStatus.UNAUTHORIZED);
+        }else{
+            UserDetails user2 = (UserDetails) user.getPrincipal();
+            Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
+            response = new ResponseEntity<>(userOpt, HttpStatus.OK);
+        }
         return response;
     }
 
@@ -127,10 +133,6 @@ public class AccountController {
             UserDetails user2 = (UserDetails) user.getPrincipal();
             //유저ID, 새로운 닉네임, 새로운 소개글을 받아온다
             Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
-            System.out.println(nickname);
-            if(nickname.equals("")){
-                nickname = userOpt.get().getNickname();
-            }
             //User객체에 기존의 정보 담아가지고 오고 새로운 닉네임과 소개글로 세팅한다
             User user3 = new User(userOpt.get().getUid(), nickname, userOpt.get().getEmail(),
                     userOpt.get().getPassword(), introduction, userOpt.get().getThumbnail(), userOpt.get().getRoles());
@@ -142,9 +144,17 @@ public class AccountController {
 
     @DeleteMapping("/account/profile")
     @ApiOperation(value = "회원 탈퇴")
-    public Object changeUserProfile(@RequestParam(required = true) final Long uid){
-        userDao.deleteById(uid);
-        ResponseEntity response = new ResponseEntity<>("회원정보 삭제 완료", HttpStatus.OK);
+    public Object changeUserProfile(){
+        Authentication user = SecurityContextHolder.getContext().getAuthentication();
+        ResponseEntity response = null;
+        if(user.getPrincipal() == "anonymousUser"){
+            response = new ResponseEntity<>("Fail", HttpStatus.UNAUTHORIZED);
+        }else{
+            UserDetails user2 = (UserDetails) user.getPrincipal();
+            Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
+            userDao.deleteById(userOpt.get().getUid());
+            response = new ResponseEntity<>("OK", HttpStatus.OK);
+        }
         return response;
     }
 
