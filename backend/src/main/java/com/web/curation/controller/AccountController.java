@@ -97,13 +97,17 @@ public class AccountController {
     public String list(){
         //권한체크
         Authentication user = SecurityContextHolder.getContext().getAuthentication();
+        if(user.getPrincipal() == "anonymousUser"){
+            System.out.println("Error");
+        }
+
         UserDetails user2 = (UserDetails) user.getPrincipal();
         Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
         return userOpt.get().getUid() + " / " + user2.getUsername() + " / " + user2.getAuthorities().toString();
 
     }
 
-    @GetMapping("/account/profile/{uid}")
+    @GetMapping("/account/profile")
     @ApiOperation(value = "유저의 프로필 정보 확인")
     public Object getOthersProfileInfo(@PathVariable final Long uid) {
         ResponseEntity response = null;
@@ -113,20 +117,26 @@ public class AccountController {
 
     @PatchMapping("/account/profile")
     @ApiOperation(value = "유저 프로필 정보 변경")
-    public Object changeUserProfile(@RequestParam(required = false) final Long uid,
-                                    @RequestParam(required = false) final String nickname,
-                                    @RequestParam(required = false) final String introduction){
-        //유저ID, 새로운 닉네임, 새로운 소개글을 받아온다
-        Optional<User> userOpt = userDao.findByUid(uid);
-        //User객체에 기존의 정보 담아가지고 오고 새로운 닉네임과 소개글로 세팅한다
-        User user = new User(uid, nickname, userOpt.get().getEmail(),
-                userOpt.get().getPassword(), introduction, userOpt.get().getThumbnail(), userOpt.get().getRoles());
-        userDao.save(user);
-        final BasicResponse result = new BasicResponse();
-        result.status = true;
-        result.data = "success";
+    public Object changeUserProfile(@RequestParam(required = false) String nickname,
+                                    @RequestParam(required = false) String introduction){
+        Authentication user = SecurityContextHolder.getContext().getAuthentication();
         ResponseEntity response = null;
-        response = new ResponseEntity<>("OK", HttpStatus.OK);
+        if(user.getPrincipal() == "anonymousUser"){
+            response = new ResponseEntity<>("Fail", HttpStatus.UNAUTHORIZED);
+        }else{
+            UserDetails user2 = (UserDetails) user.getPrincipal();
+            //유저ID, 새로운 닉네임, 새로운 소개글을 받아온다
+            Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
+            System.out.println(nickname);
+            if(nickname.equals("")){
+                nickname = userOpt.get().getNickname();
+            }
+            //User객체에 기존의 정보 담아가지고 오고 새로운 닉네임과 소개글로 세팅한다
+            User user3 = new User(userOpt.get().getUid(), nickname, userOpt.get().getEmail(),
+                    userOpt.get().getPassword(), introduction, userOpt.get().getThumbnail(), userOpt.get().getRoles());
+            userDao.save(user3);
+            response = new ResponseEntity<>("Success", HttpStatus.OK);
+        }
         return response;
     }
 
