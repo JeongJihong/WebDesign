@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface SearchDao extends JpaRepository<Search, String> {
 
-    List<Search> findByNameIsContaining(String name);
+
     List<Search> findById(Long id);
     Optional<User> findByName(String nickname);
     @Transactional

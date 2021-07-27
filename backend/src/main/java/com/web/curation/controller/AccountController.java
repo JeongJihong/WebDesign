@@ -3,9 +3,11 @@ package com.web.curation.controller;
 import com.web.curation.config.security.JwtTokenProvider;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
+import com.web.curation.model.user.ChangePasswordRequest;
 import com.web.curation.model.user.LoginRequest;
 import com.web.curation.model.user.SignupRequest;
 import com.web.curation.model.user.User;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -19,6 +21,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.text.html.Option;
 import javax.validation.Valid;
 import java.util.Collections;
 import java.util.Optional;
@@ -69,26 +72,25 @@ public class AccountController {
                 .build()).getUid();
     }
 
-    @PatchMapping("/account/changePassword")
+    @PutMapping("/account/changePassword")
     @ApiOperation(value = "비밀번호변경")
-    public Object changePassword(@RequestParam(required = true) final String oldPassword,
-                                 @RequestParam(required = true) final String newPassword,
-                                 @RequestParam(required = true) final String email){
+    public Object changePassword(@RequestBody ChangePasswordRequest request){
         //이메일, 현재비밀번호, 바꿀 비밀번호 Parameter로 받아옴
-        Optional<User> userOpt = userDao.findByEmail(email);
-        if(!passwordEncoder.matches(oldPassword, userOpt.get().getPassword())){
+        Optional<User> userOpt = userDao.findByEmail(request.getEmail());
+        System.out.println(userOpt.get().getEmail());
+        if(!passwordEncoder.matches(request.getOldPassword(), userOpt.get().getPassword())){
             throw new IllegalArgumentException("잘못된 비밀번호입니다.");
         }
-            User user = new User(userOpt.get().getUid(), userOpt.get().getNickname(), email,
-                    passwordEncoder.encode(newPassword), userOpt.get().getIntroduction(), userOpt.get().getThumbnail(), userOpt.get().getRoles());
-            //디비에 저장 (바뀐 부분만 데이터베이스에 Update된다)
-            userDao.save(user);
-            final BasicResponse result = new BasicResponse();
-            result.status = true;
-            result.data = "success";
-            ResponseEntity response = null;
-            response = new ResponseEntity<>("OK", HttpStatus.OK);
-            return response;
+        User user = new User(userOpt.get().getUid(), userOpt.get().getNickname(), request.getEmail(),
+                passwordEncoder.encode(request.getNewPassword()), userOpt.get().getIntroduction(), userOpt.get().getThumbnail(), userOpt.get().getRoles());
+        //디비에 저장 (바뀐 부분만 데이터베이스에 Update된다)
+        userDao.save(user);
+        final BasicResponse result = new BasicResponse();
+        result.status = true;
+        result.data = "success";
+        ResponseEntity response = null;
+        response = new ResponseEntity<>("OK", HttpStatus.OK);
+        return response;
     }
     @GetMapping("/account/checkJWT")
     @ApiOperation(value = "token통해서 정보 가져오기")
@@ -101,12 +103,19 @@ public class AccountController {
 
     }
 
+    @GetMapping("/account/profile/{uid}")
+    @ApiOperation(value = "유저의 프로필 정보 확인")
+    public Object getOthersProfileInfo(@PathVariable final Long uid) {
+        ResponseEntity response = null;
+        response = new ResponseEntity<>(userDao.findByUid(uid), HttpStatus.OK);
+        return response;
+    }
 
     @PatchMapping("/account/profile")
     @ApiOperation(value = "유저 프로필 정보 변경")
-    public Object changeUserProfile(@RequestParam(required = true) final Long uid,
-                                    @RequestParam(required = true) final String nickname,
-                                    @RequestParam(required = true) final String introduction){
+    public Object changeUserProfile(@RequestParam(required = false) final Long uid,
+                                    @RequestParam(required = false) final String nickname,
+                                    @RequestParam(required = false) final String introduction){
         //유저ID, 새로운 닉네임, 새로운 소개글을 받아온다
         Optional<User> userOpt = userDao.findByUid(uid);
         //User객체에 기존의 정보 담아가지고 오고 새로운 닉네임과 소개글로 세팅한다
@@ -127,5 +136,28 @@ public class AccountController {
         userDao.deleteById(uid);
         ResponseEntity response = new ResponseEntity<>("회원정보 삭제 완료", HttpStatus.OK);
         return response;
+    }
+
+    @GetMapping("/account/checkEmail")
+    @ApiOperation(value = "이메일 중복 확인")
+    public ResponseEntity<String> checkEmail(@RequestParam(required = true) String email){
+        Optional<User> user = userDao.findByEmail(email);
+        if(user.isPresent()){
+            return new ResponseEntity<>("Fail", HttpStatus.IM_USED);
+        }else{
+            return new ResponseEntity<>("Success", HttpStatus.OK);
+        }
+    }
+
+    @GetMapping("/account/checkNickname")
+    @ApiOperation(value = "닉네임 중복 확인")
+    public ResponseEntity<String> checkNickname(@RequestParam(required = true) String nickname){
+        Optional<User> user = userDao.findByNickname(nickname);
+        //
+        if(user.isPresent()){
+            return new ResponseEntity<>("Fail",HttpStatus.IM_USED);
+        }else{
+            return new ResponseEntity<>("Success", HttpStatus.OK);
+        }
     }
 }

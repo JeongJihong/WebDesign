@@ -33,8 +33,6 @@ public class User implements UserDetails {
     private String introduction;
     private String thumbnail;
 
-//    @Column(insertable = false, updatable = false)
-//    private LocalDateTime createDate;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default

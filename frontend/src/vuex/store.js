@@ -8,6 +8,16 @@ Vue.use(Vuex)
 
 const state = {
     isUser: false,
+
+    // 로그인 관련 - 두호
+    token: localStorage.getItem('token') || '',
+    loginState: false,
+
+    searchGet: [],
+    searchLive: {},
+
+    scrapList: [],
+    scrapMode: false,
 }
 
 export default new Vuex.Store({

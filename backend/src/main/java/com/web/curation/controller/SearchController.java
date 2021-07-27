@@ -49,11 +49,11 @@ public class SearchController {
     @GetMapping("/search/live")
     @ApiOperation(value = "실시간으로 검색 창 결과 반환")
     public ResponseEntity<List<Search>> list(@RequestParam String nickname){
-        List<Search> user = searchDao.findByNameIsContaining(nickname);
+        List<User> user = userDao.findByNicknameIsContaining(nickname);
         List<Search> live = new ArrayList<>();
         for(int i = 0; i < user.size(); i++){
 //            Optional<User> temp = userDao.findByUid(user.get(i).getId());
-            live.add(new Search(user.get(i).getSearchid(), user.get(i).getName()));
+            live.add(new Search(user.get(i).getUid(), user.get(i).getNickname()));
         }
 
         return new ResponseEntity<>(live, HttpStatus.OK);

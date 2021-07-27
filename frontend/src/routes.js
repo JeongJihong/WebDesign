@@ -1,7 +1,7 @@
 import Login from './views/account/Login.vue'
 import Signup from './views/account/Signup.vue'
 import ChangePassword from './views/account/ChangePassword.vue'
-import FeedMain from './views/feed/IndexFeed.vue'
+import FeedMain from './views/article/Article.vue'
 import Components from './views/Components.vue'
 import PageNotFound from '@/views/PageNotFound'
 import AlarmList from '@/views/alarm/AlarmList.vue'
@@ -16,16 +16,19 @@ import ArticleDetail from '@/views/article/ArticleDetail.vue'
 
 export default [
     {
+        mode : 'history',
         path : '/account/login',
         name : 'Login',
         component : Login
     },
     {
+        mode : 'history',
         path : '/account/signup',
         name : 'Signup',
         component : Signup
     },
     {
+        mode : 'history',
         path : '/feed/main',
         name : 'FeedMain',
         component : FeedMain
@@ -47,7 +50,8 @@ export default [
         // component: NotFound
     },
     {
-        path : '/account/changepassword',
+        mode : 'history',
+        path : '/account/changePassword',
         name : 'ChangePassword',
         component : ChangePassword
     },
@@ -85,7 +89,7 @@ export default [
         name : 'ArticleDetail',
         component : ArticleDetail
     },
-    {
+    {   mode : 'history',
         path : '/article/create',
         name : 'ArticleCreate',
         component : ArticleCreate

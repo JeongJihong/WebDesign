@@ -1,5 +1,6 @@
 package com.web.curation.dao.user;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.web.curation.model.user.User;
@@ -9,13 +10,13 @@ import javax.swing.text.html.Option;
 
 public interface UserDao extends JpaRepository<User, Long> {
 
+    List<User> findByNicknameIsContaining(String name);
+
     Optional<User> findByEmail(String email);
 
     Optional<User> findByUid(Long uid);
 
     Optional<User> findByNickname(String name);
 
-
-
-
+    List<User> findByUidIn(List<Long> followerId);
 }

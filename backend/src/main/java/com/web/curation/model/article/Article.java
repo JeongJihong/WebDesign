@@ -7,16 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @Entity
@@ -37,4 +30,20 @@ public class Article {
     @UpdateTimestamp
     private LocalDateTime updatedtime;
     private String review;
+
+//    @OneToMany
+//    @JoinColumn(name="articleid")
+//    private List<Image> images = new ArrayList<>();
+//
+//    @OneToMany
+//    @JoinColumn(name="articleid")
+//    private List<Comment> comments = new ArrayList<>();
+//
+//    @OneToMany
+//    @JoinColumn(name="articleid")
+//    private List<ArticleLike> articlelikes = new ArrayList<>();
+
+//    @ManyToOne
+//    @JoinColumn(name = "uid")
+//    private User user;
 }
