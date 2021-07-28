@@ -5,24 +5,30 @@
     </div>
     <div>
       <b-carousel
-        id="carousel-fade"
-        style="text-shadow: 0px 0px 2px #000"
-        fade
-        indicators
-      >
-        <b-carousel-slide
-          caption="First slide"
-          img-src="https://picsum.photos/1024/480/?image=10"
-        ></b-carousel-slide>
-        <b-carousel-slide
-          caption="Second Slide"
-          img-src="https://picsum.photos/1024/480/?image=12"
-        ></b-carousel-slide>
-        <b-carousel-slide
-          caption="Third Slide"
-          img-src="https://picsum.photos/1024/480/?image=22"
-        ></b-carousel-slide>
-      </b-carousel>
+          id="carousel-1"
+          v-model="slide"
+          :interval="0"
+          controls
+          indicators
+          background="#ababab"
+          img-width="1024"
+          img-height="480"
+          style="text-shadow: 1px 1px 2px #333;"
+          @sliding-start="onSlideStart"
+          @sliding-end="onSlideEnd"
+        >
+          <b-carousel-slide v-for ="image in images" :key="image.id">
+            <template #img>
+              <img
+                class="d-block img-fluid w-100"
+                width="1024"
+                height="480"
+                :src= image.src
+                alt="image slot"
+              >
+            </template>
+          </b-carousel-slide>
+        </b-carousel>
     </div>
     <p style="margin:10px">Lorem ipsum dosdlor sit amet consectetur adipisicing elit. Autem, quibusdam eum. Officiis accusantium eum beatae dolore labore pariatur, cupiditate veritatis ipsa. Necessitatibus id laboriosam voluptatibus veritatis delectus, rem error quidem.</p>
     <p>?명이 좋아해요! <b-avatar src="https://placekitten.com/300/300" size="2rem"></b-avatar><b-button style="height:35px">스크랩하기</b-button></p>
@@ -49,6 +55,31 @@
 
 <script>
 export default {
+  // data:{
+  //   articleid:'',
+  //   images:[],
+  //   content:'',
+  //   id:''
+  // },
+  // methods:{
+    // ArticleDetail(){
+    //   const userid = jwt_decode(localStorage.getItem('jwt')).user_id
+    //   axios({
+    //     url:`http://127.0.0.1:8000/article/`+this.$route.params.uid,
+    //     method:'get',
+    //     headers: {
+    //       Authorization: `JWT ${localStorage.getItem('jwt')}`,
+    //     },
+    //   })
+    //     .then(res=>{
+    //       this.articleDetail= res.data
+    //       console.log(res.data)
+    //     })
+    //     .catch(err=>{
+    //       console.log(err)
+    //     })
+    // },
+  // }
 
 }
 </script>

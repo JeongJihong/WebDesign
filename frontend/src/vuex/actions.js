@@ -1,4 +1,5 @@
 import axios from "axios"
+import router from '../routes'
 
 export default {
   // 뒤로가기 -형식
@@ -21,7 +22,7 @@ export default {
         // console.log('성공!', res.data)
         commit('UPDATE_TOKEN', res.data)
         localStorage.setItem('token', res.data)
-        commit('LOGIN', true)
+        router.push({ name: 'FeedMain' })
       })
       .catch(err => {
         // console.log('에러!', err)
@@ -39,12 +40,13 @@ export default {
       }
     })
       .then(res => {
-        // 0 // 이메일 // 역할  <-- 이런식으로 와서 id 값을 얻기 위해 parse 필요
-        const range = res.data.indexOf('/') - 1
-        const id = res.data.substr(0, range)
         axios({
-          url: `http://127.0.0.1:8080/search?id=${id}`,
-          method: 'get'
+          url: `http://127.0.0.1:8080/search?id=${res.data.uid}`,
+          method: 'get',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-AUTH-TOKEN': token
+          }
         })
           .then(res => {
             commit('SEARCH_GET', res.data)
@@ -61,10 +63,6 @@ export default {
     axios({
       url: `http://127.0.0.1:8080/search/live?nickname=${data.nickname}`,
       method: 'get',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-AUTH-TOKEN': data.token
-      }
     })
       .then(res => {
         commit('SEARCH_LIVE', res.data)
@@ -139,5 +137,8 @@ export default {
       .catch(err => {
         alert('DELETE 실패', err)
       })
-  }
+  },
+  logout ({ commit }) { 
+    commit('LOGOUT') 
+  },
 }

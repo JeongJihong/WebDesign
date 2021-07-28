@@ -3,9 +3,6 @@ export default {
   UPDATE_TOKEN(state, token) {
     state.token = token
   },
-  LOGIN(state, bool) {
-    state.loginState = bool
-  },
 
   SEARCH_GET(state, searchGet) {
     state.searchGet = searchGet
@@ -19,5 +16,10 @@ export default {
   },
   SCRAP_DELETE_MODE(state) {
     state.scrapMode = !state.scrapMode
+  },
+  LOGOUT () {
+    localStorage.removeItem('token') 
+    location.reload(); 
   }
+
 }

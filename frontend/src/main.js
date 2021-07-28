@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import App from './App.vue'
-import VueRouter from 'vue-router';
-import routes from './routes'
+// import VueRouter from 'vue-router';
+// import routes from './routes'
+import router from './routes'
 import store from './vuex/store'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 
@@ -15,11 +16,11 @@ Vue.use(IconsPlugin)
 // Optionally install the BootstrapVue icon components plugin
 Vue.config.productionTip = false
 
-Vue.use(VueRouter)
+// Vue.use(VueRouter)
 
-const router = new VueRouter({
-    routes,
-});
+// const router = new VueRouter({
+//     routes,
+// });
 
 new Vue({
     router,

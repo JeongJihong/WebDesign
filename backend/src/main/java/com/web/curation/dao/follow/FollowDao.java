@@ -18,4 +18,6 @@ public interface FollowDao extends JpaRepository<Follow, Long> {
     List<Long> findBySrcidAndApprove(Long id);
 
     Optional<Follow> findByFollowid(Long followid);
+
+    int findBySrcidAndDstid(Long src, Long dst);
 }

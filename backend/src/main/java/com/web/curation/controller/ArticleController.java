@@ -3,6 +3,7 @@ package com.web.curation.controller;
 import com.web.curation.dao.article.ArticleDao;
 import com.web.curation.dao.article.ArticleLikeDao;
 import com.web.curation.dao.image.ImageDao;
+import com.web.curation.dao.follow.FollowDao;
 import com.web.curation.dao.scrap.ScrapDao;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
@@ -27,7 +28,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @ApiResponses(value = { @ApiResponse(code = 401, message = "Unauthorized", response = BasicResponse.class),
@@ -57,6 +60,9 @@ public class ArticleController {
 
     @Autowired
     ImageDao imageDao;
+
+    @Autowired
+    FollowDao followDao;
 
     @PostMapping("/article")
     @ApiOperation(value = "게시글 작성")
@@ -155,6 +161,34 @@ public class ArticleController {
 //            return response;
 //        }
 //    }
+
+    @GetMapping("/article/{nickname}")
+    @ApiOperation(value = "타 유저 피드 보기")
+    @ResponseBody
+    public Object viewOtherFeed(@PathVariable final String nickname){
+            Authentication user = SecurityContextHolder.getContext().getAuthentication();
+            ResponseEntity response = null;
+            if(user.getPrincipal() == "anonymousUser"){
+                response = new ResponseEntity<>("Fail", HttpStatus.UNAUTHORIZED);
+            }else{
+                UserDetails user2 = (UserDetails) user.getPrincipal();
+                Optional<User> loginUser = userDao.findByEmail(user2.getUsername());
+                Optional<User> otherUser = userDao.findByNickname(nickname);
+                Optional<Article> article = articleDao.findById(otherUser.get().getUid());
+                boolean follow = false;
+                if(followDao.findBySrcidAndDstid(loginUser.get().getUid(), otherUser.get().getUid()) == 0){
+                    follow = false;
+                }else{
+                    follow = true;
+                }
+                Map result = new HashMap<String, Object>();
+                result.put("follow", follow);
+                result.put("article", article);
+                result.put("userProfile", otherUser);
+                response = new ResponseEntity<>(result, HttpStatus.OK);
+            }
+            return response;
+    }
 
     @DeleteMapping("/article/{articleid}")
     @ApiOperation(value = "게시글 삭제")
