@@ -1,4 +1,5 @@
 import axios from "axios"
+import router from '../routes'
 
 export default {
   // 뒤로가기 -형식
@@ -21,7 +22,7 @@ export default {
         // console.log('성공!', res.data)
         commit('UPDATE_TOKEN', res.data)
         localStorage.setItem('token', res.data)
-        commit('LOGIN', true)
+        router.push({ name: 'FeedMain' })
       })
       .catch(err => {
         // console.log('에러!', err)

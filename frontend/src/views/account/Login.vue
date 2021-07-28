@@ -110,11 +110,6 @@ export default {
     },
     email: function(v) {
       this.checkForm();
-    },
-    loginState: function() {
-      if (this.loginState === true) {
-        this.$router.push({ name: "FeedMain" })
-      }
     }
   },
   methods: {

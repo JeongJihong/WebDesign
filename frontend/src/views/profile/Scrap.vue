@@ -12,7 +12,7 @@
     </div>
 
     <!-- 피드 or 게시글 상세정보 보기 구현 전 디버깅 용 -->
-    <div v-for="idx in 9" :key="idx" class="square img_1 delete-btn-wrap">
+    <div v-for="idx in 90" :key="idx" class="square img_1 delete-btn-wrap">
       <b-icon v-if="scrapMode" icon="x-circle" class="delete-btn" @click="scrapDelete(idx, token)"></b-icon>
       <img src="https://picsum.photos/110" alt="debuging area" style="position: absolute;"
         @click="!scrapMode && goToArticleDetail(idx)">
