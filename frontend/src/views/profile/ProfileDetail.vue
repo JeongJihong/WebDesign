@@ -5,7 +5,7 @@
         <button style="padding-right:20px">
           <b-icon-arrow-left class="h2"></b-icon-arrow-left>
         </button>
-        <h2>본인프로필명</h2>
+        <h2>{{ this.nickname }}</h2>
       </div>
       <button @click="goToProfileUpdate">
         프로필 수정
@@ -28,30 +28,33 @@
         </div>
       </div>
     </div>
+    <div class="d-grid pt-3">
+      <button @click="goToFollow" class="btn btn-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">팔로우</button>
+      <!-- <button @click="goToFollow" class="btn btn-primary shadow-none" style="display: flex; height: 25px; justify-content: center; align-items: center;">팔로우취소</button> -->
+    </div>
     <div class="pt-4">
-      <p>본인소개글</p>
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam omnis possimus eveniet alias repudiandae 
-        reprehenderit explicabo pariatur! Incidunt error esse ab animi velit, minus itaque rerum laboriosam tenetur modi sit.</p>
+      <p>{{ this.introduction }}</p>
     </div>
     <hr>
 
     <div v-for="image in 9" :key="image" class="square img_1">
     </div>
 
-    <!-- <div class="container"> -->
-      <!-- <div class="row">
-        <div v-for="slide in 9" :key="slide" class="col-4 my-4">
-          <img src="@/assets/images/img-placeholder.png" alt="image" style="width: 100%; height: 130%">
-        </div>
-      </div> -->
-    <!-- </div> -->
   </div>
 </template>
 
 <script>
-
+import axios from 'axios'
 
 export default {
+  data () {
+    return {
+      nickname: '',
+      introduction: '',
+      followers: 0,
+      followings: 0,
+    }
+  },
   methods: {
     goToProfileUpdate () {
       this.$router.push({
@@ -62,7 +65,87 @@ export default {
       this.$router.push({
         name: 'FollowList',
       })
+    },
+    goToFollow () {
+      axios({
+        method: 'post',
+        url: `http://127.0.0.1:8080/account/profile/follow`,
+        params: this.userInfo,
+        headers: {
+          'Content-Type': 'application/json',
+          'X-AUTH-TOKEN' : this.$store.state.token
+        },
+      })
+      .then((res) => {
+        console.log('패치완료!!!!!!!!')
+        console.log(res.data)
+        this.$router.push({name:'ProfileDetail'})
+      })
+      .catch((err) => {
+        alert(err)
+      })
+    },
+    getUserInfo: function () {
+      axios({
+        method: 'get',
+        url: `http://127.0.0.1:8080/account/profile/`,
+        headers: {
+          'Content-Type': 'application/json',
+          'X-AUTH-TOKEN' : this.$store.state.token
+        },
+      })
+      .then((res) => {
+        this.nickname = res.data.nickname
+        this.introduction = res.data.introduction
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+    },
+    goToChangePassword () {
+      this.$router.push({
+        name: 'ChangePassword',
+      })
+    },
+    followInfo () {
+      axios({
+        method: 'get',
+        url: `http://127.0.0.1:8080/account/profile/${this.nickname}/follower`,
+        headers: {
+          'Content-Type': 'application/json',
+          'X-AUTH-TOKEN' : this.$store.state.token
+        },
+      })
+      .then((res) => {
+        this.followerNum = res.data
+      })
+      .catch((err) => {
+        alert(err)
+      })
     }
+  },
+  created () {
+    axios({
+      method: 'get',
+      url: `http://127.0.0.1:8080/account/checkJWT/`,
+      headers: {
+        'Content-Type': 'application/json',
+        'X-AUTH-TOKEN' : this.$store.state.token
+      },
+    })
+    .then((res) => {
+      console.log('checkJWT 성공! 밑에 res 확인')
+      console.log(res)
+      const range = res.data.indexOf('/') - 1
+      const uid = res.data.substr(0, range)
+      this.myUid=uid
+      this.getUserInfo()
+      this.followInfo()
+      console.log(this.myUid)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
   }
 }
 </script>
