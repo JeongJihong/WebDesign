@@ -15,6 +15,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
@@ -71,56 +74,113 @@ public class ArticleController {
 //        return articleDao.save(article);
     }
 
-    @PostMapping("/article/{uid}")
+    @PostMapping("/article")
     @ApiOperation(value = "게시글 작성")
-    public Object postArticle(@PathVariable final Long uid) {
+    public Object postArticle() {
+        Authentication user = SecurityContextHolder.getContext().getAuthentication();
+        ResponseEntity response = null;
+        if(user.getPrincipal() == "anonymousUser"){
+            response = new ResponseEntity<>("Fail", HttpStatus.UNAUTHORIZED);
+            return response;
+        }else {
+            UserDetails user2 = (UserDetails) user.getPrincipal();
+            Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
+            //-----여기 부분 채워 넣으셔 됩니다 ------
+//            return articleDao.save(Article.builder()
+//            )      .
+            response = new ResponseEntity<>("null", HttpStatus.OK);
+            return response;
+        }
 //        return scrapDao.save(Scrap.builder()
 //                .scrapid(null)
 //                .id(userid)
 //                .articleid(articleid)
 //                .build());
-        return null;
     }
 
-    @GetMapping("/article/{uid}")
+    @GetMapping("/article")
     @ApiOperation(value = "내 피드 보기")
-    public Object viewMyFeed(@PathVariable final Long uid) {
-        // uid를 통해 해당 유저의 게시글을 불러온다.
-        Optional<Article> article = articleDao.findById(uid);
-        return new ResponseEntity<>(article, HttpStatus.OK);
+    public Object viewMyFeed() {
+        Authentication user = SecurityContextHolder.getContext().getAuthentication();
+        ResponseEntity response = null;
+        if(user.getPrincipal() == "anonymousUser"){
+            response = new ResponseEntity<>("Fail", HttpStatus.UNAUTHORIZED);
+            return response;
+        }else {
+            UserDetails user2 = (UserDetails) user.getPrincipal();
+            Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
+            // uid를 통해 해당 유저의 게시글을 불러온다.
+            Optional<Article> article = articleDao.findById(userOpt.get().getUid());
+            response = new ResponseEntity<>(article, HttpStatus.OK);
+        }
+        return response;
     }
 
-    @DeleteMapping("/article/{nickname}/{uid}")
+    @DeleteMapping("/article/{articleid}")
     @ApiOperation(value = "게시글 삭제")
-    public Object deleteScrap(@PathVariable final String nickname, @PathVariable final Long articleid){
-        articleDao.deleteByArticleid(articleid);
-        ResponseEntity response = new ResponseEntity<>("게시글 삭제 완료", HttpStatus.OK);
+    public Object deleteArticle(@PathVariable final Long articleid){
+        Authentication user = SecurityContextHolder.getContext().getAuthentication();
+        ResponseEntity response = null;
+        if(user.getPrincipal() == "anonymousUser"){
+            response = new ResponseEntity<>("Fail", HttpStatus.UNAUTHORIZED);
+            return response;
+        }else {
+            UserDetails user2 = (UserDetails) user.getPrincipal();
+            articleDao.deleteByArticleid(articleid);
+            response = new ResponseEntity<>("게시글 삭제 완료", HttpStatus.OK);
+        }
         return response;
     }
 
     @GetMapping("/scrap")
     @ApiOperation(value = "스크랩목록 가져오기")
-    public Object scraplist(@RequestParam(required = true) final Long userid) {
+    public Object scraplist() {
+        Authentication user = SecurityContextHolder.getContext().getAuthentication();
         ResponseEntity response = null;
-        response = new ResponseEntity<>(scrapDao.findById(userid), HttpStatus.OK);
+        if(user.getPrincipal() == "anonymousUser"){
+            response = new ResponseEntity<>("Fail", HttpStatus.UNAUTHORIZED);
+            return response;
+        }else {
+            UserDetails user2 = (UserDetails) user.getPrincipal();
+            Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
+            response = new ResponseEntity<>(scrapDao.findById(userOpt.get().getUid()), HttpStatus.OK);
+        }
         return response;
     }
 
     @PostMapping("/scrap/{articleid}")
     @ApiOperation(value = "게시글 스크랩하기")
-    public Object doScrap(@PathVariable final Long articleid, @RequestParam(required = true) final Long userid) {
-        return scrapDao.save(Scrap.builder()
-                .scrapid(null)
-                .id(userid)
-                .articleid(articleid)
-                .build());
+    public Object doScrap(@PathVariable final Long articleid) {
+        Authentication user = SecurityContextHolder.getContext().getAuthentication();
+        ResponseEntity response = null;
+        if(user.getPrincipal() == "anonymousUser"){
+            response = new ResponseEntity<>("Fail", HttpStatus.UNAUTHORIZED);
+            return response;
+        }else{
+            UserDetails user2 = (UserDetails) user.getPrincipal();
+            Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
+            return scrapDao.save(Scrap.builder()
+                    .scrapid(null)
+                    .id(userOpt.get().getUid())
+                    .articleid(articleid)
+                    .build());
+        }
+
     }
 
     @DeleteMapping("/scrap/{scrapid}")
     @ApiOperation(value = "스크랩 취소")
     public Object deleteScrap(@PathVariable final Long scrapid){
-        scrapDao.deleteByScrapid(scrapid);
-        ResponseEntity response = new ResponseEntity<>("스크랩 취소 완료", HttpStatus.OK);
+        Authentication user = SecurityContextHolder.getContext().getAuthentication();
+        ResponseEntity response = null;
+        if(user.getPrincipal() == "anonymousUser"){
+            response = new ResponseEntity<>("Fail", HttpStatus.UNAUTHORIZED);
+        }else {
+            UserDetails user2 = (UserDetails) user.getPrincipal();
+            Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
+            scrapDao.deleteByScrapidAndId(scrapid, userOpt.get().getUid());
+            response = new ResponseEntity<>("스크랩 취소 완료", HttpStatus.OK);
+        }
         return response;
     }
 
