@@ -2,8 +2,11 @@ package com.web.curation.controller;
 
 import com.google.api.Http;
 import com.web.curation.config.security.JwtTokenProvider;
+import com.web.curation.dao.article.ArticleDao;
+import com.web.curation.dao.follow.FollowDao;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
+import com.web.curation.model.article.Article;
 import com.web.curation.model.user.ChangePasswordRequest;
 import com.web.curation.model.user.LoginRequest;
 import com.web.curation.model.user.SignupRequest;
@@ -41,6 +44,10 @@ public class AccountController {
 
     @Autowired
     UserDao userDao;
+    @Autowired
+    ArticleDao articleDao;
+    @Autowired
+    FollowDao followDao;
 
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
@@ -110,7 +117,6 @@ public class AccountController {
         result.put("nickname", userOpt.get().getNickname());
         result.put("email", userOpt.get().getUsername());
         result.put("roles", user2.getAuthorities().toString());
-//        return userOpt.get().getUid() + " / " +  userOpt.get().getNickname() + " / " + user2.getUsername() + " / " + user2.getAuthorities().toString();
         return result;
     }
 
@@ -189,9 +195,30 @@ public class AccountController {
         }
     }
 
-//    @GetMapping("/account/{uid}")
+//    @GetMapping("/account/{nickname}")
 //    @ApiOperation(value = "타 유저 프로필")
-//    public Object otherUserProfile(){
-//
+//    public Object otherUserProfile(@PathVariable final String nickname){
+//        Authentication user = SecurityContextHolder.getContext().getAuthentication();
+//        ResponseEntity response = null;
+//        if(user.getPrincipal() == "anonymousUser"){
+//            response = new ResponseEntity<>("Fail", HttpStatus.UNAUTHORIZED);
+//        }else{
+//            UserDetails user2 = (UserDetails) user.getPrincipal();
+//            Optional<User> loginUser = userDao.findByEmail(user2.getUsername());
+//            Optional<User> otherUser = userDao.findByNickname(nickname);
+//            Optional<Article> article = articleDao.findById(otherUser.get().getUid());
+//            boolean follow = false;
+//            if(followDao.findBySrcidAndDstid(loginUser.get().getUid(), otherUser.get().getUid()) == 0){
+//                follow = false;
+//            }else{
+//                follow = true;
+//            }
+//            Map result = new HashMap<String, Object>();
+//            result.put("follow", follow);
+//            result.put("article", article);
+//            result.put("userProfile", otherUser);
+//            response = new ResponseEntity<>(result, HttpStatus.OK);
+//        }
+//        return response;
 //    }
 }
