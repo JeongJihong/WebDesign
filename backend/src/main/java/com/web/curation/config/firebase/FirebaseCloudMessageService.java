@@ -3,7 +3,6 @@ package com.web.curation.config.firebase;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
-import com.sun.tools.javac.util.List;
 import com.web.curation.model.alarm.FcmMessage;
 import lombok.RequiredArgsConstructor;
 import okhttp3.*;
@@ -11,6 +10,8 @@ import org.apache.http.HttpHeaders;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
 
 import java.io.IOException;
 
@@ -62,7 +63,7 @@ public class FirebaseCloudMessageService {
 
         GoogleCredentials googleCredential = GoogleCredentials.fromStream(
                 new ClassPathResource(firebaseConfigPath).getInputStream()
-        ).createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
+        ).createScoped(Collections.singleton("https://www.googleapis.com/auth/cloud-platform"));
 
         googleCredential.refreshIfExpired();
 
