@@ -3,17 +3,20 @@
 
     <b-nav v-if="navShow" id="custom-navbar" class="d-flex justify-content-between">
       <b-nav-item>
-        <router-link :to="{ name: 'FeedMain' }" class="text-decoration-none fw-bold">Home</router-link>
+        <img src="./assets/images/main-icon-2.png" alt="" style="width: 83px; height: 35px;">
       </b-nav-item>
-      <b-nav-item>
-        <router-link :to="{ name: 'Login' }"  class="text-decoration-none me-3 text-dark">
-          <span>로그인</span>
+      <b-nav-item class="d-flex align-items-center">
+        <router-link :to="{ name: 'AlarmList' }"  class="text-decoration-none me-3 text-dark">
+          <span>알림</span>
         </router-link>
-        <router-link :to="{ name: 'Signup' }" class="text-decoration-none me-3 text-dark">
-          <span>회원가입</span>
+        <router-link :to="{ name: 'SearchUser' }" class="text-decoration-none me-3 text-dark">
+          <span>검색</span>
         </router-link>
-        <router-link :to="{ name: 'ArticleCreate' }" class="text-decoration-none text-dark">
-          <span>글생성</span>
+        <router-link :to="{ name: 'ArticleCreate' }" class="text-decoration-none me-3 text-dark">
+          <span>피드작성</span>
+        </router-link>
+        <router-link :to="{ name: 'ProfileDetail' }" class="text-decoration-none text-dark">
+          <span>프로필</span>
         </router-link>
       </b-nav-item>
     </b-nav>
@@ -26,6 +29,8 @@
 <script>
 import "./components/css/style.scss";
 
+import { mapState } from 'vuex'
+
 export default {
   name: "app",
   data() {
@@ -33,16 +38,34 @@ export default {
       navShow: true,
     }
   },
+  computed: {
+    ...mapState([
+      'token'
+    ])
+  },
   watch: {
     $route () {
+      console.log('일단 확인')
       if (this.$route.name === 'FeedMain') {
         this.navShow = true
+        console.log('메인 맞음')
       } else {
         this.navShow = false
+        console.log('메인 아님')
       }
     }
+  },
+  created() {
+    console.log('일단 확인')
+    if (this.$route.name === 'FeedMain') {
+      this.navShow = true
+      console.log('메인 맞음')
+    } else {
+      this.navShow = false
+      console.log('메인 아님')
+    }
   }
-};
+}
 
 var prevScrollpos = window.pageYOffset
 window.onscroll = function() {
