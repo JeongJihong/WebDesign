@@ -19,5 +19,5 @@ public interface FollowDao extends JpaRepository<Follow, Long> {
 
     Optional<Follow> findByFollowid(Long followid);
 
-    int findBySrcidAndDstid(Long src, Long dst);
+    boolean existsBySrcidAndDstid(Long src, Long dst);
 }
