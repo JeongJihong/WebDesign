@@ -6,5 +6,5 @@ import org.hibernate.loader.plan.spi.QuerySpace;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ScrapDao extends JpaRepository<Scrap, Long> {
-    void deleteByScrapid(Long scrapid);
+    void deleteByScrapidAndId(Long scrapid, Long id);
 }
