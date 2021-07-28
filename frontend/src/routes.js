@@ -72,7 +72,7 @@ const routes = [
             loggedAuth: true
         }
     },
-    {   path : '/account/profile',
+    {   path : '/account/profile/:nickname',
         name : 'ProfileDetail',
         component : ProfileDetail,
         meta: {
