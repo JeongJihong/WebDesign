@@ -1,11 +1,15 @@
 package com.web.curation.controller;
 
 import com.web.curation.dao.article.ArticleDao;
+import com.web.curation.dao.article.ArticleLikeDao;
+import com.web.curation.dao.image.ImageDao;
 import com.web.curation.dao.scrap.ScrapDao;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.article.Article;
+import com.web.curation.model.article.PostArticleRequest;
 import com.web.curation.model.comment.Comment;
+import com.web.curation.model.image.Image;
 import com.web.curation.model.scrap.Scrap;
 import com.web.curation.model.user.User;
 import io.swagger.annotations.ApiOperation;
@@ -22,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,41 +47,20 @@ public class ArticleController {
     ArticleDao articleDao;
 
     @Autowired
+    ArticleLikeDao articleLikeDao;
+
+    @Autowired
     ScrapDao scrapDao;
 
     @Autowired
     UserDao userDao;
 
-    @PostMapping("/test")
-    @ApiOperation(value = "POST테스트")
-    public Article testCode(@RequestBody Article article) {
-        // 게시글 번호로 게시글 추출
-//        Article findArticle = em.find(Article.class, articleid);
-//
-//        // 게시글에서 userId 추출
-//        Long findUserId = findArticle.getId();
-//        User findUser = em.find(User.class, findUserId);
-
-        return articleDao.save(article);
-    }
-
-    @GetMapping("/test")
-    @ApiOperation(value = "GET테스트")
-    public Article getTestCode(@RequestParam(required = false) final Long article) {
-        // 게시글 번호로 게시글 추출
-        Article findArticle = articleDao.findByArticleid(article);
-        return findArticle;
-//
-//        // 게시글에서 userId 추출
-//        Long findUserId = findArticle.getId();
-//        User findUser = em.find(User.class, findUserId);
-
-//        return articleDao.save(article);
-    }
+    @Autowired
+    ImageDao imageDao;
 
     @PostMapping("/article")
     @ApiOperation(value = "게시글 작성")
-    public Object postArticle() {
+    public Object postArticle(@RequestBody PostArticleRequest request) {
         Authentication user = SecurityContextHolder.getContext().getAuthentication();
         ResponseEntity response = null;
         if(user.getPrincipal() == "anonymousUser"){
@@ -85,17 +69,42 @@ public class ArticleController {
         }else {
             UserDetails user2 = (UserDetails) user.getPrincipal();
             Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
-            //-----여기 부분 채워 넣으셔 됩니다 ------
-//            return articleDao.save(Article.builder()
-//            )      .
-            response = new ResponseEntity<>("null", HttpStatus.OK);
+
+            Long articleId = articleDao.save(Article.builder()
+                    .articleid(null)
+                    .id(userOpt.get().getUid())
+                    .createdtime(null)
+                    .updatedtime(null)
+                    .content(request.getContent())
+                    .build()
+            ).getArticleid();
+
+            for(int i = 0; i < request.getImages().size(); ++i) {
+                imageDao.save(Image.builder()
+                        .imageid(null)
+                        .articleid(articleId)
+                        .imgURL(request.getImages().get(i).getImgURL())
+                        .build()
+                );
+            }
+
+            response = new ResponseEntity<>("게시글 작성 완료", HttpStatus.OK);
             return response;
         }
-//        return scrapDao.save(Scrap.builder()
-//                .scrapid(null)
-//                .id(userid)
-//                .articleid(articleid)
-//                .build());
+    }
+
+    @GetMapping("/article/{articleid}")
+    @ApiOperation(value = "해당 게시글 하나만 보기")
+    public Article getTestCode(@PathVariable(required = false) final Long articleid) {
+        // 게시글 번호로 게시글 추출
+        Article findArticle = articleDao.findByArticleid(articleid);
+        int articleLikeNum = articleLikeDao.countArticleLike(articleid);
+
+        Article returnArticle = new Article(findArticle.getArticleid(),
+                findArticle.getId(), findArticle.getCreatedtime(), findArticle.getUpdatedtime(),
+                findArticle.getContent(), articleLikeNum, findArticle.getImages(), findArticle.getComments());
+
+        return returnArticle;
     }
 
     @GetMapping("/article")
@@ -115,6 +124,37 @@ public class ArticleController {
         }
         return response;
     }
+
+//    @GetMapping("/article")
+//    @ApiOperation(value = "메인 피드 보기")
+//    public Object viewMainFeed() {
+//        Authentication user = SecurityContextHolder.getContext().getAuthentication();
+//        ResponseEntity response = null;
+//        if(user.getPrincipal() == "anonymousUser"){
+//            response = new ResponseEntity<>("Fail", HttpStatus.UNAUTHORIZED);
+//            return response;
+//        }else {
+//            UserDetails user2 = (UserDetails) user.getPrincipal();
+//            Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
+//
+//            // 좋아요 개수
+//            int articlelikenum = 0;
+//
+//            articleDao.save(Article.builder()
+//                    .articleid(null)
+//                    .id(null)   // user id
+//                    .createdtime(null)
+//                    .updatedtime(null)
+//                    .content(request.getContent())
+//                    .articlelikecount(articlelikenum)
+//                    .images(request.getImages())
+//                    .comments()
+//                    .build()).getArticleid();
+//
+//            response = new ResponseEntity<>(articleDao, HttpStatus.OK);
+//            return response;
+//        }
+//    }
 
     @DeleteMapping("/article/{articleid}")
     @ApiOperation(value = "게시글 삭제")
