@@ -78,7 +78,6 @@ public class AccountController {
     public Object changePassword(@RequestBody ChangePasswordRequest request){
         //이메일, 현재비밀번호, 바꿀 비밀번호 Parameter로 받아옴
         Optional<User> userOpt = userDao.findByEmail(request.getEmail());
-        System.out.println(userOpt.get().getEmail());
         if(!passwordEncoder.matches(request.getOldPassword(), userOpt.get().getPassword())){
             throw new IllegalArgumentException("잘못된 비밀번호입니다.");
         }
