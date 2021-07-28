@@ -116,38 +116,15 @@ public class ArticleController {
             UserDetails user2 = (UserDetails) user.getPrincipal();
             Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
             // uid를 통해 해당 유저의 게시글을 불러온다.
-            Optional<Article> article = articleDao.findById(userOpt.get().getUid());
+            Optional<Article> article = null;
+            if(!articleDao.existsById(userOpt.get().getUid())){
+                System.out.println("none");
+            }else{
+                article = articleDao.findById(userOpt.get().getUid());
+            }
             response = new ResponseEntity<>(article, HttpStatus.OK);
         }
         return response;
-    }
-
-    @GetMapping("/article/{nickname}")
-    @ApiOperation(value = "타 유저 피드 보기")
-    @ResponseBody
-    public Object viewOtherFeed(@PathVariable final String nickname){
-            Authentication user = SecurityContextHolder.getContext().getAuthentication();
-            ResponseEntity response = null;
-            if(user.getPrincipal() == "anonymousUser"){
-                response = new ResponseEntity<>("Fail", HttpStatus.UNAUTHORIZED);
-            }else{
-                UserDetails user2 = (UserDetails) user.getPrincipal();
-                Optional<User> loginUser = userDao.findByEmail(user2.getUsername());
-                Optional<User> otherUser = userDao.findByNickname(nickname);
-                Optional<Article> article = articleDao.findById(otherUser.get().getUid());
-                boolean follow = false;
-                if(followDao.findBySrcidAndDstid(loginUser.get().getUid(), otherUser.get().getUid()) == 0){
-                    follow = false;
-                }else{
-                    follow = true;
-                }
-                Map result = new HashMap<String, Object>();
-                result.put("follow", follow);
-                result.put("article", article);
-                result.put("userProfile", otherUser);
-                response = new ResponseEntity<>(result, HttpStatus.OK);
-            }
-            return response;
     }
 
     @DeleteMapping("/article/{articleid}")
