@@ -16,5 +16,10 @@ export default {
   },
   SCRAP_DELETE_MODE(state) {
     state.scrapMode = !state.scrapMode
+  },
+  LOGOUT () {
+    localStorage.removeItem('token') 
+    location.reload(); 
   }
+
 }
