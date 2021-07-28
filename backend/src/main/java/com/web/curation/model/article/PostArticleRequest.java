@@ -13,40 +13,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@Setter
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Builder
-public class Article {   // 게시글 보여줄 때 필요한 정보
+public class PostArticleRequest {   // 게시글 포스팅할 때 필요한 정보
     @Id @Column(name = "articleid")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long articleid;
-
-    private Long id;
-
-    @CreationTimestamp
-    private LocalDateTime createdtime;
-
-    @UpdateTimestamp
-    private LocalDateTime updatedtime;
     private String content;
-
-    private int articlelikecount;
 
     @OneToMany(cascade={CascadeType.ALL})
     @JoinColumn(name="articleid", insertable = false)
     private List<Image> images = new ArrayList<>();
-
-    @OneToMany(cascade={CascadeType.ALL})
-    @JoinColumn(name="articleid", insertable = false)
-    private List<Comment> comments = new ArrayList<>();
-
-//    @OneToMany
-//    @JoinColumn(name="articleid")
-//    private List<ArticleLike> articlelikes = new ArrayList<>();
-
-//    @ManyToOne
-//    @JoinColumn(name = "uid")
-//    private User user;
 }

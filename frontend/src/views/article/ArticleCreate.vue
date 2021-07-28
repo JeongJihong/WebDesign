@@ -1,6 +1,6 @@
 <template>
   <div class="scale">
-    <button @click="back"><b-icon-arrow-left></b-icon-arrow-left></button><span>게시글 생성하기</span>
+    <button><b-icon-arrow-left></b-icon-arrow-left></button><span>게시글 생성하기</span>
     <form enctype = "multipart/form-data">
       <div class="d-flex flex-row">
         <button style="display:inline-block; margin-right:5%; margin-left:2%" @click="clickInputTag()" id='addimage'><b-icon-plus class="h1"></b-icon-plus></button>
@@ -34,9 +34,6 @@ export default {
     }
   },
   methods:{
-    ...mapActions([
-      "back",
-    ]),
     clickInputTag() {
       this.$refs['plus'].click()
     },
