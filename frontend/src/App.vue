@@ -7,20 +7,19 @@
       </b-nav-item>
       <b-nav-item class="d-flex align-items-center">
         <router-link :to="{ name: 'AlarmList' }"  class="text-decoration-none me-3 text-dark">
-          <span>알림</span>
+          <b-icon icon="bell-fill"></b-icon>
         </router-link>
         <router-link :to="{ name: 'SearchUser' }" class="text-decoration-none me-3 text-dark">
-          <span>검색</span>
+          <b-icon icon="search"></b-icon>
         </router-link>
         <router-link :to="{ name: 'ArticleCreate' }" class="text-decoration-none me-3 text-dark">
-          <span>피드작성</span>
+          <b-icon icon="pencil-square"></b-icon>
         </router-link>
         <router-link :to="{ name: 'ProfileDetail' }" class="text-decoration-none text-dark">
-          <span>프로필</span>
+          <b-icon icon="person-fill"></b-icon>
         </router-link>
       </b-nav-item>
     </b-nav>
-
     <router-view></router-view>
 
   </div>
@@ -28,7 +27,6 @@
 
 <script>
 import "./components/css/style.scss";
-
 import { mapState } from 'vuex'
 
 export default {
