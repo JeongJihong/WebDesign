@@ -20,7 +20,8 @@
             <b-list-group-item
               class="border-0 my-1" v-for="user in searchGet" :key="user.searchid">
               <div class="d-flex justify-content-between">
-                <b-link :href="`/#/account/profile/${user.name}`"
+                <!-- <b-link :href="`/#/account/profile/${user.name}`" -->
+                <b-link
                   class="text-decoration-none text-dark pe-5 me-5">
                   <span class="d-flex align-items-center" @click="searchPost({token, user})">
                     <span class="dot me-4"></span>
@@ -39,7 +40,8 @@
       <div v-else>
         <p class="fw-bold mx-3">검색 결과</p>
         <b-list-group>
-          <b-list-group-item :href="`/#/account/profile/${user.name}`"
+          <!-- <b-list-group-item :href="`/#/account/profile/${user.name}`" -->
+          <b-list-group-item
             class="border-0 my-1" v-for="user in searchLive" :key="user.searchid"
             @click="searchPost({token, user})">
             <div class="d-flex align-items-center">
@@ -85,58 +87,62 @@ export default {
     }
   },
   methods: {
-    searchPost(data) {
+    searchPost({ token, user }) {
       axios({
         url: `http://127.0.0.1:8080/account/checkJWT`,
         method: 'get',
         headers: {
           'Content-Type': 'application/json',
-          'X-AUTH-TOKEN': data.token
+          'X-AUTH-TOKEN': token
         }
       })
         .then(res => {
-          const range = res.data.indexOf('/') - 1
-          const id = res.data.substr(0, range)
           axios({
             url: 'http://127.0.0.1:8080/search',
             method: 'post',
             data: {
-              id: id,
-              name: data.user.name
+              id: res.data.uid,
+              name: user.name
             }
           })
             .then(() => {
-              this.$store.dispatch('searchGet', data.token)
+              this.$store.dispatch('searchGet', token)
+              this.$router.push({ name: 'ProfileDetail', params: { nickname: user.name } })
             })
             .catch(err => {
-              alert('POST 요청 실패', err)
+              alert(err)
             })
         })
         .catch(err => {
           alert('JWT 인증 실패', err)
         })
     },
-    searchDelete(data) {
+    searchDelete({ token, user }) {
       axios({
         url: `http://127.0.0.1:8080/account/checkJWT`,
         method: 'get',
         headers: {
           'Content-Type': 'application/json',
-          'X-AUTH-TOKEN': data.token
+          'X-AUTH-TOKEN': token
         }
       })
-        .then(res => {
-          const range = res.data.indexOf('/') - 1
-          const id = res.data.substr(0, range)
+        .then(() => {
           axios({
-            url: `http://127.0.0.1:8080/search?id=${id}&searchid=${data.user.searchid}`,
+            url: `http://127.0.0.1:8080/search`,
             method: 'delete',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-AUTH-TOKEN': token
+            },
+            params: {
+              searchid: user.searchid
+            }
           })
             .then(() => {
-              this.$store.dispatch('searchGet', data.token)
+              this.$store.dispatch('searchGet', token)
             })
             .catch(err => {
-              alert('DELETE 요청 실패', err)
+              alert(err)
             })
         })
         .catch(err => {
