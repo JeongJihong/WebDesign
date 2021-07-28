@@ -11,7 +11,6 @@ const state = {
 
     // 로그인 관련 - 두호
     token: localStorage.getItem('token') || '',
-    loginState: false,
 
     searchGet: [],
     searchLive: {},

@@ -3,9 +3,6 @@ export default {
   UPDATE_TOKEN(state, token) {
     state.token = token
   },
-  LOGIN(state, bool) {
-    state.loginState = bool
-  },
 
   SEARCH_GET(state, searchGet) {
     state.searchGet = searchGet
