@@ -9,6 +9,7 @@ import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.article.Article;
 import com.web.curation.model.article.PostArticleRequest;
+import com.web.curation.model.article.ViewArticleRequest;
 import com.web.curation.model.comment.Comment;
 import com.web.curation.model.image.Image;
 import com.web.curation.model.scrap.Scrap;
@@ -42,9 +43,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @RestController
 public class ArticleController {
-
-    @PersistenceContext
-    private EntityManager em;
 
     @Autowired
     ArticleDao articleDao;
@@ -101,16 +99,14 @@ public class ArticleController {
 
     @GetMapping("/article/{articleid}")
     @ApiOperation(value = "해당 게시글 하나만 보기")
-    public Article getTestCode(@PathVariable(required = false) final Long articleid) {
+    public ViewArticleRequest getTestCode(@PathVariable(required = false) final Long articleid) {
         // 게시글 번호로 게시글 추출
         Article findArticle = articleDao.findByArticleid(articleid);
         int articleLikeNum = articleLikeDao.countArticleLike(articleid);
 
-        Article returnArticle = new Article(findArticle.getArticleid(),
-                findArticle.getId(), findArticle.getCreatedtime(), findArticle.getUpdatedtime(),
-                findArticle.getContent(), articleLikeNum, findArticle.getImages(), findArticle.getComments());
+        ViewArticleRequest var = new ViewArticleRequest(findArticle, articleLikeNum);
 
-        return returnArticle;
+        return var;
     }
 
     @GetMapping("/article")
