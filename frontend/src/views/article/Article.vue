@@ -1,13 +1,14 @@
 <template>
   <div class="feed newsfeed">
     <div class="wrapB">
-      <b-button @click="onClick()">피드생성</b-button>
       <h1>뉴스피드</h1>
+      <button @click="logout()">로그아웃</button>
       <!-- <div v-for="article in articles"  :key="article.id" @click="getArticle(article.id)" :article="article">
         <p>{{article.image}}</p>
         <FeedItem/>
       </div> -->
       <div v-for = " (test,index) in tests" :key="index" >
+        <b-avatar src="https://placekitten.com/300/300" size="2rem"></b-avatar><span> 냥사마</span>
         <b-carousel
           id="carousel-1"
           v-model="slide"
@@ -47,11 +48,10 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
 import axios from 'axios'
+import { mapActions,mapState } from 'vuex'
 import "../../components/css/feed/feed-item.scss";
 import "../../components/css/feed/newsfeed.scss";
-import FeedItem from "../../components/feed/FeedItem.vue";
 export default {
   props: ["keyword"],
   // components: { FeedItem },
@@ -75,14 +75,9 @@ export default {
       }
   },
   methods:{
-    onClick(){
-      if (!this.isLogin){
-        alert('Login이 필요합니다!')
-        this.$router.push({name:'Login'})
-      }else{
-        this.$router.push({ name:'ArticlCreate'} )
-      }
-    },
+  ...mapActions([
+      'logout'
+    ]),
     getArticle(articleId){
       console.log(articleId)
       this.$router.push({ name:'ArticleDetail', params:{ articleId:articleId }})

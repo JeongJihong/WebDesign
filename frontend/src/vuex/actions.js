@@ -140,5 +140,8 @@ export default {
       .catch(err => {
         alert('DELETE 실패', err)
       })
-  }
+  },
+  logout ({ commit }) { 
+    commit('LOGOUT') 
+  },
 }
