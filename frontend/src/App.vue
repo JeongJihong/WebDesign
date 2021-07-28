@@ -31,12 +31,11 @@ export default {
   data() {
     return {
       navShow: true,
-      routerShow: true
     }
   },
   watch: {
     $route () {
-      if (['FeedMain', 'Scrap'].includes(this.$route.name)) {
+      if (this.$route.name === 'FeedMain') {
         this.navShow = true
       } else {
         this.navShow = false

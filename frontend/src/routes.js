@@ -14,21 +14,23 @@ import Comments from '@/views/article/Comments.vue'
 import ArticleCreate from '@/views/article/ArticleCreate.vue'
 import ArticleDetail from '@/views/article/ArticleDetail.vue'
 
-export default [
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+
+Vue.use(VueRouter)
+
+const routes = [
     {
-        mode : 'history',
         path : '/account/login',
         name : 'Login',
         component : Login
     },
     {
-        mode : 'history',
         path : '/account/signup',
         name : 'Signup',
         component : Signup
     },
     {
-        mode : 'history',
         path : '/feed/main',
         name : 'FeedMain',
         component : FeedMain
@@ -46,11 +48,8 @@ export default [
     {
         path: '*',
         redirect: "/404"
-        // 아래처럼 바로 NotFound 경로를 매칭해도 됨
-        // component: NotFound
     },
     {
-        mode : 'history',
         path : '/account/changePassword',
         name : 'ChangePassword',
         component : ChangePassword
@@ -70,9 +69,9 @@ export default [
         component : ProfileUpdate
     },
     {
-        path : '/account/scrap',//저건 좀바꿔야할듯
+        path : '/account/scrap',
         name : 'Scrap',
-        component : Scrap //시작
+        component : Scrap
     },
     {
         path : '/search',
@@ -89,7 +88,7 @@ export default [
         name : 'ArticleDetail',
         component : ArticleDetail
     },
-    {   mode : 'history',
+    {   
         path : '/article/create',
         name : 'ArticleCreate',
         component : ArticleCreate
@@ -100,3 +99,10 @@ export default [
         component : Comments
     },
 ]
+
+const router = new VueRouter({
+    mode: 'history',
+    routes
+})
+
+export default router
