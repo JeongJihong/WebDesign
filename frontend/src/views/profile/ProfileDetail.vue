@@ -5,7 +5,7 @@
         <button style="padding-right:20px">
           <b-icon-arrow-left class="h2"></b-icon-arrow-left>
         </button>
-        <h2>{{ this.nickname }}</h2>
+        <h2>{{ this.nickname }} 님의 프로필</h2>
       </div>
       <button @click="goToProfileUpdate">
         프로필 수정
@@ -14,16 +14,16 @@
     <div class="d-flex">
       <img src="@/assets/images/profile_default.png" alt="image" style="width: 70px; height: 70px" >
       <div class="mx-4">
-        <h4>이름</h4>
+        <h4>{{ this.nickname }}</h4>
         <div class="d-flex" style="justify-content: space-between">
           <button class="d-flex" @click="goToFollowList">
-            <h4>팔로우</h4>
-            <h4 style="color:blue;">12</h4>
+            <h4>팔로잉</h4>
+            <h4 style="color:blue;">{{ this.followings }}</h4>
           </button>
           &nbsp;&nbsp;&nbsp;&nbsp;
           <button class="d-flex" @click="goToFollowList">
             <h4>팔로워</h4>
-            <h4 style="color:blue;">123</h4>
+            <h4 style="color:blue;">{{ this.followers }}</h4>
           </button>
         </div>
       </div>
@@ -51,6 +51,8 @@ export default {
     return {
       nickname: '',
       introduction: '',
+      followerLs: [],
+      followingLs: [],
       followers: 0,
       followings: 0,
     }
@@ -88,7 +90,7 @@ export default {
     getUserInfo: function () {
       axios({
         method: 'get',
-        url: `http://127.0.0.1:8080/account/profile/`,
+        url: `http://127.0.0.1:8080/account/profile/${this.nickname}`,
         headers: {
           'Content-Type': 'application/json',
           'X-AUTH-TOKEN' : this.$store.state.token
@@ -97,7 +99,7 @@ export default {
       .then((res) => {
         this.nickname = res.data.nickname
         this.introduction = res.data.introduction
-        this.followInfo()
+        this.followerList()
       })
       .catch((err) => {
         console.log(err)
@@ -108,7 +110,7 @@ export default {
         name: 'ChangePassword',
       })
     },
-    followInfo () {
+    followerList () {
       axios({
         method: 'get',
         url: `http://127.0.0.1:8080/account/profile/${this.nickname}/follower`,
@@ -118,8 +120,31 @@ export default {
         },
       })
       .then((res) => {
+        console.log('팔로워 불러오기')
         console.log(res.data)
-        this.followers = res.data
+        this.followerLs = res.data
+        this.followers = this.followerLs.length
+
+        this.followingList()
+      })
+      .catch((err) => {
+        alert(err)
+      })
+    },
+    followingList () {
+      axios({
+        method: 'get',
+        url: `http://127.0.0.1:8080/account/profile/${this.nickname}/following`,
+        headers: {
+          'Content-Type': 'application/json',
+          'X-AUTH-TOKEN' : this.$store.state.token
+        },
+      })
+      .then((res) => {
+        console.log('팔로잉 불러오기')
+        console.log(res.data)
+        this.followingLs = res.data
+        this.followings = this.followingLs.length
       })
       .catch((err) => {
         alert(err)
