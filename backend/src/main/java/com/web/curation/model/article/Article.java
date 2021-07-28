@@ -31,7 +31,7 @@ public class Article {
 
     @UpdateTimestamp
     private LocalDateTime updatedtime;
-    private String review;
+    private String content;
 
     @OneToMany(cascade={CascadeType.ALL})
     @JoinColumn(name="articleid", insertable = false)
