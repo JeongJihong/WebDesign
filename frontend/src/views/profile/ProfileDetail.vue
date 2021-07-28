@@ -97,6 +97,7 @@ export default {
       .then((res) => {
         this.nickname = res.data.nickname
         this.introduction = res.data.introduction
+        this.followInfo()
       })
       .catch((err) => {
         console.log(err)
@@ -117,7 +118,8 @@ export default {
         },
       })
       .then((res) => {
-        this.followerNum = res.data
+        console.log(res.data)
+        this.followers = res.data
       })
       .catch((err) => {
         alert(err)
@@ -136,11 +138,8 @@ export default {
     .then((res) => {
       console.log('checkJWT 성공! 밑에 res 확인')
       console.log(res)
-      const range = res.data.indexOf('/') - 1
-      const uid = res.data.substr(0, range)
-      this.myUid=uid
+      this.myUid=res.data.uid
       this.getUserInfo()
-      this.followInfo()
       console.log(this.myUid)
     })
     .catch((err) => {
