@@ -25,6 +25,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.swing.text.html.Option;
 import javax.validation.Valid;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @ApiResponses(value = { @ApiResponse(code = 401, message = "Unauthorized", response = BasicResponse.class),
@@ -94,7 +96,8 @@ public class AccountController {
     }
     @GetMapping("/account/checkJWT")
     @ApiOperation(value = "token통해서 정보 가져오기")
-    public String list(){
+    @ResponseBody
+    public Map list(){
         //권한체크
         Authentication user = SecurityContextHolder.getContext().getAuthentication();
         if(user.getPrincipal() == "anonymousUser"){
@@ -102,7 +105,13 @@ public class AccountController {
         }
         UserDetails user2 = (UserDetails) user.getPrincipal();
         Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
-        return userOpt.get().getUid() + " / " + user2.getUsername() + " / " + user2.getAuthorities().toString();
+        Map result = new HashMap<String, Object>();
+        result.put("uid", userOpt.get().getUid());
+        result.put("nickname", userOpt.get().getNickname());
+        result.put("email", userOpt.get().getUsername());
+        result.put("roles", user2.getAuthorities().toString());
+//        return userOpt.get().getUid() + " / " +  userOpt.get().getNickname() + " / " + user2.getUsername() + " / " + user2.getAuthorities().toString();
+        return result;
     }
 
     @GetMapping("/account/profile")
@@ -179,4 +188,10 @@ public class AccountController {
             return new ResponseEntity<>("Success", HttpStatus.OK);
         }
     }
+
+//    @GetMapping("/account/{uid}")
+//    @ApiOperation(value = "타 유저 프로필")
+//    public Object otherUserProfile(){
+//
+//    }
 }
