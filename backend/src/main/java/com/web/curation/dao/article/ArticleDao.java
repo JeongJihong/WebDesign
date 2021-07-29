@@ -9,8 +9,9 @@ import java.util.Optional;
 public interface ArticleDao extends JpaRepository<Article, Long> {
     void deleteByArticleid(Long articleid);
 
-//    List<Article> findByArticleid(Long articleid);
+    List<Article> findAllById(Long articleid);
+
+    Optional<Article> findByArticleid(Long articleid);
 
 
-    Article findByArticleid(Long articleid);
 }

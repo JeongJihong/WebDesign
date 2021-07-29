@@ -4,9 +4,11 @@ import com.google.api.Http;
 import com.web.curation.config.security.JwtTokenProvider;
 import com.web.curation.dao.article.ArticleDao;
 import com.web.curation.dao.follow.FollowDao;
+import com.web.curation.dao.image.ImageDao;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.article.Article;
+import com.web.curation.model.image.Image;
 import com.web.curation.model.user.ChangePasswordRequest;
 import com.web.curation.model.user.LoginRequest;
 import com.web.curation.model.user.SignupRequest;
@@ -27,10 +29,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.swing.text.html.Option;
 import javax.validation.Valid;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @ApiResponses(value = { @ApiResponse(code = 401, message = "Unauthorized", response = BasicResponse.class),
         @ApiResponse(code = 403, message = "Forbidden", response = BasicResponse.class),
@@ -48,6 +47,8 @@ public class AccountController {
     ArticleDao articleDao;
     @Autowired
     FollowDao followDao;
+    @Autowired
+    ImageDao imageDao;
 
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
@@ -73,7 +74,7 @@ public class AccountController {
 
         return userDao.save(User.builder()
                 .uid(null)
-                .introduction(null)
+                .introduction("")
                 .thumbnail(null)
                 .email(request.getEmail())
                 .nickname(request.getNickname())
@@ -101,6 +102,7 @@ public class AccountController {
         response = new ResponseEntity<>("OK", HttpStatus.OK);
         return response;
     }
+
     @GetMapping("/account/checkJWT")
     @ApiOperation(value = "token통해서 정보 가져오기")
     @ResponseBody
@@ -208,11 +210,16 @@ public class AccountController {
             UserDetails user2 = (UserDetails) user.getPrincipal();
             Optional<User> loginUser = userDao.findByEmail(user2.getUsername());
             Optional<User> otherUser = userDao.findByNickname(nickname);
-            Optional<Article> article = null;
+            List<Article> article = null;
+            List<Image> images = null;
             if(!articleDao.existsById(otherUser.get().getUid())){
                 System.out.println("none");
             }else{
-                article = articleDao.findById(otherUser.get().getUid());
+                article = articleDao.findAllById(otherUser.get().getUid());
+                images = new ArrayList<>();
+                for(int i = 0; i < article.size(); i++){
+                    images.add(imageDao.findByArticleidAndImageidStartingWith(article.get(i).getArticleid(), "0").get(0));
+                }
             }
             boolean follow = false;
             if(!followDao.existsBySrcidAndDstid(loginUser.get().getUid(), otherUser.get().getUid())){
@@ -222,8 +229,9 @@ public class AccountController {
             }
             Map result = new HashMap<String, Object>();
             result.put("follow", follow);
-            result.put("article", article);
             result.put("userProfile", otherUser);
+            result.put("article", article);
+            result.put("feed Thumbnail", images);
             response = new ResponseEntity<>(result, HttpStatus.OK);
         }
         return response;

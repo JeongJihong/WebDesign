@@ -4,7 +4,7 @@
     <form enctype = "multipart/form-data">
       <div class="d-flex flex-row">
         <button style="display:inline-block; margin-right:5%; margin-left:2%" @click="clickInputTag()" id='addimage'><b-icon-plus class="h1"></b-icon-plus></button>
-        <input hidden ref="plus" id="image" multiple type="file" name="image" accept="image/*" @change="uploadImage($event)">
+        <input hidden ref="plus" id="image" name="image" multiple type="file"  accept="image/*" @change="uploadImage($event)">
         <div id="image_container"></div>
       </div>
       <div>
@@ -16,22 +16,18 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
 import axios from 'axios'
-import jwt_decode from "jwt-decode"
 export default {
   data() {
         return {
           mainProps: { blank: true, blankColor: '#777', width: 75, height: 75, class: 'm1' },
-          content:'',
-          user:jwt_decode(localStorage.getItem('jwt')).user_id,
-          image:[],
+          content:"",
+          images:[
+            {
+              imgURL:"",
+            },
+          ],
         }
-      },
-   props:{
-    isLogin:{
-      type:Boolean
-    }
   },
   methods:{
     clickInputTag() {
@@ -50,17 +46,15 @@ export default {
       reader.readAsDataURL(event.target.files[0]); 
     },
     ArticleCreate(){
-      const userid = jwt_decode(localStorage.getItem('jwt')).user_id
       axios({
         url:'http://127.0.0.1:8000/article/create/',
         method:'post',
         headers: {
-          Authorization: `JWT ${localStorage.getItem('jwt')}`,
+          'x-access-token': `${localStorage.getItem('token')}`,
         },
         data: {
           content: this.content,
-          img: this.image,
-          user: userid,
+          Image: this.images,
         }
       })
         .then(res=>{
@@ -69,7 +63,9 @@ export default {
           console.log(this.image)
         })
         .catch(err=>{
+          console.log(`${localStorage.getItem('token')}`)
           console.log(this.image)
+          console.log(this.content)
           console.log(err)
         })
     },
