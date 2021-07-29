@@ -30,7 +30,10 @@ public class Article {   // 게시글 보여줄 때 필요한 정보
 
     @UpdateTimestamp
     private LocalDateTime updatedtime;
-    private String content;
+    private String review;
+
+
+//    private int articlelikecount;
 
     @OneToMany(cascade={CascadeType.ALL})
     @JoinColumn(name="articleid", insertable = false)

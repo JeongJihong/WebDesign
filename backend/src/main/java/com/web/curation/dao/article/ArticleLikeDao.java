@@ -10,4 +10,6 @@ public interface ArticleLikeDao extends JpaRepository<ArticleLike, Long> {
     @Query(value = "SELECT count(articlelikeid) FROM articlelike WHERE articleid = :articleid", nativeQuery = true)
     int countArticleLike(Long articleid);
 
+    boolean existsByArticleidAndId(Long articleid, Long id);
+
 }
