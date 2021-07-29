@@ -81,12 +81,14 @@ export default {
         'X-AUTH-TOKEN': token
       }
     })
-      .then(res => {
-        const range = res.data.indexOf('/') - 1
-        const id = res.data.substr(0, range)
+      .then(() => {
         axios({
-          url: `http://127.0.0.1:8080/scrap?userid=${id}`,
-          method: 'get'
+          url: `http://127.0.0.1:8080/scrap`,
+          method: 'get',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-AUTH-TOKEN': token
+          }
         })
           .then(res => {
             commit('SCRAP_GET', res.data)
