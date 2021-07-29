@@ -14,6 +14,20 @@
 
 <br>
 
+**Pipl 개발자**
+
+​	**FE**    팀장    정종우    jongs3030@naver.com
+
+​	**BE**    팀원    김백준    henry9489@gmail.com
+
+​	**FE**    팀원    신형식    shs950930@gmail.com
+
+​	**FE**    팀원    이두호    dhdev5ba@gmail.com
+
+​	**BE**    팀원    정지홍    jjh1731@naver.com
+
+<br>
+
 <br>
 
 ### 목차
@@ -162,29 +176,57 @@ __자체 제작 산출물__ (필요시 이미지 또는 설명 첨부)
 
 <img src ="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/3f2121b0-3aa2-4dc0-a344-7816a30442f6/login.gif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210729%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210729T041816Z&X-Amz-Expires=86400&X-Amz-Signature=f3b210be241912b9f6f5f57bff5c2f820cdd087c9308cce4b70a09740645d922&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22login.gif%22" width="25%">         <img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/fad4f7b8-cae7-4178-8dd5-94aa51646060/login2.gif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210729%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210729T042120Z&X-Amz-Expires=86400&X-Amz-Signature=8a0b9f1391692d181cf4542937ed0375545ca7c33e4adbf1ec3f978f121f14eb&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22login2.gif%22" width="25%">        <img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/7280bbce-f8e3-4c7f-8ba1-b9bbcb3a2376/login3.gif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210729%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210729T042258Z&X-Amz-Expires=86400&X-Amz-Signature=6857aa81d16ea8b00e1d79098e4473674a180283765b69c09fcbf2851c13804a&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22login3.gif%22" width="25%">
 
+로그인 사용자만 이용할 수 있는 SNS 서비스이기 때문에, 로그인하여 vuex 및 localStorage 에 저장되는 token 이 없으면 Login 페이지로 이동합니다.
+
 <br>
 
 #### 회원가입
+
+<img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/1f39567e-d3a1-41a6-b2ca-8189a80bb1e0/signup.gif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210729%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210729T043819Z&X-Amz-Expires=86400&X-Amz-Signature=e2620d94392ac1474783aa6b1ed568d4178564878eac4061c8803acff39bc1e1&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22signup.gif%22" width=25%>
+
+고유한 닉네임, 이메일을 가지도록 **중복확인 기능**을 추가하였습니다.
+
+닉네임, 이메일 그리고 비밀번호가 일차적으로 Frontend 에서 유효성 검사를 통해 통과시에만 가입하기 버튼이 활성화됩니다.
 
 <br>
 
 #### 프로필
 
+<img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/dfd00ef0-b478-451b-843d-d10c1838f765/profile.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210729%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210729T044019Z&X-Amz-Expires=86400&X-Amz-Signature=d2713727401fd577202760041a6bab07504a285a94e98fc8f465606a33e0f526&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22profile.png%22" width="25%">        <img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/c89efba5-0595-4696-a860-23ac413b2d06/profile_change.gif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210729%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210729T044321Z&X-Amz-Expires=86400&X-Amz-Signature=ecdcb7a20b00b22027f4a438dc01bdf473970d8d2bcdba3807cb04612b48b6bd&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22profile_change.gif%22" width="25%">
+
+Vue 의 Route.js 에서 Parameter 에 nickname 을 담아 보내, 해당 정보로 프로필을 렌더링합니다.
+
+프로필 정보 수정 페이지에서 닉네임과 본인 소개글 및 프로필 이미지를 수정할 수 있습니다.
+
 <br>
 
 #### 팔로워/팔로잉 리스트
+
+<img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/b18dc3ea-512d-46c4-89bf-c13b816ec0f6/follower.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210729%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210729T044757Z&X-Amz-Expires=86400&X-Amz-Signature=3eefa36b5f25356882312f39ef075d6ce73dbd114434ab1974abc2c1045d5e20&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22follower.png%22" width="25%">        <img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/cb943cf0-2a38-4ae5-af8d-f10544c5dc95/following.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210729%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210729T044823Z&X-Amz-Expires=86400&X-Amz-Signature=336d6fd43e5fb7d9b2c6b5975e43079c0541e71bf676ac5885ec4d3492873985&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22following.png%22" width="25%">
+
+bootstrap-vue 의 b-tap 을 활용하여 한 페이지 속에서 팔로잉/팔로워 리스트를 구현하였습니다.
 
 <br>
 
 #### 알림/요청
 
+<img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/9251682e-8435-4447-a9a5-4939f082c889/alarm.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210729%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210729T044930Z&X-Amz-Expires=86400&X-Amz-Signature=7c68ebd416a25289366c00183b8a2483c04a1d35497edb3277a8f528c7700c15&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22alarm.png%22" width="25%">
+
 <br>
 
 #### 유저 검색
 
+<img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/136d0ec3-ef2b-411e-bc1f-cf2ba384fc3c/search.gif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210729%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210729T045032Z&X-Amz-Expires=86400&X-Amz-Signature=70e13caf764f843f50843ce1b2e74bc764e010156e428a2bb1a433295603e15a&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22search.gif%22" width="25%">
+
+검색 페이지 방문 시, 혹은 검색창이 비어있을 경우 최근 검색 기록을 보여줍니다.
+
+검색 시 해당 단어가 포함된 결과를 보여줍니다.
+
 <br>
 
 #### 게시글/피드
+
+<img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/b286754d-6411-446d-8cda-846764f8b683/FeedMain_Navbar.gif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210729%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210729T045213Z&X-Amz-Expires=86400&X-Amz-Signature=9161ff4af9f8c354765ce8c70dc45465d2c11c95fd5f41bb1f12eb9e5a446966&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22FeedMain_Navbar.gif%22" width="25%">
 
 <br>
 
@@ -195,3 +237,4 @@ __자체 제작 산출물__ (필요시 이미지 또는 설명 첨부)
 #### 댓글
 
 <br>
+
