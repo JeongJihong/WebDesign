@@ -76,7 +76,7 @@ export default {
     getUserInfo: function () {
       axios({
         method: 'get',
-        url: `http://127.0.0.1:8080/account/profile/${this.myUid}/`,
+        url: `http://127.0.0.1:8080/account/profile/`,
         headers: {
           'Content-Type': 'application/json',
           'X-AUTH-TOKEN' : this.$store.state.token
@@ -112,7 +112,8 @@ export default {
     .then((res) => {
       console.log('checkJWT 성공! 밑에 res 확인')
       console.log(res)
-      var uid = Number(res.data.substring(0,1))
+      const range = res.data.indexOf('/') - 1
+      const uid = res.data.substr(0, range)
       this.myUid=uid
       this.getUserInfo()
       console.log(this.myUid)

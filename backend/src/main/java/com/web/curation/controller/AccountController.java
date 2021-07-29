@@ -102,6 +102,7 @@ public class AccountController {
         response = new ResponseEntity<>("OK", HttpStatus.OK);
         return response;
     }
+
     @GetMapping("/account/checkJWT")
     @ApiOperation(value = "token통해서 정보 가져오기")
     @ResponseBody
@@ -227,12 +228,7 @@ public class AccountController {
             }else{
                 follow = true;
             }
-
-
-
             Map result = new HashMap<String, Object>();
-
-
             result.put("follow", follow);
             result.put("userProfile", otherUser);
             result.put("article", article);

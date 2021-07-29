@@ -10,6 +10,7 @@ import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.article.Article;
 import com.web.curation.model.article.PostArticleRequest;
+import com.web.curation.model.article.ViewArticleRequest;
 import com.web.curation.model.comment.Comment;
 import com.web.curation.model.image.Image;
 import com.web.curation.model.scrap.Scrap;
@@ -51,9 +52,6 @@ import java.util.*;
 @RequiredArgsConstructor
 @RestController
 public class ArticleController {
-
-    @PersistenceContext
-    private EntityManager em;
 
     @Autowired
     ArticleDao articleDao;
