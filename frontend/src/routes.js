@@ -40,6 +40,14 @@ const routes = [
         }
     },
     {
+        path : '/article/:articleid',
+        name : 'ArticleDetail',
+        component : ArticleDetail,
+        meta: {
+            loggedAuth: true
+        }
+    },
+    {
         path : '/components',
         name : 'Components',
         component : Components,
@@ -107,14 +115,6 @@ const routes = [
         path : '/alarm',
         name : 'AlarmList',
         component : AlarmList,
-        meta: {
-            loggedAuth: true
-        }
-    },
-    {
-        path : '/article',
-        name : 'ArticleDetail',
-        component : ArticleDetail,
         meta: {
             loggedAuth: true
         }
