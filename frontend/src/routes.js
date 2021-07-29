@@ -39,6 +39,14 @@ const routes = [
             loggedAuth: true
         }
     },
+    {   
+        path : '/article/create',
+        name : 'ArticleCreate',
+        component : ArticleCreate,
+        meta: {
+            loggedAuth: true
+        }
+    },
     {
         path : '/article/:articleid',
         name : 'ArticleDetail',
@@ -119,16 +127,8 @@ const routes = [
             loggedAuth: true
         }
     },
-    {   
-        path : '/article/create',
-        name : 'ArticleCreate',
-        component : ArticleCreate,
-        meta: {
-            loggedAuth: true
-        }
-    },
     {
-        path : '/article/comments',
+        path : '/article/:articleid/comments',
         name : 'Comments',
         component : Comments,
         meta: {
