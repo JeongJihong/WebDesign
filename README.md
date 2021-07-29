@@ -2,13 +2,32 @@
 
 <div>
     <span>
-        <img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/0d43e80f-2446-4dc5-be4d-2b245936ed5e/main-icon.svg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210729%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210729T012331Z&X-Amz-Expires=86400&X-Amz-Signature=e5440ec3ad5b1c8cef118f6577af1fd4a5af80e433b54606b43008ecd864bec7&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22main-icon.svg%22" style="width: 10%">
+        <img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/0d43e80f-2446-4dc5-be4d-2b245936ed5e/main-icon.svg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210729%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210729T012331Z&X-Amz-Expires=86400&X-Amz-Signature=e5440ec3ad5b1c8cef118f6577af1fd4a5af80e433b54606b43008ecd864bec7&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22main-icon.svg%22" width= "10%">
     </span>
     <span style="word-break: normal;">
         <span style="font-weight: bold;">Pipl</span> 은
         <span style="color: red; font-weight: bold;">Pi</span>ck a <span style="color: red; font-weight: bold;">pl</span>an 의 줄임말로, SNS 상에서 모임/약속을 쉽게 잡아주는 소셜 플랫폼입니다.
     </span>
 </div>
+
+<br>
+
+<svg width="700" height="70" viewBox="0 0 700 70">
+    <image
+           xlink:href="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/0d43e80f-2446-4dc5-be4d-2b245936ed5e/main-icon.svg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210729%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210729T012331Z&X-Amz-Expires=86400&X-Amz-Signature=e5440ec3ad5b1c8cef118f6577af1fd4a5af80e433b54606b43008ecd864bec7&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22main-icon.svg%22"
+           x="0"
+           y="0"
+           width="70"
+           height="70" />
+    <text x="80" y="45" font-weight="bold" fill="#FF0000">Pi</text>
+    <text x="96" y="45">ck a</text>
+    <text x="128" y="45" font-weight="bold" fill="#FF0000">pl</text>
+    <text x="143" y="45">
+        an 의 줄임말로, SNS 상에서 모임/약속을 쉽게 잡아주는 소셜 플랫폼입니다.
+    </text>
+</svg>
+
+<br>
 
 <br>
 
