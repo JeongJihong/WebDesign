@@ -232,9 +232,19 @@ bootstrap-vue 의 b-tap 을 활용하여 한 페이지 속에서 팔로잉/팔�
 
 #### 스크랩
 
+<img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/2e1e634b-c8a2-44b3-8055-e13436772374/scrap.gif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210729%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210729T063305Z&X-Amz-Expires=86400&X-Amz-Signature=14e69825019b0609792f4c11d7d41327beed76ba6164936f4b785cf963f46e17&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22scrap.gif%22" width="25%">
+
+스크랩 기능을 이용하여 따로 보관하고 싶은 게시글을 관리할 수 있습니다.
+
 <br>
 
 #### 댓글
+
+<img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/f5cedb46-3a69-4d1e-86d2-408a39dafc9c/comments.gif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210729%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210729T063410Z&X-Amz-Expires=86400&X-Amz-Signature=fa7e4f752ae16a9589745a9c2f1dff3d48d5a4e50c037094ffdef396485f622e&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22comments.gif%22" width="25%">
+
+게시글 속 댓글보기를 통해 확인할 수 있는 댓글 페이지입니다.
+
+댓글을 작성할 수 있으며, 본인이 작성한 댓글을 수정 및 삭제 가능합니다.
 
 <br>
 
