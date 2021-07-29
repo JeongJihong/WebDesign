@@ -10,7 +10,7 @@
 
 <br>
 
-**Pipl 개발 페이지**  &#10140;  [Notion](https://www.notion.so/472849a205114733b53d218219d4b8a7)    [Jira](https://jira.ssafy.com/secure/RapidBoard.jspa?rapidView=9511&projectKey=S05P12B302)   [WireFrame](https://www.figma.com/file/GzAF1xAtlr1X2IS0iNzggx?embed_host=notion&kind=&node-id=0%3A1&viewer=1)
+**Pipl 개발 페이지**  &#10140;  [Notion](https://www.notion.so/472849a205114733b53d218219d4b8a7)  /  [Jira](https://jira.ssafy.com/secure/RapidBoard.jspa?rapidView=9511&projectKey=S05P12B302)  /  [WireFrame](https://www.figma.com/file/GzAF1xAtlr1X2IS0iNzggx?embed_host=notion&kind=&node-id=0%3A1&viewer=1)
 
 <br>
 
@@ -40,7 +40,7 @@
   - [핵심 라이브러리](#핵심-라이브러리)
 - [ERD](#erd)
 - [SWAGGER](#swagger)
-- [개발 현황](#개발%20현황)
+- [개발현황](#개발현황)
 
 
 
@@ -170,7 +170,7 @@ __자체 제작 산출물__ (필요시 이미지 또는 설명 첨부)
 
 <br>
 
-### 개발 현황
+### 개발현황
 
 #### 로그인
 
@@ -192,7 +192,7 @@ __자체 제작 산출물__ (필요시 이미지 또는 설명 첨부)
 
 #### 프로필
 
-<img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/dfd00ef0-b478-451b-843d-d10c1838f765/profile.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210729%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210729T044019Z&X-Amz-Expires=86400&X-Amz-Signature=d2713727401fd577202760041a6bab07504a285a94e98fc8f465606a33e0f526&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22profile.png%22" width="25%">        <img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/c89efba5-0595-4696-a860-23ac413b2d06/profile_change.gif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210729%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210729T044321Z&X-Amz-Expires=86400&X-Amz-Signature=ecdcb7a20b00b22027f4a438dc01bdf473970d8d2bcdba3807cb04612b48b6bd&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22profile_change.gif%22" width="25%">
+<img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/c101254c-4064-41ad-a43b-d15ce7a40e67/myProfile.gif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210729%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210729T051513Z&X-Amz-Expires=86400&X-Amz-Signature=e46c963652141ff71fe417b5803e0d1874bd2ce3d5796f2d935bf76d43936b88&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22myProfile.gif%22" width="25%">        <img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/c89efba5-0595-4696-a860-23ac413b2d06/profile_change.gif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210729%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210729T044321Z&X-Amz-Expires=86400&X-Amz-Signature=ecdcb7a20b00b22027f4a438dc01bdf473970d8d2bcdba3807cb04612b48b6bd&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22profile_change.gif%22" width="25%">
 
 Vue 의 Route.js 에서 Parameter 에 nickname 을 담아 보내, 해당 정보로 프로필을 렌더링합니다.
 
