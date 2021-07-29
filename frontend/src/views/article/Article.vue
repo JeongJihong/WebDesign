@@ -90,18 +90,18 @@ export default {
     },
   },
   created(){
-    axios({
-      url:'http://127.0.0.1:8080/feed/main',
-      method:'get',
-    })
-      .then(res=>{
-        this.articles = (res.data)
-        // console.log(this.reviews)
+    // axios({
+    //   url:'http://127.0.0.1:8080/feed/main',
+    //   method:'get',
+    // })
+    //   .then(res=>{
+    //     this.articles = (res.data)
+    //     // console.log(this.reviews)
 
-      })
-      .catch(err=>{
-        console.log(err)
-      })
+    //   })
+    //   .catch(err=>{
+    //     console.log(err)
+    //   })
   }
 };
 </script>
