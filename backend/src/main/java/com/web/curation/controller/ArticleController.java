@@ -1,5 +1,6 @@
 package com.web.curation.controller;
 
+import com.google.api.Http;
 import com.web.curation.dao.article.ArticleDao;
 import com.web.curation.dao.article.ArticleLikeDao;
 import com.web.curation.dao.image.ImageDao;
@@ -18,21 +19,29 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import sun.lwawt.macosx.CSystemTray;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import javax.swing.filechooser.FileSystemView;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 
 @ApiResponses(value = { @ApiResponse(code = 401, message = "Unauthorized", response = BasicResponse.class),
         @ApiResponse(code = 403, message = "Forbidden", response = BasicResponse.class),
@@ -62,9 +71,35 @@ public class ArticleController {
     @Autowired
     FollowDao followDao;
 
+    final String rootPath = FileSystemView.getFileSystemView().getHomeDirectory().toString();
+    final String basePath = rootPath + "/" + "SNSImage" + "/" ;
+
+    private List<String> saveFiles(List<MultipartFile> files) throws IOException{
+        List<String> pathName = new ArrayList<>();
+        File Folder = new File(basePath);
+        if(!Folder.exists()){
+            try{
+                Folder.mkdir();
+            }catch (Exception e){
+                e.getStackTrace();
+            }
+        }
+        UUID uuid = null;
+        for(int i = 0; i < files.size(); i++){
+            uuid = UUID.randomUUID();
+            String extension = FilenameUtils.getExtension(files.get(i).getOriginalFilename());
+            String rename = basePath + i + "_" + uuid + "." + extension;
+            File dest = new File(rename);
+            files.get(i).transferTo(dest);
+            pathName.add(rename);
+        }
+
+        return pathName;
+    }
+
     @PostMapping("/article")
     @ApiOperation(value = "게시글 작성")
-    public Object postArticle(@RequestBody PostArticleRequest request) {
+    public Object postArticle(@RequestParam String content, @RequestParam(required = true) List<MultipartFile> files) throws IOException {
         Authentication user = SecurityContextHolder.getContext().getAuthentication();
         ResponseEntity response = null;
         if(user.getPrincipal() == "anonymousUser"){
@@ -79,15 +114,17 @@ public class ArticleController {
                     .id(userOpt.get().getUid())
                     .createdtime(null)
                     .updatedtime(null)
-                    .content(request.getContent())
+                    .review(content)
                     .build()
             ).getArticleid();
 
-            for(int i = 0; i < request.getImages().size(); ++i) {
+            List<String> pathName = saveFiles(files);
+            System.out.println(pathName.get(0));
+            for(int i = 0; i < files.size(); ++i) {
                 imageDao.save(Image.builder()
                         .imageid(null)
                         .articleid(articleId)
-                        .imgURL(request.getImages().get(i).getImgURL())
+                        .imgURL(pathName.get(i))
                         .build()
                 );
             }
@@ -97,21 +134,11 @@ public class ArticleController {
         }
     }
 
-    @GetMapping("/article/{articleid}")
+    @GetMapping("/article/{articleid}/")
     @ApiOperation(value = "해당 게시글 하나만 보기")
-    public ViewArticleRequest getTestCode(@PathVariable(required = false) final Long articleid) {
+    public Object getTestCode(@PathVariable(required = true) final Long articleid) {
         // 게시글 번호로 게시글 추출
-        Article findArticle = articleDao.findByArticleid(articleid);
-        int articleLikeNum = articleLikeDao.countArticleLike(articleid);
-
-        ViewArticleRequest var = new ViewArticleRequest(findArticle, articleLikeNum);
-
-        return var;
-    }
-
-    @GetMapping("/article")
-    @ApiOperation(value = "내 피드 보기")
-    public Object viewMyFeed() {
+        int like = articleLikeDao.countArticleLike(articleid);
         Authentication user = SecurityContextHolder.getContext().getAuthentication();
         ResponseEntity response = null;
         if(user.getPrincipal() == "anonymousUser"){
@@ -120,17 +147,23 @@ public class ArticleController {
         }else {
             UserDetails user2 = (UserDetails) user.getPrincipal();
             Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
-            // uid를 통해 해당 유저의 게시글을 불러온다.
-            Optional<Article> article = null;
-            if(!articleDao.existsById(userOpt.get().getUid())){
-                System.out.println("none");
-            }else{
-                article = articleDao.findById(userOpt.get().getUid());
+            List<Image> images = imageDao.findByArticleid(articleid);
+            List<String> imageLocation = new ArrayList<>();
+            for(int i = 0; i < images.size(); i++){
+                imageLocation.add(images.get(i).getImgURL());
             }
-            response = new ResponseEntity<>(article, HttpStatus.OK);
+            boolean likeCheck = articleLikeDao.existsByArticleidAndId(articleid, userOpt.get().getUid());
+            boolean scrapCheck = scrapDao.existsByArticleidAndId(articleid, userOpt.get().getUid());
+            Map result = new HashMap<String, Object>();
+            result.put("likeCount", like);
+            result.put("likeCheck", likeCheck);
+            result.put("scrapCheck", scrapCheck);
+            result.put("imageLocation", imageLocation);
+            response = new ResponseEntity<>(result, HttpStatus.OK);
         }
         return response;
     }
+
 
 
     @DeleteMapping("/article/{articleid}")

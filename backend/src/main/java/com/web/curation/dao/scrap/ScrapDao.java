@@ -7,4 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ScrapDao extends JpaRepository<Scrap, Long> {
     void deleteByScrapidAndId(Long scrapid, Long id);
+    boolean existsByArticleidAndId(Long articleid, Long id);
 }
