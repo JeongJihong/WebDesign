@@ -106,6 +106,8 @@ __자체 제작 산출물__ (필요시 이미지 또는 설명 첨부)
 
 <br>
 
+<br>
+
 ### SWAGGER
 
 > 노션 SWAGGER  &#10140;  [Here](https://www.notion.so/SWAGGER-6c59eedd1def4d37b52969b0b17bd27c)
@@ -156,16 +158,40 @@ __자체 제작 산출물__ (필요시 이미지 또는 설명 첨부)
 
 ### 개발 현황
 
-| 명세서                       |                 담당                 | 현황 |
-| ---------------------------- | :----------------------------------: | :--: |
-| 계정 설정                    |     FE : 신형식<br />BE : 김백준     | Done |
-| 본인 프로필 / 타 유저 프로필 |     FE : 정종우<br />BE : 김백준     |      |
-| 팔로잉 / 팔로워 리스트       |     FE : 정종우<br />BE : 정지홍     |      |
-| 알림 / 요청                  |     FE : 이두호<br />BE : 김백준     |      |
-| 헤더                         |             FE : 이두호              | Done |
-| 유저 검색                    |     FE : 이두호<br />BE : 김백준     | Done |
-| 게시글(피드)                 | FE : 신형식<br />BE : 김백준, 정지홍 |      |
-| 스크랩                       | FE : 정종우, 이두호<br />BE : 정지홍 |      |
-| 댓글                         |     FE : 신형식<br />BE : 정지홍     |      |
+#### 로그인
+
+<img src ="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/3f2121b0-3aa2-4dc0-a344-7816a30442f6/login.gif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210729%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210729T041816Z&X-Amz-Expires=86400&X-Amz-Signature=f3b210be241912b9f6f5f57bff5c2f820cdd087c9308cce4b70a09740645d922&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22login.gif%22" width="25%">         <img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/fad4f7b8-cae7-4178-8dd5-94aa51646060/login2.gif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210729%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210729T042120Z&X-Amz-Expires=86400&X-Amz-Signature=8a0b9f1391692d181cf4542937ed0375545ca7c33e4adbf1ec3f978f121f14eb&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22login2.gif%22" width="25%">        <img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/7280bbce-f8e3-4c7f-8ba1-b9bbcb3a2376/login3.gif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210729%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210729T042258Z&X-Amz-Expires=86400&X-Amz-Signature=6857aa81d16ea8b00e1d79098e4473674a180283765b69c09fcbf2851c13804a&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22login3.gif%22" width="25%">
+
+<br>
+
+#### 회원가입
+
+<br>
+
+#### 프로필
+
+<br>
+
+#### 팔로워/팔로잉 리스트
+
+<br>
+
+#### 알림/요청
+
+<br>
+
+#### 유저 검색
+
+<br>
+
+#### 게시글/피드
+
+<br>
+
+#### 스크랩
+
+<br>
+
+#### 댓글
 
 <br>
