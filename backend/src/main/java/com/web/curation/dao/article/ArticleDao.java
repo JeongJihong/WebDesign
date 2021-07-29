@@ -11,5 +11,7 @@ public interface ArticleDao extends JpaRepository<Article, Long> {
 
     List<Article> findAllById(Long articleid);
 
+    Optional<Article> findByArticleid(Long articleid);
+
 
 }

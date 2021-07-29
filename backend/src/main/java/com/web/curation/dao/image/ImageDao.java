@@ -8,7 +8,7 @@ import java.util.List;
 public interface ImageDao extends JpaRepository<Image, Long> {
     List<Image> findByArticleid(Long articleid);
 
-    Image findByArticleidAndImageidStartingWith(Long articleid, String start);
+    List<Image> findByArticleidAndImageidStartingWith(Long articleid, String start);
 
 
 }
