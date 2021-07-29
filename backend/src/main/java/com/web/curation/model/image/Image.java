@@ -6,6 +6,8 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import java.io.File;
+
 @Getter
 @Entity
 @Table(name = "image")
@@ -20,4 +22,6 @@ public class Image{
 
     private Long articleid;
     private String imgURL;
+
+
 }
