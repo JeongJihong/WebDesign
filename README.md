@@ -1,86 +1,91 @@
-# 프로젝트 명
+# Pipl
 
-## 목차
+<div>
+    <span>
+        <img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/0d43e80f-2446-4dc5-be4d-2b245936ed5e/main-icon.svg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210729%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210729T012331Z&X-Amz-Expires=86400&X-Amz-Signature=e5440ec3ad5b1c8cef118f6577af1fd4a5af80e433b54606b43008ecd864bec7&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22main-icon.svg%22" style="width: 10%">
+    </span>
+    <span style="word-break: normal;">
+        <span style="font-weight: bold;">Pipl</span> 은
+        <span style="color: red; font-weight: bold;">Pi</span>ck a <span style="color: red; font-weight: bold;">pl</span>an 의 줄임말로, SNS 상에서 모임/약속을 쉽게 잡아주는 소셜 플랫폼입니다.
+    </span>
+</div>
+
+<br>
+
+<img src="https://shields.io/badge/vue--cli-v4.1.1-plastic" style="width: 10%;"> <img src="https://shields.io/badge/spring--boot-red" style="width: 8.3%;"> <img src="https://shields.io/badge/maven-v3.6.3-hotpink" style="width: 10%;"> <img src="https://shields.io/badge/zulu%208-blue" style="width: 5.4%;"> <img src="https://shields.io/badge/MySQL-blue" style="width: 6%;">
+
+<br>
+
+Pipl 개발 페이지  &#10140;  [Notion](https://www.notion.so/472849a205114733b53d218219d4b8a7)    [Jira](https://jira.ssafy.com/secure/RapidBoard.jspa?rapidView=9511&projectKey=S05P12B302)
+
+<br>
+
+### 목차
 
 - [프로젝트 소개](#프로젝트-소개)   
-- [텍스트 ... ](#프로젝트-소개)   
 - [프로젝트 명세](#프로젝트-명세)
   - [배포 환경](#배포-환경)
   - [개발 환경](#개발-환경)
   - [Design Resources](#design-resources)
   - [핵심 라이브러리](#핵심-라이브러리)
+
 <br>
 
-## 프로젝트 소개
-소개 입력
+### 프로젝트 소개
+Pipl 은 SNS 상에서 모임/약속을 쉽게 잡아주는 소셜 플랫폼입니다.
+
+모임/약속을 잡는 가장 첫 단추인, 사람들에게 말하는 과정을 Pipl 을 이용하여 **손쉽게 전달**할 수 있습니다.
+
+팔로우/팔로워와 태그 기반으로, 잡고자 하는 약속을 특정 사람들에게 알릴 수 있습니다.
+
+약속을 잡는데 성공하면, 사용자 GPS 정보 사용 동의 하에 약속 1시간 전부터 약속 대상자들의 위치를 확인할 수 있습니다. 
+
 <br>
 
-## 프로젝트 명세
-### 배포 환경
+### 프로젝트 명세
+#### 배포 환경
 - __URL__ : 
-- __배포 여부__ : O / X
-- __접속 가능__ : 접속 가능 / 수정 중
-- __HTTPS 적용__ : O / X
-- __PORT__ : // 3rd Party에서 사용하는 포트가 있다면 기입해주세요. <- 기입 후 해당 주석 삭제
+- __배포 여부__ : X
+- __접속 가능__ : 수정 중
+- __HTTPS 적용__ : X
+- __PORT__ : Vue (3000), Spring-Boot (8080)
+
 <br>
 
-### 개발 환경
-#### Front-end / Android
-- __Framework__ : Vue.js / React / Android / Unity
-- __지원 환경__ : Web / Mobile / Web App / Native App
-- __담당자__ : 팀원 A, 팀원 B,
+#### 개발 환경
+##### Front-end
+- __Framework__ : Vue.js
+- __지원 환경__ : Web
+- __담당자__ : 신형식, 이두호, 정종우
+
 <br>
 
-#### Back-end
-- __Framework__ : Spring boot / Node.js / Django / Flask
-- __Database__ : MySQL / MariaDB
-- __담당자__ : 팀원 A, 팀원 B,
+##### Back-end
+- __Framework__ : Spring boot
+- __Database__ : MySQL
+- __담당자__ : 김백준, 정지홍
+
 <br>
 
-#### Design
-- __Framework 사용__ : O / X
-  - [Vuetify](https://vuetifyjs.com/)
-  - [Element Plus](https://element-plus.org/)
-- __Design Tool 사용__ : Adobe XD, Photoshop, Blender, Zeplin 등 (없을 경우 빈칸)
-- __담당자__ : 팀원 A, 팀원 B,
+##### Design
+- __Framework 사용__ : O
+  - [Bootstrap-Vue](https://bootstrap-vue.org/)
+- __Design Tool 사용__ :
+- __담당자__ : 신형식, 이두호, 정종우
+
 <br>
 
-### Design Resources
+#### Design Resources
 __외부 템플릿 또는 에셋__ (이미지 또는 링크 첨부)
-- 무료 이미지, 아이콘, 폰트 등은 제외
-- [Vue Argon Design System](https://www.creative-tim.com/product/vue-argon-design-system?affiliate_id=116187) (무료)
-  - __사용 기능__ : 디자인 전반 적용
-- [Vue Black Dashboard Pro](https://www.creative-tim.com/product/vue-black-dashboard-pro?affiliate_id=116187) (유료)
-  - __사용 기능__ : 캘린더 컴포넌트 사용
+
 <br>
 
 __자체 제작 산출물__ (필요시 이미지 또는 설명 첨부)
 - LOGO
-- CardView
-- Button
-- Calendar
+
+  <img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/0d43e80f-2446-4dc5-be4d-2b245936ed5e/main-icon.svg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210729%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210729T012331Z&X-Amz-Expires=86400&X-Amz-Signature=e5440ec3ad5b1c8cef118f6577af1fd4a5af80e433b54606b43008ecd864bec7&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22main-icon.svg%22" style="width: 25%">     <img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/c1fc4306-3000-4635-a170-769300682963/main-icon-2.svg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210729%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210729T012255Z&X-Amz-Expires=86400&X-Amz-Signature=7c0ee2aae5bb9ff31f306a285202f69eed889e94f11a75f95e40481d78b622cc&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22main-icon-2.svg%22" style="width: 25%">
+
 <br>
 
 ### 핵심 라이브러리
-기본 제공하는 라이브러리 외 핵심 기능 구현에 사용한 라이브러리가 있다면 작성해주세요.   
-예시 ) VR/AR 라이브러리, 애니메이션 라이브러리, 텍스트/사진/동영상 지원, 편집 라이브러리 등
-
-- __AR CORE__
-  - __링크__ : https://developers.google.com/ar
-  - __소개__ : 구글에서 제공하는 AR 지원 라이브러리
-  - __사용 기능__ : 이미지 인식, 이미지 위 영상 표시
-  - __담당자__ : 팀원 A, 
-
-- __COLOR THIEF__
-  - __링크__ : https://lokeshdhakar.com/projects/color-thief/
-  - __소개__ : 이미지에서 색상을 추출해주는 라이브러리
-  - __사용 기능__ : 커버 사진에서 색상 추출 -> 배경 색상 변경
-  - __담당자__ : 팀원 A,
-
-- __Animate.css__
-  - __링크__ : https://animate.style/
-  - __소개__ : css 애니메이션 지원 라이브러리
-  - __사용 기능__ : 메인 페이지 진입 시 애니메이션 사용
-  - __담당자__ : 팀원 A,
-
 
