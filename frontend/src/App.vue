@@ -15,7 +15,8 @@
         <router-link :to="{ name: 'ArticleCreate' }" class="text-decoration-none me-3 text-dark">
           <b-icon icon="pencil-square"></b-icon>
         </router-link>
-        <router-link :to="{ name: 'ProfileDetail' }" class="text-decoration-none text-dark">
+        <router-link :to="{ name: 'ProfileDetail', params: { nickname: username } }"
+          class="text-decoration-none text-dark">
           <b-icon icon="person-fill"></b-icon>
         </router-link>
       </b-nav-item>
@@ -38,7 +39,8 @@ export default {
   },
   computed: {
     ...mapState([
-      'token'
+      'token',
+      'username'
     ])
   },
   watch: {

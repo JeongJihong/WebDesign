@@ -22,7 +22,23 @@ export default {
         // console.log('성공!', res.data)
         commit('UPDATE_TOKEN', res.data)
         localStorage.setItem('token', res.data)
-        router.push({ name: 'FeedMain' })
+        // vuex 및 localStorage 에 로그인한 유저의 nickname 저장
+        axios({
+          url: `http://127.0.0.1:8080/account/checkJWT`,
+          method: 'get',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-AUTH-TOKEN': res.data
+          }
+        })
+          .then(res => {
+            commit('LOGGED_USER_NAME', res.data.nickname)
+            localStorage.setItem('username', res.data.nickname)
+            router.push({ name: 'FeedMain' })
+          })
+          .catch(err => {
+            alert(err)
+          })
       })
       .catch(err => {
         // console.log('에러!', err)
