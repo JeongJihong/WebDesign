@@ -1,6 +1,6 @@
 # Pipl
 
-<img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/0d43e80f-2446-4dc5-be4d-2b245936ed5e/main-icon.svg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210729%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210729T012331Z&X-Amz-Expires=86400&X-Amz-Signature=e5440ec3ad5b1c8cef118f6577af1fd4a5af80e433b54606b43008ecd864bec7&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22main-icon.svg%22" width= "10%">    **Pipl** 은 **Pi**ck a **pl**an 의 줄임말로, SNS 상에서 모임/약속을 쉽게 잡아주는 소셜 플랫폼입니다.
+<img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/0d43e80f-2446-4dc5-be4d-2b245936ed5e/main-icon.svg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210730%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210730T023117Z&X-Amz-Expires=86400&X-Amz-Signature=cc79d401d2d211ce2db5d1ed2d8c37b6c55af16f8f2051ca1e48017c94b7ddfb&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22main-icon.svg%22" width= "10%">    **Pipl** 은 **Pi**ck a **pl**an 의 줄임말로, SNS 상에서 모임/약속을 쉽게 잡아주는 소셜 플랫폼입니다.
 
 <br>
 
@@ -104,7 +104,7 @@ __외부 템플릿 또는 에셋__ (이미지 또는 링크 첨부)
 __자체 제작 산출물__ (필요시 이미지 또는 설명 첨부)
 - LOGO
 
-  <img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/0d43e80f-2446-4dc5-be4d-2b245936ed5e/main-icon.svg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210729%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210729T012331Z&X-Amz-Expires=86400&X-Amz-Signature=e5440ec3ad5b1c8cef118f6577af1fd4a5af80e433b54606b43008ecd864bec7&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22main-icon.svg%22" style="width: 25%">     <img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/c1fc4306-3000-4635-a170-769300682963/main-icon-2.svg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210729%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210729T012255Z&X-Amz-Expires=86400&X-Amz-Signature=7c0ee2aae5bb9ff31f306a285202f69eed889e94f11a75f95e40481d78b622cc&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22main-icon-2.svg%22" style="width: 25%">
+  <img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/0d43e80f-2446-4dc5-be4d-2b245936ed5e/main-icon.svg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210730%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210730T023117Z&X-Amz-Expires=86400&X-Amz-Signature=cc79d401d2d211ce2db5d1ed2d8c37b6c55af16f8f2051ca1e48017c94b7ddfb&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22main-icon.svg%22" style="width: 25%">     <img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/c1fc4306-3000-4635-a170-769300682963/main-icon-2.svg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210730%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210730T023242Z&X-Amz-Expires=86400&X-Amz-Signature=e289dfbdb336a618dabaa222067d5cfddfd963e2cb5feb19c9630fb25c4ab4b2&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22main-icon-2.svg%22" style="width: 25%">
 
 <br>
 
