@@ -12,6 +12,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -49,36 +52,49 @@ public class SearchController {
     @GetMapping("/search/live")
     @ApiOperation(value = "실시간으로 검색 창 결과 반환")
     public ResponseEntity<List<Search>> list(@RequestParam String nickname){
-        List<Search> user = searchDao.findByNameIsContaining(nickname);
+        List<User> user = userDao.findByNicknameIsContaining(nickname);
         List<Search> live = new ArrayList<>();
         for(int i = 0; i < user.size(); i++){
-//            Optional<User> temp = userDao.findByUid(user.get(i).getId());
-            live.add(new Search(user.get(i).getSearchid(), user.get(i).getName()));
+            live.add(new Search(user.get(i).getUid(), user.get(i).getNickname()));
         }
 
         return new ResponseEntity<>(live, HttpStatus.OK);
     }
 
-    @GetMapping("/search")
-    @ApiOperation(value = "검색 버튼 클릭 시 최근 검색 반환")
-    public ResponseEntity<List<Search>> searchList(@RequestParam Long id){
-        List<Search> list = searchDao.findById(id);
-//        List<Search> timeList = new ArrayList<>();
-        Collections.sort(list, Comparator.comparing(Search::getSearchDate));
-
-        return new ResponseEntity<>(list, HttpStatus.OK);
-
-    }
-
     @DeleteMapping("/search")
     @ApiOperation(value = "최근 검색 삭제")
-    public ResponseEntity<String> deleteSearch(@RequestParam Long searchid,
-                                               @RequestParam Long id){
-        if(searchDao.deleteBySearchidAndId(searchid, id) == 0){
-            return new ResponseEntity<>("Fail", HttpStatus.BAD_REQUEST);
+    public ResponseEntity<String> deleteSearch(@RequestParam Long searchid){
+        Authentication user = SecurityContextHolder.getContext().getAuthentication();
+        ResponseEntity response = null;
+        if(user.getPrincipal() == "anonymousUser"){
+            response = new ResponseEntity<>("Fail", HttpStatus.UNAUTHORIZED);
         }else{
-            return new ResponseEntity<>("Success", HttpStatus.OK);
+            UserDetails user2 = (UserDetails) user.getPrincipal();
+            Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
+            if(searchDao.deleteBySearchidAndId(searchid, userOpt.get().getUid()) == 0){
+                response =  new ResponseEntity<>("Fail", HttpStatus.BAD_REQUEST);
+            }else{
+                response =  new ResponseEntity<>("Success", HttpStatus.OK);
+            }
         }
+        return response;
+    }
+
+    @GetMapping("/search")
+    @ApiOperation(value = "검색 버튼 클릭 시 최근 검색 반환")
+    public ResponseEntity<List<Search>> searchList(){
+        Authentication user = SecurityContextHolder.getContext().getAuthentication();
+        ResponseEntity response = null;
+        if(user.getPrincipal() == "anonymousUser"){
+            response = new ResponseEntity<>("Fail", HttpStatus.UNAUTHORIZED);
+        }else{
+            UserDetails user2 = (UserDetails) user.getPrincipal();
+            Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
+            List<Search> list = searchDao.findById(userOpt.get().getUid());
+            Collections.sort(list, Comparator.comparing(Search::getSearchDate));
+            response = new ResponseEntity<>(list, HttpStatus.OK);
+        }
+        return response;
 
     }
 

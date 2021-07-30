@@ -1,68 +1,69 @@
 <template>
   <div class="user" id="login">
-    <div class="wrapC">
-      <h1>
-        로그인을 하고 나면
-        <br />좋은 일만 있을 거예요.
-      </h1>
+    <div class="jb-box">
+      <video muted autoplay loop>
+        <source src="../../assets/videos/Sky.mp4" type="video/mp4">
+      </video>
+      <div class="jb-text">
+        <h1 >Pipl.</h1>
+        <div class="wrapC">
+          <div class="input-with-label">
+            <input
+              v-model="email"
+              v-bind:class="{error : error.email, complete:!error.email&&email.length!==0}"
+              @keyup.enter="login({ email, password })"
+              id="email"
+              placeholder="이메일을 입력하세요."
+              type="text"
+            />
+            <label for="email">이메일</label>
+            <div class="error-text" v-if="error.email">{{error.email}}</div>
+          </div>
+          <div class="input-with-label">
+            <input
+              v-model="password"
+              type="password"
+              v-bind:class="{error : error.password, complete:!error.password&&password.length!==0}"
+              id="password"
+              @keyup.enter="login({ email, password })"
+              placeholder="비밀번호를 입력하세요."
+            />
+            <label for="password">비밀번호</label>
+            <div class="error-text" v-if="error.password">{{error.password}}</div>
+          </div>
+          <div>
+            <button
+              class="btn btn-primary shadow-none"
+              @click="login({ email, password })"
+              :disabled="!isSubmit"
+              style="height: 2.7rem; width: 100%;"
+            >로그인</button>
+          </div>
 
-      <div class="input-with-label">
-        <input
-          v-model="email"
-          v-bind:class="{error : error.email, complete:!error.email&&email.length!==0}"
-          @keyup.enter="login({ email, password })"
-          id="email"
-          placeholder="이메일을 입력하세요."
-          type="text"
-        />
-        <label for="email">이메일</label>
-        <div class="error-text" v-if="error.email">{{error.email}}</div>
-      </div>
-
-      <div class="input-with-label">
-        <input
-          v-model="password"
-          type="password"
-          v-bind:class="{error : error.password, complete:!error.password&&password.length!==0}"
-          id="password"
-          @keyup.enter="login({ email, password })"
-          placeholder="비밀번호를 입력하세요."
-        />
-        <label for="password">비밀번호</label>
-        <div class="error-text" v-if="error.password">{{error.password}}</div>
-      </div>
-      <div>
-        <button
-          class="btn btn-primary shadow-none"
-          @click="login({ email, password })"
-          :disabled="!isSubmit"
-          style="height: 2.7rem; width: 100%;"
-        >로그인</button>
-      </div>
-
-      <div class="sns-login">
-        <div class="text">
-          <p>SNS 간편 로그인</p>
-          <div class="bar"></div>
-        </div>
-
-        <kakaoLogin :component="component" />
-        <GoogleLogin :component="component" />
-      </div>
-      
-      <div class="add-option">
-        <div class="text">
-          <p>혹시</p>
-          <div class="bar"></div>
-        </div>
-        <div class="wrap">
-          <p>비밀번호를 잊으셨나요?</p>
-          <!-- 수정 필요 -->
-          <router-link to="/user/ResetPassword" class="btn--text">비밀번호 변경하기</router-link>
-        </div>
-        <div class="wrap">
-          <p>아직 회원이 아니신가요?</p>
-          <router-link to="/account/signup" class="btn--text">가입하기</router-link>
+          <div class="sns-login">
+            <div class="text">
+              <p>SNS 간편 로그인</p>
+              <kakaoLogin :component="component" />
+              <GoogleLogin :component="component" />
+              <div class="bar"></div>
+            </div>
+          </div>
+          
+          <div class="add-option">
+            <div class="text">
+              <p>혹시</p>
+              <div class="bar"></div>
+            </div>
+            <div class="wrap">
+              <p>비밀번호를 잊으셨나요?</p>
+              <!-- 수정 필요 -->
+              <router-link to="/user/ResetPassword" class="btn--text">비밀번호 변경하기</router-link>
+            </div>
+            <div class="wrap">
+              <p>아직 회원이 아니신가요?</p>
+              <router-link to="/account/signup" class="btn--text">가입하기</router-link>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -153,3 +154,12 @@ export default {
   }
 };
 </script>
+<style scoped>
+  @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+  template { padding: 0px; margin: 0px; }
+  .jb-box {  width: 100%; overflow: hidden; margin: 0px auto; position: fixed; }
+  video { height: 150vh;  overflow: hidden;  position: relative; }
+  .jb-text { position: absolute; top: 5%; width: 100%; }
+  .jb-text p {color: #ffffff; }
+  .jb-text h1 { text-align: center; color: #ffffff !important; font-family: 'Pacifico',cursive; }
+</style>

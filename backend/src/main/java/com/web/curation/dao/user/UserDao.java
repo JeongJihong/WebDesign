@@ -10,6 +10,8 @@ import javax.swing.text.html.Option;
 
 public interface UserDao extends JpaRepository<User, Long> {
 
+    List<User> findByNicknameIsContaining(String name);
+
     Optional<User> findByEmail(String email);
 
     Optional<User> findByUid(Long uid);

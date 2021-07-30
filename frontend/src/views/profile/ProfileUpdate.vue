@@ -6,7 +6,7 @@
         <button><b-icon icon="arrow-left" class="me-4"></b-icon></button>
         <span class="fw-bold">프로필 정보 수정</span>
       </span>
-      <button href="#" class="text-decoration-none" @click="updateProfileInfo">저장하기</button>
+      <button class="text-decoration-none" @click="updateProfileInfo">저장하기</button>
     </div>
 
     <!-- 프로필 수정 -->
@@ -20,18 +20,18 @@
       <div>
         <div class="mt-5 mx-3">
           <!-- Username -->
-          <b-form-input placeholder="username" type="text"></b-form-input>
+          <b-form-input v-model="userInfo.nickname" placeholder="username" type="text"></b-form-input>
         </div>
         <div class="mt-3 mx-3">
           <!-- 본인 소개글 -->
-          <b-form-textarea placeholder="본인 소개글" rows="3" max-rows="6"></b-form-textarea>
+          <b-form-textarea v-model="userInfo.introduction" placeholder="본인 소개글" rows="3" max-rows="6"></b-form-textarea>
         </div>
       </div>
 
       <!-- 비밀번호 변경 버튼 -->
       <div class="mt-4 mx-3 d-grid">
         <!-- <b-button squared variant="danger">비밀번호 변경</b-button> -->
-        <button class="btn btn-danger shadow-none" style="height: 45px;">비밀번호 변경</button>
+          <button @click="goToChangePassword" class="btn btn-danger shadow-none" style="height: 45px;">비밀번호 변경</button>
       </div>
     </div>
   </div>
@@ -39,46 +39,87 @@
 
 <script>
 import axios from 'axios'
+import { mapActions, mapState } from 'vuex'
 
 export default {
   name: 'ProfileUpdate',
-  setToken: function () {
-      const token = localStorage.getItem('jwt')
-      const config = {
-        Authorization: `JWT ${token}`,
-      }
-      return config
-    },
   data () {
     return{
       userInfo: {
+        uid: '',
         introduction: '',
         nickname: '',
-        uid: '',
-      }
+      },
+      myUid:'',
     }
   },
   methods: {
     updateProfileInfo: function () {
       axios({
         method: 'patch',
-        url: `http://127.0.0.1:8080/account/profile/`,
-        data: this.userInfo,
-        //headers: this.setToken(),
+        url: 'http://127.0.0.1:8080/account/profile/',
+        params: this.userInfo,
+        headers: {
+          'Content-Type': 'application/json',
+          'X-AUTH-TOKEN' : this.$store.state.token
+        },
       })
-      .then(() => {
+      .then((res) => {
+        console.log('패치완료!!!!!!!!')
+        console.log(res.data)
         this.$router.push({name:'ProfileDetail'})
       })
       .catch((err) => {
         alert(err)
       })
+    },
+    getUserInfo: function () {
+      axios({
+        method: 'get',
+        url: `http://127.0.0.1:8080/account/profile/`,
+        headers: {
+          'Content-Type': 'application/json',
+          'X-AUTH-TOKEN' : this.$store.state.token
+        },
+      })
+      .then((res) => {
+        console.log('created then')
+        console.log(res)
+        this.userInfo.uid = res.data.uid
+        this.userInfo.nickname = res.data.nickname
+        this.userInfo.introduction = res.data.introduction
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+    },
+    goToChangePassword () {
+      this.$router.push({
+        name: 'ChangePassword',
+      })
     }
   },
   created () {
+    console.log(this.$store.state)
     axios({
       method: 'get',
-      url: `http://127.0.0.1:8080/account/profile/`,
-      //headers: this.setToken(),
+      url: `http://127.0.0.1:8080/account/checkJWT/`,
+      headers: {
+        'Content-Type': 'application/json',
+        'X-AUTH-TOKEN' : this.$store.state.token
+      },
+    })
+    .then((res) => {
+      console.log('checkJWT 성공! 밑에 res 확인')
+      console.log(res)
+      const range = res.data.indexOf('/') - 1
+      const uid = res.data.substr(0, range)
+      this.myUid=uid
+      this.getUserInfo()
+      console.log(this.myUid)
+    })
+    .catch((err) => {
+      console.log(err)
     })
   }
 }

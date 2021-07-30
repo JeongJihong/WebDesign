@@ -1,7 +1,7 @@
 import Login from './views/account/Login.vue'
 import Signup from './views/account/Signup.vue'
 import ChangePassword from './views/account/ChangePassword.vue'
-import FeedMain from './views/feed/IndexFeed.vue'
+import FeedMain from './views/article/Article.vue'
 import Components from './views/Components.vue'
 import PageNotFound from '@/views/PageNotFound'
 import AlarmList from '@/views/alarm/AlarmList.vue'
@@ -14,7 +14,13 @@ import Comments from '@/views/article/Comments.vue'
 import ArticleCreate from '@/views/article/ArticleCreate.vue'
 import ArticleDetail from '@/views/article/ArticleDetail.vue'
 
-export default [
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import store from './vuex/store'
+
+Vue.use(VueRouter)
+
+const routes = [
     {
         mode : 'history',
         path : '/account/login',
@@ -31,12 +37,34 @@ export default [
         mode : 'history',
         path : '/feed/main',
         name : 'FeedMain',
-        component : FeedMain
+        component : FeedMain,
+        meta: {
+            loggedAuth: true
+        }
+    },
+    {   
+        path : '/article/create',
+        name : 'ArticleCreate',
+        component : ArticleCreate,
+        meta: {
+            loggedAuth: true
+        }
+    },
+    {
+        path : '/article/:articleid',
+        name : 'ArticleDetail',
+        component : ArticleDetail,
+        meta: {
+            loggedAuth: true
+        }
     },
     {
         path : '/components',
         name : 'Components',
-        component : Components
+        component : Components,
+        meta: {
+            loggedAuth: true
+        }
     },
     {
         path: "/404",
@@ -46,56 +74,88 @@ export default [
     {
         path: '*',
         redirect: "/404"
-        // 아래처럼 바로 NotFound 경로를 매칭해도 됨
-        // component: NotFound
     },
     {
-        path : '/account/changepassword',
+        path : '/account/changePassword',
         name : 'ChangePassword',
-        component : ChangePassword
+        component : ChangePassword,
+        meta: {
+            loggedAuth: true
+        }
     },
     {
         path : '/account/follow',
         name : 'FollowList',
-        component : FollowList
+        component : FollowList,
+        meta: {
+            loggedAuth: true
+        }
     },
-    {   path : '/account/profile',
+    {   path : '/account/profile/:nickname',
         name : 'ProfileDetail',
-        component : ProfileDetail
+        component : ProfileDetail,
+        meta: {
+            loggedAuth: true
+        }
     },
     {
         path : '/account/profile/update',
         name : 'ProfileUpdate',
-        component : ProfileUpdate
+        component : ProfileUpdate,
+        meta: {
+            loggedAuth: true
+        }
     },
     {
-        path : '/account/scrap',//저건 좀바꿔야할듯
+        path : '/account/scrap',
         name : 'Scrap',
-        component : Scrap //시작
+        component : Scrap,
+        meta: {
+            loggedAuth: true
+        }
     },
     {
         path : '/search',
         name : 'SearchUser',
-        component : SearchUser
+        component : SearchUser,
+        meta: {
+            loggedAuth: true
+        }
     },
     {
         path : '/alarm',
         name : 'AlarmList',
-        component : AlarmList
+        component : AlarmList,
+        meta: {
+            loggedAuth: true
+        }
     },
     {
-        path : '/article',
-        name : 'ArticleDetail',
-        component : ArticleDetail
-    },
-    {
-        path : '/article/create',
-        name : 'ArticleCreate',
-        component : ArticleCreate
-    },
-    {
-        path : '/article/comments',
+        path : '/article/:articleid/comments',
         name : 'Comments',
-        component : Comments
+        component : Comments,
+        meta: {
+            loggedAuth: true
+        }
     },
 ]
+
+const router = new VueRouter({
+    mode: 'history',
+    routes
+})
+
+router.beforeEach((to, from, next) => {
+    if (to.meta.loggedAuth === true) {
+        if (store.state.token === '') {
+            next({ name: 'Login' })
+        }
+        else {
+            next() // 원래 가려던 곳 가기
+        }
+    } else {
+        next() // 권한 필요 없는 곳은 그냥 가기
+    }
+})
+
+export default router

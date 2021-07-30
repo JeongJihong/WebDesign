@@ -55,10 +55,10 @@
     <form @submit="checkForm" @submit.prevent="signup">
       <div v-if="activeButton()">
         <!-- <button @click="PopUpEmailModal" class="btn-bottom" >가입하기</button> -->
-        <button class="btn-bottom" >가입하기</button>
+        <button :disabled="!isSubmit" class="btn-bottom" >가입하기</button>
       </div>
       <div v-else>
-        <button class="btn-bottom disabled" >가입하기</button>
+        <button :disabled="!isSubmit" class="btn-bottom disabled" >가입하기</button>
       </div>
     </form>
   </div>
