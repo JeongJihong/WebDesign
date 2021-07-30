@@ -148,6 +148,7 @@ public class ArticleController {
             UserDetails user2 = (UserDetails) user.getPrincipal();
             Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
             List<Image> images = imageDao.findByArticleid(articleid);
+            Optional<Article> article = articleDao.findByArticleid(articleid);
             List<String> imageLocation = new ArrayList<>();
             for(int i = 0; i < images.size(); i++){
                 imageLocation.add(images.get(i).getImgURL());
@@ -155,9 +156,12 @@ public class ArticleController {
             boolean likeCheck = articleLikeDao.existsByArticleidAndId(articleid, userOpt.get().getUid());
             boolean scrapCheck = scrapDao.existsByArticleidAndId(articleid, userOpt.get().getUid());
             Map result = new HashMap<String, Object>();
+            result.put("userId", userOpt.get().getUid());
+            result.put("userNickname", userOpt.get().getNickname());
             result.put("likeCount", like);
             result.put("likeCheck", likeCheck);
             result.put("scrapCheck", scrapCheck);
+            result.put("articleDetail", article);
             result.put("imageLocation", imageLocation);
             response = new ResponseEntity<>(result, HttpStatus.OK);
         }

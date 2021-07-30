@@ -215,11 +215,10 @@ public class AccountController {
             if(!articleDao.existsById(otherUser.get().getUid())){
                 System.out.println("none");
             }else{
-                article = new ArrayList<>();
                 article = articleDao.findAllById(otherUser.get().getUid());
                 images = new ArrayList<>();
                 for(int i = 0; i < article.size(); i++){
-                    images.add(imageDao.findByArticleidAndImageidStartingWith(article.get(i).getArticleid(), "0"));
+                    images.add(imageDao.findByArticleidAndImageidStartingWith(article.get(i).getArticleid(), "0").get(0));
                 }
             }
             boolean follow = false;

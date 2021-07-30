@@ -3,6 +3,9 @@ export default {
   UPDATE_TOKEN(state, token) {
     state.token = token
   },
+  LOGGED_USER_NAME(state, username) {
+    state.username = username
+  },
 
   SEARCH_GET(state, searchGet) {
     state.searchGet = searchGet

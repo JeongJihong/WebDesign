@@ -15,7 +15,8 @@
         <router-link :to="{ name: 'ArticleCreate' }" class="text-decoration-none me-3 text-dark">
           <b-icon icon="pencil-square"></b-icon>
         </router-link>
-        <router-link :to="{ name: 'ProfileDetail' }" class="text-decoration-none text-dark">
+        <router-link :to="{ name: 'ProfileDetail', params: { nickname: username } }"
+          class="text-decoration-none text-dark">
           <b-icon icon="person-fill"></b-icon>
         </router-link>
       </b-nav-item>
@@ -38,7 +39,8 @@ export default {
   },
   computed: {
     ...mapState([
-      'token'
+      'token',
+      'username'
     ])
   },
   watch: {
@@ -67,17 +69,19 @@ export default {
 
 var prevScrollpos = window.pageYOffset
 window.onscroll = function() {
-  var currentScrollPos = window.pageYOffset;
-  if (prevScrollpos < 100) {
-    document.getElementById("custom-navbar").style.position = 'static'
-  } else if (prevScrollpos > currentScrollPos) {
-    document.getElementById("custom-navbar").style.top = "0"
-    document.getElementById("custom-navbar").style.position = 'fixed'
-    document.getElementById("custom-navbar").style.background = 'linear-gradient(rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.8))'
-  } else {
-    document.getElementById("custom-navbar").style.top = "-50px"
+  if (document.getElementById('custom-navbar') !== null) {
+    var currentScrollPos = window.pageYOffset;
+    if (prevScrollpos < 100) {
+      document.getElementById("custom-navbar").style.position = 'static'
+    } else if (prevScrollpos > currentScrollPos) {
+      document.getElementById("custom-navbar").style.top = "0"
+      document.getElementById("custom-navbar").style.position = 'fixed'
+      document.getElementById("custom-navbar").style.background = 'linear-gradient(rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.8))'
+    } else {
+      document.getElementById("custom-navbar").style.top = "-50px"
+    }
+    prevScrollpos = currentScrollPos;
   }
-  prevScrollpos = currentScrollPos;
 }
 </script>
 

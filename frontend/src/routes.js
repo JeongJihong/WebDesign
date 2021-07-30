@@ -128,7 +128,7 @@ const routes = [
         }
     },
     {
-        path : '/article/comments',
+        path : '/article/:articleid/comments',
         name : 'Comments',
         component : Comments,
         meta: {
