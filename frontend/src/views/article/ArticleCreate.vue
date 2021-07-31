@@ -1,7 +1,8 @@
 <template>
   <div class="scale">
     <button><b-icon-arrow-left></b-icon-arrow-left></button><span>게시글 생성하기</span>
-    <form enctype = "multipart/form-data" method="post" >
+    <!-- <form enctype = "multipart/form-data" method="post" > -->
+    <form>
       <div class="d-flex flex-row">
         <button style="display:inline-block; margin-right:5%; margin-left:2%" @click.prevent="clickInputTag()" id='addimage'><b-icon-plus class="h1"></b-icon-plus></button>
         <input hidden ref="plus" id="file" type="file"  accept="image/*" @change.prevent="uploadImage($event)" multiple>
@@ -22,7 +23,7 @@
     data(){
       return{
         content:"",
-        files:[],
+        files:File,
       }
     },
     methods:{
@@ -31,7 +32,8 @@
       },
       uploadImage(event) { 
         console.log(event.target.files)
-        this.files.push(event.target.files)
+        console.log(event.target.files[0], typeof event.target.files[0])
+        this.files = event.target.files[0]
 
         for (var image of event.target.files) {
           var reader = new FileReader(); 
@@ -47,16 +49,24 @@
         console.log(this.files, typeof this.files)
       },
       articleCreate(){
+        const formData = new FormData();
+        formData.append("content", this.content);
+        formData.append("files", this.files);
+        console.log(this.content, this.files, typeof this.files)
         axios({
           url:'http://127.0.0.1:8080/article',
           method:'post',
           headers: {
-            'x-access-token': `${localStorage.getItem('token')}`,
+            'x-auth-token': `${localStorage.getItem('token')}`,
+            // 'Content-Type': 'multipart/form-data'
           },
-          params: {
-            content: this.content,
-            files: this.files,
-          }
+          data:{
+            formData: this.formData
+          },
+          // params: {
+          //   content: this.content,
+          //   files: this.files,
+          // }
         })
           .then(res=>{
             this.$router.push({ name:'article'})
