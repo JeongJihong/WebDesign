@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-
     <b-nav v-if="navShow" id="custom-navbar" class="d-flex justify-content-between">
       <b-nav-item>
         <img src="./assets/images/main-icon-2.png" alt="" style="width: 83px; height: 35px;">
@@ -21,8 +20,11 @@
         </router-link>
       </b-nav-item>
     </b-nav>
+    <b-nav v-if="backShow">
+      <button @click="goBack"><b-icon icon="arrow-left" class="me-4"></b-icon></button>
+      <span class="fw-bold">{{ this.$route.name }}</span>
+    </b-nav>
     <router-view></router-view>
-
   </div>
 </template>
 
@@ -35,6 +37,7 @@ export default {
   data() {
     return {
       navShow: true,
+      backShow: true,
     }
   },
   computed: {
@@ -48,9 +51,16 @@ export default {
       console.log('일단 확인')
       if (this.$route.name === 'FeedMain') {
         this.navShow = true
+        this.backShow = false
         console.log('메인 맞음')
-      } else {
+      } 
+      else if (this.$route.name === 'ArticleCreate' || this.$route.name === 'ArticleDetail' || this.$route.name === 'Comments') {
         this.navShow = false
+        this.backShow = true
+      } 
+      else {
+        this.navShow = false
+        this.backShow = false
         console.log('메인 아님')
       }
     }
@@ -59,11 +69,23 @@ export default {
     console.log('일단 확인')
     if (this.$route.name === 'FeedMain') {
       this.navShow = true
+      this.backShow = false
       console.log('메인 맞음')
-    } else {
+    }  
+    else if (this.$route.name === 'ArticleCreate' || this.$route.name === 'ArticleDetail' || this.$route.name === 'Comments') {
+        this.navShow = false
+        this.backShow = true
+    }
+    else {
       this.navShow = false
+      this.backShow = false
       console.log('메인 아님')
     }
+  },
+  methods:{
+    goBack() {
+      this.$router.go(-1)
+    },
   }
 }
 

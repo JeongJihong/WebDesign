@@ -23,6 +23,7 @@ public class Comment{
 
     private Long articleid;
     private Long id;
+    private String nickname;
     @CreationTimestamp
     @Column(name = "createdtime", nullable = true)
     private LocalDateTime createdtime;
