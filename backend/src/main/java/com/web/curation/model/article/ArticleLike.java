@@ -19,6 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Builder
+@Table(name = "articlelike")
 public class ArticleLike {
     @Id @Column(name = "articlelikeid")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
