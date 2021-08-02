@@ -12,20 +12,26 @@
     </div>
 
     <!-- 피드 or 게시글 상세정보 보기 구현 전 디버깅 용 -->
-    <div v-for="idx in 90" :key="idx" class="square img_1 delete-btn-wrap">
+    <!-- <div v-for="idx in 90" :key="idx" class="square img_1 delete-btn-wrap">
       <b-icon v-if="scrapMode" icon="x-circle-fill" variant="warning"
         class="delete-btn" @click="scrapDelete(idx, token)"></b-icon>
       <img src="https://picsum.photos/110" alt="debuging area" style="position: absolute;"
         @click="!scrapMode && goToArticleDetail(idx)">
-    </div>
-    <!-- 피드 or 게시글 상세정보 보기 구현되면 사용할 내용
-         scrap 정보가 없어서 수정 필요!!!
-    <div v-for="scrap in scrapList" :key="scrap.id" class="square delete-btn-wrap">
-      <b-icon v-if="scrapMode" icon="x-circle-fill" variant="warning" class="delete-btn"
-        @click="scrapDelete(scrap.id, token)"></b-icon>
-      <img :src="scrap.thumbnail" :alt="scrap.name" style="position: absolute;"
-        @click="!scrapMode && goToArticleDetail(scrap.id)">
     </div> -->
+    <!-- 피드 or 게시글 상세정보 보기 구현되면 사용할 내용 scrap 정보가 없어서 수정 필요!!! -->
+    <div v-if="scrapList.length !== 0">
+      <div v-for="scrap in scrapList" :key="scrap.articleid" class="square delete-btn-wrap">
+        <b-icon v-if="scrapMode" icon="x-circle-fill" variant="warning" class="delete-btn"
+          @click="scrapDelete({ scrapid: scrap.scrapid, token })"></b-icon>
+        <img v-if="scrap.imgURL" :src="scrap.imgURL" :alt="'게시글' + scrap.articleid"
+          style="position: absolute;" @click="!scrapMode && goToArticleDetail(scrap.articleid)">
+        <img v-else src="https://picsum.photos/110" style="position: absolute;"
+          @click="!scrapMode && goToArticleDetail(scrap.articleid)">
+      </div>
+    </div>
+    <div v-else>
+      <p class="text-center mt-4 pt-4">스크랩한 게시물이 없습니다.</p>
+    </div>
   </div>
 </template>
 
@@ -51,10 +57,8 @@ export default {
     goBack() {
       this.$router.go(-1)
     },
-    // 해당 스크랩 클릭시 해당 게시글의 상세정보 보기로 이동 -- 임시라 수정 필요!!!
-    goToArticleDetail(url) {
-      // this.$router.push(`/#/article/${url}`)
-      console.log('디버깅용:', url, '번째 클릭')
+    goToArticleDetail(articleid) {
+      this.$router.push({ name: 'ArticleDetail', params: { articleid: articleid } })
     },
     ...mapActions([
       'scrapDeleteMode',
