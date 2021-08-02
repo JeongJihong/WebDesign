@@ -29,8 +29,13 @@
       </div>
     </div>
     <div class="d-grid pt-3">
-      <button @click="goToFollow" v-if="this.nickname !== this.myNickname" class="btn btn-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">팔로우</button>
-      <!-- <button @click="goToFollow" class="btn btn-primary shadow-none" style="display: flex; height: 25px; justify-content: center; align-items: center;">팔로우취소</button> -->
+      <button @click="goToFollow" v-if="this.nickname !== this.myNickname && this.isFollowBool === false" class="btn btn-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">팔로우</button>
+      <button v-if="this.nickname !== this.myNickname && this.isFollowBool === true" class="btn btn-outline-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">팔로우 요청 보냄</button>
+    </div>
+    <div v-if="this.isApproveBool === false" class="d-grid pt-2">
+      <button class="col-6 btn btn-outline-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">승인</button>
+      <button class="col-6 btn btn-outline-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">거절</button>
+
     </div>
     <div class="pt-4">
       <p>{{ this.introduction }}</p>
@@ -58,6 +63,8 @@ export default {
       followers: 0,
       followings: 0,
       myUid: 0,
+      isFollowBool: false,
+      isApproveBool: false,
     }
   },
   methods: {
@@ -76,10 +83,9 @@ export default {
       axios({
         method: 'post',
         url: `http://127.0.0.1:8080/account/profile/follow`,
-        params: {
-          'approve': true,
-          'dstid': 6,
-          'srcid': 7
+        data: {
+          'dstnickname': this.nickname,
+          'srcnickname': this.myNickname
         },
         headers: {
           'Content-Type': 'application/json',
@@ -87,9 +93,9 @@ export default {
         },
       })
       .then((res) => {
-        console.log('패치완료!!!!!!!!')
+        console.log('팔로우 요청 보내기 성공')
         console.log(res.data)
-        this.$router.push({name:'ProfileDetail'})
+        this.isFollowBool = !this.isFollowBool
       })
       .catch((err) => {
         alert(err)
@@ -105,7 +111,10 @@ export default {
         },
       })
       .then((res) => {
-        this.introduction = res.data.introduction
+        console.log(res.data)
+        this.isFollowBool = res.data.follow
+        this.introduction = res.data.userProfile.introduction
+        this.isApproveBool = res.data.followBoolean
         this.followerList()
       })
       .catch((err) => {
@@ -169,8 +178,6 @@ export default {
       },
     })
     .then((res) => {
-      console.log('checkJWT 성공! 밑에 res 확인')
-      console.log(res)
       this.myNickname = this.$store.state.username
       this.myUid=res.data.uid
       this.getUserInfo()
