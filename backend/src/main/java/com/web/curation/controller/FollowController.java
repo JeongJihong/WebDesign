@@ -46,28 +46,28 @@ public class FollowController {
                 .build()).getFollowid();
     }
 
-//    @DeleteMapping("/account/profile/follow")
-//    @ApiOperation(value = "팔로우 요청 거부")
-//    public Object FollowReject(@RequestParam(required = true) final Long followid){
-//        followDao.deleteById(followid);
-//        ResponseEntity response = new ResponseEntity<>("팔로우 요청 거부 완료", HttpStatus.OK);
-//        return response;
-//    }
-//
-//    @PatchMapping("/account/profile/follow")
-//    @ApiOperation(value = "팔로우 요청 승인")
-//    public Object FollowApprove(@RequestParam(required = true) final Long followid){
-//
-//        Optional<Follow> follow = followDao.findByFollowid(followid);
-//        Follow newFollow = new Follow(followid, follow.get().getSrcid(), follow.get().getDstid(), true);
-//        followDao.save(newFollow);
-//        final BasicResponse result = new BasicResponse();
-//        result.status = true;
-//        result.data = "success";
-//        ResponseEntity response = null;
-//        response = new ResponseEntity<>("OK", HttpStatus.OK);
-//        return response;
-//    }
+    @DeleteMapping("/account/profile/follow")
+    @ApiOperation(value = "팔로우 요청 거부")
+    public Object FollowReject(@RequestParam(required = true) final Long followid){
+        followDao.deleteById(followid);
+        ResponseEntity response = new ResponseEntity<>("팔로우 요청 거부 완료", HttpStatus.OK);
+        return response;
+    }
+
+    @PatchMapping("/account/profile/follow")
+    @ApiOperation(value = "팔로우 요청 승인")
+    public Object FollowApprove(@RequestParam(required = true) final Long followid){
+
+        Optional<Follow> follow = followDao.findByFollowid(followid);
+        Follow newFollow = new Follow(followid, follow.get().getSrcid(), follow.get().getDstid(), true);
+        followDao.save(newFollow);
+        final BasicResponse result = new BasicResponse();
+        result.status = true;
+        result.data = "success";
+        ResponseEntity response = null;
+        response = new ResponseEntity<>("OK", HttpStatus.OK);
+        return response;
+    }
 
     @GetMapping("/account/profile/{nickname}/follower")
     @ApiOperation(value = "팔로워 목록 반환")
