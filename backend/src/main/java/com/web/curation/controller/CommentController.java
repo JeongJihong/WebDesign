@@ -4,12 +4,7 @@ import com.web.curation.dao.article.ArticleDao;
 import com.web.curation.dao.comment.CommentDao;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
-import com.web.curation.model.article.Article;
-import com.web.curation.model.article.PostArticleRequest;
 import com.web.curation.model.comment.Comment;
-import com.web.curation.model.follow.Follow;
-import com.web.curation.model.image.Image;
-import com.web.curation.model.user.ChangePasswordRequest;
 import com.web.curation.model.user.User;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -63,6 +58,7 @@ public class CommentController {
                     .commentid(null)
                     .articleid(articleid)
                     .id(userOpt.get().getUid())
+                    .nickname(userOpt.get().getNickname())
                     .createdtime(null)
                     .updatedtime(null)
                     .comment(request.getComment())
@@ -97,7 +93,7 @@ public class CommentController {
             // 만약 현재 로그인한 유저와 수정요청한 유저가 같을때만 수정한다
             if(userOpt.get().getUid() == oldComment.getId()) {
                 Comment newComment = new Comment(oldComment.getCommentid(), oldComment.getArticleid(), userOpt.get().getUid(),
-                        request.getCreatedtime(), request.getUpdatedtime(), request.getComment());
+                        request.getNickname(), request.getCreatedtime(), request.getUpdatedtime(), request.getComment());
                 commentDao.save(newComment);
                 response = new ResponseEntity<>("댓글 수정 성공", HttpStatus.OK);
             }
