@@ -189,16 +189,16 @@ public class ArticleController {
 
     @GetMapping("/scrap")
     @ApiOperation(value = "스크랩목록 가져오기")
-    public Object scraplist() {
+    public ResponseEntity<List<Scrap>> scraplist() {
         Authentication user = SecurityContextHolder.getContext().getAuthentication();
         ResponseEntity response = null;
         if(user.getPrincipal() == "anonymousUser"){
             response = new ResponseEntity<>("Fail", HttpStatus.UNAUTHORIZED);
-            return response;
+            return null;
         }else {
             UserDetails user2 = (UserDetails) user.getPrincipal();
             Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
-            response = new ResponseEntity<>(scrapDao.findById(userOpt.get().getUid()), HttpStatus.OK);
+            response = new ResponseEntity<>(scrapDao.findAllById(userOpt.get().getUid()), HttpStatus.OK);
         }
         return response;
     }
