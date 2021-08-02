@@ -120,10 +120,14 @@ export default {
   scrapDeleteMode({ commit }) {
     commit('SCRAP_DELETE_MODE')
   },
-  scrapDelete({ commit }, scrapId, token) {
+  scrapDelete({ commit }, payload) {
     axios({
-      url: `http://127.0.0.1:8080/scrap/${scrapId}`,
+      url: `http://127.0.0.1:8080/scrap/${payload.scrapid}`,
       method: 'delete',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-AUTH-TOKEN': payload.token
+      }
     })
       .then(() => {
         axios({
@@ -131,14 +135,12 @@ export default {
           method: 'get',
           headers: {
             'Content-Type': 'application/json',
-            'X-AUTH-TOKEN': token
+            'X-AUTH-TOKEN': payload.token
           }
         })
           .then(res => {
-            const range = res.data.indexOf('/') - 1
-            const id = res.data.substr(0, range)
             axios({
-              url: `http://127.0.0.1:8080/scrap?userid=${id}`,
+              url: `http://127.0.0.1:8080/scrap?userid=${res.data.uid}`,
               method: 'get'
             })
               .then(res => {

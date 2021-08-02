@@ -9,7 +9,6 @@ import com.web.curation.dao.scrap.ScrapDao;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.article.Article;
-import com.web.curation.model.article.PostArticleRequest;
 import com.web.curation.model.article.ViewArticleRequest;
 import com.web.curation.model.comment.Comment;
 import com.web.curation.model.image.Image;
@@ -189,16 +188,16 @@ public class ArticleController {
 
     @GetMapping("/scrap")
     @ApiOperation(value = "스크랩목록 가져오기")
-    public Object scraplist() {
+    public ResponseEntity<List<Scrap>> scraplist() {
         Authentication user = SecurityContextHolder.getContext().getAuthentication();
         ResponseEntity response = null;
         if(user.getPrincipal() == "anonymousUser"){
             response = new ResponseEntity<>("Fail", HttpStatus.UNAUTHORIZED);
-            return response;
+            return null;
         }else {
             UserDetails user2 = (UserDetails) user.getPrincipal();
             Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
-            response = new ResponseEntity<>(scrapDao.findById(userOpt.get().getUid()), HttpStatus.OK);
+            response = new ResponseEntity<>(scrapDao.findAllById(userOpt.get().getUid()), HttpStatus.OK);
         }
         return response;
     }
@@ -218,6 +217,7 @@ public class ArticleController {
                     .scrapid(null)
                     .id(userOpt.get().getUid())
                     .articleid(articleid)
+                    .thumnailURL(articleDao.findByArticleid(articleid).get().getImages().get(0).getImgURL())
                     .build());
         }
 
@@ -233,7 +233,7 @@ public class ArticleController {
         }else {
             UserDetails user2 = (UserDetails) user.getPrincipal();
             Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
-            scrapDao.deleteByScrapidAndId(scrapid, userOpt.get().getUid());
+            scrapDao.deleteByScrapid(scrapid);
             response = new ResponseEntity<>("스크랩 취소 완료", HttpStatus.OK);
         }
         return response;
