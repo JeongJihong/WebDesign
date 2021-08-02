@@ -3,10 +3,7 @@ package com.web.curation.model.scrap;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 
 @Entity
@@ -18,7 +15,7 @@ import javax.persistence.Table;
 @Builder
 public class Scrap {
 
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long scrapid;
 
     @Column(name = "id", nullable = false)
