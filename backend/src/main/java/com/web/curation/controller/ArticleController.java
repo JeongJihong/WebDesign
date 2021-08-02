@@ -173,7 +173,37 @@ public class ArticleController {
         return response;
     }
 
+    @GetMapping("/article")
+    @ApiOperation(value = "전체 게시글 보기")
+    public Object getArticleList() {
+        Authentication user = SecurityContextHolder.getContext().getAuthentication();
+        ResponseEntity response = null;
+        if(user.getPrincipal() == "anonymousUser"){
+            response = new ResponseEntity<>("Fail", HttpStatus.UNAUTHORIZED);
+            return response;
+        }else {
+            UserDetails user2 = (UserDetails) user.getPrincipal();
+            // 로그인 한 사용자
+            Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
+            // 사용자가 팔로잉한 사람들의 ID목록
+            List<Long> followingIds = followDao.findBySrcidAndApprove(userOpt.get().getUid());
+            System.out.println("팔로잉 목록 크기: " + followingIds.size());
+            // 내가 팔로잉한 사람들의 목록
+            List<User> allFollowings = userDao.findByUidIn(followingIds);
 
+            User loginMember = new User(userOpt.get().getUid(), userOpt.get().getNickname(), userOpt.get().getEmail(),
+                    userOpt.get().getPassword(), userOpt.get().getIntroduction(), userOpt.get().getThumbnail(), userOpt.get().getRoles());
+            // 내가 팔로잉한 사람들 + 나
+            allFollowings.add(loginMember);
+            followingIds.add(userOpt.get().getUid());
+            System.out.println("팔로잉 목록 + 나 크기: " + followingIds.size());
+
+
+            List<Article> articleList = articleDao.findAllByIdIn(followingIds);
+            response = new ResponseEntity<>(articleList, HttpStatus.OK);
+        }
+        return response;
+    }
 
     @DeleteMapping("/article/{articleid}")
     @ApiOperation(value = "게시글 삭제")
