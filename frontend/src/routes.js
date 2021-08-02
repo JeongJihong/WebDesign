@@ -48,7 +48,7 @@ const routes = [
         }
     },
     {
-        path : '/article/:articleid',
+        path : '/article/:articleid/',
         name : 'ArticleDetail',
         component : ArticleDetail,
         meta: {

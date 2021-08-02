@@ -31,42 +31,28 @@
           </b-carousel-slide>
         </b-carousel>
     </div>
-    <p style="margin:10px">{{ articledetail.article.content }}</p>
-    <p>생성시간: {{ articledetail.article.createdtime }} </p>
-    <p>수정시간: {{ articledetail.article.updatedtime }} </p>
-    <p>{{ articledetail.articlelikecount }}명이 좋아해요! <b-avatar src="https://placekitten.com/300/300" size="2rem"></b-avatar><b-button style="height:35px">스크랩하기</b-button></p>
+    <p style="margin:10px">{{ article }}</p>
+    <!-- <p>생성시간: {{ articledetail.article.createdtime }} </p> -->
+    <!-- <p>수정시간: {{ articledetail.article.updatedtime }} </p> -->
+    <!-- <p>{{ articledetail[0] }}명이 좋아해요! <b-avatar src="https://placekitten.com/300/300" size="2rem"></b-avatar><b-button style="height:35px">스크랩하기</b-button></p> -->
     <hr>
-    <div class="d-flex justify-content-left align-items-center">
-      <b-avatar src="https://placekitten.com/300/300" size="2rem"></b-avatar>
-      <input type="text" placeholder="하고싶은말을 적어주세요">
-    </div>
-    <b-list-group>
-      <b-list-group-item class="d-flex justify-content-left align-items-center">
-        <b-avatar src="https://placekitten.com/300/300" size="2rem"></b-avatar>| Cras justo odio
-      </b-list-group-item>
-
-      <b-list-group-item class="d-flex justify-content-left align-items-center">
-        <b-avatar src="https://placekitten.com/300/300" size="2rem"></b-avatar>| Dapibus ac facilisis in
-      </b-list-group-item>
-
-      <b-list-group-item class="d-flex justify-content-left align-items-center">
-        <b-avatar src="https://placekitten.com/300/300" size="2rem"></b-avatar>| Morbi leo risus
-      </b-list-group-item>
-    </b-list-group>
+    <Comments/>
   </div>
 </template>
 
 
 <script>
+import Comments  from "../../views/article/Comments.vue"
 import axios from 'axios'
 export default {
   name:'ArticleDetail',
+  components: { Comments },
   data() {
     return {
       slide: 0,
       sliding: null,
       tests:4,
-      articledetail:[],
+      article:[],
       images:[
             {src: "https://picsum.photos/1024/480/?image=52"},
             {src: "https://picsum.photos/1024/480/?image=54"},
@@ -76,25 +62,29 @@ export default {
   },
   created(){
     axios({
-      url:`http://127.0.0.1:8080/article/`+this.$route.params.articleid,
-      method:'get',
+      url:`http://127.0.0.1:8080/article/`+this.$route.params.articleid+`/`,
+      method:'GET',
+      headers: {
+            'x-auth-token': `${localStorage.getItem('token')}`,
+          },
     })
       .then(res=>{
-        this.articledetail= res.data
+        this.article= res.data
         console.log(res.data)
       })
       .catch(err=>{
         console.log(err)
+        console.log("왜안됨?")
       })
   },
   methods:{
     articleDetail(){
       axios({
-      url:`http://127.0.0.1:8080/article/`+this.$route.params.articleid,
+      url: 'http://127.0.0.1:8080/article/'+this.$route.params.articleid,
       method:'get',
       })
       .then(res=>{
-        this.articledetail= res.data
+        this.article= res.data
         console.log(res.data)
       })
       .catch(err=>{

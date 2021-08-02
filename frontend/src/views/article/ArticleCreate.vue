@@ -1,8 +1,8 @@
 <template>
   <div class="scale">
     <button><b-icon-arrow-left></b-icon-arrow-left></button><span>게시글 생성하기</span>
-    <!-- <form enctype = "multipart/form-data" method="post" > -->
-    <form>
+    <form enctype = "multipart/form-data" method="post" >
+    <!-- <form> -->
       <div class="d-flex flex-row">
         <button style="display:inline-block; margin-right:5%; margin-left:2%" @click.prevent="clickInputTag()" id='addimage'><b-icon-plus class="h1"></b-icon-plus></button>
         <input hidden ref="plus" id="file" type="file"  accept="image/*" @change.prevent="uploadImage($event)" multiple>
@@ -23,7 +23,7 @@
     data(){
       return{
         content:"",
-        files:File,
+        afiles:File,
       }
     },
     methods:{
@@ -33,7 +33,7 @@
       uploadImage(event) { 
         console.log(event.target.files)
         console.log(event.target.files[0], typeof event.target.files[0])
-        this.files = event.target.files[0]
+        this.afiles = event.target.files[0]
 
         for (var image of event.target.files) {
           var reader = new FileReader(); 
@@ -51,8 +51,8 @@
       articleCreate(){
         const formData = new FormData();
         formData.append("content", this.content);
-        formData.append("files", this.files);
-        console.log(this.content, this.files, typeof this.files)
+        formData.append("files", this.afiles);
+        console.log(this.content, this.afiles, typeof this.afiles)
         axios({
           url:'http://127.0.0.1:8080/article',
           method:'post',
@@ -61,12 +61,14 @@
             // 'Content-Type': 'multipart/form-data'
           },
           data:{
-            formData: this.formData
+            // formData: this.formData
+            // content: this.content,
+            files: this.afiles,
           },
-          // params: {
-          //   content: this.content,
+          params: {
+            content: this.content,
           //   files: this.files,
-          // }
+          }
         })
           .then(res=>{
             this.$router.push({ name:'article'})
