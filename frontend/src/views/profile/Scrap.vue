@@ -18,15 +18,14 @@
       <img src="https://picsum.photos/110" alt="debuging area" style="position: absolute;"
         @click="!scrapMode && goToArticleDetail(idx)">
     </div> -->
-    <!-- 피드 or 게시글 상세정보 보기 구현되면 사용할 내용 scrap 정보가 없어서 수정 필요!!! -->
     <div v-if="scrapList.length !== 0">
-      <div v-for="scrap in scrapList" :key="scrap.articleid" class="square delete-btn-wrap">
+      <div v-for="scrap in scrapList" :key="scrap.articleid" class="square delete-btn-wrap bg-secondary">
         <b-icon v-if="scrapMode" icon="x-circle-fill" variant="warning" class="delete-btn"
           @click="scrapDelete({ scrapid: scrap.scrapid, token })"></b-icon>
-        <img v-if="scrap.imgURL" :src="scrap.imgURL" :alt="'게시글' + scrap.articleid"
+        <img v-if="scrap.thumnailURL" :src="scrap.thumnailURL" :alt="scrap.articleid+'번 게시글'"
           style="position: absolute;" @click="!scrapMode && goToArticleDetail(scrap.articleid)">
-        <img v-else src="https://picsum.photos/110" style="position: absolute;"
-          @click="!scrapMode && goToArticleDetail(scrap.articleid)">
+        <!-- <img v-else src="https://picsum.photos/110" style="position: absolute;"
+          @click="!scrapMode && goToArticleDetail(scrap.articleid)"> -->
       </div>
     </div>
     <div v-else>
@@ -58,6 +57,7 @@ export default {
       this.$router.go(-1)
     },
     goToArticleDetail(articleid) {
+      console.log(articleid+'클릭!')
       this.$router.push({ name: 'ArticleDetail', params: { articleid: articleid } })
     },
     ...mapActions([
