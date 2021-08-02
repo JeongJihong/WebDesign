@@ -29,13 +29,12 @@
       </div>
     </div>
     <div class="d-grid pt-3">
-      <button @click="goToFollow" v-if="this.nickname !== this.myNickname && this.isFollowBool === false" class="btn btn-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">팔로우</button>
-      <button v-if="this.nickname !== this.myNickname && this.isFollowBool === true" class="btn btn-outline-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">팔로우 요청 보냄</button>
+      <button @click="goToFollow" v-if="this.nickname !== this.myNickname && this.didIrequestFollowToYou === false" class="btn btn-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">팔로우</button>
+      <button v-if="this.nickname !== this.myNickname && this.didIrequestFollowToYou === true" @click="cancelFollow" class="btn btn-outline-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">팔로우 요청 보냄</button>
     </div>
-    <div v-if="this.isApproveBool === false" class="d-grid pt-2">
-      <button class="col-6 btn btn-outline-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">승인</button>
-      <button class="col-6 btn btn-outline-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">거절</button>
-
+    <div v-if="this.didYouRequestFollowToMe === true" class="d-flex pt-2">
+      <button @click="approveFollowRequest" class="col-6 btn btn-outline-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">승인</button>
+      <button @click="rejectFollowRequest" class="col-6 btn btn-outline-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">거절</button>
     </div>
     <div class="pt-4">
       <p>{{ this.introduction }}</p>
@@ -63,8 +62,8 @@ export default {
       followers: 0,
       followings: 0,
       myUid: 0,
-      isFollowBool: false,
-      isApproveBool: false,
+      didIrequestFollowToYou: false,
+      didYouRequestFollowToMe: false,
     }
   },
   methods: {
@@ -95,7 +94,7 @@ export default {
       .then((res) => {
         console.log('팔로우 요청 보내기 성공')
         console.log(res.data)
-        this.isFollowBool = !this.isFollowBool
+        this.didIrequestFollowToYou = !this.didIrequestFollowToYou
       })
       .catch((err) => {
         alert(err)
@@ -112,13 +111,71 @@ export default {
       })
       .then((res) => {
         console.log(res.data)
-        this.isFollowBool = res.data.follow
+        this.didIrequestFollowToYou = res.data.follow
         this.introduction = res.data.userProfile.introduction
-        this.isApproveBool = res.data.followBoolean
+        this.checkFollowRequest()
         this.followerList()
       })
       .catch((err) => {
         console.log(err)
+      })
+    },
+    checkFollowRequest () {
+      axios({
+        method: 'get',
+        url: `http://127.0.0.1:8080/account/profile/follow/${this.nickname}`,
+        headers: {
+          'Content-Type': 'application/json',
+          'X-AUTH-TOKEN' : this.$store.state.token
+        },
+      })
+      .then((res) => {
+        // console.log(res.data)
+        this.didYouRequestFollowToMe = res.data.otherToMe
+      })
+      .catch((err) => {
+        alert(err)
+      })
+    },
+    approveFollowRequest () {
+      axios({
+        method: 'patch',
+        url: `http://127.0.0.1:8080/account/profile/follow`,
+        headers: {
+          'Content-Type': 'application/json',
+          'X-AUTH-TOKEN' : this.$store.state.token
+        },
+        params: {
+          'followid': 14,
+        },
+      })
+      .then((res) => {
+        this.didYouRequestFollowToMe = !this.didYouRequestFollowToMe
+        alert(`${this.nickname}님의 팔로우 요청을 수락하셨습니다!`)
+        this.followerList()
+      })
+      .then((err) => {
+        alert(err)
+      })
+    },
+    rejectFollowRequest () {
+      axios({
+        method: 'delete',
+        url: `http://127.0.0.1:8080/account/profile/follow`,
+        headers: {
+          'Content-Type': 'application/json',
+          'X-AUTH-TOKEN' : this.$store.state.token
+        },
+        params: {
+          'followid': 14,
+        },
+      })
+      .then((res) => {
+        this.didYouRequestFollowToMe = !this.didYouRequestFollowToMe
+        alert(`${this.nickname}님의 팔로우 요청을 거절하셨습니다!`)
+      })
+      .then((err) => {
+        alert(err)
       })
     },
     goToChangePassword () {
@@ -136,8 +193,8 @@ export default {
         },
       })
       .then((res) => {
-        console.log('팔로워 불러오기')
-        console.log(res.data)
+        // console.log('팔로워 불러오기')
+        // console.log(res.data)
         this.followerLs = res.data
         this.followers = this.followerLs.length
 
@@ -157,13 +214,30 @@ export default {
         },
       })
       .then((res) => {
-        console.log('팔로잉 불러오기')
-        console.log(res.data)
+        // console.log('팔로잉 불러오기')
+        // console.log(res.data)
         this.followingLs = res.data
         this.followings = this.followingLs.length
       })
       .catch((err) => {
         alert(err)
+      })
+    },
+    cancelFollow () {
+      axios({
+        method: 'delete',
+        url: `http://127.0.0.1:8080/account/profile/follow/`,
+        headers: {
+          'Content-Type': 'application/json',
+          'X-AUTH-TOKEN' : this.$store.state.token
+        },
+        params: {
+          'followid': 7,
+        }
+      })
+      .then((res) => {
+        this.didIrequestFollowToYou = !this.didIrequestFollowToYou
+        console.log('승인여부', this.didYouRequestFollowToMe)
       })
     }
   },
