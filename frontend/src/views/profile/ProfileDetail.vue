@@ -7,7 +7,7 @@
         </button>
         <h2>{{ this.nickname }} 님의 프로필</h2>
       </div>
-      <button @click="goToProfileUpdate">
+      <button @click="goToProfileUpdate" v-if="this.nickname === this.myNickname">
         프로필 수정
       </button>
     </div>
@@ -29,7 +29,7 @@
       </div>
     </div>
     <div class="d-grid pt-3">
-      <button @click="goToFollow" class="btn btn-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">팔로우</button>
+      <button @click="goToFollow" v-if="this.nickname !== this.myNickname" class="btn btn-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">팔로우</button>
       <!-- <button @click="goToFollow" class="btn btn-primary shadow-none" style="display: flex; height: 25px; justify-content: center; align-items: center;">팔로우취소</button> -->
     </div>
     <div class="pt-4">
@@ -45,16 +45,19 @@
 
 <script>
 import axios from 'axios'
+import { mapActions,mapState } from 'vuex'
 
 export default {
   data () {
     return {
-      nickname: '',
+      nickname: this.$route.params.nickname,
+      myNickname: '',
       introduction: '',
       followerLs: [],
       followingLs: [],
       followers: 0,
       followings: 0,
+      myUid: 0,
     }
   },
   methods: {
@@ -66,13 +69,18 @@ export default {
     goToFollowList () {
       this.$router.push({
         name: 'FollowList',
+        params: {nickname: this.nickname}
       })
     },
     goToFollow () {
       axios({
         method: 'post',
         url: `http://127.0.0.1:8080/account/profile/follow`,
-        params: this.userInfo,
+        params: {
+          'approve': true,
+          'dstid': 6,
+          'srcid': 7
+        },
         headers: {
           'Content-Type': 'application/json',
           'X-AUTH-TOKEN' : this.$store.state.token
@@ -97,7 +105,6 @@ export default {
         },
       })
       .then((res) => {
-        this.nickname = res.data.nickname
         this.introduction = res.data.introduction
         this.followerList()
       })
@@ -152,6 +159,7 @@ export default {
     }
   },
   created () {
+    // this.getUserInfo()
     axios({
       method: 'get',
       url: `http://127.0.0.1:8080/account/checkJWT/`,
@@ -163,6 +171,7 @@ export default {
     .then((res) => {
       console.log('checkJWT 성공! 밑에 res 확인')
       console.log(res)
+      this.myNickname = this.$store.state.username
       this.myUid=res.data.uid
       this.getUserInfo()
       console.log(this.myUid)
