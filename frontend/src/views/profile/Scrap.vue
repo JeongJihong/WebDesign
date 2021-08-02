@@ -19,11 +19,13 @@
         @click="!scrapMode && goToArticleDetail(idx)">
     </div> -->
     <!-- 피드 or 게시글 상세정보 보기 구현되면 사용할 내용 scrap 정보가 없어서 수정 필요!!! -->
-    <div v-for="scrap in scrapList" :key="scrap.id" class="square delete-btn-wrap">
+    <div v-for="scrap in scrapList" :key="scrap.articleid" class="square delete-btn-wrap">
       <b-icon v-if="scrapMode" icon="x-circle-fill" variant="warning" class="delete-btn"
         @click="scrapDelete(scrap.id, token)"></b-icon>
-      <img :src="scrap.thumbnail" :alt="scrap.name" style="position: absolute;"
-        @click="!scrapMode && goToArticleDetail(scrap.id)">
+      <img v-if="scrap.imgURL" :src="scrap.imgURL" :alt="'게시글' + scrap.articleid"
+        style="position: absolute;" @click="!scrapMode && goToArticleDetail(scrap.articleid)">
+      <img v-else src="https://picsum.photos/110" style="position: absolute;"
+        @click="!scrapMode && goToArticleDetail(scrap.articleid)">
     </div>
   </div>
 </template>
@@ -51,9 +53,9 @@ export default {
       this.$router.go(-1)
     },
     // 해당 스크랩 클릭시 해당 게시글의 상세정보 보기로 이동 -- 임시라 수정 필요!!!
-    goToArticleDetail(url) {
-      // this.$router.push(`/#/article/${url}`)
-      console.log('디버깅용:', url, '번째 클릭')
+    goToArticleDetail(articleid) {
+      this.$router.push({ name: 'ArticleDetail', params: { articleid: articleid } })
+      // console.log('디버깅용:', url, '번째 클릭')
     },
     ...mapActions([
       'scrapDeleteMode',
