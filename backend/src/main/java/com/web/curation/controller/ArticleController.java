@@ -25,6 +25,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -97,9 +98,9 @@ public class ArticleController {
         return pathName;
     }
 
-    @PostMapping("/article")
+    @PostMapping(value = "/article", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ApiOperation(value = "게시글 작성")
-    public Object postArticle(@RequestParam String content, @RequestParam(required = true) List<MultipartFile> files) throws IOException {
+    public Object postArticle(@RequestPart String content, @RequestPart(required = true) List<MultipartFile> files) throws IOException {
         Authentication user = SecurityContextHolder.getContext().getAuthentication();
         ResponseEntity response = null;
         if(user.getPrincipal() == "anonymousUser"){
@@ -134,7 +135,7 @@ public class ArticleController {
         }
     }
 
-    @GetMapping("/article/{articleid}/")
+    @GetMapping("/article/{articleid}")
     @ApiOperation(value = "해당 게시글 하나만 보기")
     public Object getTestCode(@PathVariable(required = true) final Long articleid) {
         // 게시글 번호로 게시글 추출
