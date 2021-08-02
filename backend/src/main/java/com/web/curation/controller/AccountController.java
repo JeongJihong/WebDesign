@@ -242,4 +242,35 @@ public class AccountController {
         }
         return response;
     }
+
+    @GetMapping("/account/profile/follow/{nickname}")
+    @ApiOperation(value = "팔로잉 유무 확인")
+    @ResponseBody
+    public Object ddd(@PathVariable("nickname") final String othersNickname){
+        Authentication user = SecurityContextHolder.getContext().getAuthentication();
+        ResponseEntity response = null;
+        if(user.getPrincipal() == "anonymousUser"){
+            response = new ResponseEntity<>("Fail", HttpStatus.UNAUTHORIZED);
+        }else{
+            UserDetails user2 = (UserDetails) user.getPrincipal();
+            Optional<User> me = userDao.findByEmail(user2.getUsername());
+            Optional<User> otherUser = userDao.findByNickname(othersNickname);
+            boolean otherToMe = false;
+
+            System.out.println("Srcid: " + otherUser.get().getUid());
+            System.out.println("Dstid: " + me.get().getUid());
+            if(!followDao.existsBySrcidAndDstidAndApprove(otherUser.get().getUid(), me.get().getUid(), false)){
+                otherToMe = false;
+                System.out.println("팔로잉 없음");
+            }else{
+                otherToMe = true;
+            }
+
+            Map result = new HashMap<String, Object>();
+            result.put("otherToMe", otherToMe);
+
+            response = new ResponseEntity<>(result, HttpStatus.OK);
+        }
+        return response;
+    }
 }

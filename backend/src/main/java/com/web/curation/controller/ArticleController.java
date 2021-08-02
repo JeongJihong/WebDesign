@@ -1,6 +1,7 @@
 package com.web.curation.controller;
 
 import com.google.api.Http;
+import com.google.api.gax.paging.Page;
 import com.web.curation.dao.article.ArticleDao;
 import com.web.curation.dao.article.ArticleLikeDao;
 import com.web.curation.dao.image.ImageDao;
@@ -14,6 +15,7 @@ import com.web.curation.model.comment.Comment;
 import com.web.curation.model.image.Image;
 import com.web.curation.model.scrap.Scrap;
 import com.web.curation.model.user.User;
+//import com.web.curation.service.article.ArticleService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -70,6 +72,9 @@ public class ArticleController {
 
     @Autowired
     FollowDao followDao;
+
+//    @Autowired
+//    ArticleService articleService;
 
     final String rootPath = FileSystemView.getFileSystemView().getHomeDirectory().toString();
     final String basePath = rootPath + "/" + "SNSImage" + "/" ;
@@ -238,5 +243,22 @@ public class ArticleController {
         }
         return response;
     }
+
+//    @GetMapping("/api/articles")
+//    @ApiOperation(value = "메인피드")
+//    public ResponseEntity<Page<Article>> getArticlePages(@RequestParam Long lastArticleId, @RequestParam int size) {
+//        Authentication user = SecurityContextHolder.getContext().getAuthentication();
+//        ResponseEntity response = null;
+//        if(user.getPrincipal() == "anonymousUser"){
+//            response = new ResponseEntity<>("Fail", HttpStatus.UNAUTHORIZED);
+//            return response;
+//        }else {
+//            UserDetails user2 = (UserDetails) user.getPrincipal();
+//            Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
+//
+//            Page<Article> articleResponses = articleService.fetchArticlePagesBy(lastArticleId, size, userOpt.get().getUid());
+//            return new ResponseEntity<>(articleResponses, HttpStatus.OK);
+//        }
+//    }
 
 }
