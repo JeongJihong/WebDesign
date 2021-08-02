@@ -8,6 +8,7 @@ import com.web.curation.dao.image.ImageDao;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.article.Article;
+import com.web.curation.model.follow.Follow;
 import com.web.curation.model.image.Image;
 import com.web.curation.model.user.ChangePasswordRequest;
 import com.web.curation.model.user.LoginRequest;
@@ -223,16 +224,51 @@ public class AccountController {
                 article = articleDao.findAllById(otherUser.get().getUid());
             }
             boolean follow = false;
+            Optional<Follow> followUser;
+            Map result = new HashMap<String, Object>();
             if(!followDao.existsBySrcidAndDstid(loginUser.get().getUid(), otherUser.get().getUid())){
                 follow = false;
             }else{
                 follow = true;
+                followUser = followDao.findBySrcidAndDstid(loginUser.get().getUid(), otherUser.get().getUid());
+                result.put("followBoolean", followUser.get().getApprove());
             }
-            Map result = new HashMap<String, Object>();
+
             result.put("follow", follow);
             result.put("userProfile", otherUser);
             result.put("article", article);
             result.put("feed Thumbnail", images);
+            response = new ResponseEntity<>(result, HttpStatus.OK);
+        }
+        return response;
+    }
+
+    @GetMapping("/account/profile/follow/{nickname}")
+    @ApiOperation(value = "팔로잉 유무 확인")
+    @ResponseBody
+    public Object ddd(@PathVariable("nickname") final String othersNickname){
+        Authentication user = SecurityContextHolder.getContext().getAuthentication();
+        ResponseEntity response = null;
+        if(user.getPrincipal() == "anonymousUser"){
+            response = new ResponseEntity<>("Fail", HttpStatus.UNAUTHORIZED);
+        }else{
+            UserDetails user2 = (UserDetails) user.getPrincipal();
+            Optional<User> me = userDao.findByEmail(user2.getUsername());
+            Optional<User> otherUser = userDao.findByNickname(othersNickname);
+            boolean otherToMe = false;
+
+            System.out.println("Srcid: " + otherUser.get().getUid());
+            System.out.println("Dstid: " + me.get().getUid());
+            if(!followDao.existsBySrcidAndDstidAndApprove(otherUser.get().getUid(), me.get().getUid(), false)){
+                otherToMe = false;
+                System.out.println("팔로잉 없음");
+            }else{
+                otherToMe = true;
+            }
+
+            Map result = new HashMap<String, Object>();
+            result.put("otherToMe", otherToMe);
+
             response = new ResponseEntity<>(result, HttpStatus.OK);
         }
         return response;
