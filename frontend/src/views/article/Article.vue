@@ -79,7 +79,7 @@ export default {
       'logout'
     ]),
     getArticle(articleId){
-      console.log(articleId)
+      // console.log(articleId)
       this.$router.push({ name:'ArticleDetail', params:{ articleId:articleId }})
     },
     onSlideStart(slide) {
