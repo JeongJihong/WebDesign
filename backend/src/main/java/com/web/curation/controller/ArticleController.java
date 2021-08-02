@@ -233,7 +233,7 @@ public class ArticleController {
         }else {
             UserDetails user2 = (UserDetails) user.getPrincipal();
             Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
-            scrapDao.deleteByScrapidAndId(scrapid, userOpt.get().getUid());
+            scrapDao.deleteByScrapid(scrapid);
             response = new ResponseEntity<>("스크랩 취소 완료", HttpStatus.OK);
         }
         return response;
