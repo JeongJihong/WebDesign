@@ -8,7 +8,7 @@
       <b-avatar src="https://placekitten.com/300/300" size="2rem"></b-avatar><span> {{ article.userNickname }}</span>
       <span>
         <!-- <button @click="articleUpdate()" class="btn-warning badge text-dark fw-bold me-2">수정</button> -->
-        <button v-if=" article.userId === article.articleDetail.id" @click="articleDelete()" class="btn-danger badge">삭제</button>
+        <!-- <button v-if=" article.userId === article.articleDetail.id" @click="articleDelete()" class="btn-danger badge">삭제</button> -->
       </span>
     </div>
     <div>
@@ -72,7 +72,6 @@ export default {
     })
       .then(res=>{
         this.article= res.data
-        console.log( this.username, this.articlemaster)
         console.log(res.data)
       })
       .catch(err=>{

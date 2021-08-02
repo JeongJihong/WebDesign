@@ -27,14 +27,14 @@
           <span v-if="comment.createdtime == comment.updatedtime ">생성시간:{{ comment.createdtime}}</span>
           <span v-else>수정시간:{{ comment.updatedtime}}</span>
           <span>
-            <button v-b-modal.modal-1 variant="none" class="btn-warning badge text-dark fw-bold me-2">수정</button>
+            <button v-if="comment.nickname === username" v-b-modal.modal-1 variant="none" class="btn-warning badge text-dark fw-bold me-2">수정</button>
             <b-modal id="modal-1" title="댓글수정">
                 <form @submit.prevent="UpdateComment(comment.commentid)">
                   <input type="text" v-model="newcontent" :placeholder="comment.comment">
                   <button class="btn btn-primary btn-sm">수정하기</button>
                 </form>
             </b-modal>
-            <button @click ="CommentDelete(comment.commentid)" class="btn-danger badge">삭제</button>
+            <button v-if="comment.nickname === username" @click ="CommentDelete(comment.commentid)" class="btn-danger badge">삭제</button>
           </span>
         </span>
       </b-list-group-item>
@@ -51,6 +51,7 @@ export default {
       comments:[],
       content:"",
       newcontent:"",
+      username:"",
     }
   },
   created() {
@@ -60,14 +61,12 @@ export default {
         headers: {
             'x-auth-token': `${localStorage.getItem('token')}`,
         },
-        data:{
-          needNav:false,
-        },
       })
         .then(res=>{
           console.log(res.data)
           this.comments = res.data
           console.log(this.comment)
+          this.username = `${localStorage.getItem('username')}`
         })
         .catch(err=>{
           console.log(err.response.data)
@@ -88,6 +87,7 @@ export default {
       })
         .then(res=>{
           this.comments = res.data
+          this.username = `${localStorage.getItem('username')}`
           
         })
         .catch(err => {
