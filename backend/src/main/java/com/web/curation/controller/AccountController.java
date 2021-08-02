@@ -27,6 +27,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.filechooser.FileSystemView;
 import javax.swing.text.html.Option;
 import javax.validation.Valid;
 import java.util.*;
@@ -52,6 +53,9 @@ public class AccountController {
 
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
+
+    final String rootPath = FileSystemView.getFileSystemView().getHomeDirectory().toString();
+    final String basePath = rootPath + "/" + "SNSImage" + "/" ;
 
 
 
@@ -212,14 +216,11 @@ public class AccountController {
             Optional<User> otherUser = userDao.findByNickname(nickname);
             List<Article> article = null;
             List<Image> images = null;
+            System.out.println(basePath+"0");
             if(!articleDao.existsById(otherUser.get().getUid())){
                 System.out.println("none");
             }else{
                 article = articleDao.findAllById(otherUser.get().getUid());
-                images = new ArrayList<>();
-                for(int i = 0; i < article.size(); i++){
-                    images.add(imageDao.findByArticleidAndImageidStartingWith(article.get(i).getArticleid(), "0").get(0));
-                }
             }
             boolean follow = false;
             if(!followDao.existsBySrcidAndDstid(loginUser.get().getUid(), otherUser.get().getUid())){
