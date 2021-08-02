@@ -4,6 +4,7 @@ import com.web.curation.dao.follow.FollowDao;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.follow.Follow;
+import com.web.curation.model.follow.FollowRequest;
 import com.web.curation.model.search.Search;
 import com.web.curation.model.user.User;
 import io.swagger.annotations.ApiOperation;
@@ -36,37 +37,37 @@ public class FollowController {
 
     @PostMapping("/account/profile/follow")
     @ApiOperation(value = "팔로우 요청")
-    public Object FollowRequest(@RequestBody Follow request){
+    public Object FollowRequest(@RequestBody FollowRequest request){
         return followDao.save(Follow.builder()
                 .followid(null)
-                .srcid(request.getSrcid())
-                .dstid(request.getDstid())
+                .srcid(userDao.getUidFromNickname(request.getSrcnickname()))
+                .dstid(userDao.getUidFromNickname(request.getDstnickname()))
                 .approve(false)
                 .build()).getFollowid();
     }
 
-//    @DeleteMapping("/account/profile/follow")
-//    @ApiOperation(value = "팔로우 요청 거부")
-//    public Object FollowReject(@RequestParam(required = true) final Long followid){
-//        followDao.deleteById(followid);
-//        ResponseEntity response = new ResponseEntity<>("팔로우 요청 거부 완료", HttpStatus.OK);
-//        return response;
-//    }
-//
-//    @PatchMapping("/account/profile/follow")
-//    @ApiOperation(value = "팔로우 요청 승인")
-//    public Object FollowApprove(@RequestParam(required = true) final Long followid){
-//
-//        Optional<Follow> follow = followDao.findByFollowid(followid);
-//        Follow newFollow = new Follow(followid, follow.get().getSrcid(), follow.get().getDstid(), true);
-//        followDao.save(newFollow);
-//        final BasicResponse result = new BasicResponse();
-//        result.status = true;
-//        result.data = "success";
-//        ResponseEntity response = null;
-//        response = new ResponseEntity<>("OK", HttpStatus.OK);
-//        return response;
-//    }
+    @DeleteMapping("/account/profile/follow")
+    @ApiOperation(value = "팔로우 요청 거부")
+    public Object FollowReject(@RequestParam(required = true) final Long followid){
+        followDao.deleteById(followid);
+        ResponseEntity response = new ResponseEntity<>("팔로우 요청 거부 완료", HttpStatus.OK);
+        return response;
+    }
+
+    @PatchMapping("/account/profile/follow")
+    @ApiOperation(value = "팔로우 요청 승인")
+    public Object FollowApprove(@RequestParam(required = true) final Long followid){
+
+        Optional<Follow> follow = followDao.findByFollowid(followid);
+        Follow newFollow = new Follow(followid, follow.get().getSrcid(), follow.get().getDstid(), true);
+        followDao.save(newFollow);
+        final BasicResponse result = new BasicResponse();
+        result.status = true;
+        result.data = "success";
+        ResponseEntity response = null;
+        response = new ResponseEntity<>("OK", HttpStatus.OK);
+        return response;
+    }
 
     @GetMapping("/account/profile/{nickname}/follower")
     @ApiOperation(value = "팔로워 목록 반환")
