@@ -20,5 +20,6 @@ public class Scrap {
 
     private Long id;
     private Long articleid;
+    private String thumnailURL;
 
 }

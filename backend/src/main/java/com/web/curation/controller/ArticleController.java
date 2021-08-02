@@ -9,7 +9,6 @@ import com.web.curation.dao.scrap.ScrapDao;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.article.Article;
-import com.web.curation.model.article.PostArticleRequest;
 import com.web.curation.model.article.ViewArticleRequest;
 import com.web.curation.model.comment.Comment;
 import com.web.curation.model.image.Image;
@@ -218,6 +217,7 @@ public class ArticleController {
                     .scrapid(null)
                     .id(userOpt.get().getUid())
                     .articleid(articleid)
+                    .thumnailURL(articleDao.findByArticleid(articleid).get().getImages().get(0).getImgURL())
                     .build());
         }
 
