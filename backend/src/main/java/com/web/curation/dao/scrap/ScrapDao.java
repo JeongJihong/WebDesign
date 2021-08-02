@@ -6,10 +6,12 @@ import org.hibernate.loader.plan.spi.QuerySpace;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 public interface ScrapDao extends JpaRepository<Scrap, Long> {
-    void deleteByScrapidAndId(Long scrapid, Long id);
+    @Transactional
+    void deleteByScrapid(Long scrapid);
     boolean existsByArticleidAndId(Long articleid, Long id);
 
     List<Scrap> findAllById(Long id);
