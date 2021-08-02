@@ -2,10 +2,10 @@
   <!-- <div class="scale"> -->
   <div>
      <!-- 헤더 -->
-    <div class="mt-3 mx-4 fs-1">
+    <!-- <div class="mt-3 mx-4 fs-1">
       <button @click="goBack"><b-icon icon="arrow-left" class="me-4"></b-icon></button>
       <span class="fw-bold">댓글</span>
-    </div>
+    </div> -->
 
     <!-- 댓글 입력 -->
     <div class="d-flex justify-content-left align-items-center mx-3 mt-4">
@@ -55,10 +55,13 @@ export default {
   },
   created() {
     axios({
-        url:'http://127.0.0.1:8080/article/1/comment',
+        url:`http://127.0.0.1:8080/article/`+this.$route.params.articleid+`/comment`,
         method:'get',
         headers: {
             'x-auth-token': `${localStorage.getItem('token')}`,
+        },
+        data:{
+          needNav:false,
         },
       })
         .then(res=>{

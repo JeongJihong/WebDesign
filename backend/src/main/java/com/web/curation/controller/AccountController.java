@@ -8,6 +8,7 @@ import com.web.curation.dao.image.ImageDao;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.article.Article;
+import com.web.curation.model.follow.Follow;
 import com.web.curation.model.image.Image;
 import com.web.curation.model.user.ChangePasswordRequest;
 import com.web.curation.model.user.LoginRequest;
@@ -223,12 +224,16 @@ public class AccountController {
                 article = articleDao.findAllById(otherUser.get().getUid());
             }
             boolean follow = false;
+            Optional<Follow> followUser;
+            Map result = new HashMap<String, Object>();
             if(!followDao.existsBySrcidAndDstid(loginUser.get().getUid(), otherUser.get().getUid())){
                 follow = false;
             }else{
                 follow = true;
+                followUser = followDao.findBySrcidAndDstid(loginUser.get().getUid(), otherUser.get().getUid());
+                result.put("followBoolean", followUser.get().getApprove());
             }
-            Map result = new HashMap<String, Object>();
+
             result.put("follow", follow);
             result.put("userProfile", otherUser);
             result.put("article", article);
