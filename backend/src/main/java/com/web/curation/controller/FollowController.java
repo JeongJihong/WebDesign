@@ -4,6 +4,7 @@ import com.web.curation.dao.follow.FollowDao;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.follow.Follow;
+import com.web.curation.model.follow.FollowRequest;
 import com.web.curation.model.search.Search;
 import com.web.curation.model.user.User;
 import io.swagger.annotations.ApiOperation;
@@ -36,11 +37,11 @@ public class FollowController {
 
     @PostMapping("/account/profile/follow")
     @ApiOperation(value = "팔로우 요청")
-    public Object FollowRequest(@RequestBody Follow request){
+    public Object FollowRequest(@RequestBody FollowRequest request){
         return followDao.save(Follow.builder()
                 .followid(null)
-                .srcid(request.getSrcid())
-                .dstid(request.getDstid())
+                .srcid(userDao.getUidFromNickname(request.getSrcnickname()))
+                .dstid(userDao.getUidFromNickname(request.getDstnickname()))
                 .approve(false)
                 .build()).getFollowid();
     }
