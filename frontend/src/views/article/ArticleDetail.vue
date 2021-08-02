@@ -1,8 +1,15 @@
 <template>
   <div class="scale">
+    <div class="mt-3 mx-4 fs-1">
+      <span class="fw-bold"></span>
+    </div>
     <div class="mb-2">
       <!-- <p>생성시간 : {{ article.createdtime }}</p> -->
-      <b-avatar src="https://placekitten.com/300/300" size="2rem"></b-avatar><span> 냥사마</span>
+      <b-avatar src="https://placekitten.com/300/300" size="2rem"></b-avatar><span> {{ article.userNickname }}</span>
+      <span>
+        <!-- <button @click="articleUpdate()" class="btn-warning badge text-dark fw-bold me-2">수정</button> -->
+        <button v-if=" article.userId === article.articleDetail.id" @click="articleDelete()" class="btn-danger badge">삭제</button>
+      </span>
     </div>
     <div>
       <b-carousel
@@ -18,23 +25,23 @@
           @sliding-start="onSlideStart"
           @sliding-end="onSlideEnd"
         >
-          <b-carousel-slide v-for ="image in images" :key="image.id">
+          <b-carousel-slide v-for ="(idx,image) in article.imageLocation" :key="idx">
             <template #img>
               <img
                 class="d-block img-fluid w-100"
                 width="1024"
                 height="480"
-                :src= image.src
+                :src= image
                 alt="image slot"
               >
             </template>
           </b-carousel-slide>
         </b-carousel>
     </div>
-    <p style="margin:10px">{{ article }}</p>
-    <!-- <p>생성시간: {{ articledetail.article.createdtime }} </p> -->
-    <!-- <p>수정시간: {{ articledetail.article.updatedtime }} </p> -->
-    <!-- <p>{{ articledetail[0] }}명이 좋아해요! <b-avatar src="https://placekitten.com/300/300" size="2rem"></b-avatar><b-button style="height:35px">스크랩하기</b-button></p> -->
+    <p style="margin:10px">{{ article.articleDetail.review }}</p>
+    <p>생성시간: {{ article.articleDetail.createdtime }} </p>
+    <p>수정시간: {{ article.articleDetail.updatedtime }} </p>
+    <p>{{ article.likeCount }} 명이 좋아해요! <b-avatar src="https://placekitten.com/300/300" size="2rem"></b-avatar><b-button style="height:35px">스크랩하기</b-button></p>
     <hr>
     <Comments/>
   </div>
@@ -53,16 +60,11 @@ export default {
       sliding: null,
       tests:4,
       article:[],
-      images:[
-            {src: "https://picsum.photos/1024/480/?image=52"},
-            {src: "https://picsum.photos/1024/480/?image=54"},
-            {src: "https://picsum.photos/1024/480/?image=58"},
-            {src: "https://picsum.photos/1024/480/?image=55"}]
     }
   },
   created(){
     axios({
-      url:`http://127.0.0.1:8080/article/`+this.$route.params.articleid+`/`,
+      url:`http://127.0.0.1:8080/article/`+this.$route.params.articleid+'/',
       method:'GET',
       headers: {
             'x-auth-token': `${localStorage.getItem('token')}`,
@@ -70,6 +72,7 @@ export default {
     })
       .then(res=>{
         this.article= res.data
+        console.log( this.username, this.articlemaster)
         console.log(res.data)
       })
       .catch(err=>{
@@ -78,6 +81,9 @@ export default {
       })
   },
   methods:{
+    goBack() {
+      this.$router.go(-1)
+    },
     articleDetail(){
       axios({
       url: 'http://127.0.0.1:8080/article/'+this.$route.params.articleid,
@@ -86,6 +92,38 @@ export default {
       .then(res=>{
         this.article= res.data
         console.log(res.data)
+      })
+      .catch(err=>{
+        console.log(err)
+      })
+    },
+    // articleUpdate(){
+    //   axios({
+    //   url: 'http://127.0.0.1:8080/article/'+this.$route.params.articleid,
+    //   method:'put',
+    //   headers: {
+    //       'x-auth-token': `${localStorage.getItem('token')}`,
+    //     }
+    //   })
+    //   .then(res=>{
+    //     this.article= res.data
+    //     console.log(res.data)
+    //   })
+    //   .catch(err=>{
+    //     console.log(err)
+    //   })
+    // },
+    articleDelete(){
+      axios({
+      url: 'http://127.0.0.1:8080/article/'+this.$route.params.articleid,
+      method:'delete',
+      headers: {
+          'x-auth-token': `${localStorage.getItem('token')}`,
+        }
+      })
+      .then(res=>{
+        console.log(res.data)
+        this.$router.push({ name:'FeedMain'})
       })
       .catch(err=>{
         console.log(err)
