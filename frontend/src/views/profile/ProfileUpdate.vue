@@ -65,9 +65,10 @@ export default {
         },
       })
       .then((res) => {
-        console.log('패치완료!!!!!!!!')
-        console.log(res.data)
-        this.$router.push({name:'ProfileDetail'})
+        this.$router.push({
+          name:'ProfileDetail',
+          params: {nickname: this.userInfo.nickname}
+        })
       })
       .catch((err) => {
         alert(err)
@@ -83,8 +84,6 @@ export default {
         },
       })
       .then((res) => {
-        console.log('created then')
-        console.log(res)
         this.userInfo.uid = res.data.uid
         this.userInfo.nickname = res.data.nickname
         this.userInfo.introduction = res.data.introduction
@@ -110,8 +109,6 @@ export default {
       },
     })
     .then((res) => {
-      console.log('checkJWT 성공! 밑에 res 확인')
-      console.log(res)
       this.myUid=res.data.uid
       this.getUserInfo()
       console.log(this.myUid)
