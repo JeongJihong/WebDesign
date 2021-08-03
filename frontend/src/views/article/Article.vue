@@ -3,7 +3,7 @@
     <div class="wrapB">
       <h1>뉴스피드</h1>
       <button @click="logout()">로그아웃</button>
-      <div v-for="article in list" :key="article.review" >
+      <div v-for="article in articles" :key="article.review" >
         <b-avatar src="https://placekitten.com/300/300" size="2rem"></b-avatar><span> 냥사마</span>
         <b-carousel
           id="carousel-1"
@@ -59,7 +59,7 @@ export default {
   // components: { FeedItem },
   data() {
       return {
-        limit: 0,
+        pageNum: 0,
         list: [],
         slide: 0,
         sliding: null,
@@ -70,27 +70,36 @@ export default {
   methods:{
     infiniteHandler($state) {
       console.log('살아있음1');
-      axios.get('http://127.0.0.1:8080/article', {
+      axios.get('http://127.0.0.1:8080/article/main', {
           headers: {
             'x-auth-token': `${localStorage.getItem('token')}`,
-        },
+          },
           params: {
-            limit: this.limit,
+            pageNum: this.pageNum,
           },
         })
-        .then((response) => {
-          setTimeout(() => {
-            console.log('살아있음2')
-            if (response.data.length) {
-              this.list = this.list.concat(response.data);
-              this.limit += 3;
-              $state.loaded();
-            } else {
+        .then(res => {
+          if(res.data.totalPages == this.pageNum){
               $state.complete();
-            }
-          }, 1000);
-        })
-        .catch((error) => {});
+          }else{
+              setTimeout(() => {
+                  const data = res.data.content;
+                            for(let key in data){
+                                this.articles.push(data[key])
+                            }
+                  this.pageNum++;
+                  $state.loaded();
+              }, 1000)
+          }
+      })
+      .catch(err => {
+          console.log(err)
+          alert('에러');
+          localStorage.clear();
+          this.$store.state.loginState = false;
+          this.$store.state.token = null;
+          this.$router.push('/');
+      })
     },
     // infiniteHandler($state) { 
     //   axios({
@@ -132,21 +141,21 @@ export default {
       this.sliding = false
     },
   },
-  created(){
-    axios({
-      url:'http://127.0.0.1:8080/article',
-      method:'get',
-      headers: {
-          'x-auth-token': `${localStorage.getItem('token')}`,
-        },
-    })
-      .then(res=>{
-        this.articles = (res.data)
-      })
-      .catch(err=>{
-        console.log(err)
-      })
-  }
+  // created(){
+  //   axios({
+  //     url:'http://127.0.0.1:8080/article',
+  //     method:'get',
+  //     headers: {
+  //         'x-auth-token': `${localStorage.getItem('token')}`,
+  //       },
+  //   })
+  //     .then(res=>{
+  //       this.articles = (res.data)
+  //     })
+  //     .catch(err=>{
+  //       console.log(err)
+  //     })
+  // }
 };
 </script>
 <style scoped>
