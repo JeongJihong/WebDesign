@@ -158,6 +158,25 @@ export default {
         alert('DELETE 실패', err)
       })
   },
+
+  promiseDetailGet({ commit }, payload) {
+    // payload: { token, promiseid }
+    axios({
+      url: `http://127.0.0.1:8080/promise/${payload.promiseid}`,
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-AUTH-TOKEN': payload.token
+      }
+    })
+      .then(res => {
+        commit('PROMISE_DETAIL_GET', res.data)
+      })
+      .catch(err => {
+        console.log(payload.promiseid + '상세 페이지 GET 실패')
+      })
+  },
+
   logout ({ commit }) { 
     commit('LOGOUT') 
   },
