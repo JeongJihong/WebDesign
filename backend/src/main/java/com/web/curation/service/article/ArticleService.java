@@ -32,7 +32,7 @@
 //        List<Long> followingIds = findFollowersWithLoggedInMember(loginMemberId, loginUser); // 사용자를 포함하고, 사용자가 팔로우하고 있는 사람들을 가져온다.
 //        Page<Article> articles = fetchPages(lastArticleId, size, followingIds); // followers의 게시물들을 페이지네이션해서 가져온다.
 //
-////        return ArticleAssembler.toDtos(articles.getNextPage(), loginUser);
+//        return ArticleAssembler.toDtos(articles.getNextPage(), loginUser);
 //        return articles;
 //    }
 //
