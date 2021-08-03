@@ -12,7 +12,7 @@
     <br><br><br>
     <div>
       <b-tabs content-class="mt-3" fill>
-        <b-tab title="팔로워" active>
+        <b-tab :title="'팔로워 (' + followers + ')'" active>
           <b-list-group>
             <b-list-group-item class="listgroupitem" variant="light" href="#some-link" v-for="person in this.followers" :key="person">
               <div class="d-flex" style="align-items:center" @click="goToProfileDetailFromFollower({person})">
@@ -23,7 +23,7 @@
             </b-list-group-item>
           </b-list-group>
         </b-tab>
-        <b-tab title="팔로잉" active>
+        <b-tab :title="'팔로잉 (' + followings + ')'" active>
           <b-list-group>
             <b-list-group-item class="listgroupitem" variant="light" href="#some-link" v-for="person in this.followings" :key="person">
               <div class="d-flex" style="align-items:center" @click="goToProfileDetailFromFollowing({person})">
