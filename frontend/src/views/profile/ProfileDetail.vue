@@ -64,6 +64,7 @@ export default {
       myUid: 0,
       didIrequestFollowToYou: false,
       didYouRequestFollowToMe: false,
+      followId: 0,
     }
   },
   methods: {
@@ -130,8 +131,9 @@ export default {
         },
       })
       .then((res) => {
-        // console.log(res.data)
+        console.log(res.data)
         this.didYouRequestFollowToMe = res.data.otherToMe
+        this.followId = res.data.followId
       })
       .catch((err) => {
         alert(err)
@@ -146,7 +148,7 @@ export default {
           'X-AUTH-TOKEN' : this.$store.state.token
         },
         params: {
-          'followid': 14,
+          'followid': this.followId,
         },
       })
       .then((res) => {
@@ -166,8 +168,8 @@ export default {
           'Content-Type': 'application/json',
           'X-AUTH-TOKEN' : this.$store.state.token
         },
-        params: {
-          'followid': 14,
+        data: {
+          'followid': 2,
         },
       })
       .then((res) => {
@@ -232,7 +234,7 @@ export default {
           'X-AUTH-TOKEN' : this.$store.state.token
         },
         params: {
-          'followid': 7,
+          'followid': 2,
         }
       })
       .then((res) => {
