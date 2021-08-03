@@ -12,7 +12,12 @@ public interface ArticleDao extends JpaRepository<Article, Long> {
 
     List<Article> findAllById(Long articleid);
 
+    Optional<Article> findByArticleid(Long articleid);
+
     List<Article> findAllByIdIn(List<Long> articleid);
 
-    Optional<Article> findByArticleid(Long articleid);
+    List<Article> findAllByIdInOrderByArticleidDesc(List<Long> followingIds);
+
+    @Query(value = "select * from", nativeQuery = true)
+    List<Article> selectListLimit(int size);
 }

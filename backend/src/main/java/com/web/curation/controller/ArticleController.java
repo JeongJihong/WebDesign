@@ -15,7 +15,7 @@ import com.web.curation.model.comment.Comment;
 import com.web.curation.model.image.Image;
 import com.web.curation.model.scrap.Scrap;
 import com.web.curation.model.user.User;
-//import com.web.curation.service.article.ArticleService;
+import com.web.curation.service.article.ArticleService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -73,8 +73,8 @@ public class ArticleController {
     @Autowired
     FollowDao followDao;
 
-//    @Autowired
-//    ArticleService articleService;
+    @Autowired
+    ArticleService articleService;
 
     final String rootPath = FileSystemView.getFileSystemView().getHomeDirectory().toString();
     final String basePath = rootPath + "/" + "SNSImage" + "/" ;
@@ -187,7 +187,6 @@ public class ArticleController {
             Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
             // 사용자가 팔로잉한 사람들의 ID목록
             List<Long> followingIds = followDao.findBySrcidAndApprove(userOpt.get().getUid());
-            System.out.println("팔로잉 목록 크기: " + followingIds.size());
             // 내가 팔로잉한 사람들의 목록
             List<User> allFollowings = userDao.findByUidIn(followingIds);
 
@@ -196,10 +195,9 @@ public class ArticleController {
             // 내가 팔로잉한 사람들 + 나
             allFollowings.add(loginMember);
             followingIds.add(userOpt.get().getUid());
-            System.out.println("팔로잉 목록 + 나 크기: " + followingIds.size());
 
 
-            List<Article> articleList = articleDao.findAllByIdIn(followingIds);
+            List<Article> articleList = articleDao.findAllByIdInOrderByArticleidDesc(followingIds);
             response = new ResponseEntity<>(articleList, HttpStatus.OK);
         }
         return response;
