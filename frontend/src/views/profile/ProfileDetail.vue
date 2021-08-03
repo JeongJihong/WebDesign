@@ -32,11 +32,15 @@
       <button @click="goToFollow" v-if="this.nickname !== this.myNickname && this.didIrequestFollowToYou === false" class="btn btn-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">팔로우</button>
       <button v-if="this.nickname !== this.myNickname && this.didIrequestFollowToYou === true" @click="cancelFollow" class="btn btn-outline-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">팔로우 요청 보냄</button>
     </div>
-    <div v-if="this.didYouRequestFollowToMe === true" class="d-flex pt-2">
-      <button @click="approveFollowRequest" class="col-6 btn btn-outline-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">승인</button>
-      <button @click="rejectFollowRequest" class="col-6 btn btn-outline-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">거절</button>
+    <div v-if="this.didYouRequestFollowToMe === true">
+      <p class="pt-2 pb-0 mb-0">{{ this.nickname }}님의 팔로우 요청</p>
+      <div class="d-flex">
+        <button @click="approveFollowRequest" class="col-6 btn btn-outline-secondary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">승인</button>
+        <button @click="rejectFollowRequest" class="col-6 btn btn-dark shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">거절</button>
+      </div>
     </div>
     <div class="pt-4">
+      <p>본인소개글</p>
       <p>{{ this.introduction }}</p>
     </div>
     <hr>
@@ -64,7 +68,7 @@ export default {
       myUid: 0,
       didIrequestFollowToYou: false,
       didYouRequestFollowToMe: false,
-      followId: 0,
+      followid: 0,
     }
   },
   methods: {
@@ -133,7 +137,7 @@ export default {
       .then((res) => {
         console.log(res.data)
         this.didYouRequestFollowToMe = res.data.otherToMe
-        this.followId = res.data.followId
+        this.followid = res.data.followid
       })
       .catch((err) => {
         alert(err)
@@ -148,7 +152,7 @@ export default {
           'X-AUTH-TOKEN' : this.$store.state.token
         },
         params: {
-          'followid': this.followId,
+          'followid': this.followid,
         },
       })
       .then((res) => {
@@ -168,8 +172,8 @@ export default {
           'Content-Type': 'application/json',
           'X-AUTH-TOKEN' : this.$store.state.token
         },
-        data: {
-          'followid': 2,
+        params: {
+          'followid': this.followid,
         },
       })
       .then((res) => {
@@ -234,7 +238,7 @@ export default {
           'X-AUTH-TOKEN' : this.$store.state.token
         },
         params: {
-          'followid': 2,
+          'followid': this.followid,
         }
       })
       .then((res) => {
