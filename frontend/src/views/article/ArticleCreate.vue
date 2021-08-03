@@ -1,6 +1,6 @@
 <template>
   <div class="scale">
-    <button><b-icon-arrow-left></b-icon-arrow-left></button><span>게시글 생성하기</span>
+    <p>게시글 생성하기</p>
     <form enctype = "multipart/form-data" method="post" >
     <!-- <form> -->
       <div class="d-flex flex-row">

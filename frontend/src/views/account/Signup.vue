@@ -11,7 +11,7 @@
       <div class="input-with-label">
         <input v-model="nickname" id="nickname" placeholder="닉네임을 입력하세요." type="text" />
         <label for="nickname">닉네임</label>
-        <b-button @onclick="confirmNickname()">중복확인</b-button>
+        <b-button @click="confirmNickname()">중복확인</b-button>
       </div>
 
       <div class="input-with-label">
@@ -19,7 +19,7 @@
         v-bind:class="{error : error.email, complete:!error.email&&email.length!==0}"
         />
         <label for="email">이메일</label>
-        <b-button @onclick="confirmEmail()">중복확인</b-button>
+        <b-button @click="confirmEmail()">중복확인</b-button>
         <div class="error-text" v-if="error.email">{{error.email}}</div>
       </div>
 
@@ -116,36 +116,49 @@ export default {
     },
   },
   methods:{
-    // confirmNickname(){
-    //   axios({
-    //     url:'http://127.0.0.1:8080/account/signup',
-    //     method:'get',
-    //     data:{
-    //       nickname:this.nickname,
-    //     }
-    //   })
-    //     .then(res=>{
-    //       console.log(res)
-    //     })
-    //     .catch(err=>{
-    //       console.log(err)
-    //     })
-    // },
-    // confirmEmail(){
-    //   axios({
-    //     url:'http://127.0.0.1:8080/account/signup',
-    //     method:'get',
-    //     data:{
-    //       email: this.email,
-    //     }
-    //   })
-    //     .then(res=>{
-    //       console.log(res)
-    //     })
-    //     .catch(err=>{
-    //       console.log(err)
-    //     })
-    // },
+    confirmNickname(){
+      axios({
+        url:'http://127.0.0.1:8080/account/checkNickname',
+        method:'get',
+        params:{
+          nickname:this.nickname,
+        }
+      })
+        .then(res=>{
+          console.log(res)
+          if (res.data === 'Fail'){
+            alert('중복된 닉네임 입니다!')
+            this.nickname=""
+          }else{
+            alert('사용 가능한 닉네임 입니다.')
+          }
+        })
+        .catch(err=>{
+          console.log(err)
+        })
+    },
+    confirmEmail(){
+      axios({
+        url:'http://127.0.0.1:8080/account/checkEmail',
+        method:'get',
+        params:{
+          email: this.email,
+        }
+      })
+        .then(res=>{
+          console.log(res)
+          if (res.data === 'Fail'){
+            alert('중복된 이메일 입니다!')
+            this.email=""
+          }else{
+            alert('사용 가능한 이메일 입니다.')
+          }
+
+        })
+        .catch(err=>{
+          console.log(err)
+        })
+    },
     signup(){
       axios({
         url:'http://127.0.0.1:8080/account/signup',
