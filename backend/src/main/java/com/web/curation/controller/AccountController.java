@@ -256,18 +256,23 @@ public class AccountController {
             Optional<User> me = userDao.findByEmail(user2.getUsername());
             Optional<User> otherUser = userDao.findByNickname(othersNickname);
             boolean otherToMe = false;
+            Long followid = null;
+            Long othersid = otherUser.get().getUid();
+            Long myid = me.get().getUid();
 
-            System.out.println("Srcid: " + otherUser.get().getUid());
-            System.out.println("Dstid: " + me.get().getUid());
-            if(!followDao.existsBySrcidAndDstidAndApprove(otherUser.get().getUid(), me.get().getUid(), false)){
+            System.out.println("Srcid: " + othersid);
+            System.out.println("Dstid: " + myid);
+            if(!followDao.existsBySrcidAndDstidAndApprove(othersid, myid, false)){
                 otherToMe = false;
                 System.out.println("팔로잉 없음");
             }else{
                 otherToMe = true;
+                followid = followDao.findBySrcidAndDstid(othersid, myid).get().getFollowid();
             }
 
             Map result = new HashMap<String, Object>();
             result.put("otherToMe", otherToMe);
+            result.put("followid", followid);
 
             response = new ResponseEntity<>(result, HttpStatus.OK);
         }

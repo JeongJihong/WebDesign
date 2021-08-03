@@ -29,10 +29,18 @@
       </div>
     </div>
     <div class="d-grid pt-3">
-      <button @click="goToFollow" v-if="this.nickname !== this.myNickname" class="btn btn-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">팔로우</button>
-      <!-- <button @click="goToFollow" class="btn btn-primary shadow-none" style="display: flex; height: 25px; justify-content: center; align-items: center;">팔로우취소</button> -->
+      <button @click="goToFollow" v-if="this.nickname !== this.myNickname && this.didIrequestFollowToYou === false" class="btn btn-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">팔로우</button>
+      <button v-if="this.nickname !== this.myNickname && this.didIrequestFollowToYou === true" @click="cancelFollow" class="btn btn-outline-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">팔로우 요청 보냄</button>
+    </div>
+    <div v-if="this.didYouRequestFollowToMe === true">
+      <p class="pt-2 pb-0 mb-0">{{ this.nickname }}님의 팔로우 요청</p>
+      <div class="d-flex">
+        <button @click="approveFollowRequest" class="col-6 btn btn-outline-secondary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">승인</button>
+        <button @click="rejectFollowRequest" class="col-6 btn btn-dark shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">거절</button>
+      </div>
     </div>
     <div class="pt-4">
+      <p>본인소개글</p>
       <p>{{ this.introduction }}</p>
     </div>
     <hr>
@@ -58,6 +66,9 @@ export default {
       followers: 0,
       followings: 0,
       myUid: 0,
+      didIrequestFollowToYou: false,
+      didYouRequestFollowToMe: false,
+      followid: 0,
     }
   },
   methods: {
@@ -76,10 +87,9 @@ export default {
       axios({
         method: 'post',
         url: `http://127.0.0.1:8080/account/profile/follow`,
-        params: {
-          'approve': true,
-          'dstid': 6,
-          'srcid': 7
+        data: {
+          'dstnickname': this.nickname,
+          'srcnickname': this.myNickname
         },
         headers: {
           'Content-Type': 'application/json',
@@ -87,9 +97,9 @@ export default {
         },
       })
       .then((res) => {
-        console.log('패치완료!!!!!!!!')
+        console.log('팔로우 요청 보내기 성공')
         console.log(res.data)
-        this.$router.push({name:'ProfileDetail'})
+        this.didIrequestFollowToYou = !this.didIrequestFollowToYou
       })
       .catch((err) => {
         alert(err)
@@ -105,11 +115,73 @@ export default {
         },
       })
       .then((res) => {
-        this.introduction = res.data.introduction
+        console.log(res.data)
+        this.didIrequestFollowToYou = res.data.follow
+        this.introduction = res.data.userProfile.introduction
+        this.checkFollowRequest()
         this.followerList()
       })
       .catch((err) => {
         console.log(err)
+      })
+    },
+    checkFollowRequest () {
+      axios({
+        method: 'get',
+        url: `http://127.0.0.1:8080/account/profile/follow/${this.nickname}`,
+        headers: {
+          'Content-Type': 'application/json',
+          'X-AUTH-TOKEN' : this.$store.state.token
+        },
+      })
+      .then((res) => {
+        console.log(res.data)
+        this.didYouRequestFollowToMe = res.data.otherToMe
+        this.followid = res.data.followid
+      })
+      .catch((err) => {
+        alert(err)
+      })
+    },
+    approveFollowRequest () {
+      axios({
+        method: 'patch',
+        url: `http://127.0.0.1:8080/account/profile/follow`,
+        headers: {
+          'Content-Type': 'application/json',
+          'X-AUTH-TOKEN' : this.$store.state.token
+        },
+        params: {
+          'followid': this.followid,
+        },
+      })
+      .then((res) => {
+        this.didYouRequestFollowToMe = !this.didYouRequestFollowToMe
+        alert(`${this.nickname}님의 팔로우 요청을 수락하셨습니다!`)
+        this.followerList()
+      })
+      .then((err) => {
+        alert(err)
+      })
+    },
+    rejectFollowRequest () {
+      axios({
+        method: 'delete',
+        url: `http://127.0.0.1:8080/account/profile/follow`,
+        headers: {
+          'Content-Type': 'application/json',
+          'X-AUTH-TOKEN' : this.$store.state.token
+        },
+        params: {
+          'followid': this.followid,
+        },
+      })
+      .then((res) => {
+        this.didYouRequestFollowToMe = !this.didYouRequestFollowToMe
+        alert(`${this.nickname}님의 팔로우 요청을 거절하셨습니다!`)
+      })
+      .then((err) => {
+        alert(err)
       })
     },
     goToChangePassword () {
@@ -127,8 +199,8 @@ export default {
         },
       })
       .then((res) => {
-        console.log('팔로워 불러오기')
-        console.log(res.data)
+        // console.log('팔로워 불러오기')
+        // console.log(res.data)
         this.followerLs = res.data
         this.followers = this.followerLs.length
 
@@ -148,13 +220,30 @@ export default {
         },
       })
       .then((res) => {
-        console.log('팔로잉 불러오기')
-        console.log(res.data)
+        // console.log('팔로잉 불러오기')
+        // console.log(res.data)
         this.followingLs = res.data
         this.followings = this.followingLs.length
       })
       .catch((err) => {
         alert(err)
+      })
+    },
+    cancelFollow () {
+      axios({
+        method: 'delete',
+        url: `http://127.0.0.1:8080/account/profile/follow/`,
+        headers: {
+          'Content-Type': 'application/json',
+          'X-AUTH-TOKEN' : this.$store.state.token
+        },
+        params: {
+          'followid': this.followid,
+        }
+      })
+      .then((res) => {
+        this.didIrequestFollowToYou = !this.didIrequestFollowToYou
+        console.log('승인여부', this.didYouRequestFollowToMe)
       })
     }
   },
@@ -169,8 +258,6 @@ export default {
       },
     })
     .then((res) => {
-      console.log('checkJWT 성공! 밑에 res 확인')
-      console.log(res)
       this.myNickname = this.$store.state.username
       this.myUid=res.data.uid
       this.getUserInfo()

@@ -1,6 +1,8 @@
 package com.web.curation.dao.article;
 
 import com.web.curation.model.article.Article;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -12,7 +14,12 @@ public interface ArticleDao extends JpaRepository<Article, Long> {
 
     List<Article> findAllById(Long articleid);
 
+    Optional<Article> findByArticleid(Long articleid);
+
     List<Article> findAllByIdIn(List<Long> articleid);
 
-    Optional<Article> findByArticleid(Long articleid);
+    Page<Article> findAllByIdInOrderByArticleidDesc(List<Long> followingIds, Pageable pageable);
+
+    @Query(value = "select * from", nativeQuery = true)
+    List<Article> selectListLimit(int size);
 }
