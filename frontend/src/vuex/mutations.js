@@ -14,12 +14,24 @@ export default {
     state.searchLive = userList
   },
 
+  ALARM_LIKE_GET(state, likeList) {
+    state.likeList = likeList
+  },
+  ALARM_FOLLOW_GET(state, followList) {
+    state.followList = followList
+  },
+
   SCRAP_GET(state, scrapList) {
     state.scrapList = scrapList
   },
   SCRAP_DELETE_MODE(state) {
     state.scrapMode = !state.scrapMode
   },
+
+  PROMISE_DETAIL_GET(state, promiseDetail) {
+    state.promiseDetail = promiseDetail
+  },
+
   LOGOUT () {
     localStorage.removeItem('token') 
     location.reload(); 

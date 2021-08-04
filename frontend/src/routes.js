@@ -15,6 +15,7 @@ import ArticleCreate from '@/views/article/ArticleCreate.vue'
 import ArticleDetail from '@/views/article/ArticleDetail.vue'
 import PromiseList from '@/views/promise/PromiseList.vue'
 import PromiseCreate from '@/views/promise/PromiseCreate.vue'
+import PromiseDetail from '@/views/promise/PromiseDetail.vue'
 
 import Vue from 'vue'
 import VueRouter from 'vue-router'
@@ -149,6 +150,11 @@ const routes = [
         path : '/promise/create',
         name : 'PromiseCreate',
         component : PromiseCreate,
+    },
+    {
+        path: '/promise/:promiseid',
+        name: 'PromiseDetail',
+        component: PromiseDetail,
         meta: {
             loggedAuth: true
         }
