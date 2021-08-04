@@ -2,12 +2,7 @@
   <div class="feed newsfeed">
     <div class="wrapB">
       <h1>뉴스피드</h1>
-      <button @click="logout()">로그아웃</button>
-      <!-- <div v-for="article in articles"  :key="article.id" @click="getArticle(article.id)" :article="article">
-        <p>{{article.image}}</p>
-        <FeedItem/>
-      </div> -->
-      <div v-for = " (test,index) in tests" :key="index" >
+      <div v-for="article in articles" :key="article.review" style="z-index:-1;">
         <b-avatar src="https://placekitten.com/300/300" size="2rem"></b-avatar><span> 냥사마</span>
         <b-carousel
           id="carousel-1"
@@ -22,90 +17,103 @@
           @sliding-start="onSlideStart"
           @sliding-end="onSlideEnd"
         >
-          <b-carousel-slide v-for ="image in images" :key="image.id">
+          <b-carousel-slide v-for ="image in article.images" :key="image.id">
             <template #img>
               <img
                 class="d-block img-fluid w-100"
                 width="1024"
                 height="480"
-                :src= image.src
+                :src= image.imgURL
                 alt="image slot"
               >
             </template>
           </b-carousel-slide>
         </b-carousel>
-        <p> {{ content[index].text }} </p>
-        <ul class="d-flex justify-content-left" style="padding:3px;">
+        <p> {{ article.review }} </p>
+        <ul class="d-flex justify-content-left" style="padding-left:3px;">
           <li><b-icon icon="hand-thumbs-up" scale="1.5" variant="primary"></b-icon></li>
           <li><b-icon icon="tags-fill" scale="1.5" variant="primary"></b-icon></li>
           <li><b-icon icon="tags" scale="1.5" variant="primary"></b-icon></li>
-          <li><b-icon icon="chevron-double-down" scale="1.5" variant="dark"></b-icon></li>
+          <li @click="getComments(article.articleid)"><b-icon icon="chat-dots" scale="1.5" variant="primary"></b-icon></li><span>{{ article.comments.length }}</span>
         </ul>
+        <p>? 명의 유저가 이글을 좋아합니다.</p>
         <br>
       </div>
+      <infinite-loading @infinite="infiniteHandler"></infinite-loading>
     </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
-import { mapActions,mapState } from 'vuex'
-import "../../components/css/feed/feed-item.scss";
-import "../../components/css/feed/newsfeed.scss";
+import InfiniteLoading from 'vue-infinite-loading';
 export default {
-  props: ["keyword"],
-  // components: { FeedItem },
+  components: {
+    InfiniteLoading,
+  },
   data() {
       return {
-        images:[
-            {src: "https://picsum.photos/1024/480/?image=52"},
-            {src: "https://picsum.photos/1024/480/?image=54"},
-            {src: "https://picsum.photos/1024/480/?image=58"},
-            {src: "https://picsum.photos/1024/480/?image=55"}
-        ],
-        content:[
-          {text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse eros felis, tincidunta tincidunt eget, convallis vel est. Ut pellentesque ut lacus vel interdum."},
-          {text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse eros felis, tincidunta tincidunt eget, convallis vel est. Ut pellentesque ut lacus vel interdum."},
-          {text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse eros felis, tincidunta tincidunt eget, convallis vel est. Ut pellentesque ut lacus vel interdum."},
-          {text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse eros felis, tincidunta tincidunt eget, convallis vel est. Ut pellentesque ut lacus vel interdum."},
-        ],
+        pageNum: 0,
+        list: [],
         slide: 0,
         sliding: null,
         tests:4,
+        articles:[],
       }
   },
   methods:{
-  ...mapActions([
-      'logout'
-    ]),
-    getArticle(articleId){
-      // console.log(articleId)
-      this.$router.push({ name:'ArticleDetail', params:{ articleId:articleId }})
+    infiniteHandler($state) {
+      console.log('살아있음1');
+      axios.get('http://127.0.0.1:8080/article/main', {
+          headers: {
+            'x-auth-token': `${localStorage.getItem('token')}`,
+          },
+          params: {
+            pageNum: this.pageNum,
+          },
+        })
+        .then(res => {
+          if(res.data.totalPages == this.pageNum){
+              $state.complete();
+          }else{
+              setTimeout(() => {
+                  const data = res.data.content;
+                            for(let key in data){
+                                this.articles.push(data[key])
+                            }
+                  this.pageNum++;
+                  $state.loaded();
+              }, 1000)
+          }
+      })
+      .catch(err => {
+          console.log(err)
+          alert('에러');
+          localStorage.clear();
+          this.$store.state.loginState = false;
+          this.$store.state.token = null;
+          this.$router.push('/');
+      })
+    },
+    getArticle(articleid){
+      this.$router.push({ name:'ArticleDetail', params:{ articleid:articleid }})
+    },
+    getComments(articleid){
+      this.$router.push({ name:'Comments', params:{ articleid:articleid }})
     },
     onSlideStart(slide) {
         this.sliding = true
     },
-      onSlideEnd(slide) {
-        this.sliding = false
+    onSlideEnd(slide) {
+      this.sliding = false
     },
   },
-  created(){
-    // axios({
-    //   url:'http://127.0.0.1:8080/feed/main',
-    //   method:'get',
-    // })
-    //   .then(res=>{
-    //     this.articles = (res.data)
-    //     // console.log(this.reviews)
-
-    //   })
-    //   .catch(err=>{
-    //     console.log(err)
-    //   })
-  }
 };
 </script>
 <style scoped>
+#carousel-1{
+  z-index: -1;
+}
   li {
     margin-right: 12px;
   }

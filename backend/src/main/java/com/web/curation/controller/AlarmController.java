@@ -50,6 +50,11 @@ public class AlarmController {
         }
     }
 
+//    @RequestMapping(value = "/alarmTest")
+//    public String main(){
+//        return "script.html";
+//    }
+
 
 
 
