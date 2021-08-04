@@ -4,6 +4,8 @@ import com.web.curation.model.article.ArticleLike;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import javax.transaction.Transactional;
+
 public interface ArticleLikeDao extends JpaRepository<ArticleLike, Long> {
 
 
@@ -12,4 +14,6 @@ public interface ArticleLikeDao extends JpaRepository<ArticleLike, Long> {
 
     boolean existsByArticleidAndId(Long articleid, Long id);
 
+    @Transactional
+    void deleteByIdAndArticleid(Long uid, Long articleid);
 }

@@ -161,7 +161,7 @@ export default {
     },
     signup(){
       axios({
-        url:'http://127.0.0.1:8080/account/signup',
+        url:"http://127.0.0.1:8080/account/signup",
         method:'post',
         data:{
           nickname:this.nickname,

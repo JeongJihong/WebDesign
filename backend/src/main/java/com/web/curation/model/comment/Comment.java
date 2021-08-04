@@ -1,5 +1,7 @@
 package com.web.curation.model.comment;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.web.curation.model.article.Article;
 import lombok.*;
 
 import javax.persistence.*;
@@ -31,4 +33,8 @@ public class Comment{
     @Column(name = "updatedtime", nullable = true)
     private LocalDateTime updatedtime;
     private String comment;
+
+    @ManyToOne @JsonIgnore
+    @JoinColumn(name = "articleid", insertable = false, updatable = false)
+    private Article article;
 }

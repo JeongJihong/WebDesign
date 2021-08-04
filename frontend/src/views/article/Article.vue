@@ -2,8 +2,7 @@
   <div class="feed newsfeed">
     <div class="wrapB">
       <h1>뉴스피드</h1>
-      <button @click="logout()">로그아웃</button>
-      <div v-for="article in articles" :key="article.review" >
+      <div v-for="article in articles" :key="article.review" style="z-index:-1;">
         <b-avatar src="https://placekitten.com/300/300" size="2rem"></b-avatar><span> 냥사마</span>
         <b-carousel
           id="carousel-1"
@@ -47,16 +46,11 @@
 
 <script>
 import axios from 'axios'
-import { mapActions,mapState } from 'vuex'
-import "../../components/css/feed/feed-item.scss";
-import "../../components/css/feed/newsfeed.scss";
 import InfiniteLoading from 'vue-infinite-loading';
 export default {
-  props: ["keyword"],
   components: {
     InfiniteLoading,
   },
-  // components: { FeedItem },
   data() {
       return {
         pageNum: 0,
@@ -117,7 +111,7 @@ export default {
         
     // test(){
     //   axios 
-    //     .get('http://127.0.0.1:8080/article', 
+    //     .get('http://i5b302.p.ssafy.io/article', 
     //     { lastArticleId: lastArticleId, size: 3, }) 
     //     .then(response => response.data) 
     //     .then(data => { this.articles = (data.data) })
@@ -127,11 +121,9 @@ export default {
       'logout'
     ]),
     getArticle(articleid){
-      // console.log(articleId)
       this.$router.push({ name:'ArticleDetail', params:{ articleid:articleid }})
     },
     getComments(articleid){
-      // console.log(articleId)
       this.$router.push({ name:'Comments', params:{ articleid:articleid }})
     },
     onSlideStart(slide) {
@@ -141,24 +133,12 @@ export default {
       this.sliding = false
     },
   },
-  // created(){
-  //   axios({
-  //     url:'http://127.0.0.1:8080/article',
-  //     method:'get',
-  //     headers: {
-  //         'x-auth-token': `${localStorage.getItem('token')}`,
-  //       },
-  //   })
-  //     .then(res=>{
-  //       this.articles = (res.data)
-  //     })
-  //     .catch(err=>{
-  //       console.log(err)
-  //     })
-  // }
 };
 </script>
 <style scoped>
+#carousel-1{
+  z-index: -1;
+}
   li {
     margin-right: 12px;
   }

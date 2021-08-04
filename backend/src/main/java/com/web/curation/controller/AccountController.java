@@ -1,6 +1,7 @@
 package com.web.curation.controller;
 
 import com.google.api.Http;
+import com.sun.org.apache.xpath.internal.operations.Mult;
 import com.web.curation.config.security.JwtTokenProvider;
 import com.web.curation.dao.article.ArticleDao;
 import com.web.curation.dao.follow.FollowDao;
@@ -19,18 +20,23 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.text.html.Option;
 import javax.validation.Valid;
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 @ApiResponses(value = { @ApiResponse(code = 401, message = "Unauthorized", response = BasicResponse.class),
@@ -38,7 +44,8 @@ import java.util.*;
         @ApiResponse(code = 404, message = "Not Found", response = BasicResponse.class),
         @ApiResponse(code = 500, message = "Failure", response = BasicResponse.class) })
 
-@CrossOrigin(origins = { "http://localhost:3000" })
+//@CrossOrigin(origins = { "http://localhost:3000" })
+@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 @RestController
 public class AccountController {
@@ -59,6 +66,10 @@ public class AccountController {
     final String basePath = rootPath + "/" + "SNSImage" + "/" ;
 
 
+    @GetMapping("/test")
+    public String test(){
+        return "test Success";
+    }
 
     @PostMapping("/account/login")
     @ApiOperation(value = "로그인")
@@ -97,7 +108,7 @@ public class AccountController {
             throw new IllegalArgumentException("잘못된 비밀번호입니다.");
         }
         User user = new User(userOpt.get().getUid(), userOpt.get().getNickname(), request.getEmail(),
-                passwordEncoder.encode(request.getNewPassword()), userOpt.get().getIntroduction(), userOpt.get().getThumbnail(), userOpt.get().getRoles());
+                passwordEncoder.encode(request.getNewPassword()), userOpt.get().getIntroduction(), userOpt.get().getThumbnail(), userOpt.get().getArticles(), userOpt.get().getRoles());
         //디비에 저장 (바뀐 부분만 데이터베이스에 Update된다)
         userDao.save(user);
         final BasicResponse result = new BasicResponse();
@@ -142,10 +153,11 @@ public class AccountController {
         return response;
     }
 
-    @PatchMapping("/account/profile")
+    @PatchMapping(value = "/account/profile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ApiOperation(value = "유저 프로필 정보 변경")
-    public Object changeUserProfile(@RequestParam(required = false) String nickname,
-                                    @RequestParam(required = false) String introduction){
+    public Object changeUserProfile(@RequestPart(required = false) String nickname,
+                                    @RequestPart(required = false) String introduction,
+                                    @RequestPart(required = false) MultipartFile file) throws IOException {
         Authentication user = SecurityContextHolder.getContext().getAuthentication();
         ResponseEntity response = null;
         if(user.getPrincipal() == "anonymousUser"){
@@ -155,12 +167,38 @@ public class AccountController {
             //유저ID, 새로운 닉네임, 새로운 소개글을 받아온다
             Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
             //User객체에 기존의 정보 담아가지고 오고 새로운 닉네임과 소개글로 세팅한다
+            String pathName = null;
+            if(!file.isEmpty()){
+                pathName = saveFile(file);
+            }else{
+                pathName = userOpt.get().getThumbnail();
+            }
             User user3 = new User(userOpt.get().getUid(), nickname, userOpt.get().getEmail(),
-                    userOpt.get().getPassword(), introduction, userOpt.get().getThumbnail(), userOpt.get().getRoles());
+                    userOpt.get().getPassword(), introduction, pathName, userOpt.get().getArticles(), userOpt.get().getRoles());
             userDao.save(user3);
             response = new ResponseEntity<>("Success", HttpStatus.OK);
         }
         return response;
+    }
+    private String saveFile(MultipartFile file) throws IOException {
+        String pathName = "";
+        File Folder = new File(basePath);
+        if(!Folder.exists()){
+            try{
+                Folder.mkdir();
+            }catch (Exception e){
+                e.getStackTrace();
+            }
+        }
+        UUID uuid = null;
+        uuid = UUID.randomUUID();
+        String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+        String rename = basePath + "thumbnail" + "_" + uuid + "." + extension;
+        File dest = new File(rename);
+        file.transferTo(dest);
+        pathName = rename;
+
+        return pathName;
     }
 
     @DeleteMapping("/account/profile")
@@ -205,8 +243,7 @@ public class AccountController {
 
     @GetMapping("/account/profile/{nickname}")
     @ApiOperation(value = "타 유저 피드 보기")
-    @ResponseBody
-    public Object viewOtherFeed(@PathVariable final String nickname){
+    public Object viewOtherFeed(@PathVariable("nickname") final String nickname){
         Authentication user = SecurityContextHolder.getContext().getAuthentication();
         ResponseEntity response = null;
         if(user.getPrincipal() == "anonymousUser"){
@@ -216,9 +253,7 @@ public class AccountController {
             Optional<User> loginUser = userDao.findByEmail(user2.getUsername());
             Optional<User> otherUser = userDao.findByNickname(nickname);
             List<Article> article = null;
-            List<Image> images = null;
-            System.out.println(basePath+"0");
-            if(!articleDao.existsById(otherUser.get().getUid())){
+            if(!articleDao.existsArticleById(otherUser.get().getUid())){
                 System.out.println("none");
             }else{
                 article = articleDao.findAllById(otherUser.get().getUid());
@@ -233,11 +268,9 @@ public class AccountController {
                 followUser = followDao.findBySrcidAndDstid(loginUser.get().getUid(), otherUser.get().getUid());
                 result.put("followBoolean", followUser.get().getApprove());
             }
-
             result.put("follow", follow);
             result.put("userProfile", otherUser);
             result.put("article", article);
-            result.put("feed Thumbnail", images);
             response = new ResponseEntity<>(result, HttpStatus.OK);
         }
         return response;
