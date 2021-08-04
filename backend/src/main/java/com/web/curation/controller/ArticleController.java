@@ -170,55 +170,6 @@ public class ArticleController {
         return response;
     }
 
-//    @GetMapping("/article")
-//    @ApiOperation(value = "전체 게시글 보기")
-//    public Object getArticleList(final Pageable pageable) {
-//        Authentication user = SecurityContextHolder.getContext().getAuthentication();
-//        ResponseEntity response = null;
-//        if(user.getPrincipal() == "anonymousUser"){
-//            response = new ResponseEntity<>("Fail", HttpStatus.UNAUTHORIZED);
-//            return response;
-//        }else {
-//            UserDetails user2 = (UserDetails) user.getPrincipal();
-//            // 로그인 한 사용자
-//            Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
-//            // 사용자가 팔로잉한 사람들의 ID목록
-//            List<Long> followingIds = followDao.findBySrcidAndApprove(userOpt.get().getUid());
-//            // 내가 팔로잉한 사람들의 목록
-//            List<User> allFollowings = userDao.findByUidIn(followingIds);
-//
-//            User loginMember = new User(userOpt.get().getUid(), userOpt.get().getNickname(), userOpt.get().getEmail(),
-//                    userOpt.get().getPassword(), userOpt.get().getIntroduction(), userOpt.get().getThumbnail(), userOpt.get().getRoles());
-//            // 내가 팔로잉한 사람들 + 나
-//            allFollowings.add(loginMember);
-//            followingIds.add(userOpt.get().getUid());
-//
-//
-////            List<Article> articleList = articleDao.findAllByIdInOrderByArticleidDesc(followingIds);
-//            Page<Article> articlePage = articleDao.findAll(pageable);
-//            response = new ResponseEntity<>(articlePage, HttpStatus.OK);
-//        }
-//        return response;
-//    }
-
-//    @GetMapping("/article/main")
-//    @ApiOperation(value = "메인피드")
-//    public ResponseEntity<Page<Article>> getArticlePages(@RequestParam int pageNum) {
-//        Authentication user = SecurityContextHolder.getContext().getAuthentication();
-//        ResponseEntity response = null;
-//        if(user.getPrincipal() == "anonymousUser"){
-//            response = new ResponseEntity<>("Fail", HttpStatus.UNAUTHORIZED);
-//            return response;
-//        }else {
-//            UserDetails user2 = (UserDetails) user.getPrincipal();
-//            Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
-//
-//            Page<Article> articleResponses = articleService.fetchArticlePagesBy(pageNum, userOpt.get().getUid());
-//            return new ResponseEntity<>(articleResponses, HttpStatus.OK);
-//        }
-//    }
-
-    // 메인피드 반환객체를 ViewArticleRequest로 변환
     @GetMapping("/article/main")
     @ApiOperation(value = "메인피드")
     public ResponseEntity<Page<ViewArticleRequest>> getArticlePages(@RequestParam int pageNum) {
@@ -234,15 +185,16 @@ public class ArticleController {
             Long loginID = userOpt.get().getUid();
             String loginUser = userOpt.get().getNickname();
 
+            // Article는 피드를 나타내기에 정보가 부족하기 때문에, List<Article>을 List<ViewArticleRequest>로 변환하여 정보를 더해준다.
             List<Article> articleList = articleService.followingsArticleList(loginID);
             Stream<Article> articleStream = articleList.stream();
-
             List<ViewArticleRequest> requestList = articleStream.map(article -> new ViewArticleRequest(article, loginID, loginUser,
                                                     articleLikeDao.countArticleLike(article.getArticleid()),
                                                     articleLikeDao.existsByArticleidAndId(article.getArticleid(), loginID),
                                                     scrapDao.existsByArticleidAndId(article.getArticleid(), loginID)))
                                                      .collect(Collectors.toList());
 
+            // 무한 스크롤을 사용할 때, 한 번 정보를 요청할 때마다 5개씩 반환하기 위해 페이지네이션 사용
             Page<ViewArticleRequest> requestPage = new PageImpl<>(requestList, PageRequest.of(pageNum, 5), requestList.size());
             return new ResponseEntity<>(requestPage, HttpStatus.OK);
         }
