@@ -70,7 +70,7 @@ export default {
   methods:{
     infiniteHandler($state) {
       console.log('살아있음1');
-      axios.get('http://127.0.0.1:8080/article/main', {
+      axios.get('http://i5b302.p.ssafy.io/api/article/main', {
           headers: {
             'x-auth-token': `${localStorage.getItem('token')}`,
           },
@@ -117,7 +117,7 @@ export default {
         
     // test(){
     //   axios 
-    //     .get('http://127.0.0.1:8080/article', 
+    //     .get('http://i5b302.p.ssafy.io/article', 
     //     { lastArticleId: lastArticleId, size: 3, }) 
     //     .then(response => response.data) 
     //     .then(data => { this.articles = (data.data) })
@@ -143,7 +143,7 @@ export default {
   },
   // created(){
   //   axios({
-  //     url:'http://127.0.0.1:8080/article',
+  //     url:'http://i5b302.p.ssafy.io/article',
   //     method:'get',
   //     headers: {
   //         'x-auth-token': `${localStorage.getItem('token')}`,

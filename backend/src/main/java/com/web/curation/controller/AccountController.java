@@ -59,6 +59,10 @@ public class AccountController {
     final String basePath = rootPath + "/" + "SNSImage" + "/" ;
 
 
+    @GetMapping("/test")
+    public String test(){
+        return "test Success";
+    }
 
     @PostMapping("/account/login")
     @ApiOperation(value = "로그인")

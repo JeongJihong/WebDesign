@@ -118,7 +118,7 @@ export default {
   methods:{
     confirmNickname(){
       axios({
-        url:'http://127.0.0.1:8080/account/checkNickname',
+        url:'http://i5b302.p.ssafy.io/api/account/checkNickname',
         method:'get',
         params:{
           nickname:this.nickname,
@@ -139,7 +139,7 @@ export default {
     },
     confirmEmail(){
       axios({
-        url:'http://127.0.0.1:8080/account/checkEmail',
+        url:'http://i5b302.p.ssafy.io/api/account/checkEmail',
         method:'get',
         params:{
           email: this.email,
@@ -161,7 +161,7 @@ export default {
     },
     signup(){
       axios({
-        url:'http://127.0.0.1:8080/account/signup',
+        url:"http://i5b302.p.ssafy.io/api/account/signup",
         method:'post',
         data:{
           nickname:this.nickname,
