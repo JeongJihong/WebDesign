@@ -54,7 +54,8 @@ import java.util.stream.Stream;
         @ApiResponse(code = 404, message = "Not Found", response = BasicResponse.class),
         @ApiResponse(code = 500, message = "Failure", response = BasicResponse.class) })
 
-@CrossOrigin(origins = { "http://localhost:3000" })
+//@CrossOrigin(origins = { "http://localhost:3000" })
+@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 @RestController
 public class ArticleController {

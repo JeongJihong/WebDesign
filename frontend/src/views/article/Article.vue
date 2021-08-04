@@ -95,6 +95,31 @@ export default {
           this.$router.push('/');
       })
     },
+    // infiniteHandler($state) { 
+    //   axios({
+    //     url:c',
+    //     method:'get',
+    //     params: { page: this.page, }, 
+    //   })
+    //   .then(({ data }) => { 
+    //     if (data.hits.length) { 
+    //       this.page += 1; 
+    //       this.list.push(...data.hits); 
+    //       $state.loaded(); } 
+    //     else { $state.complete(); } });
+    //     },
+        
+    // test(){
+    //   axios 
+    //     .get('http://i5b302.p.ssafy.io/article', 
+    //     { lastArticleId: lastArticleId, size: 3, }) 
+    //     .then(response => response.data) 
+    //     .then(data => { this.articles = (data.data) })
+    // },
+    
+  ...mapActions([
+      'logout'
+    ]),
     getArticle(articleid){
       this.$router.push({ name:'ArticleDetail', params:{ articleid:articleid }})
     },
