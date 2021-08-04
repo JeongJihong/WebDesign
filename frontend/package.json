@@ -65,6 +65,9 @@
     },
     "parserOptions": {
       "parser": "babel-eslint"
+    },
+    "global": {
+      "kakao": false
     }
   },
   "browserslist": [

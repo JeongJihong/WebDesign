@@ -57,8 +57,17 @@
     <div class="mt-4 pt-3">
       <p class="fw-bold mx-3">약속 장소</p>
       <div>
-        지도
+        <!-- padding-bottom: 56.25% 는 16:9 비율로 고정한다는 style -->
+        <div v-if="promiseDetail.place" id="map" style="padding-bottom: 56.25%; width: 100%; height: 100%;">
+        </div>
+        <div v-else id="map" style="padding-bottom: 56.25%; width: 100%; height: 100%;">
+        </div>
       </div>
+      <!-- 디버깅용 -> v-else 는 다 삭제 -->
+      <span class="mt-1 me-1 d-flex justify-content-end">
+        <span v-if="promiseDetail.place">{{ promiseDetail.place }}</span>
+        <span v-else>대전광역시 유성구 동서대로 98-39</span>
+      </span>
     </div>
 
     <!-- 약속 인원 -->
@@ -94,11 +103,24 @@ import { mapState } from 'vuex'
 export default {
   data() {
     return {
-      title: this.$route.params.title
+      title: this.$route.params.title,
+      tmpX: 0,
+      tmpY: 0,
+    }
+  },
+  mounted() {
+      if (window.kakao && window.kakao.maps) {
+      this.initMap();
+    } else {
+      const script = document.createElement('script')
+      /* global kakao */
+      script.onload = () => kakao.maps.load(this.initMap)
+      script.src = `http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${process.env.VUE_APP_MAP_API}`
+      document.head.appendChild(script)
     }
   },
   created() {
-    console.log(Date.now())
+    // console.log(Date.now())
     this.$store.dispatch('promiseDetailGet',
       { 
         token: this.token,
@@ -117,6 +139,34 @@ export default {
     },
     goToPromiseLocations(promiseid) {
       this.$router.push({ name: 'PromiseLocations', params: { promiseid } })
+    },
+    // kakao 지도 관련
+    initMap() {
+      // REST API 생성 전 디버깅 용 - lat: 위도 == y, lon: 경도 == x
+      if (this.promiseDetail.lat && this.promiseDetail.lon) {
+        this.tmpX = this.promiseDetail.lon
+        this.tmpY = this.promiseDetail.lat
+      } else {
+        this.tmpX = 127.298514,
+        this.tmpY = 36.3551420
+      }
+
+      // ######     좌표를 중심으로 지도가 그려짐      ######
+      var mapContainer = document.getElementById('map'),                 // 지도를 표시할 div
+          mapOption = {
+            center: new kakao.maps.LatLng(this.tmpY, this.tmpX),       // 지도의 중심좌표
+            level: 4,                                                    // 지도의 확대 레벨
+          }
+      var map = new kakao.maps.Map(mapContainer, mapOption)              // 지도를 생성
+
+      map.setDraggable(false)
+      map.setZoomable(false)
+
+
+      // ######    여기부터는 지도에 마커 표시하기     ######
+      var markerPosition = new kakao.maps.LatLng(this.tmpY, this.tmpX) // 마커가 표시될 위치
+      var marker = new kakao.maps.Marker({ position: markerPosition })   // 마커를 생성
+      marker.setMap(map)                                                 // 마커가 지도 위에 표시되도록 설정
     },
     goToProfile(nickname) {
       this.$router.push({ name: 'ProfileDetail', params: { nickname } })
