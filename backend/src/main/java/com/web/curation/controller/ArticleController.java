@@ -8,8 +8,11 @@ import com.web.curation.dao.scrap.ScrapDao;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.article.Article;
+import com.web.curation.model.article.ArticleLike;
 import com.web.curation.model.article.ViewArticleRequest;
 import com.web.curation.model.comment.Comment;
+import com.web.curation.model.follow.Follow;
+import com.web.curation.model.follow.FollowRequest;
 import com.web.curation.model.image.Image;
 import com.web.curation.model.scrap.Scrap;
 import com.web.curation.model.user.User;
@@ -21,6 +24,8 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -41,6 +46,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @ApiResponses(value = { @ApiResponse(code = 401, message = "Unauthorized", response = BasicResponse.class),
         @ApiResponse(code = 403, message = "Forbidden", response = BasicResponse.class),
@@ -158,14 +165,7 @@ public class ArticleController {
             }
             boolean likeCheck = articleLikeDao.existsByArticleidAndId(articleid, userOpt.get().getUid());
             boolean scrapCheck = scrapDao.existsByArticleidAndId(articleid, userOpt.get().getUid());
-            Map result = new HashMap<String, Object>();
-            result.put("userId", userOpt.get().getUid());
-            result.put("userNickname", userOpt.get().getNickname());
-            result.put("likeCount", like);
-            result.put("likeCheck", likeCheck);
-            result.put("scrapCheck", scrapCheck);
-            result.put("articleDetail", article);
-            result.put("imageLocation", imageLocation);
+            ViewArticleRequest result = new ViewArticleRequest(article.get(), userOpt.get().getUid(), userOpt.get().getNickname(), like, likeCheck, scrapCheck);
             response = new ResponseEntity<>(result, HttpStatus.OK);
         }
         return response;
@@ -202,9 +202,27 @@ public class ArticleController {
 //        return response;
 //    }
 
+//    @GetMapping("/article/main")
+//    @ApiOperation(value = "메인피드")
+//    public ResponseEntity<Page<Article>> getArticlePages(@RequestParam int pageNum) {
+//        Authentication user = SecurityContextHolder.getContext().getAuthentication();
+//        ResponseEntity response = null;
+//        if(user.getPrincipal() == "anonymousUser"){
+//            response = new ResponseEntity<>("Fail", HttpStatus.UNAUTHORIZED);
+//            return response;
+//        }else {
+//            UserDetails user2 = (UserDetails) user.getPrincipal();
+//            Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
+//
+//            Page<Article> articleResponses = articleService.fetchArticlePagesBy(pageNum, userOpt.get().getUid());
+//            return new ResponseEntity<>(articleResponses, HttpStatus.OK);
+//        }
+//    }
+
+    // 메인피드 반환객체를 ViewArticleRequest로 변환
     @GetMapping("/article/main")
     @ApiOperation(value = "메인피드")
-    public ResponseEntity<Page<Article>> getArticlePages(@RequestParam int pageNum) {
+    public ResponseEntity<Page<ViewArticleRequest>> getArticlePages(@RequestParam int pageNum) {
         Authentication user = SecurityContextHolder.getContext().getAuthentication();
         ResponseEntity response = null;
         if(user.getPrincipal() == "anonymousUser"){
@@ -214,8 +232,20 @@ public class ArticleController {
             UserDetails user2 = (UserDetails) user.getPrincipal();
             Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
 
-            Page<Article> articleResponses = articleService.fetchArticlePagesBy(pageNum, userOpt.get().getUid());
-            return new ResponseEntity<>(articleResponses, HttpStatus.OK);
+            Long loginID = userOpt.get().getUid();
+            String loginUser = userOpt.get().getNickname();
+
+            List<Article> articleList = articleService.followingsArticleList(loginID);
+            Stream<Article> articleStream = articleList.stream();
+
+            List<ViewArticleRequest> requestList = articleStream.map(article -> new ViewArticleRequest(article, loginID, loginUser,
+                                                    articleLikeDao.countArticleLike(article.getArticleid()),
+                                                    articleLikeDao.existsByArticleidAndId(article.getArticleid(), loginID),
+                                                    scrapDao.existsByArticleidAndId(article.getArticleid(), loginID)))
+                                                     .collect(Collectors.toList());
+
+            Page<ViewArticleRequest> requestPage = new PageImpl<>(requestList, PageRequest.of(pageNum, 5), requestList.size());
+            return new ResponseEntity<>(requestPage, HttpStatus.OK);
         }
     }
 
@@ -231,6 +261,43 @@ public class ArticleController {
             UserDetails user2 = (UserDetails) user.getPrincipal();
             articleDao.deleteByArticleid(articleid);
             response = new ResponseEntity<>("게시글 삭제 완료", HttpStatus.OK);
+        }
+        return response;
+    }
+
+    @PostMapping("/article/{articleid}/like")
+    @ApiOperation(value = "좋아요")
+    public Object articleLike(@PathVariable(required = true) final Long articleid){
+        Authentication user = SecurityContextHolder.getContext().getAuthentication();
+        ResponseEntity response = null;
+        if(user.getPrincipal() == "anonymousUser"){
+            response = new ResponseEntity<>("Fail", HttpStatus.UNAUTHORIZED);
+        }else{
+            UserDetails user2 = (UserDetails) user.getPrincipal();
+            Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
+            Long articlelikeid = articleLikeDao.save(ArticleLike.builder()
+                    .articlelikeid(null)
+                    .id(userOpt.get().getUid())
+                    .articleid(articleid)
+                    .build()).getArticlelikeid();
+
+            response = new ResponseEntity<>(articlelikeid, HttpStatus.OK);
+        }
+        return response;
+    }
+
+    @DeleteMapping("/article/{articleid}/like")
+    @ApiOperation(value = "좋아요 취소")
+    public Object articleLikeCancle(@PathVariable(required = true) final Long articleid){
+        Authentication user = SecurityContextHolder.getContext().getAuthentication();
+        ResponseEntity response = null;
+        if(user.getPrincipal() == "anonymousUser"){
+            response = new ResponseEntity<>("Fail", HttpStatus.UNAUTHORIZED);
+        }else{
+            UserDetails user2 = (UserDetails) user.getPrincipal();
+            Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
+            articleLikeDao.deleteByIdAndArticleid(userOpt.get().getUid(), articleid);
+            response = new ResponseEntity<>("좋아요 취소 완료", HttpStatus.OK);
         }
         return response;
     }

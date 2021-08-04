@@ -108,7 +108,7 @@ public class AccountController {
             throw new IllegalArgumentException("잘못된 비밀번호입니다.");
         }
         User user = new User(userOpt.get().getUid(), userOpt.get().getNickname(), request.getEmail(),
-                passwordEncoder.encode(request.getNewPassword()), userOpt.get().getIntroduction(), userOpt.get().getThumbnail(), userOpt.get().getRoles());
+                passwordEncoder.encode(request.getNewPassword()), userOpt.get().getIntroduction(), userOpt.get().getThumbnail(), userOpt.get().getArticles(), userOpt.get().getRoles());
         //디비에 저장 (바뀐 부분만 데이터베이스에 Update된다)
         userDao.save(user);
         final BasicResponse result = new BasicResponse();
@@ -174,7 +174,7 @@ public class AccountController {
                 pathName = userOpt.get().getThumbnail();
             }
             User user3 = new User(userOpt.get().getUid(), nickname, userOpt.get().getEmail(),
-                    userOpt.get().getPassword(), introduction, pathName, userOpt.get().getRoles());
+                    userOpt.get().getPassword(), introduction, pathName, userOpt.get().getArticles(), userOpt.get().getRoles());
             userDao.save(user3);
             response = new ResponseEntity<>("Success", HttpStatus.OK);
         }

@@ -94,7 +94,7 @@ public class CommentController {
             // 만약 현재 로그인한 유저와 수정요청한 유저가 같을때만 수정한다
             if(userOpt.get().getUid() == oldComment.getId()) {
                 Comment newComment = new Comment(oldComment.getCommentid(), oldComment.getArticleid(), userOpt.get().getUid(),
-                        request.getNickname(), request.getCreatedtime(), request.getUpdatedtime(), request.getComment());
+                        request.getNickname(), request.getCreatedtime(), request.getUpdatedtime(), request.getComment(), oldComment.getArticle());
                 commentDao.save(newComment);
                 response = new ResponseEntity<>("댓글 수정 성공", HttpStatus.OK);
             }
