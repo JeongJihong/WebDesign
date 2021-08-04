@@ -165,7 +165,8 @@ public class ArticleController {
             }
             boolean likeCheck = articleLikeDao.existsByArticleidAndId(articleid, userOpt.get().getUid());
             boolean scrapCheck = scrapDao.existsByArticleidAndId(articleid, userOpt.get().getUid());
-            ViewArticleRequest result = new ViewArticleRequest(article.get(), userOpt.get().getUid(), userOpt.get().getNickname(), like, likeCheck, scrapCheck);
+            ViewArticleRequest result = new ViewArticleRequest(article.get(), userOpt.get().getUid(),
+                                                            userOpt.get().getNickname(), like, likeCheck, scrapCheck);
             response = new ResponseEntity<>(result, HttpStatus.OK);
         }
         return response;
@@ -193,7 +194,7 @@ public class ArticleController {
                                                     articleLikeDao.countArticleLike(article.getArticleid()),
                                                     articleLikeDao.existsByArticleidAndId(article.getArticleid(), loginID),
                                                     scrapDao.existsByArticleidAndId(article.getArticleid(), loginID)))
-                                                     .collect(Collectors.toList());
+                                                    .collect(Collectors.toList());
 
             // 무한 스크롤을 사용할 때, 한 번 정보를 요청할 때마다 5개씩 반환하기 위해 페이지네이션 사용
             Page<ViewArticleRequest> requestPage = new PageImpl<>(requestList, PageRequest.of(pageNum, 5), requestList.size());
