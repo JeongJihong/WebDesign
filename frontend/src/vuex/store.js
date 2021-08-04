@@ -17,6 +17,8 @@ const state = {
     searchLive: {},
     scrapList: [],
     scrapMode: false,
+
+    promiseDetail: {},
 }
 
 

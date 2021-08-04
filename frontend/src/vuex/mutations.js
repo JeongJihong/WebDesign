@@ -20,6 +20,11 @@ export default {
   SCRAP_DELETE_MODE(state) {
     state.scrapMode = !state.scrapMode
   },
+
+  PROMISE_DETAIL_GET(state, promiseDetail) {
+    state.promiseDetail = promiseDetail
+  },
+
   LOGOUT () {
     localStorage.removeItem('token') 
     location.reload(); 
