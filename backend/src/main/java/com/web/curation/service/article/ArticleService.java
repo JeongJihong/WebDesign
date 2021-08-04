@@ -25,30 +25,10 @@ public class ArticleService {
     private final ArticleDao articleDao;
 
     @Autowired
-    private UserDao userDao;
-
-    @Autowired
     private FollowDao followDao;
 
-//    public Page<Article> fetchArticlePagesBy(int pageNum, Long loginMemberId) {
-//        List<Long> followingIds = findFollowersWithLoggedInMember(loginMemberId); // 사용자를 포함하고, 사용자가 팔로우하고 있는 사람들을 가져온다.
-//        Page<Article> articles = fetchPages(pageNum, followingIds); // followers의 게시물들을 페이지네이션해서 가져온다.
-//
-//        return articles;
-//    }
-//
-//    private List<Long> findFollowersWithLoggedInMember(Long loginMemberId) {
-//        List<Long> followingIds = followDao.findBySrcidAndApprove(loginMemberId);
-//        followingIds.add(loginMemberIㅋd);
-//        return followingIds;
-//    }
-//
-//    private Page<Article> fetchPages(int pageNum, List<Long> followingIds) {
-//        Pageable pageRequest = PageRequest.of(pageNum, 5); // 페이지네이션을 위한 PageRequest, 페이지는 0으로 고정한다.
-//        return articleDao.findAllByIdInOrderByArticleidDesc(followingIds, pageRequest);
-//    }
-
     public List<Article> followingsArticleList(Long loginMemberId) {
+        // 내가 팔로잉하고 있는 유저 + 나의 게시물 리스트를 반환
         List<Long> followingIds = followDao.findBySrcidAndApprove(loginMemberId);
         followingIds.add(loginMemberId);
         return articleDao.findAllByIdIn(followingIds);
