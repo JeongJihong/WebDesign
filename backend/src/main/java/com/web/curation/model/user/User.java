@@ -1,5 +1,6 @@
 package com.web.curation.model.user;
 
+import com.web.curation.model.article.Article;
 import lombok.*;
 
 import javax.persistence.*;
@@ -32,6 +33,9 @@ public class User implements UserDetails {
     private String password;
     private String introduction;
     private String thumbnail;
+
+    @OneToMany(mappedBy = "user") @JsonIgnore
+    private List<Article> articles = new ArrayList<>();
 
 
     @ElementCollection(fetch = FetchType.EAGER)

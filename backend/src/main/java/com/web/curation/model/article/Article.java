@@ -1,8 +1,10 @@
 package com.web.curation.model.article;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.web.curation.model.comment.Comment;
 import com.web.curation.model.image.Image;
+import com.web.curation.model.user.User;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -32,19 +34,17 @@ public class Article {   // 게시글 보여줄 때 필요한 정보
     private LocalDateTime updatedtime;
     private String review;
 
-    @OneToMany(cascade={CascadeType.ALL})
-    @JoinColumn(name="articleid", insertable = false)
+    @OneToMany(mappedBy = "article", cascade={CascadeType.ALL})
     private List<Image> images = new ArrayList<>();
 
-    @OneToMany(cascade={CascadeType.ALL})
-    @JoinColumn(name="articleid", insertable = false)
+    @OneToMany(mappedBy = "article", cascade={CascadeType.ALL})
     private List<Comment> comments = new ArrayList<>();
 
 //    @OneToMany
 //    @JoinColumn(name="articleid")
 //    private List<ArticleLike> articlelikes = new ArrayList<>();
 
-//    @ManyToOne
-//    @JoinColumn(name = "uid")
-//    private User user;
+    @ManyToOne
+    @JoinColumn(name = "id", insertable = false, updatable = false)
+    private User user;
 }
