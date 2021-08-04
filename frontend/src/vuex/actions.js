@@ -88,6 +88,40 @@ export default {
       })
   },
 
+  alarmLikeGet({ commit }, token) {
+    axios({
+      url: `http://127.0.0.1:8080/alarm/like`,
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-AUTH-TOKEN': token
+      }
+    })
+      .then(res => {
+        commit('ALARM_LIKE_GET', res.data)
+      })
+      .catch(err => {
+        alert(err)
+      })
+  },
+  alarmFollowGet({ commit }, token) {
+    axios({
+      url: `http://127.0.0.1:8080/alarm/follow`,
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-AUTH-TOKEN': token
+      }
+    })
+      .then(res => {
+        commit('ALARM_FOLLOW_GET', res.data)
+      })
+      .catch(err => {
+        alert(err)
+      })
+  },
+
+
   scrapGet({ commit }, token) {
     axios({
       url: `http://127.0.0.1:8080/account/checkJWT`,
