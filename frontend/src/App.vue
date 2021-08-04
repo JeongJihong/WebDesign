@@ -5,6 +5,9 @@
         <img src="./assets/images/main-icon-2.png" alt="" style="width: 83px; height: 35px;">
       </b-nav-item>
       <b-nav-item class="d-flex align-items-center">
+        <router-link :to="{ name: 'PromiseList' }"  class="text-decoration-none me-3 text-dark">
+          <b-icon icon="signpost"></b-icon>
+        </router-link>
         <router-link :to="{ name: 'AlarmList' }"  class="text-decoration-none me-3 text-dark">
           <b-icon icon="bell-fill"></b-icon>
         </router-link>
@@ -14,10 +17,17 @@
         <router-link :to="{ name: 'ArticleCreate' }" class="text-decoration-none me-3 text-dark">
           <b-icon icon="pencil-square"></b-icon>
         </router-link>
-        <router-link :to="{ name: 'ProfileDetail', params: { nickname: username } }"
-          class="text-decoration-none text-dark">
-          <b-icon icon="person-fill"></b-icon>
-        </router-link>
+        <b-dropdown id="dropdownMenuButton" size="sm" right variant="link" toggle-class="text-decoration-none" no-caret>
+          <template #button-content >
+            <b-icon icon="person-fill"></b-icon>
+          </template>
+          <b-dropdown-item><router-link :to="{ name: 'ProfileDetail', params: { nickname: username } }"
+          >자신의 프로필</router-link></b-dropdown-item>
+          <b-dropdown-item href="#">자신의 스크랩</b-dropdown-item>
+          <b-dropdown-item><router-link :to="{ name: 'PromiseCreate', }"
+          >약속잡기</router-link></b-dropdown-item>
+          <b-dropdown-item ><button class="danger" @click="logout()">로그아웃</button></b-dropdown-item>
+        </b-dropdown>
       </b-nav-item>
     </b-nav>
     <b-nav v-if="backShow">
@@ -30,7 +40,7 @@
 
 <script>
 import "./components/css/style.scss";
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: "app",
@@ -83,6 +93,9 @@ export default {
     }
   },
   methods:{
+    ...mapActions([ 
+      'logout'
+    ]),
     goBack() {
       this.$router.go(-1)
     },
@@ -107,7 +120,12 @@ window.onscroll = function() {
 }
 </script>
 
-<style scoped>
+<style>
+#dropdownMenuButton__BV_toggle_ {
+    width: 100%;
+    height: 30px;
+    box-shadow: none;
+  }
 #custom-navbar {
   background-color: white;
   position: static;
@@ -117,5 +135,6 @@ window.onscroll = function() {
   top: 0;
   width: 100%;
   transition: top 0.3s;
+  padding: 1px;
 }
 </style>
