@@ -13,6 +13,8 @@ import Scrap from '@/views/profile/Scrap.vue'
 import Comments from '@/views/article/Comments.vue'
 import ArticleCreate from '@/views/article/ArticleCreate.vue'
 import ArticleDetail from '@/views/article/ArticleDetail.vue'
+import PromiseList from '@/views/promise/PromiseList.vue'
+import PromiseCreate from '@/views/promise/PromiseCreate.vue'
 
 import Vue from 'vue'
 import VueRouter from 'vue-router'
@@ -131,6 +133,22 @@ const routes = [
         path : '/article/:articleid/comments',
         name : 'Comments',
         component : Comments,
+        meta: {
+            loggedAuth: true
+        }
+    },
+    {   
+        path : '/promise',
+        name : 'PromiseList',
+        component : PromiseList,
+        meta: {
+            loggedAuth: true
+        }
+    },
+    {   
+        path : '/promise/create',
+        name : 'PromiseCreate',
+        component : PromiseCreate,
         meta: {
             loggedAuth: true
         }
