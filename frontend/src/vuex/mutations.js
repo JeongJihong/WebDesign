@@ -14,6 +14,13 @@ export default {
     state.searchLive = userList
   },
 
+  ALARM_LIKE_GET(state, likeList) {
+    state.likeList = likeList
+  },
+  ALARM_FOLLOW_GET(state, followList) {
+    state.followList = followList
+  },
+
   SCRAP_GET(state, scrapList) {
     state.scrapList = scrapList
   },

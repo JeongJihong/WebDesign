@@ -13,6 +13,9 @@ const state = {
     token: localStorage.getItem('token') || '',
     username: localStorage.getItem('username') || '',
 
+    likeList: [],
+    followList: [],
+
     searchGet: [],
     searchLive: {},
     scrapList: [],
