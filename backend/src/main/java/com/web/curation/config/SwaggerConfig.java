@@ -3,6 +3,7 @@ package com.web.curation.config;
 import com.google.common.base.Predicates;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -20,6 +21,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+//@CrossOrigin(origins = { "http://localhost:3000" })
+@CrossOrigin(origins = "*")
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig extends WebMvcConfigurerAdapter {
@@ -57,7 +60,7 @@ public class SwaggerConfig extends WebMvcConfigurerAdapter {
     }
 
     private ApiKey apiKey() {
-        return new ApiKey("Bearer +accessToken", "Authorization", "header");
+        return new ApiKey("Bearer +accessToken", "X-AUTH-TOKEN", "header");
     }
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

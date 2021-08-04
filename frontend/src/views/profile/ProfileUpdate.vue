@@ -57,7 +57,7 @@ export default {
     updateProfileInfo: function () {
       axios({
         method: 'patch',
-        url: 'http://i5b302.p.ssafy.io/api/account/profile/',
+        url: 'http://127.0.0.1:8080/account/profile/',
         params: this.userInfo,
         headers: {
           'Content-Type': 'application/json',
@@ -77,7 +77,7 @@ export default {
     getUserInfo: function () {
       axios({
         method: 'get',
-        url: `http://i5b302.p.ssafy.io/api/account/profile/${this.userInfo.nickname}`,
+        url: `http://127.0.0.1:8080/account/profile/${this.userInfo.nickname}`,
         headers: {
           'Content-Type': 'application/json',
           'X-AUTH-TOKEN' : this.$store.state.token
@@ -102,7 +102,7 @@ export default {
     console.log(this.$store.state)
     axios({
       method: 'get',
-      url: `http://i5b302.p.ssafy.io/api/account/checkJWT/`,
+      url: `http://127.0.0.1:8080/account/checkJWT/`,
       headers: {
         'Content-Type': 'application/json',
         'X-AUTH-TOKEN' : this.$store.state.token

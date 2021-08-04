@@ -55,7 +55,7 @@ export default {
     followerList () {
       axios({
         method: 'get',
-        url: `http://i5b302.p.ssafy.io/api/account/profile/${this.nickname}/follower`,
+        url: `http://127.0.0.1:8080/account/profile/${this.nickname}/follower`,
         headers: {
           'Content-Type': 'application/json',
           'X-AUTH-TOKEN' : this.$store.state.token
@@ -77,7 +77,7 @@ export default {
     followingList () {
       axios({
         method: 'get',
-        url: `http://i5b302.p.ssafy.io/api/account/profile/${this.nickname}/following`,
+        url: `http://127.0.0.1:8080/account/profile/${this.nickname}/following`,
         headers: {
           'Content-Type': 'application/json',
           'X-AUTH-TOKEN' : this.$store.state.token

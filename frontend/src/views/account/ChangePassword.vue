@@ -70,7 +70,7 @@ export default {
   methods:{
     changepassword(){
         axios({
-          url:'http://127.0.0.1:8080/api/account/changePassword',
+          url:'http://127.0.0.1:8080/account/changePassword',
           method:'put',
           data:{
             email: this.email,

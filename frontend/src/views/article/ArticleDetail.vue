@@ -64,7 +64,7 @@ export default {
   },
   created(){
     axios({
-      url:`http://i5b302.p.ssafy.io/api/article/`+this.$route.params.articleid+'/',
+      url:`http://127.0.0.1:8080/article/`+this.$route.params.articleid+'/',
       method:'GET',
       headers: {
             'x-auth-token': `${localStorage.getItem('token')}`,
@@ -85,7 +85,7 @@ export default {
     },
     articleDetail(){
       axios({
-      url: 'http://i5b302.p.ssafy.io/api/article/'+this.$route.params.articleid,
+      url: 'http://127.0.0.1:8080/article/'+this.$route.params.articleid,
       method:'get',
       })
       .then(res=>{
@@ -98,7 +98,7 @@ export default {
     },
     // articleUpdate(){
     //   axios({
-    //   url: 'http://i5b302.p.ssafy.io/api/article/'+this.$route.params.articleid,
+    //   url: 'http://127.0.0.1:8080/article/'+this.$route.params.articleid,
     //   method:'put',
     //   headers: {
     //       'x-auth-token': `${localStorage.getItem('token')}`,
@@ -114,7 +114,7 @@ export default {
     // },
     articleDelete(){
       axios({
-      url: 'http://i5b302.p.ssafy.io/api/article/'+this.$route.params.articleid,
+      url: 'http://127.0.0.1:8080/article/'+this.$route.params.articleid,
       method:'delete',
       headers: {
           'x-auth-token': `${localStorage.getItem('token')}`,

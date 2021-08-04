@@ -10,7 +10,7 @@ export default {
   // 로그인 - 두호
   login({ commit }, credentials) {
     axios({
-      url: "http://i5b302.p.ssafy.io/api/account/login",
+      url: "http://127.0.0.1:8080/account/login",
       method: "post",
       data: {
         email: credentials.email,
@@ -23,7 +23,7 @@ export default {
         localStorage.setItem("token", res.data);
         // vuex 및 localStorage 에 로그인한 유저의 nickname 저장
         axios({
-          url: `http://i5b302.p.ssafy.io/api/account/checkJWT`,
+          url: `http://127.0.0.1:8080/account/checkJWT`,
           method: "get",
           headers: {
             "Content-Type": "application/json",
@@ -47,7 +47,7 @@ export default {
 
   searchGet({ commit }, token) {
     axios({
-      url: `http://i5b302.p.ssafy.io/api/account/checkJWT`,
+      url: `http://127.0.0.1:8080/account/checkJWT`,
       method: "get",
       headers: {
         "Content-Type": "application/json",
@@ -56,7 +56,7 @@ export default {
     })
       .then((res) => {
         axios({
-          url: `http://i5b302.p.ssafy.io/search?id=${res.data.uid}`,
+          url: `http://127.0.0.1:8080/search?id=${res.data.uid}`,
           method: "get",
           headers: {
             "Content-Type": "application/json",
@@ -76,7 +76,7 @@ export default {
   },
   searchLive({ commit }, data) {
     axios({
-      url: `http://i5b302.p.ssafy.io/search/live?nickname=${data.nickname}`,
+      url: `http://127.0.0.1:8080/search/live?nickname=${data.nickname}`,
       method: "get",
     })
       .then((res) => {
@@ -89,7 +89,7 @@ export default {
 
   scrapGet({ commit }, token) {
     axios({
-      url: `http://i5b302.p.ssafy.io/account/checkJWT`,
+      url: `http://127.0.0.1:8080/account/checkJWT`,
       method: "get",
       headers: {
         "Content-Type": "application/json",
@@ -98,7 +98,7 @@ export default {
     })
       .then(() => {
         axios({
-          url: `http://i5b302.p.ssafy.io/scrap`,
+          url: `http://127.0.0.1:8080/scrap`,
           method: "get",
           headers: {
             "Content-Type": "application/json",
@@ -121,7 +121,7 @@ export default {
   },
   scrapDelete({ commit }, payload) {
     axios({
-      url: `http://i5b302.p.ssafy.io/scrap/${payload.scrapid}`,
+      url: `http://127.0.0.1:8080/scrap/${payload.scrapid}`,
       method: "delete",
       headers: {
         "Content-Type": "application/json",
@@ -130,7 +130,7 @@ export default {
     })
       .then(() => {
         axios({
-          url: `http://i5b302.p.ssafy.io/account/checkJWT`,
+          url: `http://127.0.0.1:8080/account/checkJWT`,
           method: "get",
           headers: {
             "Content-Type": "application/json",
@@ -139,7 +139,7 @@ export default {
         })
           .then((res) => {
             axios({
-              url: `http://i5b302.p.ssafy.io/scrap?userid=${res.data.uid}`,
+              url: `http://127.0.0.1:8080/scrap?userid=${res.data.uid}`,
               method: "get",
             })
               .then((res) => {

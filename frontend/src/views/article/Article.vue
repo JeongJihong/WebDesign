@@ -70,7 +70,7 @@ export default {
   methods:{
     infiniteHandler($state) {
       console.log('살아있음1');
-      axios.get('http://i5b302.p.ssafy.io/api/article/main', {
+      axios.get('http://127.0.0.1:8080/article/main', {
           headers: {
             'x-auth-token': `${localStorage.getItem('token')}`,
           },
