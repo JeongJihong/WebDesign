@@ -2,10 +2,8 @@
   <div class="m-4">
     <div class="d-flex my-4" style="justify-content: space-between">
       <div class="d-flex" style="justify-content: space-between">
-        <button style="padding-right:20px">
-          <b-icon-arrow-left class="h2"></b-icon-arrow-left>
-        </button>
-        <h2>{{ this.nickname }} 님의 프로필</h2>
+        <button @click="goBack"><b-icon icon="arrow-left" class="fs-1 me-4"></b-icon></button>
+        <h4>프로필</h4>
       </div>
       <button @click="goToProfileUpdate" v-if="this.nickname === this.myNickname">
         프로필 수정
@@ -17,12 +15,12 @@
         <h4>{{ this.nickname }}</h4>
         <div class="d-flex" style="justify-content: space-between">
           <button class="d-flex" @click="goToFollowList">
-            <h4>팔로잉</h4>
+            <h4>팔로잉</h4>&nbsp;&nbsp;
             <h4 style="color:blue;">{{ this.followings }}</h4>
           </button>
           &nbsp;&nbsp;&nbsp;&nbsp;
           <button class="d-flex" @click="goToFollowList">
-            <h4>팔로워</h4>
+            <h4>팔로워</h4>&nbsp;&nbsp;
             <h4 style="color:blue;">{{ this.followers }}</h4>
           </button>
         </div>
@@ -72,6 +70,9 @@ export default {
     }
   },
   methods: {
+    goBack() {
+      this.$router.go(-1)
+    },
     goToProfileUpdate () {
       this.$router.push({
         name: 'ProfileUpdate',
@@ -115,6 +116,7 @@ export default {
         },
       })
       .then((res) => {
+        console.log('getUserInfo 데이터')
         console.log(res.data)
         this.didIrequestFollowToYou = res.data.follow
         this.introduction = res.data.userProfile.introduction

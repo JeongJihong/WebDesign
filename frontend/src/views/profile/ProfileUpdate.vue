@@ -3,7 +3,7 @@
     <!-- 헤더 -->
     <div class="mt-3 mx-4 d-flex justify-content-between align-items-center">
       <span class="fs-1">
-        <button><b-icon icon="arrow-left" class="me-4"></b-icon></button>
+        <button @click="goBack"><b-icon icon="arrow-left" class="fs-1 me-4"></b-icon></button>
         <span class="fw-bold">프로필 정보 수정</span>
       </span>
       <button class="text-decoration-none" @click="updateProfileInfo">저장하기</button>
@@ -54,6 +54,9 @@ export default {
     }
   },
   methods: {
+    goBack() {
+      this.$router.go(-1)
+    },
     updateProfileInfo: function () {
       axios({
         method: 'patch',
