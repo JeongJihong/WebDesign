@@ -10,7 +10,7 @@
       </button>
     </div>
     <div class="d-flex">
-      <img src="@/assets/images/profile_default.png" alt="image" style="width: 70px; height: 70px" >
+      <img :src="thumbnail" alt="image" style="width: 70px; height: 70px" >
       <div class="mx-4">
         <h4>{{ this.nickname }}</h4>
         <div class="d-flex" style="justify-content: space-between">
@@ -70,6 +70,7 @@ export default {
       followid: 0,
       articles: [],
       articlesLength: 0,
+      thumbnail: '',
     }
   },
   methods: {
@@ -126,6 +127,11 @@ export default {
         this.articles = res.data.article
         console.log('articles', this.articles)
         this.articlesLength = this.articles.length
+        this.thumbnail = res.data.userProfile.thumbnail
+        console.log(this.thumbnail)
+        if (typeof this.thumbnail === 'undefined') {
+          this.thumbnail = require(`@/assets/images/profile_default.png`)
+        }
         this.checkFollowRequest()
         this.followerList()
       })

@@ -49,6 +49,7 @@ export default {
         uid: '',
         introduction: '',
         nickname: '',
+        file: '@/assets/images/profile_default.png',
       },
       myUid:'',
     }
@@ -58,6 +59,7 @@ export default {
       this.$router.go(-1)
     },
     updateProfileInfo: function () {
+      console.log(this.$store.state.token)
       axios({
         method: 'patch',
         url: 'http://127.0.0.1:8080/account/profile/',
