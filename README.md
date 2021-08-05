@@ -8,7 +8,7 @@
 
 <br>
 
-<img src="https://shields.io/badge/vue--cli-v4.1.1-plastic" style="width: 10%;"> <img src="https://shields.io/badge/spring--boot-red" style="width: 8.3%;"> <img src="https://shields.io/badge/maven-v3.6.3-hotpink" style="width: 10%;"> <img src="https://shields.io/badge/zulu%208-blue" style="width: 5.4%;"> <img src="https://shields.io/badge/MySQL-blue" style="width: 6%;">
+<img src="https://shields.io/badge/vue--cli-v4.1.1-plastic" style="width: 10%;">  <img src="https://shields.io/badge/vue.js-2.6-plastic" style="width: 8%;"> <img src="https://shields.io/badge/spring--boot-2.2-red" style="width: 11%;"> <img src="https://shields.io/badge/maven-v3.6.3-hotpink" style="width: 10%;"> <img src="https://shields.io/badge/zulu%208-blue" style="width: 5.4%;"> <img src="https://shields.io/badge/MySQL-blue" style="width: 6%;">
 
 <br>
 
@@ -40,6 +40,8 @@
   - [개발 환경](#개발-환경)
   - [Design Resources](#design-resources)
   - [핵심 라이브러리](#핵심-라이브러리)
+- [브랜치 전략](#브랜치%20전략)
+- [컨벤션 규칙](#컨벤션%20규칙)
 - [ERD](#erd)
 - [SWAGGER](#swagger)
 - [개발현황](#개발현황)
@@ -61,30 +63,40 @@ Pipl 은 SNS 상에서 모임/약속을 쉽게 잡아주는 소셜 플랫폼입�
 
 ### 프로젝트 명세
 #### 배포 환경
-- __URL__ : 
-- __배포 여부__ : X
-- __접속 가능__ : X
+
+<p align="center">
+    <img src="./assets/deploy-main.gif" width="50%">
+</p>
+
+<br>
+
+- __URL__ : http://i5b302.p.ssafy.io/
+- __배포 여부__ : O
+- __접속 가능__ : O
 - __HTTPS 적용__ : X
 - __PORT__ : Vue (3000), Spring-Boot (8080)
+- **배포 방식**
+  - 현재 배포 테스트 상황입니다. (Frontend, Backend 연결 확인)
+  - 추후 CI/CD 를 구축하여 애자일 방식으로
 
 <br>
 
 #### 개발 환경
 ##### Front-end
-- __Framework__ : Vue.js
-- __지원 환경__ : Web
+- __Framework__ : Vue.js (2.6)
+- __지원 환경__ : Mobile Web
 - __담당자__ : 신형식, 이두호, 정종우
-  - 신형식 : 회원정보(로그인, 회원가입, 비밀번호 변경), 게시글(조회, 생성, 수정), 댓글
-  - 이두호 : 헤더(네비게이션, 라우팅 관리), 검색, 알림, 스크랩
-  - 정종우 : 프로필(조회, 수정), 팔로우/팔로워, 스크랩
+  - 신형식 : 회원정보(로그인, 회원가입, 비밀번호 변경), 게시글(조회, 생성, 수정), 댓글, 약속 리스트, 약속 생성
+  - 이두호 : 헤더(네비게이션, 라우팅 관리), 검색, 알림, 스크랩, 약속 상세페이지
+  - 정종우 : 프로필(조회, 수정), 팔로우/팔로워, 스크랩, 약속 인원 위치 공유 페이지
 
 <br>
 
 ##### Back-end
-- __Framework__ : Spring boot
+- __Framework__ : Spring boot (2.2)
 - __Database__ : MySQL
 - __담당자__ : 김백준, 정지홍
-  - 공통 : 게시글
+  - 공통 : 게시글, 약속
   - 김백준 : 회원정보(JWT 인증), 검색, 알림
   - 정지홍 : 팔로우/팔로워, 댓글, 스크랩
 
@@ -93,7 +105,7 @@ Pipl 은 SNS 상에서 모임/약속을 쉽게 잡아주는 소셜 플랫폼입�
 ##### Design
 - __Framework 사용__ : O
   - [Bootstrap-Vue](https://bootstrap-vue.org/)
-- __Design Tool 사용__ :
+- __Design Tool 사용__ : X
 - __담당자__ : 신형식, 이두호, 정종우
 
 <br>
@@ -114,6 +126,38 @@ __자체 제작 산출물__ (필요시 이미지 또는 설명 첨부)
 <br>
 
 ### 핵심 라이브러리
+
+<br>
+
+### 브랜치 전략
+
+<img src="https://render.githubusercontent.com/render/math?math={\color{blue}\textbf{feature}}">  &#10140;  기능단위 개발이 진행되는 브랜치입니다. (feature/frontend/기능  &#8644;  feature/backend/기능)
+
+<img src="https://render.githubusercontent.com/render/math?math={\color{blue}\textbf{develop}}">  &#10140;  기능단위 개발이 완료된 개발 관련 브랜치입니다.
+
+<img src="https://render.githubusercontent.com/render/math?math={\color{red}\textbf{release}}">  &#10140;  배포전 버전 관리를 위한 브랜치입니다.
+
+<img src="https://render.githubusercontent.com/render/math?math={\color{red}\textbf{master}}"> &#10140;  배포된 메인 브랜치입니다.
+
+<br>
+
+### 컨벤션 규칙
+
+##### Commit 컨벤션
+
+> `Feat:`, `Fix:`, `Design:`, `Docs:`, `Rename:`, `Remove:`, `Comment:`
+
+```bash
+$ git commit -m "Feat: Make Login Page
+> 로그인 페이지 구현했습니다."
+
+$ git commit -m "Fix: Edit User JWT
+> 로그인 시 사용되는 JWT 관리 방식을 OOO 에서 OOO 로 수정했습니다."
+```
+
+<br>
+
+Commit 메세지는 중요 사항을 간결하게 작성하는 것을 규칙으로 삼았습니다.
 
 <br>
 
@@ -148,15 +192,15 @@ __자체 제작 산출물__ (필요시 이미지 또는 설명 첨부)
 | account/profile/follow               |  PUT   | 팔로우 요청을 승인한다.                                      | Done |
 | account/changePassword               |  PUT   | 본인의 비밀번호를 변경합니다.<br />**(Need Token)**          | Done |
 |                                      |        |                                                              |      |
-| article/                             |  GET   | 메인페이지(피드: 최신 글 순)를 반환합니다.                   |      |
+| article/                             |  GET   | 메인페이지(피드: 최신 글 순)를 반환합니다.                   | Done |
 | article/                             |  GET   | 유저의 전체 게시글 정보(간략)를 반환합니다.<br />**(Need Token)** |      |
 | article/                             |  POST  | 해당 유저의 새로운 게시글을 생성합니다.<br />**(Need Token)** |      |
 | article/{nickname}                   |  GET   | 해당 유저의 프로필 정보, 팔로잉 유무, 피드 정보를 얻어옵니다. |      |
 | article/{articleid}                  |  GET   | 해당 유저의 특정 게시글의 상세정보(좋아요 수, 댓글 수 포함)를 반환합니다. | Done |
 | article/{articleid}                  |  PUT   | 해당 유저의 특정 게시글의 정보를 수정합니다.<br />**(Need Token)** |      |
 | article/{articleid}                  | DELETE | 해당 유저의 특정 게시글을 삭제합니다.<br />**(Need Token)**  | Done |
-| article/{articleid}/like             |  POST  | 해당 유저의 특정 게시글을 좋아요 요청을 보냅니다.            |      |
-| article/{articleid}/like             | DELETE | 해당 유저의 특정 게시글을 좋아요 취소 요청을 보냅니다.       |      |
+| article/{articleid}/like             |  POST  | 해당 유저의 특정 게시글을 좋아요 요청을 보냅니다.            | Done |
+| article/{articleid}/like             | DELETE | 해당 유저의 특정 게시글을 좋아요 취소 요청을 보냅니다.       | Done |
 | article/{articleid}/comment          |  GET   | 해당 유저의 특정 게시글의 댓글 리스트 정보를 반환합니다.     | Done |
 | article/{articleid}/comment          |  POST  | 해당 유저의 특정 게시글에 댓글을 작성합니다.<br />**(Need Token)** | Done |
 | article/comment/{commentid}          |  PUT   | 해당 유저의 특정 게시글 속 특정 댓글을 수정합니다.<br />**(Need Token)** | Done |
@@ -169,9 +213,18 @@ __자체 제작 산출물__ (필요시 이미지 또는 설명 첨부)
 | alarm/{nickname}                     | DELETE | Follow DB 상에서 해당 팔로우 요청을 삭제합니다.              |      |
 | alarm/{nickname}                     |  POST  | Follow DB 상에서 해당 팔로우 요청을 수락(False → True) 합니다. |      |
 |                                      |        |                                                              |      |
-| scrap/                               |  GET   | 본인이 스크랩한 게시글 리스트를 반환합니다.<br />**(Need Token)** |      |
-| scrap/{articleid}                    |  POST  | 해당 게시글을 본인의 스크랩 리스트에 추가합니다.<br />**(Need Token)** |      |
-| scrap/{scrapid}                      | DELETE | 스크랩한 해당 게시글을 삭제한다.<br />**(Need Token)**       |      |
+| scrap/                               |  GET   | 본인이 스크랩한 게시글 리스트를 반환합니다.<br />**(Need Token)** | Done |
+| scrap/{articleid}                    |  POST  | 해당 게시글을 본인의 스크랩 리스트에 추가합니다.<br />**(Need Token)** | Done |
+| scrap/{scrapid}                      | DELETE | 스크랩한 해당 게시글을 삭제합니다.<br />**(Need Token)**     | Done |
+|                                      |        |                                                              |      |
+| promise/                             |  GET   | 악속 목록을 보여줍니다.<br /><br />대기중인 약속: 본인이 생성하였지만, 약속 시간 전이면서 인원이 다 차지 않은 약속<br />다가오는 약속: 내가 참가한 약속<br />**(Need Token)** |      |
+| promise/                             |  POST  | 약속을 생성합니다.<br />**(Need Token)**                     |      |
+| promise/{promiseid}                  | DELETE | 약속에 불참합니다.<br />**(Need Token)**                     |      |
+| promise/{promiseid}                  |  GET   | 특정 약속 정보를 가져옵니다.<br />**(Need Token)**           |      |
+| promise/people/{promiseid}           | DELETE | 약속에 불참합니다.<br />**(Need Token)**                     |      |
+| promise/people/{promiseid}           |  POST  | 약속에 참가합니다.<br />**(Need Token)**                     |      |
+| promise/people/{promiseid}           |  PUT   | 특정 약속 참가자의 위도 경도를 업데이트합니다.<br />**(Need Token)** |      |
+| promise/people/{promiseid}           |  GET   | 약속 참가자들의 최근위치, 목적지 정보를 가져옵니다.<br />**(Need Token)** |      |
 
 <br>
 
