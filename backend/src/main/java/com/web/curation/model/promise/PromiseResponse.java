@@ -7,34 +7,21 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Builder
-public class Promise {
+public class PromiseResponse {
 
-    @Id
-    @Column(name = "promiseid")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long promiseid;
 
-    private Long createruid;
-    private LocalDateTime promisetime;
-
-    @CreationTimestamp
-    private LocalDateTime createdtime;
-
     private String type;
-    private String place;
-    private String title;
     private int num;
-    private BigDecimal lat;
-    private BigDecimal lon;
-    private String nickname;
+    private int peopleNum;
+    private String title;
+    private LocalDateTime promisetime;
 }

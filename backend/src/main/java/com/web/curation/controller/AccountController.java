@@ -279,7 +279,7 @@ public class AccountController {
     @GetMapping("/account/profile/follow/{nickname}")
     @ApiOperation(value = "팔로잉 유무 확인")
     @ResponseBody
-    public Object ddd(@PathVariable("nickname") final String othersNickname){
+    public Object followingCheck(@PathVariable("nickname") final String othersNickname){
         Authentication user = SecurityContextHolder.getContext().getAuthentication();
         ResponseEntity response = null;
         if(user.getPrincipal() == "anonymousUser"){
