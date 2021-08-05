@@ -2,8 +2,9 @@
   <div class="feed newsfeed">
     <div class="wrapB">
       <h1>뉴스피드</h1>
+      
       <div v-for="article in articles" :key="article.review" style="z-index:-1;">
-        <b-avatar src="https://placekitten.com/300/300" size="2rem"></b-avatar><span> 냥사마</span>
+        <b-avatar src="https://placekitten.com/300/300" size="2rem"></b-avatar><span>{{article.articleDetail.user.nickname}}</span>
         <b-carousel
           id="carousel-1"
           v-model="slide"
@@ -17,7 +18,7 @@
           @sliding-start="onSlideStart"
           @sliding-end="onSlideEnd"
         >
-          <b-carousel-slide v-for ="image in article.images" :key="image.id">
+          <b-carousel-slide v-for ="image in article.articleDetail.images" :key="image.id">
             <template #img>
               <img
                 class="d-block img-fluid w-100"
@@ -29,14 +30,16 @@
             </template>
           </b-carousel-slide>
         </b-carousel>
-        <p> {{ article.review }} </p>
+        <p> {{ article.articleDetail.review }} </p>
         <ul class="d-flex justify-content-left" style="padding-left:3px;">
-          <li><b-icon icon="hand-thumbs-up" scale="1.5" variant="primary"></b-icon></li>
-          <li><b-icon icon="tags-fill" scale="1.5" variant="primary"></b-icon></li>
-          <li><b-icon icon="tags" scale="1.5" variant="primary"></b-icon></li>
-          <li @click="getComments(article.articleid)"><b-icon icon="chat-dots" scale="1.5" variant="primary"></b-icon></li><span>{{ article.comments.length }}</span>
+          <li v-if="article.likeCheck"><b-icon  @click="articleLike(article.articleDetail.articleid)" id="likestat" icon="hand-thumbs-up" scale="1.5" variant="danger"></b-icon></li>
+          <li v-else><b-icon  @click="articleLike(article.articleDetail.articleid)" id="likestat" icon="hand-thumbs-up" scale="1.5" variant="secondary"></b-icon></li>
+          
+          <li v-if="article.scrapCheck"><b-icon icon="tags-fill" scale="1.5" variant="primary"></b-icon></li>
+          <li v-else><b-icon icon="tags" scale="1.5" variant="primary"></b-icon></li>
+          <li @click="getComments(article.articleDetail.articleid)"><b-icon icon="chat-dots" scale="1.5" variant="primary"></b-icon></li><span>{{ article.articleDetail.comments.length }}</span>
         </ul>
-        <p>? 명의 유저가 이글을 좋아합니다.</p>
+        <p>{{ article.articleDetail.likeCount }} 명의 유저가 이글을 좋아합니다.</p>
         <br>
       </div>
       <infinite-loading @infinite="infiniteHandler"></infinite-loading>
@@ -95,31 +98,43 @@ export default {
           this.$router.push('/');
       })
     },
-    // infiniteHandler($state) { 
-    //   axios({
-    //     url:c',
-    //     method:'get',
-    //     params: { page: this.page, }, 
-    //   })
-    //   .then(({ data }) => { 
-    //     if (data.hits.length) { 
-    //       this.page += 1; 
-    //       this.list.push(...data.hits); 
-    //       $state.loaded(); } 
-    //     else { $state.complete(); } });
-    //     },
-        
-    // test(){
-    //   axios 
-    //     .get('http://i5b302.p.ssafy.io/article', 
-    //     { lastArticleId: lastArticleId, size: 3, }) 
-    //     .then(response => response.data) 
-    //     .then(data => { this.articles = (data.data) })
-    // },
-    
-  ...mapActions([
-      'logout'
-    ]),
+    articleLike(articleid){
+      let likestat = document.getElementById('likestat')
+      if (likestat.variant == "secondary"){
+        axios({
+          url:`http://127.0.0.1:8080/article/`+articleid+'/like',
+          method:'post',
+          headers: {
+                'x-auth-token': `${localStorage.getItem('token')}`,
+              },
+        })
+        .then(res=>{
+          console.log(res.data)
+          likestat.variant = "danger"
+          likestat.setAttribute('variant','danger')
+        })
+        .catch(err=>{
+          console.log(err)
+        })
+        }
+      else{
+        axios({
+          url:`http://127.0.0.1:8080/article/`+articleid+'/like',
+          method:'delete',
+          headers: {
+                'x-auth-token': `${localStorage.getItem('token')}`,
+              },
+        })
+        .then(res=>{
+          console.log(res.data)
+          likestat.variant = "secondary"
+          likestat.setAttribute('variant','secondary')
+        })
+        .catch(err=>{
+          console.log(err)
+        })
+      }
+    },
     getArticle(articleid){
       this.$router.push({ name:'ArticleDetail', params:{ articleid:articleid }})
     },

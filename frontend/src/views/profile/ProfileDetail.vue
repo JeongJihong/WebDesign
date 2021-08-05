@@ -2,27 +2,25 @@
   <div class="m-4">
     <div class="d-flex my-4" style="justify-content: space-between">
       <div class="d-flex" style="justify-content: space-between">
-        <button style="padding-right:20px">
-          <b-icon-arrow-left class="h2"></b-icon-arrow-left>
-        </button>
-        <h2>{{ this.nickname }} 님의 프로필</h2>
+        <button @click="goBack"><b-icon icon="arrow-left" class="fs-1 me-4"></b-icon></button>
+        <h4>프로필</h4>
       </div>
       <button @click="goToProfileUpdate" v-if="this.nickname === this.myNickname">
         프로필 수정
       </button>
     </div>
     <div class="d-flex">
-      <img src="@/assets/images/profile_default.png" alt="image" style="width: 70px; height: 70px" >
+      <img :src="thumbnail" alt="image" style="width: 70px; height: 70px" >
       <div class="mx-4">
         <h4>{{ this.nickname }}</h4>
         <div class="d-flex" style="justify-content: space-between">
           <button class="d-flex" @click="goToFollowList">
-            <h4>팔로잉</h4>
+            <h4>팔로잉</h4>&nbsp;&nbsp;
             <h4 style="color:blue;">{{ this.followings }}</h4>
           </button>
           &nbsp;&nbsp;&nbsp;&nbsp;
           <button class="d-flex" @click="goToFollowList">
-            <h4>팔로워</h4>
+            <h4>팔로워</h4>&nbsp;&nbsp;
             <h4 style="color:blue;">{{ this.followers }}</h4>
           </button>
         </div>
@@ -45,7 +43,8 @@
     </div>
     <hr>
 
-    <div v-for="image in 9" :key="image" class="square img_1">
+    <div v-for="image in this.articlesLength" :key="image" class="square" :style="{ 'background-image': 'url('+articles[image-1].images[0].imgURL+')' }">
+      <!-- <img :src="articles[image-1].images[0].imgURL" alt="image" style=""> -->
     </div>
 
   </div>
@@ -69,9 +68,15 @@ export default {
       didIrequestFollowToYou: false,
       didYouRequestFollowToMe: false,
       followid: 0,
+      articles: [],
+      articlesLength: 0,
+      thumbnail: '',
     }
   },
   methods: {
+    goBack() {
+      this.$router.go(-1)
+    },
     goToProfileUpdate () {
       this.$router.push({
         name: 'ProfileUpdate',
@@ -115,9 +120,18 @@ export default {
         },
       })
       .then((res) => {
+        console.log('getUserInfo 데이터')
         console.log(res.data)
         this.didIrequestFollowToYou = res.data.follow
         this.introduction = res.data.userProfile.introduction
+        this.articles = res.data.article
+        console.log('articles', this.articles)
+        this.articlesLength = this.articles.length
+        this.thumbnail = res.data.userProfile.thumbnail
+        console.log(this.thumbnail)
+        if (typeof this.thumbnail === 'undefined') {
+          this.thumbnail = require(`@/assets/images/profile_default.png`)
+        }
         this.checkFollowRequest()
         this.followerList()
       })

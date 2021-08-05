@@ -32,7 +32,7 @@
     </b-nav>
     <b-nav v-if="backShow">
       <button @click="goBack"><b-icon icon="arrow-left" class="me-4"></b-icon></button>
-      <span class="fw-bold">{{ this.$route.name }}</span>
+      <span class="fw-bold" style="font-size:2rem;">{{ this.$route.name }}</span>
     </b-nav>
     <router-view></router-view>
   </div>
@@ -64,7 +64,7 @@ export default {
         this.backShow = false
         console.log('메인 맞음')
       } 
-      else if (this.$route.name === 'ArticleCreate' || this.$route.name === 'ArticleDetail' || this.$route.name === 'Comments') {
+      else if (this.$route.name === 'ArticleCreate' || this.$route.name === 'ArticleDetail' || this.$route.name === 'Comments' || this.$route.name === 'PromiseCreate' || this.$route.name === 'PromiseList') {
         this.navShow = false
         this.backShow = true
       } 
