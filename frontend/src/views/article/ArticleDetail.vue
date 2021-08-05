@@ -25,7 +25,7 @@
           @sliding-start="onSlideStart"
           @sliding-end="onSlideEnd"
         >
-          <b-carousel-slide v-for ="(idx,image) in article.imageLocation" :key="idx">
+          <b-carousel-slide v-for ="(idx,image) in article.articleDetail.images" :key="idx">
             <template #img>
               <img
                 class="d-block img-fluid w-100"
