@@ -25,7 +25,7 @@ Vue.use(VueRouter)
 
 const routes = [
     {
-        path : '/account/login',
+        path : '/',
         name : 'Login',
         component : Login
     },
