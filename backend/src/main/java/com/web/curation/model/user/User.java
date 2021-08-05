@@ -34,6 +34,9 @@ public class User implements UserDetails {
     private String introduction;
     private String thumbnail;
 
+    @Column(name = "alarmtoken", nullable = true)
+    private String alarmtoken;
+
     @OneToMany(mappedBy = "user") @JsonIgnore
     private List<Article> articles = new ArrayList<>();
 

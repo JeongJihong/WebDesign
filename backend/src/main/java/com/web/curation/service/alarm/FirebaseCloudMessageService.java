@@ -5,7 +5,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.WebpushConfig;
 import com.google.firebase.messaging.WebpushNotification;
-import com.web.curation.model.alarm.NotificationRequest;
+import com.web.curation.model.alarm.Alarm;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,12 +24,13 @@ public class FirebaseCloudMessageService {
 
     private static final Logger logger = LoggerFactory.getLogger(FirebaseCloudMessageService.class);
 
-    public void send(final NotificationRequest notificationRequest) throws InterruptedException, ExecutionException {
+
+    public void send(final Alarm notificationRequest, String receiverToken) throws InterruptedException, ExecutionException {
         Message message = Message.builder()
-                .setToken(notificationRequest.getToken())
+                .setToken(receiverToken)
                 .setWebpushConfig(WebpushConfig.builder().putHeader("ttl", "300")
                         .setNotification(new WebpushNotification(notificationRequest.getTitle(),
-                                notificationRequest.getMessage()))
+                                notificationRequest.getBody()))
                         .build())
                 .build();
 

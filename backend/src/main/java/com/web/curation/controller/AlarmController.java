@@ -1,7 +1,10 @@
 package com.web.curation.controller;
 
+import com.web.curation.dao.alarm.AlarmDao;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
+import com.web.curation.model.alarm.Alarm;
+import com.web.curation.model.alarm.AlarmRequest;
 import com.web.curation.model.user.User;
 import com.web.curation.service.alarm.NotificationService;
 import io.swagger.annotations.ApiResponse;
@@ -36,7 +39,10 @@ public class AlarmController {
     @Autowired
     UserDao userDao;
 
-    @PostMapping("/register")
+    @Autowired
+    AlarmDao alarmDao;
+
+    @PostMapping("/alarm/register")
     public ResponseEntity register(@RequestBody String token) {
         Authentication user = SecurityContextHolder.getContext().getAuthentication();
         ResponseEntity response = null;
@@ -45,26 +51,42 @@ public class AlarmController {
             return response;
         } else {
             UserDetails user2 = (UserDetails) user.getPrincipal();
-            Optional<User> loginUser = userDao.findByEmail(user2.getUsername());
-            notificationService.register(loginUser.get().getUid(), token);
-            return ResponseEntity.ok().build();
+            Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
+            User user3 = new User(userOpt.get().getUid(), userOpt.get().getNickname(), userOpt.get().getEmail(),
+                    userOpt.get().getPassword(), userOpt.get().getIntroduction(), userOpt.get().getThumbnail(),
+                    token, userOpt.get().getArticles(), userOpt.get().getRoles());
+            userDao.save(user3);
+            response = new ResponseEntity<>("Success", HttpStatus.OK);
         }
+        return response;
     }
 
-//    @RequestMapping(value = "/alarmTest")
-//    public String main(){
-//        return "script.html";
-//    }
+    @PostMapping("/alarm")
+    public ResponseEntity sendAlarm(@RequestBody AlarmRequest request) {
+        Authentication user = SecurityContextHolder.getContext().getAuthentication();
+        ResponseEntity response = null;
+        if (user.getPrincipal() == "anonymousUser") {
+            response = new ResponseEntity<>("Fail", HttpStatus.UNAUTHORIZED);
+            return response;
+        } else {
+            UserDetails user2 = (UserDetails) user.getPrincipal();
+            Optional<User> sender = userDao.findByEmail(user2.getUsername());
+            Optional<User> receiver = userDao.findByNickname(request.getReceiverKickname());
+            Long alarmId = alarmDao.save(Alarm.builder()
+                    .alarmid(null)
+                    .receiveuid(receiver.get().getUid())
+                    .senderuid(sender.get().getUid())
+                    .title(request.getTitle())
+                    .body(request.getBody())
+                    .checkalarm(false)
+                    .category(request.getCategory()).build()
+            ).getAlarmid();
+            notificationService.sendNotification(alarmDao.getOne(alarmId), receiver.get().getAlarmtoken());
+            response = new ResponseEntity<>("OK", HttpStatus.OK);
+        }
+        return response;
+    }
 
-
-
-
-//    @GetMapping("/alarm/send")
-//    @ApiOperation(value = "Test Alarm Token")
-//    public void sendNotification(@RequestParam String registrationToken,
-//                                 @RequestParam String title,
-//                                 @RequestParam String Body) throws IOException{
-//        firebaseCloudMessageService.sendMessageTo(registrationToken, title, Body);
-//
-//    }
 }
+
+
