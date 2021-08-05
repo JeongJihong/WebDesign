@@ -43,7 +43,8 @@
     </div>
     <hr>
 
-    <div v-for="image in 9" :key="image" class="square img_1">
+    <div v-for="image in this.articlesLength" :key="image" class="square" :style="{ 'background-image': 'url('+articles[image-1].images[0].imgURL+')' }">
+      <!-- <img :src="articles[image-1].images[0].imgURL" alt="image" style=""> -->
     </div>
 
   </div>
@@ -67,6 +68,8 @@ export default {
       didIrequestFollowToYou: false,
       didYouRequestFollowToMe: false,
       followid: 0,
+      articles: [],
+      articlesLength: 0,
     }
   },
   methods: {
@@ -120,6 +123,9 @@ export default {
         console.log(res.data)
         this.didIrequestFollowToYou = res.data.follow
         this.introduction = res.data.userProfile.introduction
+        this.articles = res.data.article
+        console.log('articles', this.articles)
+        this.articlesLength = this.articles.length
         this.checkFollowRequest()
         this.followerList()
       })
