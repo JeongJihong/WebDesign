@@ -1,14 +1,11 @@
 package com.web.curation.service.alarm;
 
-import com.web.curation.config.firebase.NotificationType;
-import com.web.curation.model.alarm.NotificationRequest;
-import com.web.curation.model.user.User;
+import com.web.curation.model.alarm.Alarm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -37,9 +34,9 @@ public class NotificationService {
         return tokenMap.get(userId);
     }
 
-    public void sendNotification(final NotificationRequest request) {
+    public void sendNotification(final Alarm request, String receiverToken) {
         try {
-            fcmService.send(request);
+            fcmService.send(request, receiverToken);
         } catch (InterruptedException | ExecutionException e) {
             logger.error(e.getMessage());
         }
@@ -54,29 +51,29 @@ public class NotificationService {
 //        }
 //    }
 
-    private void createReceiveNotification(User sender, User receiver) {
-//        if (receiver.isLogin()) {
-            NotificationRequest notificationRequest = NotificationRequest.builder()
-                    .title("POST RECEIVED")
-                    .token(getToken(receiver.getUid()))
-                    .message(NotificationType.POST_RECEIVED.generateNotificationMessage(sender, receiver))
-                    .build();
-            sendNotification(notificationRequest);
-//        }
-    }
+//    private void createReceiveNotification(User sender, User receiver) {
+////        if (receiver.isLogin()) {
+//            NotificationRequest notificationRequest = NotificationRequest.builder()
+//                    .title("POST RECEIVED")
+//                    .token(getToken(receiver.getUid()))
+//                    .message(NotificationType.POST_RECEIVED.generateNotificationMessage(sender, receiver))
+//                    .build();
+//            sendNotification(notificationRequest);
+////        }
+//    }
 
-    private void createTaggedNotification(User sender, List<User> receivers) {
-        receivers.stream()
-//                .filter(User::isLogin)
-                .forEach(receiver -> {
-                    NotificationRequest notificationRequest = NotificationRequest.builder()
-                            .title("POST TAGGED")
-                            .token(getToken(receiver.getUid()))
-                            .message(NotificationType.POST_TAGGED.generateNotificationMessage(sender, receiver))
-                            .build();
-                    sendNotification(notificationRequest);
-                });
-    }
+//    private void createTaggedNotification(User sender, List<User> receivers) {
+//        receivers.stream()
+////                .filter(User::isLogin)
+//                .forEach(receiver -> {
+//                    NotificationRequest notificationRequest = NotificationRequest.builder()
+//                            .title("POST TAGGED")
+//                            .token(getToken(receiver.getUid()))
+//                            .message(NotificationType.POST_TAGGED.generateNotificationMessage(sender, receiver))
+//                            .build();
+//                    sendNotification(notificationRequest);
+//                });
+//    }
 
 
 
