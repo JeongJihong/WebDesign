@@ -24,4 +24,9 @@ public interface PromisepeopleDao extends JpaRepository<Promisepeople, Long> {
 
     @Transactional
     void deleteAllByPromiseid(Long promiseid);
+
+    Promisepeople findByPromiseidAndUid(Long promiseid, Long uid);
+
+    @Transactional
+    void deleteByPromiseidAndUid(Long promiseid, Long uid);
 }
