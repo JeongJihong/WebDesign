@@ -4,6 +4,7 @@ import com.web.curation.model.promise.Promise;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 
@@ -15,6 +16,9 @@ public interface PromiseDao extends JpaRepository<Promise, Long> {
     List<Promise> waitingPromise(Long loginID);
 
     Promise findByPromiseid(Long promiseid);
+
+    @Transactional
+    void deleteByPromiseid(Long promiseid);
 
 //    @Query(value = "SELECT p.promiseid, p.type,  p.num, cp.peopleNum, p.title, p.promisetime " +
 //            "FROM promise p " +
