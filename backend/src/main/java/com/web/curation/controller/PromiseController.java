@@ -163,4 +163,27 @@ public class PromiseController {
         return response;
     }
 
+    @DeleteMapping("/promise/{promiseid}")
+    @ApiOperation(value = "약속 삭제")
+    public Object deletePromise(@PathVariable final Long promiseid){
+        Authentication user = SecurityContextHolder.getContext().getAuthentication();
+        ResponseEntity response = null;
+        if(user.getPrincipal() == "anonymousUser"){
+            response = new ResponseEntity<>("Fail", HttpStatus.UNAUTHORIZED);
+            return response;
+        }else {
+            UserDetails user2 = (UserDetails) user.getPrincipal();
+            Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
+            // 만약 지금 로그인 한 유저와 약속 생성자의 UID가 같다면(약속 권한 파악)
+            if(userOpt.get().getUid() == promiseDao.findByPromiseid(promiseid).getCreateruid()) {
+                promisePeopleDao.deleteAllByPromiseid(promiseid);
+                promiseDao.deleteByPromiseid(promiseid);
+                response = new ResponseEntity<>("약속 삭제 완료", HttpStatus.OK);
+            } else {
+                response = new ResponseEntity<>("약속 삭제 권한 없음", HttpStatus.UNAUTHORIZED);
+            }
+        }
+        return response;
+    }
+
 }
