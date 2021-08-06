@@ -238,4 +238,21 @@ public class PromiseController {
         return response;
     }
 
+    @DeleteMapping("/promise/people/{promiseid}")
+    @ApiOperation(value = "약속 불참")
+    public Object rejectPromise(@PathVariable final Long promiseid){
+        Authentication user = SecurityContextHolder.getContext().getAuthentication();
+        ResponseEntity response = null;
+        if(user.getPrincipal() == "anonymousUser"){
+            response = new ResponseEntity<>("Fail", HttpStatus.UNAUTHORIZED);
+            return response;
+        }else {
+            UserDetails user2 = (UserDetails) user.getPrincipal();
+            Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
+            promisePeopleDao.deleteByPromiseidAndUid(promiseid, userOpt.get().getUid());
+            response = new ResponseEntity<>("약속 불참 완료", HttpStatus.OK);
+        }
+        return response;
+    }
+
 }
