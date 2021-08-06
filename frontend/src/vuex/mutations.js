@@ -6,6 +6,9 @@ export default {
   LOGGED_USER_NAME(state, username) {
     state.username = username
   },
+  FIREBASE_TOKEN_GET(state, firebaseToken) {
+    state.firebaseToken = firebaseToken
+  },
 
   SEARCH_GET(state, searchGet) {
     state.searchGet = searchGet
@@ -34,6 +37,7 @@ export default {
 
   LOGOUT () {
     localStorage.removeItem('token') 
+    localStorage.removeItem('username') 
     location.reload(); 
   }
 
