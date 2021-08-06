@@ -1,7 +1,6 @@
 package com.web.curation.model.alarm;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.sun.tools.javah.Gen;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
