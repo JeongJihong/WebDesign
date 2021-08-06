@@ -7,8 +7,9 @@
         <span class="fw-bold">{{ this.title }}</span>
       </span>
       <!-- 한 시간 전인지 판단하는 변수 필요 ex) Date.now() -->
-      <button v-if="aHourAgo" style="color: #0d6efd;"
-        @click="goToPromiseLocations(this.$route.params.promiseid)">
+      <!-- 현재는 일단 활성화 -->
+      <button v-if="true" style="color: #0d6efd;"
+        @click="goToPromiseLocations()">
         지금 어디?</button>
       <button v-else style="color: grey;">지금 어디?</button>
     </div>
@@ -79,9 +80,10 @@
         <span v-else style="color: #0d6efd;">4</span>
         <hr style="width: 65%;">
       </div>
-      <b-list-group>
+      <!-- v-if 는 디버깅용 코드 -> 추후 수정 필요! -->
+      <b-list-group v-if="promiseDetail.promisePeople">
         <b-list-group-item
-          class="border-0 my-1" v-for="user in promisePeople" :key="user.uid"
+          class="border-0 my-1" v-for="user in promiseDetail.promisePeople" :key="user.uid"
           @click="goToProfile(user.nickname)">
           <div class="d-flex align-items-center">
             <span>
@@ -95,11 +97,29 @@
         </b-list-group-item>
       </b-list-group>
     </div>
+
+    <!-- 약속 취소  /  수락/거절 버튼 -->
+    <div class="mt-4 mx-3 pt-4">
+      <div v-if="promiseDetail.nickname === username"
+        class="d-flex justify-content-center">
+        <!-- 약속 생성자 nickname === 본인 닉네임 -> 약속 취소(promise db 삭제) -->
+        <button @click="promiseDetailDelete()"
+          class="me-4 btn-danger px-4 py-2 rounded">약속 취소하기</button>
+      </div>
+      <div v-else-if="promiseDetail.nickname !== username && promiseDetail.approve === 0"
+        class="d-flex justify-content-center">
+        <!-- 약속 생성자 nickname !== 본인 닉네임, approve === 0 -->
+        <button @click="promiseDetailReject()" class="me-4 btn-danger px-4 py-2 rounded">거절하기</button>
+        <button @click="promiseDetailAccept()" class="ms-4 btn-primary px-4 py-2 rounded">수락하기</button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
 import { mapState } from 'vuex'
+
 export default {
   data() {
     return {
@@ -121,6 +141,7 @@ export default {
   },
   created() {
     // console.log(Date.now())
+    // console.log(this.$route.params.promiseid)
     this.$store.dispatch('promiseDetailGet',
       { 
         token: this.token,
@@ -130,6 +151,7 @@ export default {
   computed: {
     ...mapState([
       'token',
+      'username',
       'promiseDetail'
     ])
   },
@@ -137,7 +159,8 @@ export default {
     goBack() {
       this.$router.go(-1)
     },
-    goToPromiseLocations(promiseid) {
+    goToPromiseLocations() {
+      let promiseid = this.$route.params.promiseid
       this.$router.push({ name: 'PromiseLocations', params: { promiseid } })
     },
     // kakao 지도 관련
@@ -170,6 +193,57 @@ export default {
     },
     goToProfile(nickname) {
       this.$router.push({ name: 'ProfileDetail', params: { nickname } })
+    },
+    promiseDetailDelete() {
+      if (this.promiseDetail.nickname === this.username) {
+        axios({
+          url: `http://127.0.0.1:8080/promise/${this.$route.params.promiseid}`,
+          method: "delete",
+          headers: {
+            "Content-Type": "application/json",
+            "X-AUTH-TOKEN": this.token
+          },
+        })
+          .then(() => {
+            this.$router.push({ name: 'PromiseList' })
+          })
+      }
+    },
+    promiseDetailAccept() {
+      if (this.promiseDetail.nickname === this.username) {
+        axios({
+          url: `http://127.0.0.1:8080/promise/people/${this.$route.params.promiseid}`,
+          method: "post",
+          headers: {
+            "Content-Type": "application/json",
+            "X-AUTH-TOKEN": this.token
+          },
+          data: {
+            nickname: this.username,
+          }
+        })
+          .then(() => {
+            let payload = {
+              token: this.token,
+              promiseid: this.$route.params.promiseid
+            }
+          })
+      }
+    },
+    promiseDetailReject() {
+      if (this.promiseDetail.nickname === this.username) {
+        axios({
+          url: `http://127.0.0.1:8080/promise/people/${this.$route.params.promiseid}`,
+          method: "delete",
+          headers: {
+            "Content-Type": "application/json",
+            "X-AUTH-TOKEN": this.token
+          }
+        })
+          .then(() => {
+            this.$router.go(-1)
+          })
+      }
     }
   }
 }
