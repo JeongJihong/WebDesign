@@ -149,6 +149,7 @@ export default {
     },
   },
 };
+//
 </script>
 <style scoped>
 #carousel-1{

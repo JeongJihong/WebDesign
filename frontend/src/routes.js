@@ -16,6 +16,7 @@ import ArticleDetail from '@/views/article/ArticleDetail.vue'
 import PromiseList from '@/views/promise/PromiseList.vue'
 import PromiseCreate from '@/views/promise/PromiseCreate.vue'
 import PromiseDetail from '@/views/promise/PromiseDetail.vue'
+import PromiseLocations from '@/views/promise/PromiseLocations'
 
 import Vue from 'vue'
 import VueRouter from 'vue-router'
@@ -155,6 +156,14 @@ const routes = [
         path: '/promise/:promiseid',
         name: 'PromiseDetail',
         component: PromiseDetail,
+        meta: {
+            loggedAuth: true
+        }
+    },
+    {
+        path: '/promise/place/:promiseid',
+        name: 'PromiseLocations',
+        component: PromiseLocations,
         meta: {
             loggedAuth: true
         }

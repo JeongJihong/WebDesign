@@ -1,9 +1,7 @@
 <template>
   <div class="m-4">
     <div class="d-flex">
-      <button>
-        <h1> ← </h1>
-      </button>
+      <button @click="goBack"><b-icon icon="arrow-left" class="fs-1 me-4"></b-icon></button>
       &nbsp;&nbsp;&nbsp;&nbsp;
       <h1>
         팔로잉/팔로우
@@ -14,7 +12,7 @@
       <b-tabs content-class="mt-3" fill>
         <b-tab :title="'팔로워 (' + followers + ')'" active>
           <b-list-group>
-            <b-list-group-item class="listgroupitem" variant="light" href="#some-link" v-for="person in this.followers" :key="person">
+            <b-list-group-item class="listgroupitem" variant="light" v-for="person in this.followers" :key="person">
               <div class="d-flex" style="align-items:center" @click="goToProfileDetailFromFollower({person})">
                 <img src="@/assets/images/profile_default.png" alt="image" style="width: 40px; height: 40px" >
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -25,7 +23,7 @@
         </b-tab>
         <b-tab :title="'팔로잉 (' + followings + ')'" active>
           <b-list-group>
-            <b-list-group-item class="listgroupitem" variant="light" href="#some-link" v-for="person in this.followings" :key="person">
+            <b-list-group-item class="listgroupitem" variant="light" v-for="person in this.followings" :key="person">
               <div class="d-flex" style="align-items:center" @click="goToProfileDetailFromFollowing({person})">
                 <img src="@/assets/images/profile_default.png" alt="image" style="width: 40px; height: 40px" >
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -52,6 +50,9 @@ export default {
     }
   },
   methods: {
+    goBack() {
+      this.$router.go(-1)
+    },
     followerList () {
       axios({
         method: 'get',
