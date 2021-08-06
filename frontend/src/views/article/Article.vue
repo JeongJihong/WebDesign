@@ -33,7 +33,7 @@
         <p> {{ article.articleDetail.review }} </p>
         <ul class="d-flex justify-content-left" style="padding-left:3px;">
           <li v-if="article.likeCheck"><b-icon  @click="articleLike(article.articleDetail.articleid)" id="likestat" icon="hand-thumbs-up" scale="1.5" variant="danger"></b-icon></li>
-          <li v-else><b-icon  @click="articleLike(article.articleDetail.articleid)" id="likestat" icon="hand-thumbs-up" scale="1.5" variant="secondary"></b-icon></li>
+          <li v-else><b-icon @click="articleLike(article.articleDetail.articleid)" id="likestat" icon="hand-thumbs-up" scale="1.5" variant="secondary"></b-icon></li>
           
           <li v-if="article.scrapCheck"><b-icon icon="tags-fill" scale="1.5" variant="primary"></b-icon></li>
           <li v-else><b-icon icon="tags" scale="1.5" variant="primary"></b-icon></li>
