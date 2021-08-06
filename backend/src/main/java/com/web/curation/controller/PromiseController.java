@@ -186,4 +186,56 @@ public class PromiseController {
         return response;
     }
 
+    @GetMapping("/promise/{promiseid}")
+    @ApiOperation(value = "약속 목록 확인하기")
+    public Object getPromiseList(@PathVariable(required = true) final Long promiseid) {
+        Authentication user = SecurityContextHolder.getContext().getAuthentication();
+        ResponseEntity response = null;
+        if(user.getPrincipal() == "anonymousUser"){
+            response = new ResponseEntity<>("Fail", HttpStatus.UNAUTHORIZED);
+            return response;
+        }else {
+            UserDetails user2 = (UserDetails) user.getPrincipal();
+            Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
+
+            // 내가 확인하고 싶은 약속
+            Promise promise = promiseDao.findByPromiseid(promiseid);
+
+            // 해당 약속에 관련된 나의 정보
+            Promisepeople myPromise = promisePeopleDao.findByPromiseidAndUid(promiseid, userOpt.get().getUid());
+
+            int approve = -1;
+            if(myPromise != null) {
+                approve = myPromise.getApprove();
+            }
+
+            // 해당 약속에 참여하는 사람
+            List<Promisepeople> promisepeopleList = promisePeopleDao.findAllByPromiseidAndApprove(promiseid, 1);
+
+            Boolean isCreater = false;
+            // 만약 내가 해당 약속의 생성자라면
+            if(userOpt.get().getUid() == promise.getCreateruid()) {
+                isCreater = true;
+            }
+            
+            Map result = new HashMap<String, Object>();
+            result.put("isCreater", isCreater);
+            result.put("title", promise.getTitle());
+            result.put("type", promise.getType());
+            result.put("promisetime", promise.getPromisetime());
+            result.put("num", promise.getNum());
+            result.put("createrUid", promise.getCreateruid());
+            result.put("createrNickname", promise.getNickname());
+            result.put("peopleNum", promisepeopleList.size());
+            result.put("promisePeople", promisepeopleList);
+            result.put("place", promise.getPlace());
+            result.put("lat", promise.getLat());
+            result.put("lon", promise.getLon());
+            result.put("approve", approve);
+            response = new ResponseEntity<>(result, HttpStatus.OK);
+
+        }
+        return response;
+    }
+
 }
