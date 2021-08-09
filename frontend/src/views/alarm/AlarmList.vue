@@ -7,50 +7,68 @@
     </div>
 
     <div class="mt-4 pt-4">
-      <div v-if="this.click === 'Like'">
-        <b-list-group>
-          <b-list-group-item
-            class="border-0 my-1" v-for="user in likeList" :key="user.senderUid"
-            @click="goToArticle(user.detail)">
-            <div class="d-flex align-items-center">
-              <span>
-                <img v-if="user.thumnail" :src="user.thumnail"
-                  :alt="user.senderNickname + '님의 프로필'">
-              </span>
-              <span>{{ user.senderNickname }}님이 좋아요를 누르셨습니다.</span>
-            </div>
-          </b-list-group-item>
-        </b-list-group>
+        <div v-if="this.click === 'Like'">
+          <div v-if="this.likeList.length === 0"
+            class="d-flex justify-content-center">
+          <p>좋아요 알람이 존재하지 않습니다. 😥</p>
+        </div>
+        <div v-else>
+          <b-list-group>
+            <b-list-group-item
+              class="border-0 my-1" v-for="user in likeList" :key="user.senderUid"
+              @click="goToArticle(user.detail)">
+              <div class="d-flex align-items-center">
+                <span>
+                  <img v-if="user.thumnail" :src="user.thumnail"
+                    :alt="user.senderNickname + '님의 프로필'">
+                </span>
+                <span>{{ user.senderNickname }}님이 좋아요를 누르셨습니다.</span>
+              </div>
+            </b-list-group-item>
+          </b-list-group>
+        </div>
       </div>
       <div v-else-if="this.click === 'Follow'">
-        <b-list-group>
-          <b-list-group-item
-            class="border-0 my-1" v-for="user in followList" :key="user.senderUid"
-            @click="goToProfile(user.senderNickname)">
-            <div class="d-flex align-items-center">
-              <span>
-                <img v-if="user.thumnail" :src="user.thumnail"
-                  :alt="user.senderNickname + '님의 프로필'">
-              </span>
-              <span>{{ user.senderNickname }}님의 팔로우 요청이 왔습니다.</span>
-            </div>
-          </b-list-group-item>
-        </b-list-group>
+        <div v-if="this.followList.length === 0"
+          class="d-flex justify-content-center">
+          <p>팔로우 요청이 존재하지 않습니다. 😥</p>
+        </div>
+        <div v-else>
+          <b-list-group>
+            <b-list-group-item
+              class="border-0 my-1" v-for="user in followList" :key="user.senderUid"
+              @click="goToProfile(user.senderNickname)">
+              <div class="d-flex align-items-center">
+                <span>
+                  <img v-if="user.thumnail" :src="user.thumnail"
+                    :alt="user.senderNickname + '님의 프로필'">
+                </span>
+                <span>{{ user.senderNickname }}님의 팔로우 요청이 왔습니다.</span>
+              </div>
+            </b-list-group-item>
+          </b-list-group>
+        </div>
       </div>
       <div v-else>
-        <b-list-group>
-          <b-list-group-item
-            class="border-0 my-1" v-for="user in promiseList" :key="user.senderUid"
-            @click="goToPromise(user.detail)">
-            <div class="d-flex align-items-center">
-              <span>
-                <img v-if="user.thumnail" :src="user.thumnail"
-                  :alt="user.senderNickname + '님의 프로필'">
-              </span>
-              <span>{{ user.senderNickname }}님의 약속 초대가 왔습니다.</span>
-            </div>
-          </b-list-group-item>
-        </b-list-group>
+        <div v-if="Object.keys(this.promiseList).length === 0"
+          class="d-flex justify-content-center">
+          <p>약속 요청이 존재하지 않습니다. 😥</p>
+        </div>
+        <div v-else>
+          <b-list-group>
+            <b-list-group-item
+              class="border-0 my-1" v-for="user in promiseList" :key="user.senderUid"
+              @click="goToPromise(user.detail)">
+              <div class="d-flex align-items-center">
+                <span>
+                  <img v-if="user.thumnail" :src="user.thumnail"
+                    :alt="user.senderNickname + '님의 프로필'">
+                </span>
+                <span>{{ user.senderNickname }}님의 약속 초대가 왔습니다.</span>
+              </div>
+            </b-list-group-item>
+          </b-list-group>
+        </div>
       </div>
     </div>
 

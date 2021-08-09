@@ -47,7 +47,7 @@ messaging.usePublicVapidKey(
 
 // 알림 수신을 위한 사용자 권한 요청
 Notification.requestPermission().then((permission) => {
-  console.log("permission ", permission);
+  // console.log("permission ", permission);
   if (permission !== "granted") {
     alert("알림을 허용해주세요");
   }
@@ -56,7 +56,7 @@ Notification.requestPermission().then((permission) => {
 // TODO: Send token to server for send notification
 // messaging.getToken().then(console.log);
 messaging.getToken().then((res) => {
-  console.log(res)
+  // console.log(res)
   store.dispatch('firebaseTokenGet', res)
 });
 
