@@ -5,6 +5,7 @@ import com.web.curation.model.promise.Promisepeople;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 public interface PromisepeopleDao extends JpaRepository<Promisepeople, Long> {
@@ -20,4 +21,12 @@ public interface PromisepeopleDao extends JpaRepository<Promisepeople, Long> {
             "and TIMESTAMP(promisetime) >= TIMESTAMP(NOW()) " +
             "and approve >= 1", nativeQuery = true)
     List<Promisepeople> upcomingPromise(Long loginID);
+
+    @Transactional
+    void deleteAllByPromiseid(Long promiseid);
+
+    Promisepeople findByPromiseidAndUid(Long promiseid, Long uid);
+
+    @Transactional
+    void deleteByPromiseidAndUid(Long promiseid, Long uid);
 }
