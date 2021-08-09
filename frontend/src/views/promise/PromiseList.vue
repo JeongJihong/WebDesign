@@ -7,6 +7,7 @@
     <br>
     <ul>
       <h2>대기중인 약속!</h2>
+      <br>
       <li><img src="../../assets/images/game-icon.svg" alt="game"> 3/5 레온고? 08.03 20:00</li>
       <li><img src="../../assets/images/food-icon.svg" alt="game"> 3/5 레온? 08.04 20:00</li>
       <li><img src="../../assets/images/study-icon.svg" alt="game"> 3/5 ㄹㅇㄱ 08.05 20:00</li>
@@ -15,6 +16,7 @@
     <hr>
     <ul>
       <h2>다가오는 약속!</h2>
+      <br>
       <li><img src="../../assets/images/game-icon.svg" alt="game"> 2명 롤 5인팟   08.04.14:00</li>
       <li><img src="../../assets/images/food-icon.svg" alt="game"> 3명 파스타 먹을사람  08.06.12:00</li>
       <li><img src="../../assets/images/study-icon.svg" alt="game"> 5명 면접준비스터디  08.05.14:00</li>

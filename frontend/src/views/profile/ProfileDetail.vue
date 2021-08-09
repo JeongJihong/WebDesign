@@ -126,7 +126,12 @@ export default {
         this.introduction = res.data.userProfile.introduction
         this.articles = res.data.article
         console.log('articles', this.articles)
-        this.articlesLength = this.articles.length
+        if (this.articles === null) {
+          this.articlesLength = 0
+        }
+        else {
+          this.articlesLength = this.articles.length
+        }
         this.thumbnail = res.data.userProfile.thumbnail
         console.log(this.thumbnail)
         if (typeof this.thumbnail === 'undefined') {
@@ -213,8 +218,8 @@ export default {
         },
       })
       .then((res) => {
-        // console.log('팔로워 불러오기')
-        // console.log(res.data)
+        console.log('팔로워 불러오기')
+        console.log(res.data)
         this.followerLs = res.data
         this.followers = this.followerLs.length
 

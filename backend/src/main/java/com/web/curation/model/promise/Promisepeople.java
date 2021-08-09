@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Builder
-public class PromisePeople {
+public class Promisepeople {
 
     @Id
     @Column(name = "promisepeopleid")

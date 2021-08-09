@@ -11,22 +11,25 @@
 
     <!-- 프로필 수정 -->
     <div>
-      <!-- 프로필 사진 수정 -->
-      <div class="mt-5 mx-3 d-flex justify-content-center">
-        <span class="dot"></span>
-      </div>
-      
-      <!-- Username, 본인 소개글 수정 -->
-      <div>
-        <div class="mt-5 mx-3">
-          <!-- Username -->
-          <b-form-input v-model="userInfo.nickname" placeholder="username" type="text"></b-form-input>
+      <form enctype = "multipart/form-data" method="patch" >
+        <!-- 프로필 사진 수정 -->
+        <div class="mt-5 mx-3 d-flex justify-content-center">
+          <img @click.prevent="clickInputTag()" id='addimage' :src="thumbnail" alt="image" class="dot">
+          <input hidden ref="plus" id="file" type="file"  accept="image/*" @change.prevent="uploadImage($event)" multiple>
         </div>
-        <div class="mt-3 mx-3">
-          <!-- 본인 소개글 -->
-          <b-form-textarea v-model="userInfo.introduction" placeholder="본인 소개글" rows="3" max-rows="6"></b-form-textarea>
+        
+        <!-- Username, 본인 소개글 수정 -->
+        <div>
+          <div class="mt-5 mx-3">
+            <!-- Username -->
+            <b-form-input v-model="userInfo.nickname" placeholder="username" type="text"></b-form-input>
+          </div>
+          <div class="mt-3 mx-3">
+            <!-- 본인 소개글 -->
+            <b-form-textarea v-model="userInfo.introduction" placeholder="본인 소개글" rows="3" max-rows="6"></b-form-textarea>
+          </div>
         </div>
-      </div>
+      </form>
 
       <!-- 비밀번호 변경 버튼 -->
       <div class="mt-4 mx-3 d-grid">
@@ -49,8 +52,9 @@ export default {
         // uid: '',
         introduction: '',
         nickname: '',
-        file: '@/assets/images/profile_default.png',
+        file: File,
       },
+      thumbnail: '',
       myUid:'',
     }
   },
@@ -58,14 +62,34 @@ export default {
     goBack() {
       this.$router.go(-1)
     },
+    clickInputTag() {
+      this.$refs['plus'].click()
+    },
+    uploadImage(event) { 
+      console.log(event.target.files)
+      console.log(event.target.files[0], typeof event.target.files[0])
+      this.userInfo.file = event.target.files[0]
+      console.log(this.userInfo.file)
+
+
+      var reader = new FileReader();
+      reader.onload = function(event) {
+        console.log(event.target)
+        var img = document.querySelector("#addimage")
+        img.setAttribute("src", event.target.result)
+      }
+      reader.readAsDataURL(event.target.files[0])
+    },
     updateProfileInfo: function () {
-      console.log(this.$store.state.token)
+      const formData = new FormData();
+      formData.append("nickname", this.userInfo.nickname);
+      formData.append("introduction", this.userInfo.introduction);
+      formData.append("file", this.userInfo.file);
       axios({
         method: 'patch',
         url: 'http://127.0.0.1:8080/account/profile/',
-        params: this.userInfo,
+        data: formData,
         headers: {
-          // 'Content-Type': 'application/json',
           'Content-Type': 'multipart/form-data',
           'X-AUTH-TOKEN' : this.$store.state.token
         },
@@ -90,9 +114,16 @@ export default {
         },
       })
       .then((res) => {
-        this.userInfo.uid = res.data.uid
-        this.userInfo.nickname = res.data.nickname
-        this.userInfo.introduction = res.data.introduction
+        console.log(res.data)
+        this.userInfo.uid = res.data.userProfile.uid
+        this.userInfo.nickname = res.data.userProfile.nickname
+        this.userInfo.introduction = res.data.userProfile.introduction
+        this.thumbnail = res.data.userProfile.thumbnail
+        console.log(this.thumbnail)
+        if (typeof this.thumbnail === 'undefined') {
+          this.thumbnail = require(`@/assets/images/profile_default.png`)
+        }
+        this.fixThumbnailURL()
       })
       .catch((err) => {
         console.log(err)
@@ -102,6 +133,13 @@ export default {
       this.$router.push({
         name: 'ChangePassword',
       })
+    },
+    fixThumbnailURL () {
+      var tmp = this.thumbnail.split('Desktop/')[1];
+      console.log('이건 왜 안돼', tmp)
+      tmp = 'http://localhost:3000/' + tmp;
+      this.thumbnail = tmp;
+      console.log('새로 바뀐 이미지 url', this.thumbnail)
     }
   },
   created () {
@@ -115,9 +153,8 @@ export default {
       },
     })
     .then((res) => {
-      this.myUid=res.data.uid
+      this.userInfo.nickname = this.$store.state.username
       this.getUserInfo()
-      console.log(this.myUid)
     })
     .catch((err) => {
       console.log(err)
