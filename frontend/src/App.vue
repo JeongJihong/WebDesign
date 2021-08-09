@@ -58,11 +58,9 @@ export default {
   },
   watch: {
     $route () {
-      console.log('일단 확인')
       if (this.$route.name === 'FeedMain') {
         this.navShow = true
         this.backShow = false
-        console.log('메인 맞음')
       } 
       else if (this.$route.name === 'ArticleCreate' || this.$route.name === 'ArticleDetail' || this.$route.name === 'Comments' || this.$route.name === 'PromiseCreate' || this.$route.name === 'PromiseList') {
         this.navShow = false
@@ -71,16 +69,13 @@ export default {
       else {
         this.navShow = false
         this.backShow = false
-        console.log('메인 아님')
       }
     }
   },
   created() {
-    console.log('일단 확인')
     if (this.$route.name === 'FeedMain') {
       this.navShow = true
       this.backShow = false
-      console.log('메인 맞음')
     }  
     else if (this.$route.name === 'ArticleCreate' || this.$route.name === 'ArticleDetail' || this.$route.name === 'Comments') {
         this.navShow = false
@@ -89,7 +84,6 @@ export default {
     else {
       this.navShow = false
       this.backShow = false
-      console.log('메인 아님')
     }
   },
   methods:{
