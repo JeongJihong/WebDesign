@@ -209,7 +209,7 @@ export default {
       }
     },
     promiseDetailAccept() {
-      if (this.promiseDetail.createrNickname === this.username && promiseDetail.approve === 0) {
+      if (this.promiseDetail.createrNickname === this.username && this.promiseDetail.approve === 0) {
         axios({
           url: `http://127.0.0.1:8080/promise/people/${this.$route.params.promiseid}`,
           method: "post",
@@ -230,7 +230,7 @@ export default {
       }
     },
     promiseDetailReject() {
-      if (this.promiseDetail.createrNickname === this.username && promiseDetail.approve === 0) {
+      if (this.promiseDetail.createrNickname === this.username && this.promiseDetail.approve === 0) {
         axios({
           url: `http://127.0.0.1:8080/promise/people/${this.$route.params.promiseid}`,
           method: "delete",
