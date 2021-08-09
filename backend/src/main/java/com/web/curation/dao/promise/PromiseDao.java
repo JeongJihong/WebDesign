@@ -16,7 +16,6 @@ public interface PromiseDao extends JpaRepository<Promise, Long> {
 
     Promise findByPromiseid(Long promiseid);
 
-    Optional<Promise> findByPromiseid(Long id);
 
     @Transactional
     void deleteByPromiseid(Long promiseid);

@@ -164,8 +164,8 @@ public class AlarmController {
             Map mapResult = new HashMap<String, Object>();
             for(int i = 0; i < alarm.size(); i++){
                 Optional<User> tempUser = userDao.findByUid(alarm.get(i).getSenderuid());
-                Optional<Promise> promiseUser= promiseDao.findByPromiseid(alarm.get(0).getDetail());
-                String type = promiseUser.get().getType();
+                Promise promiseUser= promiseDao.findByPromiseid(alarm.get(0).getDetail());
+                String type = promiseUser.getType();
                 result.add(new LikeFollowRequest(tempUser.get().getUid(), tempUser.get().getNickname(),
                         tempUser.get().getThumbnail(), alarm.get(i).getTitle(), alarm.get(i).getBody(),
                         alarm.get(i).getCheckalarm(), alarm.get(i).getCategory(), alarm.get(i).getDetail()));
