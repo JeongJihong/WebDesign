@@ -238,16 +238,11 @@ export default {
         "X-AUTH-TOKEN": payload.token,
       },
     })
-      .then((res) => {
-        commit("PROMISE_DETAIL_GET", res.data);
-      })
-      .then(() => {
-        if (![0, 1].includes(this.$store.state.promiseDetail.apporve)) {
-          this.$router.go(-1)
-        }
+      .then(res => {
+        commit("PROMISE_DETAIL_GET", res.data)
       })
       .catch(() => {
-        console.log(payload.promiseid + "번 id의 상세 페이지 GET 실패");
+        router.push({ name: 'PromiseList' })
       });
   },
 

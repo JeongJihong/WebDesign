@@ -1,9 +1,8 @@
 package com.web.curation.dao.promise;
-
 import com.web.curation.model.promise.Promise;
 import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.Query;
-
 import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
@@ -16,6 +15,7 @@ public interface PromiseDao extends JpaRepository<Promise, Long> {
     List<Promise> waitingPromise(Long loginID);
 
     Promise findByPromiseid(Long promiseid);
+
 
     @Transactional
     void deleteByPromiseid(Long promiseid);
