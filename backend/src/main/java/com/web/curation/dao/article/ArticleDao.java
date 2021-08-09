@@ -20,7 +20,9 @@ public interface ArticleDao extends JpaRepository<Article, Long> {
 
     List<Article> findAllByIdIn(List<Long> articleid);
 
-    Page<Article> findAllByIdInOrderByArticleidDesc(List<Long> followingIds, Pageable pageable);
+//    Page<Article> findAllByIdInOrderByArticleidDesc(List<Long> followingIds, Pageable pageable);
+
+    List<Article> findAllByIdInOrderByArticleidDesc(List<Long> followingIds);
 
     @Query(value = "select * from", nativeQuery = true)
     List<Article> selectListLimit(int size);
