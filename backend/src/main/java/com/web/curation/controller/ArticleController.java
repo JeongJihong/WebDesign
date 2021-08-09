@@ -201,7 +201,7 @@ public class ArticleController {
 
             Map result = new HashMap<String, Object>();
             result.put("pageList", requestPage.getPageList());
-            result.put("pageCount", requestPage.getPageCount());
+            result.put("totalPages", requestPage.getPageCount());
             return new ResponseEntity<>(result, HttpStatus.OK);
         }
     }
