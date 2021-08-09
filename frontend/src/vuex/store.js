@@ -16,6 +16,7 @@ const state = {
 
     likeList: [],
     followList: [],
+    promiseList: [],
 
     searchGet: [],
     searchLive: {},
