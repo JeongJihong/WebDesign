@@ -72,6 +72,8 @@ public class PromiseController {
             UserDetails user2 = (UserDetails) user.getPrincipal();
             Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
 
+            System.out.println(promise.getPromisetime());
+
             // 약속 정보 Promise table에 저장
             Long promiseID =  promiseDao.save(Promise.builder()
                             .createruid(userOpt.get().getUid())
