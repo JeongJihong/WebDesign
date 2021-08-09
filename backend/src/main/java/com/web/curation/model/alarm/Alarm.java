@@ -33,6 +33,8 @@ public class Alarm {
 //    @Column(name = "category")
     private String category;
 
+    private Long detail;
+
 //    @Builder
 //    public Alarm( Long receiveuid, Long senderuid, String title, String body, Boolean check, String category){
 //

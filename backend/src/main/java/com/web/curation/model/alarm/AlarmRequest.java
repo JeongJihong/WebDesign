@@ -13,11 +13,12 @@ import javax.validation.constraints.Null;
 public class AlarmRequest {
 
     @NotNull
-    private String receiverKickname;
+    private String receiverNickname;
     @NotNull
     private String title;
     @NotNull
     private String body;
     private Boolean check;
     private String category;
+    private Long detail;
 }
