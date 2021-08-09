@@ -107,7 +107,8 @@ public class ArticleController {
 
     @PostMapping(value = "/article", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ApiOperation(value = "게시글 작성")
-    public Object postArticle(@RequestPart String content, @RequestPart(required = true) List<MultipartFile> files) throws IOException {
+    public Object postArticle(@RequestPart String content,
+                              @RequestPart(required = true) List<MultipartFile> files) throws IOException {
         Authentication user = SecurityContextHolder.getContext().getAuthentication();
         ResponseEntity response = null;
         if(user.getPrincipal() == "anonymousUser"){

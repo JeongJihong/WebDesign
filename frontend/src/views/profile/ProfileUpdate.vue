@@ -49,7 +49,7 @@ export default {
   data () {
     return{
       userInfo: {
-        uid: '',
+        // uid: '',
         introduction: '',
         nickname: '',
         file: File,

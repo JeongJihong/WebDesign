@@ -77,19 +77,22 @@
       </b-list-group>
     </div>
 
-    <!-- 약속 취소  /  수락/거절 버튼 -->
+    <!-- 약속 취소  /  수락/거절 버튼 / 불참 버튼-->
     <div class="mt-4 mx-3 pt-4">
       <div v-if="promiseDetail.createrNickname === username"
         class="d-flex justify-content-center">
-        <!-- 약속 생성자 nickname === 본인 닉네임 -> 약속 취소(promise db 삭제) -->
         <button @click="promiseDetailDelete()"
           class="ms-4 me-4 btn-danger px-4 py-2 rounded">약속 취소하기</button>
       </div>
       <div v-else-if="promiseDetail.createrNickname !== username && promiseDetail.approve === 0"
         class="d-flex justify-content-center">
-        <!-- 약속 생성자 nickname !== 본인 닉네임, approve === 0 -->
         <button @click="promiseDetailReject()" class="me-4 btn-danger px-4 py-2 rounded">거절하기</button>
         <button @click="promiseDetailAccept()" class="ms-4 btn-primary px-4 py-2 rounded">수락하기</button>
+      </div>
+      <div v-else-if="promiseDetail.createrNickname !== username && promiseDetail.approve === 1"
+        class="d-flex justify-content-center">
+        <button @click="promiseDetailRejectAfterAccept()"
+          class="ms-4 me-4 btn-danger px-4 py-2 rounded">불참하기</button>
       </div>
     </div>
   </div>
@@ -117,11 +120,11 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch('promiseDetailGet',
-      { 
-        token: this.token,
-        promiseid: this.$route.params.promiseid
-      })
+    let payload = {
+      token: this.token,
+      promiseid: this.$route.params.promiseid
+    }
+    this.$store.dispatch('promiseDetailGet', payload)
   },
   computed: {
     ...mapState([
@@ -218,16 +221,13 @@ export default {
       }
     },
     promiseDetailAccept() {
-      if (this.promiseDetail.createrNickname === this.username && this.promiseDetail.approve === 0) {
+      if (this.promiseDetail.createrNickname !== this.username && this.promiseDetail.approve === 0) {
         axios({
           url: `http://127.0.0.1:8080/promise/people/${this.$route.params.promiseid}`,
-          method: "post",
+          method: "put",
           headers: {
             "Content-Type": "application/json",
             "X-AUTH-TOKEN": this.token
-          },
-          data: {
-            nickname: this.username,
           }
         })
           .then(() => {
@@ -235,11 +235,12 @@ export default {
               token: this.token,
               promiseid: this.$route.params.promiseid
             }
+            this.$store.dispatch('promiseDetailGet', payload)
           })
       }
     },
     promiseDetailReject() {
-      if (this.promiseDetail.createrNickname === this.username && this.promiseDetail.approve === 0) {
+      if (this.promiseDetail.createrNickname !== this.username && this.promiseDetail.approve === 0) {
         axios({
           url: `http://127.0.0.1:8080/promise/people/${this.$route.params.promiseid}`,
           method: "delete",
@@ -250,6 +251,21 @@ export default {
         })
           .then(() => {
             this.$router.go(-1)
+          })
+      }
+    },
+    promiseDetailRejectAfterAccept() {
+      if (this.promiseDetail.createrNickname !== this.username && this.promiseDetail.approve === 1) {
+        axios({
+          url: `http://127.0.0.1:8080/promise/people/${this.$route.params.promiseid}`,
+          method: "delete",
+          headers: {
+            "Content-Type": "application/json",
+            "X-AUTH-TOKEN": this.token
+          }
+        })
+          .then(() => {
+            this.$router.push({ name: "PromiseList"})
           })
       }
     }
