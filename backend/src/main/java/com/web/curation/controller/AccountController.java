@@ -32,6 +32,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletContext;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.text.html.Option;
 import javax.validation.Valid;
@@ -63,11 +64,13 @@ public class AccountController {
     private final JwtTokenProvider jwtTokenProvider;
 
     final String rootPath = FileSystemView.getFileSystemView().getHomeDirectory().toString();
+//    final String rootPath = ;
     final String basePath = rootPath + "/" + "SNSImage" + "/" ;
 
 
     @GetMapping("/test")
     public String test(){
+        System.out.println(basePath);
         return "test Success";
     }
 
@@ -155,8 +158,9 @@ public class AccountController {
     }
 
     @PatchMapping(value = "/account/profile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//    @PostMapping(value = "/account/profile")
     @ApiOperation(value = "유저 프로필 정보 변경")
-    public Object changeUserProfile(@RequestPart(required = false) String nickname,
+    public Object changeUserProfile(@RequestPart(required = true) String nickname,
                                     @RequestPart(required = false) String introduction,
                                     @RequestPart(required = false) MultipartFile file) throws IOException {
         Authentication user = SecurityContextHolder.getContext().getAuthentication();

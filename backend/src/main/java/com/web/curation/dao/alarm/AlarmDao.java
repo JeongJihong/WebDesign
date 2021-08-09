@@ -3,7 +3,9 @@ package com.web.curation.dao.alarm;
 import com.web.curation.model.alarm.Alarm;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface AlarmDao extends JpaRepository<Alarm, Long> {
+import java.util.List;
 
+public interface AlarmDao extends JpaRepository<Alarm, Long> {
+    List<Alarm> findAllByReceiveuidAndCategory(Long receiveUid, String category);
 
 }

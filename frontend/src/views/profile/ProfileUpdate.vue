@@ -46,7 +46,7 @@ export default {
   data () {
     return{
       userInfo: {
-        uid: '',
+        // uid: '',
         introduction: '',
         nickname: '',
         file: '@/assets/images/profile_default.png',
@@ -65,7 +65,8 @@ export default {
         url: 'http://127.0.0.1:8080/account/profile/',
         params: this.userInfo,
         headers: {
-          'Content-Type': 'application/json',
+          // 'Content-Type': 'application/json',
+          'Content-Type': 'multipart/form-data',
           'X-AUTH-TOKEN' : this.$store.state.token
         },
       })
