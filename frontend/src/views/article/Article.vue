@@ -39,7 +39,7 @@
           <li v-else><b-icon icon="tags" scale="1.5" variant="primary"></b-icon></li>
           <li @click="getComments(article.articleDetail.articleid)"><b-icon icon="chat-dots" scale="1.5" variant="primary"></b-icon></li><span>{{ article.articleDetail.comments.length }}</span>
         </ul>
-        <p>{{ article.articleDetail.likeCount }} 명의 유저가 이글을 좋아합니다.</p>
+        <p>{{ article.likeCount }} 명의 유저가 이글을 좋아합니다.</p>
         <br>
       </div>
       <infinite-loading @infinite="infiniteHandler"></infinite-loading>
@@ -66,7 +66,6 @@ export default {
   },
   methods:{
     infiniteHandler($state) {
-      console.log('살아있음1');
       axios.get('http://127.0.0.1:8080/article/main', {
           headers: {
             'x-auth-token': `${localStorage.getItem('token')}`,
@@ -80,7 +79,8 @@ export default {
               $state.complete();
           }else{
               setTimeout(() => {
-                  const data = res.data.content;
+                  console.log(res.data)
+                  const data = res.data.pageList;
                             for(let key in data){
                                 this.articles.push(data[key])
                             }
