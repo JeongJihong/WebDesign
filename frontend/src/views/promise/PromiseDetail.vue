@@ -29,13 +29,13 @@
           <span class="fw-bold">약속 유형</span>
           <!-- 디버깅용 코드 -> v-if 지우고 v-else가 있는 span 지우기 -->
           <span v-if="promiseDetail.type" class="ms-2">{{ promiseDetail.type }}</span>
-          <span v-else class="ms-2">게임</span>
+          <span v-else class="ms-2">디버깅</span>
         </span>
         <span>
           <span class="fw-bold">약속 시간</span>
           <!-- 디버깅용 코드 -> v-if 지우고 v-else가 있는 span 지우기 -->
           <span v-if="promiseDetail.type" class="ms-2">{{ promiseDetail.promisetime }}</span>
-          <span v-else class="ms-2">8. 4. 19:00~24:00</span>
+          <span v-else class="ms-2">디버깅: 8. 6. 18:00</span>
         </span>
         <span class="d-flex justify-content-start align-items-center">
           <span class="fw-bold">모임 여부</span>
@@ -67,7 +67,7 @@
       <!-- 디버깅용 -> v-else 는 다 삭제 -->
       <span class="mt-1 me-1 d-flex justify-content-end">
         <span v-if="promiseDetail.place">{{ promiseDetail.place }}</span>
-        <span v-else>대전광역시 유성구 동서대로 98-39</span>
+        <span v-else>디버깅: 대전광역시 유성구 동서대로 98-39</span>
       </span>
     </div>
 
@@ -77,7 +77,7 @@
         <span class="fw-bold">약속 인원</span>
         <!-- 디버깅용 -> v-if 구문과 v-else 줄 지우기 -->
         <span v-if="promiseDetail.peopleNum" style="color: #0d6efd;">{{ promiseDetail.peopleNum }}</span>
-        <span v-else style="color: #0d6efd;">4</span>
+        <span v-else style="color: #0d6efd;">디버깅: 4</span>
         <hr style="width: 65%;">
       </div>
       <!-- v-if 는 디버깅용 코드 -> 추후 수정 필요! -->
@@ -100,13 +100,13 @@
 
     <!-- 약속 취소  /  수락/거절 버튼 -->
     <div class="mt-4 mx-3 pt-4">
-      <div v-if="promiseDetail.nickname === username"
+      <div v-if="promiseDetail.createrNickname === username"
         class="d-flex justify-content-center">
         <!-- 약속 생성자 nickname === 본인 닉네임 -> 약속 취소(promise db 삭제) -->
         <button @click="promiseDetailDelete()"
           class="me-4 btn-danger px-4 py-2 rounded">약속 취소하기</button>
       </div>
-      <div v-else-if="promiseDetail.nickname !== username && promiseDetail.approve === 0"
+      <div v-else-if="promiseDetail.createrNickname !== username && promiseDetail.approve === 0"
         class="d-flex justify-content-center">
         <!-- 약속 생성자 nickname !== 본인 닉네임, approve === 0 -->
         <button @click="promiseDetailReject()" class="me-4 btn-danger px-4 py-2 rounded">거절하기</button>
@@ -141,7 +141,6 @@ export default {
   },
   created() {
     // console.log(Date.now())
-    // console.log(this.$route.params.promiseid)
     this.$store.dispatch('promiseDetailGet',
       { 
         token: this.token,
@@ -195,7 +194,7 @@ export default {
       this.$router.push({ name: 'ProfileDetail', params: { nickname } })
     },
     promiseDetailDelete() {
-      if (this.promiseDetail.nickname === this.username) {
+      if (this.promiseDetail.createrNickname === this.username) {
         axios({
           url: `http://127.0.0.1:8080/promise/${this.$route.params.promiseid}`,
           method: "delete",
@@ -210,7 +209,7 @@ export default {
       }
     },
     promiseDetailAccept() {
-      if (this.promiseDetail.nickname === this.username) {
+      if (this.promiseDetail.createrNickname === this.username && promiseDetail.approve === 0) {
         axios({
           url: `http://127.0.0.1:8080/promise/people/${this.$route.params.promiseid}`,
           method: "post",
@@ -231,7 +230,7 @@ export default {
       }
     },
     promiseDetailReject() {
-      if (this.promiseDetail.nickname === this.username) {
+      if (this.promiseDetail.createrNickname === this.username && promiseDetail.approve === 0) {
         axios({
           url: `http://127.0.0.1:8080/promise/people/${this.$route.params.promiseid}`,
           method: "delete",

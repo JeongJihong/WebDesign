@@ -18,12 +18,13 @@ export default {
       },
     })
       .then((res) => {
-        // console.log('성공!', res.data)
+        let token = res.data
+
         commit("UPDATE_TOKEN", res.data);
         localStorage.setItem("token", res.data);
         // vuex 및 localStorage 에 로그인한 유저의 nickname 저장
         axios({
-          url: `http://127.0.0.1:8080/account/checkJWT`,
+          url: 'http://127.0.0.1:8080/account/checkJWT',
           method: "get",
           headers: {
             "Content-Type": "application/json",
@@ -33,7 +34,23 @@ export default {
           .then((res) => {
             commit("LOGGED_USER_NAME", res.data.nickname);
             localStorage.setItem("username", res.data.nickname);
-            router.push({ name: "FeedMain" });
+            
+            axios({
+              url: 'http://127.0.0.1:8080/alarm/register',
+              method: 'post',
+              headers: {
+                "Content-Type": "application/json",
+                "X-AUTH-TOKEN": token,
+              },
+              data: localStorage.getItem('firebaseToken')
+
+            })
+              .then(() =>
+                router.push({ name: "FeedMain" })
+              )
+              .catch((err) => {
+                console.log('Firebase Token POST Failed' + err)
+              })
           })
           .catch((err) => {
             alert(err);
@@ -43,6 +60,10 @@ export default {
         // console.log('에러!', err)
         alert(err);
       });
+  },
+  firebaseTokenGet({ commit }, firebaseToken) {
+    localStorage.setItem('firebaseToken', firebaseToken)
+    commit('FIREBASE_TOKEN_GET', firebaseToken)
   },
 
   searchGet({ commit }, token) {

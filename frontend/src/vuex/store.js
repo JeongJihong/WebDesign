@@ -12,6 +12,7 @@ const state = {
     // 로그인 관련 - 두호
     token: localStorage.getItem('token') || '',
     username: localStorage.getItem('username') || '',
+    firebaseToken: localStorage.getItem('firebaseToken') || '',
 
     likeList: [],
     followList: [],
