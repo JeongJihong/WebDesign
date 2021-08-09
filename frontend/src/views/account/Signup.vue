@@ -9,13 +9,13 @@
     <h1>가입하기</h1>
     <div class="form-wrap">
       <div class="input-with-label">
-        <input v-model="nickname" id="nickname" placeholder="닉네임을 입력하세요." type="text" />
+        <input  @change="reNickname()" v-model="nickname" id="nickname" placeholder="닉네임을 입력하세요." type="text" />
         <label for="nickname">닉네임</label>
         <b-button @click="confirmNickname()">중복확인</b-button>
       </div>
 
       <div class="input-with-label">
-        <input v-model="email" id="email" placeholder="이메일을 입력하세요." type="text" 
+        <input @change="reEmail()" v-model="email" id="email" placeholder="이메일을 입력하세요." type="text" 
         v-bind:class="{error : error.email, complete:!error.email&&email.length!==0}"
         />
         <label for="email">이메일</label>
@@ -45,20 +45,14 @@
         <label for="password-confirm">비밀번호 확인</label>
       </div>
     </div>
-
-    <label>
-      <input v-model="isTerm" type="checkbox" id="term" />
-      <span>약관을 동의합니다.</span>
-    </label>
-
-    <span @click="termPopup=true">약관보기</span>
+    
     <form @submit="checkForm" @submit.prevent="signup">
-      <div v-if="activeButton()">
+      <div v-if="activeButton() && isSubmit">
         <!-- <button @click="PopUpEmailModal" class="btn-bottom" >가입하기</button> -->
-        <button :disabled="!isSubmit" class="btn-bottom" >가입하기</button>
+        <button class="btn-bottom" >가입하기</button>
       </div>
       <div v-else>
-        <button :disabled="!isSubmit" class="btn-bottom disabled" >가입하기</button>
+        <button class="btn-bottom disabled" disabled >가입하기</button>
       </div>
     </form>
   </div>
@@ -80,6 +74,7 @@ export default {
       sameCheckPassword:false,
       nickname: "",
       nicknameConfirm:false,
+
       isTerm: false,
       isLoading: false,
       error: {
@@ -108,14 +103,24 @@ export default {
       .letters();
   },
   watch: {
+    nickname: function(v) {
+      this.nicknameConfirm=false;
+    },
     password: function(v) {
       this.checkForm();
     },
     email: function(v) {
+      this.emailConfirm=false;
       this.checkForm();
     },
   },
   methods:{
+    reEmail(){
+      this.emailConfirm = false
+    },
+    reNickname(){
+      this.nicknameConfirm = false
+    },
     confirmNickname(){
       axios({
         url:'http://127.0.0.1:8080/account/checkNickname',
@@ -129,8 +134,10 @@ export default {
           if (res.data === 'Fail'){
             alert('중복된 닉네임 입니다!')
             this.nickname=""
+            
           }else{
             alert('사용 가능한 닉네임 입니다.')
+            this.nicknameConfirm=true
           }
         })
         .catch(err=>{
@@ -152,6 +159,7 @@ export default {
             this.email=""
           }else{
             alert('사용 가능한 이메일 입니다.')
+            this.emailConfirm=true
           }
 
         })
@@ -175,6 +183,8 @@ export default {
         })
         .catch(err=>{
           console.log(err)
+          alert('가입이 불가능 합니다.')
+          
         })
     },
     checkPassword: function(){
@@ -186,18 +196,10 @@ export default {
       return false; }
     },
     activeButton: function(){
-      if(this.email && this.password && this.passwordConfirm && this.nickname && this.sameCheckPassword){
+      if(this.email && this.password && this.passwordConfirm && this.nickname && this.sameCheckPassword && this.nicknameConfirm && this.emailConfirm){
         return true;
       }else{ return false; }
     },
-    // checkForm(e) {
-    //   e.preventDefault();
-    //   this.errors = [];
-    //   if (!this.validateEmail(this.email)) {
-    //     alert("이메일 형식을 확인하세요.");
-    //   }
-    //   if (!this.errors.length) return true;
-    // },
     checkForm() {
       if (this.email.length >= 0 && !EmailValidator.validate(this.email))
         this.error.email = "이메일 형식이 아닙니다.";
@@ -207,7 +209,7 @@ export default {
         this.password.length >= 0 &&
         !this.passwordSchema.validate(this.password)
       )
-        this.error.password = "영문,숫자 포함 8 자리이상이어야 합니다.";
+        this.error.password = "영문,숫자,특수문자 포함 8 자리이상이어야 합니다.";
       else this.error.password = false;
 
       let isSubmit = true;
@@ -216,13 +218,6 @@ export default {
       });
       this.isSubmit = isSubmit;
     },
-    // validateEmail(email) {
-    // const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    // return re.test(String(email).toLowerCase());
-    // },
-    // PopUpEmailModal: function(){
-    //   alert('회원가입 인증메일이 발송되었습니다.')
-    // }
   }
 };
 </script>
