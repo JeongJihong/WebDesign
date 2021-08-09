@@ -7,7 +7,10 @@ import com.web.curation.dao.promise.PromisepeopleDao;
 import com.web.curation.dao.scrap.ScrapDao;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
+import com.web.curation.model.article.Article;
+import com.web.curation.model.article.ViewArticleRequest;
 import com.web.curation.model.promise.Promise;
+import com.web.curation.model.promise.PromiseLocationInfo;
 import com.web.curation.model.promise.PromiseResponse;
 import com.web.curation.model.promise.Promisepeople;
 import com.web.curation.model.user.User;
@@ -23,6 +26,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -255,4 +259,88 @@ public class PromiseController {
         return response;
     }
 
+    @PutMapping("/promise/people/{promiseid}")
+    @ApiOperation(value = "약속 참가하기")
+    public Object participatePromise(@PathVariable final Long promiseid) {
+        Authentication user = SecurityContextHolder.getContext().getAuthentication();
+        ResponseEntity response = null;
+        if(user.getPrincipal() == "anonymousUser"){
+            response = new ResponseEntity<>("Fail", HttpStatus.UNAUTHORIZED);
+            return response;
+        }else{
+            UserDetails user2 = (UserDetails) user.getPrincipal();
+            Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
+
+            Promisepeople promisepeople = promisePeopleDao.findByPromiseidAndUid(promiseid, userOpt.get().getUid());
+            Promisepeople newpeople = new Promisepeople(promisepeople.getPromisepeopleid(),
+                    promisepeople.getUid(), promisepeople.getPromiseid(), promisepeople.getCreateruid(),
+                    promisepeople.getUpdatedtime(), promisepeople.getNickname(), promisepeople.getLat(),
+                    promisepeople.getLon(), promisepeople.getThumbnail(), 1);
+
+            promisePeopleDao.save(newpeople);
+
+            Map result = new HashMap<String, Object>();
+            result.put("nickname", newpeople.getNickname());
+            result.put("updatedtime",newpeople.getUpdatedtime());
+            result.put("lat", newpeople.getLat());
+            result.put("lon", newpeople.getLon());
+            response = new ResponseEntity<>(result, HttpStatus.OK);
+
+            return response;
+        }
+    }
+
+    @PutMapping("promise/place/{promiseid}")
+    @ApiOperation(value = "특정 약속 참가자의 위도, 경도를 업데이트")
+    public Object participatePromise(@PathVariable final Long promiseid,
+                                     @RequestParam(required = true) BigDecimal lat, @RequestParam(required = true) BigDecimal lon) {
+        Authentication user = SecurityContextHolder.getContext().getAuthentication();
+        ResponseEntity response = null;
+        if(user.getPrincipal() == "anonymousUser"){
+            response = new ResponseEntity<>("Fail", HttpStatus.UNAUTHORIZED);
+            return response;
+        }else{
+            UserDetails user2 = (UserDetails) user.getPrincipal();
+            Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
+
+            Promisepeople promisepeople = promisePeopleDao.findByPromiseidAndUid(promiseid, userOpt.get().getUid());
+            Promisepeople newpeople = new Promisepeople(promisepeople.getPromisepeopleid(),
+                    promisepeople.getUid(), promisepeople.getPromiseid(), promisepeople.getCreateruid(),
+                    promisepeople.getUpdatedtime(), promisepeople.getNickname(), lat,
+                    lon, promisepeople.getThumbnail(), promisepeople.getApprove());
+
+            promisePeopleDao.save(newpeople);
+
+            Map result = new HashMap<String, Object>();
+            result.put("lat", newpeople.getLat());
+            result.put("lon", newpeople.getLon());
+            response = new ResponseEntity<>(result, HttpStatus.OK);
+
+            return response;
+        }
+    }
+
+    @GetMapping("promise/place/{promiseid}")
+    @ApiOperation(value = "약속 참가자들의 최근위치, 목적지")
+    public Object locationInfo(@PathVariable final Long promiseid) {
+        Authentication user = SecurityContextHolder.getContext().getAuthentication();
+        ResponseEntity response = null;
+        if(user.getPrincipal() == "anonymousUser"){
+            response = new ResponseEntity<>("Fail", HttpStatus.UNAUTHORIZED);
+            return response;
+        }else {
+            UserDetails user2 = (UserDetails) user.getPrincipal();
+            Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
+
+            List<Promisepeople> participationList = promisePeopleDao.findAllByPromiseidAndApprove(promiseid, 1);
+            Stream<Promisepeople> participationStream = participationList.stream();
+            List<PromiseLocationInfo> locationInfoList =participationStream.map(promisepeople -> new PromiseLocationInfo(
+                    promisepeople.getNickname(), promisepeople.getThumbnail(), promisepeople.getUpdatedtime(),
+                    promisepeople.getLat(), promisepeople.getLon()
+            )).collect(Collectors.toList());
+
+            response = new ResponseEntity<>(locationInfoList, HttpStatus.OK);
+        }
+        return response;
+    }
 }
