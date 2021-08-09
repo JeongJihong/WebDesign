@@ -23,10 +23,8 @@ import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.beans.support.PagedListHolder;
+import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -175,7 +173,7 @@ public class ArticleController {
 
     @GetMapping("/article/main")
     @ApiOperation(value = "메인피드")
-    public ResponseEntity<Page<ViewArticleRequest>> getArticlePages(@RequestParam int pageNum) {
+    public Object getArticlePages(@RequestParam int pageNum) {
         Authentication user = SecurityContextHolder.getContext().getAuthentication();
         ResponseEntity response = null;
         if(user.getPrincipal() == "anonymousUser"){
@@ -197,11 +195,46 @@ public class ArticleController {
                                                     scrapDao.existsByArticleidAndId(article.getArticleid(), loginID)))
                                                     .collect(Collectors.toList());
 
-            // 무한 스크롤을 사용할 때, 한 번 정보를 요청할 때마다 5개씩 반환하기 위해 페이지네이션 사용
-            Page<ViewArticleRequest> requestPage = new PageImpl<>(requestList, PageRequest.of(pageNum, 5), requestList.size());
-            return new ResponseEntity<>(requestPage, HttpStatus.OK);
+            PagedListHolder<ViewArticleRequest> requestPage = new PagedListHolder<>(requestList);
+            requestPage.setPageSize(5);
+            requestPage.setPage(pageNum);
+
+            Map result = new HashMap<String, Object>();
+            result.put("pageList", requestPage.getPageList());
+            result.put("totalPages", requestPage.getPageCount());
+            return new ResponseEntity<>(result, HttpStatus.OK);
         }
     }
+
+//    @GetMapping("/article/main")
+//    @ApiOperation(value = "메인피드")
+//    public ResponseEntity<Page<ViewArticleRequest>> getArticlePages(@RequestParam int pageNum) {
+//        Authentication user = SecurityContextHolder.getContext().getAuthentication();
+//        ResponseEntity response = null;
+//        if(user.getPrincipal() == "anonymousUser"){
+//            response = new ResponseEntity<>("Fail", HttpStatus.UNAUTHORIZED);
+//            return response;
+//        }else {
+//            UserDetails user2 = (UserDetails) user.getPrincipal();
+//            Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
+//
+//            Long loginID = userOpt.get().getUid();
+//            String loginUser = userOpt.get().getNickname();
+//
+//            // Article는 피드를 나타내기에 정보가 부족하기 때문에, List<Article>을 List<ViewArticleRequest>로 변환하여 정보를 더해준다.
+//            List<Article> articleList = articleService.followingsArticleList(loginID);
+//            Stream<Article> articleStream = articleList.stream();
+//            List<ViewArticleRequest> requestList = articleStream.map(article -> new ViewArticleRequest(article, loginID, loginUser,
+//                            articleLikeDao.countArticleLike(article.getArticleid()),
+//                            articleLikeDao.existsByArticleidAndId(article.getArticleid(), loginID),
+//                            scrapDao.existsByArticleidAndId(article.getArticleid(), loginID)))
+//                    .collect(Collectors.toList());
+//
+//            // 무한 스크롤을 사용할 때, 한 번 정보를 요청할 때마다 5개씩 반환하기 위해 페이지네이션 사용
+//            Page<ViewArticleRequest> requestPage = new PageImpl<>(requestList, PageRequest.of(pageNum, 5), requestList.size());
+//            return new ResponseEntity<>(requestPage, HttpStatus.OK);
+//        }
+//    }
 
     @DeleteMapping("/article/{articleid}")
     @ApiOperation(value = "게시글 삭제")

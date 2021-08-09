@@ -31,6 +31,6 @@ public class ArticleService {
         // 내가 팔로잉하고 있는 유저 + 나의 게시물 리스트를 반환
         List<Long> followingIds = followDao.findBySrcidAndApprove(loginMemberId);
         followingIds.add(loginMemberId);
-        return articleDao.findAllByIdIn(followingIds);
+        return articleDao.findAllByIdInOrderByArticleidDesc(followingIds);
     }
 }
