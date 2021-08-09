@@ -8,43 +8,49 @@
 
     <div class="mt-4 pt-4">
       <div v-if="this.click === 'Like'">
-        <h1>디버깅용 : Like</h1>
         <b-list-group>
           <b-list-group-item
-            class="border-0 my-1" v-for="user in likeList" :key="user.uid"
-            @click="goToArticle(user.articleid)">
+            class="border-0 my-1" v-for="user in likeList" :key="user.senderUid"
+            @click="goToArticle(user.detail)">
             <div class="d-flex align-items-center">
               <span>
                 <img v-if="user.thumnail" :src="user.thumnail"
-                  :alt="user.nickname + '님의 프로필'">
-                <!-- 디버깅용 코드 -> Icon 생기면 지우기-->
-                <img v-else src="https://picsum.photos/60" style="border-radius: 50%;">
+                  :alt="user.senderNickname + '님의 프로필'">
               </span>
-              <span>{{ user.nickname }}님이 좋아요를 누르셨습니다.</span>
+              <span>{{ user.senderNickname }}님이 좋아요를 누르셨습니다.</span>
             </div>
           </b-list-group-item>
         </b-list-group>
       </div>
       <div v-else-if="this.click === 'Follow'">
-        <h1>디버깅용 : Follow</h1>
         <b-list-group>
           <b-list-group-item
-            class="border-0 my-1" v-for="user in followList" :key="user.uid"
-            @click="goToProfile(user.nickname)">
+            class="border-0 my-1" v-for="user in followList" :key="user.senderUid"
+            @click="goToProfile(user.senderNickname)">
             <div class="d-flex align-items-center">
               <span>
                 <img v-if="user.thumnail" :src="user.thumnail"
-                  :alt="user.nickname + '님의 프로필'">
-                <!-- 디버깅용 코드 -> Icon 생기면 지우기-->
-                <img v-else src="https://picsum.photos/60" style="border-radius: 50%;">
+                  :alt="user.senderNickname + '님의 프로필'">
               </span>
-              <span>{{ user.nickname }}님의 팔로우 요청이 왔습니다.</span>
+              <span>{{ user.senderNickname }}님의 팔로우 요청이 왔습니다.</span>
             </div>
           </b-list-group-item>
         </b-list-group>
       </div>
       <div v-else>
-        <h1>디버깅용 : Promise</h1>
+        <b-list-group>
+          <b-list-group-item
+            class="border-0 my-1" v-for="user in promiseList" :key="user.senderUid"
+            @click="goToPromise(user.detail)">
+            <div class="d-flex align-items-center">
+              <span>
+                <img v-if="user.thumnail" :src="user.thumnail"
+                  :alt="user.senderNickname + '님의 프로필'">
+              </span>
+              <span>{{ user.senderNickname }}님의 약속 초대가 왔습니다.</span>
+            </div>
+          </b-list-group-item>
+        </b-list-group>
       </div>
     </div>
 
@@ -74,7 +80,8 @@ export default {
     ...mapState([
       'token',
       'likeList',
-      'followList'
+      'followList',
+      'promiseList'
     ])
   },
   watch: {
@@ -96,7 +103,7 @@ export default {
         document.getElementById('btn-follow').style.backgroundColor = ''
         document.getElementById('btn-promise').style.backgroundColor = '#93CCEA'
 
-        // 관련한 API 주소가 아직 안만들어졌음!!!
+        this.$store.dispatch('alarmPromiseGet', this.token)
       }
     }
   },
@@ -133,6 +140,9 @@ export default {
     },
     goToProfile(nickname) {
       this.$router.push({ name: 'ProfileDetail', params: { nickname } })
+    },
+    goToPromise(promiseid) {
+      this.$router.push({ name: 'PromiseDetail', params: { promiseid }})
     }
   }
 }

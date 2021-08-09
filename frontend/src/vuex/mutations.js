@@ -23,6 +23,9 @@ export default {
   ALARM_FOLLOW_GET(state, followList) {
     state.followList = followList
   },
+  ALARM_PROMISE_GET(state, promiseList) {
+    state.promiseList = promiseList
+  },
 
   SCRAP_GET(state, scrapList) {
     state.scrapList = scrapList
