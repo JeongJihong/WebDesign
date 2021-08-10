@@ -168,26 +168,7 @@ public class AccountController {
         }
         return response;
     }
-//    private String saveFile(MultipartFile file) throws IOException {
-//        String pathName = "";
-//        File Folder = new File(basePath);
-//        if(!Folder.exists()){
-//            try{
-//                Folder.mkdir();
-//            }catch (Exception e){
-//                e.getStackTrace();
-//            }
-//        }
-//        UUID uuid = null;
-//        uuid = UUID.randomUUID();
-//        String extension = FilenameUtils.getExtension(file.getOriginalFilename());
-//        String rename = basePath + "thumbnail" + "_" + uuid + "." + extension;
-//        File dest = new File(rename);
-//        file.transferTo(dest);
-//        pathName = rename;
-//
-//        return pathName;
-//    }
+
 
     @DeleteMapping("/account/profile")
     @ApiOperation(value = "회원 탈퇴")
