@@ -67,7 +67,7 @@ export default {
       headCount:2,
       promiseDate: '',
       promiseTime: '',
-      Types: [{ text: 'Select One', value: null }, 'Game', 'Study', 'Travel', 'Restaurant'],
+      Types: [{ text: 'Select One', value: null }, 'game', 'study', 'travel', 'restaurant'],
       Type:'',
       lat:0,
       lon:0,
@@ -153,7 +153,7 @@ export default {
           data:{
             title: this.title,
             headCount: this.headCount,
-            promisetime: this.promiseDate+'T'+this.promiseTime+'Z',
+            promisetime: this.promiseDate+' '+this.promiseTime,
             type: this.Type,
             lat: this.lat,
             lon: this.lon,   
@@ -170,7 +170,7 @@ export default {
             this.checked,
             this.headCount,
             
-            this.promiseDate+'T'+this.promiseTime+'Z',
+            this.promiseDate+' '+this.promiseTime,
             this.time,
             this.Type,
             this.lat,
