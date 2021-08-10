@@ -8,28 +8,60 @@
     <ul>
       <h2>대기중인 약속!</h2>
       <br>
-      <li><img src="../../assets/images/game-icon.svg" alt="game"> 3/5 레온고? 08.03 20:00</li>
-      <li><img src="../../assets/images/food-icon.svg" alt="game"> 3/5 레온? 08.04 20:00</li>
-      <li><img src="../../assets/images/study-icon.svg" alt="game"> 3/5 ㄹㅇㄱ 08.05 20:00</li>
-      <li><img src="../../assets/images/sport-icon.svg" alt="game"> 3/5 ㄹㅇㄱ 08.06 20:00</li>
+      <div v-for="waitingPromise in waitingPromises" :key="waitingPromise.promiseid">
+        <router-link :to="{ name: 'PromiseDetail', params: {promiseid: waitingPromise.promiseid } }">
+          <li><img :src="require(`../../assets/images/${ waitingPromise.type }-icon.svg`)" alt=type> {{ waitingPromise.title }} {{ waitingPromise.promisetime }}</li>
+        </router-link>
+      </div>
     </ul>
     <hr>
     <ul>
       <h2>다가오는 약속!</h2>
       <br>
-      <li><img src="../../assets/images/game-icon.svg" alt="game"> 2명 롤 5인팟   08.04.14:00</li>
-      <li><img src="../../assets/images/food-icon.svg" alt="game"> 3명 파스타 먹을사람  08.06.12:00</li>
-      <li><img src="../../assets/images/study-icon.svg" alt="game"> 5명 면접준비스터디  08.05.14:00</li>
-      <li><img src="../../assets/images/study-icon.svg" alt="game"> 4명 모각코  08.05.14:00 </li>
+      <div v-for="upcomingPromise in upcomingPromises" :key="upcomingPromise.promiseid">
+        <router-link :to="{ name: 'PromiseDetail', params: {promiseid:upcomingPromise.promiseid } }">
+          <li><img :src="require(`../../assets/images/${ upcomingPromise.type }-icon.svg`)"  alt=type> {{ upcomingPromise.title }} {{ upcomingPromise.promisetime }}</li>
+        </router-link>
+      </div>
     </ul>
-
-
   </div>
 </template>
 
 <script>
+import axios from 'axios'
 export default {
+  data(){
+    return{
+      upcomingPromises:[],
+      waitingPromises:[]
+    }
+  },
+  created(){
+      axios({
+          url:'http://127.0.0.1:8080/promise',
+          method:'get',
+          headers: {
+            'x-auth-token': `${localStorage.getItem('token')}`,
+          },
+        })
+          .then(res=>{
+            console.log(res.data)
 
+            const upcomings = res.data.upcoming
+            const waitings = res.data.waiting
+            for( let key in upcomings){
+              upcomings[key].type = upcomings[key].type.toLowerCase();
+              this.upcomingPromises.push(upcomings[key])
+            }
+            for( let key in waitings){
+              this.waitingPromises.push(waitings[key])
+            }
+            console.log(this.upcomingPromises,this.waitingPromises)
+          })
+          .catch(err=>{
+            console.log(err)
+          })
+  },
 }
 </script>
 

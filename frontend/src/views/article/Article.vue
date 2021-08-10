@@ -32,14 +32,14 @@
         </b-carousel>
         <p> {{ article.articleDetail.review }} </p>
         <ul class="d-flex justify-content-left" style="padding-left:3px;">
-          <li v-if="article.likeCheck"><b-icon  @click="articleLike(article.articleDetail.articleid)" id="likestat" icon="hand-thumbs-up" scale="1.5" variant="danger"></b-icon></li>
-          <li v-else><b-icon @click="articleLike(article.articleDetail.articleid)" id="likestat" icon="hand-thumbs-up" scale="1.5" variant="secondary"></b-icon></li>
+          <li v-if="article.likeCheck"><b-icon  @click="articleLike({ articleid: article.articleDetail.articleid, nickname: article.articleDetail.user.nickname })" id="likestat" icon="hand-thumbs-up" scale="1.5" variant="danger"></b-icon></li>
+          <li v-else><b-icon @click="articleLike({ articleid: article.articleDetail.articleid, nickname: article.articleDetail.user.nickname })" id="likestat" icon="hand-thumbs-up" scale="1.5" variant="secondary"></b-icon></li>
           
           <li v-if="article.scrapCheck"><b-icon icon="tags-fill" scale="1.5" variant="primary"></b-icon></li>
           <li v-else><b-icon icon="tags" scale="1.5" variant="primary"></b-icon></li>
           <li @click="getComments(article.articleDetail.articleid)"><b-icon icon="chat-dots" scale="1.5" variant="primary"></b-icon></li><span>{{ article.articleDetail.comments.length }}</span>
         </ul>
-        <p>{{ article.articleDetail.likeCount }} 명의 유저가 이글을 좋아합니다.</p>
+        <p>{{ article.likeCount }} 명의 유저가 이글을 좋아합니다.</p>
         <br>
       </div>
       <infinite-loading @infinite="infiniteHandler"></infinite-loading>
@@ -50,6 +50,7 @@
 <script>
 import axios from 'axios'
 import InfiniteLoading from 'vue-infinite-loading';
+import { mapState } from 'vuex'
 export default {
   components: {
     InfiniteLoading,
@@ -64,9 +65,14 @@ export default {
         articles:[],
       }
   },
+  computed: {
+    ...mapState([
+      'token',
+      'username'
+    ])
+  },
   methods:{
     infiniteHandler($state) {
-      console.log('살아있음1');
       axios.get('http://127.0.0.1:8080/article/main', {
           headers: {
             'x-auth-token': `${localStorage.getItem('token')}`,
@@ -80,7 +86,8 @@ export default {
               $state.complete();
           }else{
               setTimeout(() => {
-                  const data = res.data.content;
+                  console.log(res.data)
+                  const data = res.data.pageList;
                             for(let key in data){
                                 this.articles.push(data[key])
                             }
@@ -98,11 +105,11 @@ export default {
           this.$router.push('/');
       })
     },
-    articleLike(articleid){
+    articleLike(payload){
       let likestat = document.getElementById('likestat')
       if (likestat.variant == "secondary"){
         axios({
-          url:`http://127.0.0.1:8080/article/`+articleid+'/like',
+          url:`http://127.0.0.1:8080/article/`+payload.articleid+'/like',
           method:'post',
           headers: {
                 'x-auth-token': `${localStorage.getItem('token')}`,
@@ -116,10 +123,28 @@ export default {
         .catch(err=>{
           console.log(err)
         })
+
+        // Like Alarm POST
+        if (payload.nickname !== this.username) {
+          axios({
+            url: 'http://127.0.0.1:8080/alarm',
+            method: 'post',
+            headers: {
+              'x-auth-token': this.token
+            },
+            data: {
+              body: '게시글에 좋아요를 눌렀습니다.',
+              category: 'Like',
+              detail: payload.articleid,
+              receiverNickname: payload.nickname,
+              title: '좋아요 알림'
+            }
+          })
         }
+      }
       else{
         axios({
-          url:`http://127.0.0.1:8080/article/`+articleid+'/like',
+          url:`http://127.0.0.1:8080/article/`+payload.articleid+'/like',
           method:'delete',
           headers: {
                 'x-auth-token': `${localStorage.getItem('token')}`,

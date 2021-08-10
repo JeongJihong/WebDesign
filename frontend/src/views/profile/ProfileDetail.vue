@@ -113,6 +113,22 @@ export default {
       .catch((err) => {
         alert(err)
       })
+
+      // Follow Alarm Post
+      axios({
+        url: 'http://127.0.0.1:8080/alarm',
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-AUTH-TOKEN' : this.$store.state.token
+        },
+        data: {
+          body: '팔로우 요청이 왔습니다.',
+          category: 'Follow',
+          receiverNickname: this.nickname,
+          title: '팔로우 알림'
+        }
+      })
     },
     getUserInfo: function () {
       axios({

@@ -109,7 +109,7 @@ public class AlarmController {
         } else {
             UserDetails user2 = (UserDetails) user.getPrincipal();
             Optional<User> loginUser = userDao.findByEmail(user2.getUsername());
-            List<Alarm> alarm = alarmDao.findAllByReceiveuidAndCategory(loginUser.get().getUid(), "like");
+            List<Alarm> alarm = alarmDao.findAllByReceiveuidAndCategory(loginUser.get().getUid(), "Like");
             List<LikeFollowRequest> result = new ArrayList<>();
             for(int i = 0; i < alarm.size(); i++){
                 Optional<User> tempUser = userDao.findByUid(alarm.get(i).getSenderuid());
@@ -134,7 +134,7 @@ public class AlarmController {
         } else {
             UserDetails user2 = (UserDetails) user.getPrincipal();
             Optional<User> loginUser = userDao.findByEmail(user2.getUsername());
-            List<Alarm> alarm = alarmDao.findAllByReceiveuidAndCategory(loginUser.get().getUid(), "follow");
+            List<Alarm> alarm = alarmDao.findAllByReceiveuidAndCategory(loginUser.get().getUid(), "Follow");
             List<LikeFollowRequest> result = new ArrayList<>();
             for(int i = 0; i < alarm.size(); i++){
                 Optional<User> tempUser = userDao.findByUid(alarm.get(i).getSenderuid());
@@ -159,7 +159,7 @@ public class AlarmController {
         } else {
             UserDetails user2 = (UserDetails) user.getPrincipal();
             Optional<User> loginUser = userDao.findByEmail(user2.getUsername());
-            List<Alarm> alarm = alarmDao.findAllByReceiveuidAndCategory(loginUser.get().getUid(), "promise");
+            List<Alarm> alarm = alarmDao.findAllByReceiveuidAndCategory(loginUser.get().getUid(), "Promise");
             List<LikeFollowRequest> result = new ArrayList<>();
             Map mapResult = new HashMap<String, Object>();
             for(int i = 0; i < alarm.size(); i++){
