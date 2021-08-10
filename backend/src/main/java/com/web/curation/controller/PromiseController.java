@@ -150,10 +150,8 @@ public class PromiseController {
         }else {
             UserDetails user2 = (UserDetails) user.getPrincipal();
             Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
-
             // 내가 생성하고 약속 시간 전인 Promise의 List
             List<Promise> waitingList = promiseDao.waitingPromise(userOpt.get().getUid());
-
             // List<Promise>를 peopleNum을 추가한 List<PromiseResponse>로 변환
             Stream<Promise> waitingStream = waitingList.stream();
             List<PromiseResponse> waiting = waitingStream.map(promise -> new PromiseResponse(promise.getPromiseid(),
