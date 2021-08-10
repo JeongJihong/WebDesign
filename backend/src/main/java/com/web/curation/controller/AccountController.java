@@ -11,10 +11,7 @@ import com.web.curation.model.BasicResponse;
 import com.web.curation.model.article.Article;
 import com.web.curation.model.follow.Follow;
 import com.web.curation.model.image.Image;
-import com.web.curation.model.user.ChangePasswordRequest;
-import com.web.curation.model.user.LoginRequest;
-import com.web.curation.model.user.SignupRequest;
-import com.web.curation.model.user.User;
+import com.web.curation.model.user.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -63,14 +60,8 @@ public class AccountController {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
 
-    final String rootPath = FileSystemView.getFileSystemView().getHomeDirectory().toString();
-//    final String rootPath = ;
-    final String basePath = rootPath + "/" + "SNSImage" + "/" ;
-
-
     @GetMapping("/test")
     public String test(){
-        System.out.println(basePath);
         return "test Success";
     }
 
@@ -157,12 +148,9 @@ public class AccountController {
         return response;
     }
 
-    @PatchMapping(value = "/account/profile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-//    @PostMapping(value = "/account/profile")
+    @PatchMapping(value = "/account/profile")
     @ApiOperation(value = "유저 프로필 정보 변경")
-    public Object changeUserProfile(@RequestPart(required = true) String nickname,
-                                    @RequestPart(required = false) String introduction,
-                                    @RequestPart(required = false) MultipartFile file) throws IOException {
+    public Object changeUserProfile(@RequestBody ChangeUserDetails request){
         Authentication user = SecurityContextHolder.getContext().getAuthentication();
         ResponseEntity response = null;
         if(user.getPrincipal() == "anonymousUser"){
@@ -172,39 +160,34 @@ public class AccountController {
             //유저ID, 새로운 닉네임, 새로운 소개글을 받아온다
             Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
             //User객체에 기존의 정보 담아가지고 오고 새로운 닉네임과 소개글로 세팅한다
-            String pathName = null;
-            if(!file.isEmpty()){
-                pathName = saveFile(file);
-            }else{
-                pathName = userOpt.get().getThumbnail();
-            }
-            User user3 = new User(userOpt.get().getUid(), nickname, userOpt.get().getEmail(),
-                    userOpt.get().getPassword(), introduction, pathName, userOpt.get().getAlarmtoken(), userOpt.get().getArticles(), userOpt.get().getRoles());
+
+            User user3 = new User(userOpt.get().getUid(), request.getNickname(), userOpt.get().getEmail(),
+                    userOpt.get().getPassword(), request.getIntroduction(), request.getFileLocation(), userOpt.get().getAlarmtoken(), userOpt.get().getArticles(), userOpt.get().getRoles());
             userDao.save(user3);
             response = new ResponseEntity<>("Success", HttpStatus.OK);
         }
         return response;
     }
-    private String saveFile(MultipartFile file) throws IOException {
-        String pathName = "";
-        File Folder = new File(basePath);
-        if(!Folder.exists()){
-            try{
-                Folder.mkdir();
-            }catch (Exception e){
-                e.getStackTrace();
-            }
-        }
-        UUID uuid = null;
-        uuid = UUID.randomUUID();
-        String extension = FilenameUtils.getExtension(file.getOriginalFilename());
-        String rename = basePath + "thumbnail" + "_" + uuid + "." + extension;
-        File dest = new File(rename);
-        file.transferTo(dest);
-        pathName = rename;
-
-        return pathName;
-    }
+//    private String saveFile(MultipartFile file) throws IOException {
+//        String pathName = "";
+//        File Folder = new File(basePath);
+//        if(!Folder.exists()){
+//            try{
+//                Folder.mkdir();
+//            }catch (Exception e){
+//                e.getStackTrace();
+//            }
+//        }
+//        UUID uuid = null;
+//        uuid = UUID.randomUUID();
+//        String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+//        String rename = basePath + "thumbnail" + "_" + uuid + "." + extension;
+//        File dest = new File(rename);
+//        file.transferTo(dest);
+//        pathName = rename;
+//
+//        return pathName;
+//    }
 
     @DeleteMapping("/account/profile")
     @ApiOperation(value = "회원 탈퇴")

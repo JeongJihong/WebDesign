@@ -9,6 +9,7 @@ import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.article.Article;
 import com.web.curation.model.article.ArticleLike;
+import com.web.curation.model.article.ArticleWrite;
 import com.web.curation.model.article.ViewArticleRequest;
 import com.web.curation.model.comment.Comment;
 import com.web.curation.model.follow.Follow;
@@ -79,36 +80,32 @@ public class ArticleController {
     @Autowired
     ArticleService articleService;
 
-    final String rootPath = FileSystemView.getFileSystemView().getHomeDirectory().toString();
-    final String basePath = rootPath + "/" + "SNSImage" + "/" ;
-
-    private List<String> saveFiles(List<MultipartFile> files) throws IOException{
-        List<String> pathName = new ArrayList<>();
-        File Folder = new File(basePath);
-        if(!Folder.exists()){
-            try{
-                Folder.mkdir();
-            }catch (Exception e){
-                e.getStackTrace();
-            }
-        }
-        UUID uuid = null;
-        for(int i = 0; i < files.size(); i++){
-            uuid = UUID.randomUUID();
-            String extension = FilenameUtils.getExtension(files.get(i).getOriginalFilename());
-            String rename = basePath + i + "_" + uuid + "." + extension;
-            File dest = new File(rename);
-            files.get(i).transferTo(dest);
-            pathName.add(rename);
-        }
-
-        return pathName;
-    }
+//    private List<String> saveFiles(List<MultipartFile> files) throws IOException{
+//        List<String> pathName = new ArrayList<>();
+//        File Folder = new File(basePath);
+//        if(!Folder.exists()){
+//            try{
+//                Folder.mkdir();
+//            }catch (Exception e){
+//                e.getStackTrace();
+//            }
+//        }
+//        UUID uuid = null;
+//        for(int i = 0; i < files.size(); i++){
+//            uuid = UUID.randomUUID();
+//            String extension = FilenameUtils.getExtension(files.get(i).getOriginalFilename());
+//            String rename = basePath + i + "_" + uuid + "." + extension;
+//            File dest = new File(rename);
+//            files.get(i).transferTo(dest);
+//            pathName.add(rename);
+//        }
+//
+//        return pathName;
+//    }
 
     @PostMapping(value = "/article", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ApiOperation(value = "게시글 작성")
-    public Object postArticle(@RequestPart String content,
-                              @RequestPart(required = true) List<MultipartFile> files) throws IOException {
+    public Object postArticle(@RequestBody ArticleWrite request) throws IOException {
         Authentication user = SecurityContextHolder.getContext().getAuthentication();
         ResponseEntity response = null;
         if(user.getPrincipal() == "anonymousUser"){
@@ -123,17 +120,16 @@ public class ArticleController {
                     .id(userOpt.get().getUid())
                     .createdtime(null)
                     .updatedtime(null)
-                    .review(content)
+                    .review(request.getContent())
                     .build()
             ).getArticleid();
 
-            List<String> pathName = saveFiles(files);
-            System.out.println(pathName.get(0));
-            for(int i = 0; i < files.size(); ++i) {
+
+            for(int i = 0; i < request.getFiles().size(); ++i) {
                 imageDao.save(Image.builder()
                         .imageid(null)
                         .articleid(articleId)
-                        .imgURL(pathName.get(i))
+                        .imgURL(request.getFiles().get(i))
                         .build()
                 );
             }
