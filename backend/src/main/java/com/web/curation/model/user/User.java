@@ -33,6 +33,7 @@ public class User implements UserDetails {
     private String password;
     private String introduction;
     private String thumbnail;
+    private Long status;
 
     @Column(name = "alarmtoken", nullable = true)
     private String alarmtoken;

@@ -215,9 +215,22 @@ export default {
             "X-AUTH-TOKEN": this.token
           },
         })
-          .then(() => {
-            this.$router.push({ name: 'PromiseList' })
-          })
+
+        // 약속 삭제(취소) -> 생성자'status -(2*num)
+        axios({
+          // 어짜피 약속 삭제는 생성자만 가능하다 -> this.username 사용
+          url: `http://127.0.0.1:8080/status/${this.username}`,
+          method: 'put',
+          headers: {
+            "Content-Type": "application/json",
+            "X-AUTH-TOKEN": this.token
+          },
+          data: {
+            status: - (2 * this.promiseDetail.peopleNum)
+          }
+        })
+
+        this.$router.push({ name: 'PromiseList' })
       }
     },
     promiseDetailAccept() {
@@ -237,6 +250,32 @@ export default {
             }
             this.$store.dispatch('promiseDetailGet', payload)
           })
+        
+        // 약속 수락 -> 참가자'status +2
+        axios({
+          url: `http://127.0.0.1:8080/status/${this.username}`,
+          method: 'put',
+          headers: {
+            "Content-Type": "application/json",
+            "X-AUTH-TOKEN": this.token
+          },
+          data: {
+            status: 2
+          }
+        })
+
+        // 약속 수락 -> 생성자'status +1
+        axios({
+          url: `http://127.0.0.1:8080/status/${this.promiseDetail.createrNickname}`,
+          method: 'put',
+          headers: {
+            "Content-Type": "application/json",
+            "X-AUTH-TOKEN": this.token
+          },
+          data: {
+            status: 1
+          }
+        })
       }
     },
     promiseDetailReject() {
@@ -264,9 +303,21 @@ export default {
             "X-AUTH-TOKEN": this.token
           }
         })
-          .then(() => {
-            this.$router.push({ name: "PromiseList"})
-          })
+
+        // 약속 수락 후 거절 -> 참가자'status -3
+        axios({
+          url: `http://127.0.0.1:8080/status/${this.username}`,
+          method: 'put',
+          headers: {
+            "Content-Type": "application/json",
+            "X-AUTH-TOKEN": this.token
+          },
+          data: {
+            status: -3
+          }
+        })
+
+        this.$router.push({ name: "PromiseList"})
       }
     }
   }
