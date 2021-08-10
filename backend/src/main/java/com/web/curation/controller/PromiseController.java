@@ -97,8 +97,6 @@ public class PromiseController {
 
             // 약속 생성자의 모든 팔로워/팔로잉의 UID 저장
             List<Long> allFollowingFollower = followDao.findBySrcidAndApprove(userOpt.get().getUid());
-            allFollowingFollower.addAll(followDao.findByDstidAndApprove(userOpt.get().getUid()));
-
             // 팔로워/팔로잉 PromisePeople table에 저장
             for (int i = 0; i < allFollowingFollower.size(); i++) {
                 User invitedUser = userDao.findByUid(allFollowingFollower.get(i)).get();
