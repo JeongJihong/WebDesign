@@ -8,7 +8,7 @@
           다들 어디
         </h2>
       </div>
-      <b-icon icon="arrow-clockwise" animation="spin" font-scale="2"></b-icon>
+      <b-icon @click="updateLocations" icon="arrow-clockwise" animation="spin" font-scale="2"></b-icon>
     </div>
     <hr>
     <div class="my-2">
@@ -28,6 +28,7 @@
   </div>
 </template>
 
+<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 <script>
 import axios from 'axios'
 
@@ -35,9 +36,27 @@ import axios from 'axios'
 export default {
   data () {
     return {
-      'nicknames' : ['김백준','신형식','이두호','정지홍'],
-      'times': [28,16,10,21],
-      'places': ['충현동','신촌동','신촌동','아현동']
+      promiseid : this.$route.params.promiseid,
+      attendantsInfo: '',
+      attendantsLength: 0,
+      promiseLat: 37.40484970442224,
+      promiseLon: 126.70718664191531,
+      thumbnails: [],
+      nicknames : [],
+      times: [],
+      places: []
+    }
+  },
+  mounted () {
+    if (window.kakao && window.kakao.maps) {
+      this.initMap();
+    } else {
+      const script = document.createElement('script')
+      /* global kakao */
+      script.onload = () => kakao.maps.load(this.updateLocations)
+      script.src =
+        `http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${process.env.VUE_APP_MAP_API}&libraries=services,clusterer`
+      document.head.appendChild(script)
     }
   },
   methods: {
@@ -47,8 +66,8 @@ export default {
     initMap() {
       var mapContainer = document.getElementById('map'), // 지도를 표시할 div
         mapOption = {
-          center: new kakao.maps.LatLng(37.564343, 126.947613), // 지도의 중심좌표
-          level: 5, // 지도의 확대 레벨
+          center: new kakao.maps.LatLng(this.promiseLat, this.promiseLon), // 지도의 중심좌표
+          level: 7, // 지도의 확대 레벨
         }
 
       var map = new kakao.maps.Map(mapContainer, mapOption)
@@ -67,7 +86,7 @@ export default {
             
       // 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
       var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption),
-          markerPosition = new kakao.maps.LatLng(37.564343, 126.947613); // 마커가 표시될 위치입니다
+          markerPosition = new kakao.maps.LatLng(37.40, 126.71); // 마커가 표시될 위치입니다
 
       // 마커를 생성합니다
       var marker = new kakao.maps.Marker({
@@ -76,114 +95,90 @@ export default {
       });
       marker.setMap(map);  
 
-      // 첫번째 인간
-      var markerPosition1 = new kakao.maps.LatLng(37.564343, 126.952773);
-      var marker1 = new kakao.maps.Marker({
-        position: markerPosition1,
-        title: 'hi'
-      });
-      marker1.setMap(map)
-      var iwContent1 = '<div class="d-flex px-3" style="padding:5px; width:150px; justify-content: space-between; align-items:top;">'+ 
-      '<span>'+'<font size="3em" color="black">'+this.nicknames[point]+'</font>'+'</span>'+
-      '<span>'+'<font size="2em" color="green">도착'+this.times[point]+'분전</font></span></div>',
-          iwPosition1 = new kakao.maps.LatLng(37.565343, 126.948613);
-      var infowindow1 = new kakao.maps.InfoWindow({
-        position : iwPosition1, 
-        content : iwContent1 
-      });
-      infowindow1.open(map, marker1);
-      point = point + 1
-
-      // 두번째 인간
-      var markerPosition2 = new kakao.maps.LatLng(37.560743, 126.942813);
-      var marker2 = new kakao.maps.Marker({
-        position: markerPosition2
-      });
-      marker2.setMap(map)
-      var iwContent2 = '<div class="d-flex px-3" style="padding:5px; width:150px; justify-content: space-between; align-items:top;">'+ 
-      '<span>'+'<font size="3em" color="black">'+this.nicknames[point]+'</font>'+'</span>'+
-      '<span>'+'<font size="2em" color="green">도착'+this.times[point]+'분전</font></span></div>',
-          iwPosition2 = new kakao.maps.LatLng(37.560743, 126.942813);
-      // var iwContent2 = '<div style="padding:5px;">'+this.nicknames[point]+'<br>'+(point+2)+'분전</div>',
-      //     iwPosition2 = new kakao.maps.LatLng(37.563343, 126.946613);
-      var infowindow2 = new kakao.maps.InfoWindow({
-        position : iwPosition2,
-        content : iwContent2 
-      });
-      infowindow2.open(map, marker2);
-      point = point + 1
-
-      // 세번째 인간
-      var markerPosition3 = new kakao.maps.LatLng(37.564743, 126.944013);
-      var marker3 = new kakao.maps.Marker({
-        position: markerPosition3
-      });
-      marker3.setMap(map)
-      var iwContent3 = '<div class="d-flex px-3" style="padding:5px; width:150px; justify-content: space-between; align-items:top;">'+ 
-      '<span>'+'<font size="3em" color="black">'+this.nicknames[point]+'</font>'+'</span>'+
-      '<span>'+'<font size="2em" color="green">도착'+this.times[point]+'분전</font></span></div>',
-          iwPosition3 = new kakao.maps.LatLng(37.560743, 126.942813);
-      // var iwContent2 = '<div style="padding:5px;">'+this.nicknames[point]+'<br>'+(point+2)+'분전</div>',
-      //     iwPosition2 = new kakao.maps.LatLng(37.563343, 126.946613);
-      var infowindow3 = new kakao.maps.InfoWindow({
-        position : iwPosition3,
-        content : iwContent3 
-      });
-      infowindow3.open(map, marker3);
-      point = point + 1
-
-      // 네번째 인간
-      var markerPosition4 = new kakao.maps.LatLng(37.560543, 126.949913);
-      var marker4 = new kakao.maps.Marker({
-        position: markerPosition4
-      });
-      marker4.setMap(map)
-      var iwContent4 = '<div class="d-flex px-3" style="padding:5px; width:150px; justify-content: space-between; align-items:top;">'+ 
-      '<span>'+'<font size="3em" color="black">'+this.nicknames[point]+'</font>'+'</span>'+
-      '<span>'+'<font size="2em" color="green">도착'+this.times[point]+'분전</font></span></div>',
-          iwPosition4 = new kakao.maps.LatLng(37.560743, 126.942813);
-      // var iwContent2 = '<div style="padding:5px;">'+this.nicknames[point]+'<br>'+(point+2)+'분전</div>',
-      //     iwPosition2 = new kakao.maps.LatLng(37.563343, 126.946613);
-      var infowindow4 = new kakao.maps.InfoWindow({
-        position : iwPosition4,
-        content : iwContent4 
-      });
-      infowindow4.open(map, marker4);
-
-      // for (point = 0; point < 5; point++) {
-      //   const markerPosition = new kakao.maps.LatLng(37.564343 + point * 0.0003, 126.947613 - point * 0.0003);
-
-      //   const marker = new kakao.maps.Marker({
-      //     position: markerPosition
-      //   });
-      //   marker.setMap(map)
-
-      //   var iwContent = '<div style="padding:5px;">'+this.nicknames[point]+'<br>'+(point+2)+'분전</div>',
-      //       iwPosition = new kakao.maps.LatLng(37.564343 + point * 0.0003, 126.947613 - point * 0.0003);
+      var thumbnailList = Array()
+      var nameList = Array()
+      var timeList = Array()
+      var placeList = Array()
       
-      //   var infowindow = new kakao.maps.InfoWindow({
-      //     position : iwPosition, 
-      //     content : iwContent 
-      //   });
+      // --------------------------- 약속 참가자들 위치 마커로 띄워줄거임 ---------------------------------------------
+      for (point = 0; point < this.attendantsLength; point++) {
+        const thumbnail = this.attendantsInfo[point].thumbnail;
+        const name = this.attendantsInfo[point].nickname;
+        const lat = this.attendantsInfo[point].lat;
+        const lon = this.attendantsInfo[point].lon;
+        const markerPosition = new kakao.maps.LatLng(lat, lon);
+
+        const marker = new kakao.maps.Marker({
+          position: markerPosition
+        });
+        marker.setMap(map)
+
+        // 직선 거리, 시간 계산
+        function deg2rad(deg) { return deg * (Math.PI/180) }
+        var R = 6371; // Radius of the earth in km 
+        var dLon = deg2rad(this.promiseLat-lat); // deg2rad below 
+        var dLat = deg2rad(this.promiseLon-lon); 
+        var a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(deg2rad(lon)) * Math.cos(deg2rad(this.promiseLon)) * Math.sin(dLon/2) * Math.sin(dLon/2); 
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+        var d = R * c; // Distance in km
+        var time = parseInt(d / 15 * 60); // 평균 시속 15km/h로 나누고 분으로 환산
+
+
+
+        var iwContent = '<div class="d-flex px-3" style="padding:5px; width:150px; justify-content: space-between; align-items:top;">'+ 
+          '<span>'+'<font size="3em" color="black">'+name+'</font>'+'</span>'+
+          '<span>'+'<font size="2em" color="green">도착'+time+'분전</font></span></div>',
+          iwPosition = new kakao.maps.LatLng(lat, lon);
+        var infowindow = new kakao.maps.InfoWindow({
+          position : iwPosition, 
+          content : iwContent 
+        });
         
-      //   infowindow.open(map, marker); 
-      // }
-      
+        infowindow.open(map, marker);
 
-    }
+        // 주소-좌표 변환 객체를 생성합니다
+        
+        var geocoder = new kakao.maps.services.Geocoder();
+        
+        geocoder.coord2Address(lon, lat, (result, status)=> {
+          if (status === kakao.maps.services.Status.OK) {
+            var detailAddr = result[0].address.address_name;
+            var currentAddress = detailAddr
+            var currentDong = currentAddress.split(' ')[2]
+            placeList.push(currentDong);
+          }   
+        });
+        thumbnailList.push(thumbnail);
+        nameList.push(name);
+        timeList.push(time);
+        
+        this.thumbnails = thumbnailList
+        this.nicknames = nameList
+        this.places = placeList
+        this.times = timeList
+      }
+      // ------------------------------------------------------------------------
+
+    },
+    updateLocations () {
+      axios({
+        method: 'get',
+        url: `http://127.0.0.1:8080/promise/place/${this.promiseid}`,
+        headers: {
+          'Content-Type': 'application/json',
+          'X-AUTH-TOKEN' : this.$store.state.token
+        },
+      })
+      .then((res) => {
+        this.attendantsInfo = res.data
+        this.attendantsLength = res.data.length
+        this.initMap()
+      })
+      .catch((err) => {
+        alert(err)
+      })
+    },
   },
-  mounted() {
-    if (window.kakao && window.kakao.maps) {
-      this.initMap();
-    } else {
-      const script = document.createElement('script')
-      /* global kakao */
-      script.onload = () => kakao.maps.load(this.initMap)
-      script.src =
-        `http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${process.env.VUE_APP_MAP_API}`
-      document.head.appendChild(script)
-  }
-}
 }
 </script>
 
