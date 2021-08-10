@@ -28,7 +28,9 @@
     </div>
     <div class="d-grid pt-3">
       <button @click="goToFollow" v-if="this.nickname !== this.myNickname && this.didIrequestFollowToYou === false" class="btn btn-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">팔로우</button>
-      <button v-if="this.nickname !== this.myNickname && this.didIrequestFollowToYou === true" @click="cancelFollow" class="btn btn-outline-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">팔로우 요청 보냄</button>
+      <!-- <button v-if="this.nickname !== this.myNickname && this.didIrequestFollowToYou === true" @click="cancelFollow" class="btn btn-outline-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">팔로우 요청 보냄</button> -->
+      <button v-if="this.nickname !== this.myNickname && this.didIrequestFollowToYou === true && this.doIFollowYou === false" @click="cancelFollow" class="btn btn-outline-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">팔로우 요청 보냄</button>
+      <button @click="rejectFollowRequest" v-if="this.doIFollowYou === true" class="btn btn-outline-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">팔로우 취소</button>
     </div>
     <div v-if="this.didYouRequestFollowToMe === true">
       <p class="pt-2 pb-0 mb-0">{{ this.nickname }}님의 팔로우 요청</p>
@@ -71,6 +73,7 @@ export default {
       articles: [],
       articlesLength: 0,
       thumbnail: '',
+      doIFollowYou: false,
     }
   },
   methods: {
@@ -105,6 +108,7 @@ export default {
         console.log('팔로우 요청 보내기 성공')
         console.log(res.data)
         this.didIrequestFollowToYou = !this.didIrequestFollowToYou
+        this.getUserInfo()
       })
       .catch((err) => {
         alert(err)
@@ -125,6 +129,7 @@ export default {
         this.didIrequestFollowToYou = res.data.follow
         this.introduction = res.data.userProfile.introduction
         this.articles = res.data.article
+        this.doIFollowYou = res.data.followBoolean
         console.log('articles', this.articles)
         if (this.articles === null) {
           this.articlesLength = 0
@@ -154,7 +159,7 @@ export default {
         },
       })
       .then((res) => {
-        console.log(res.data)
+        console.log('팔로잉유무확인', res.data)
         this.didYouRequestFollowToMe = res.data.otherToMe
         this.followid = res.data.followid
       })
@@ -179,7 +184,7 @@ export default {
         alert(`${this.nickname}님의 팔로우 요청을 수락하셨습니다!`)
         this.followerList()
       })
-      .then((err) => {
+      .catch((err) => {
         alert(err)
       })
     },
@@ -199,7 +204,7 @@ export default {
         this.didYouRequestFollowToMe = !this.didYouRequestFollowToMe
         alert(`${this.nickname}님의 팔로우 요청을 거절하셨습니다!`)
       })
-      .then((err) => {
+      .catch((err) => {
         alert(err)
       })
     },

@@ -35,9 +35,9 @@ import axios from 'axios'
 export default {
   data () {
     return {
-      'nicknames' : ['김백준','신형식','이두호','정지홍'],
-      'times': [28,16,10,21],
-      'places': ['충현동','신촌동','신촌동','아현동']
+      nicknames : ['김백준','신형식','이두호','정지홍'],
+      times: [28,16,10,21],
+      places: ['충현동','신촌동','신촌동','아현동']
     }
   },
   methods: {

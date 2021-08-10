@@ -153,7 +153,7 @@ export default {
           data:{
             title: this.title,
             headCount: this.headCount,
-            promisetime: this.promiseDate+'T'+this.promiseTime+'Z',
+            promisetime: this.promiseDate+' '+this.promiseTime,
             type: this.Type,
             lat: this.lat,
             lon: this.lon,   
