@@ -12,7 +12,11 @@
     <div class="d-flex">
       <img :src="thumbnail" alt="image" style="width: 70px; height: 70px" >
       <div class="mx-4">
-        <h4>{{ this.nickname }}</h4>
+        <!-- <h4>{{ this.nickname }}</h4> -->
+        <div class="d-flex justify-content-between">
+          <span class="fs-4">{{ this.nickname }}</span>
+          <span class="fs-4">Pipl {{ this.status }}</span>
+        </div>
         <div class="d-flex" style="justify-content: space-between">
           <button class="d-flex" @click="goToFollowList">
             <h4>팔로잉</h4>&nbsp;&nbsp;
@@ -74,6 +78,7 @@ export default {
       articlesLength: 0,
       thumbnail: '',
       doIFollowYou: false,
+      status: 0, // Pipl 지수
     }
   },
   methods: {
@@ -319,6 +324,21 @@ export default {
     .catch((err) => {
       alert(err)
     })
+
+    axios({
+      url: `http://127.0.0.1:8080/status/${this.nickname}`,
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-AUTH-TOKEN' : this.$store.state.token
+      }
+    })
+      .then(res => {
+        this.status = res.data.status
+      })
+      .catch(() => {
+        console.log('Pipl 지수 GET 실패')
+      })
   }
 }
 </script>

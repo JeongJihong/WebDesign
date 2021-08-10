@@ -63,7 +63,7 @@ public class AlarmController {
             Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
             User user3 = new User(userOpt.get().getUid(), userOpt.get().getNickname(), userOpt.get().getEmail(),
                     userOpt.get().getPassword(), userOpt.get().getIntroduction(), userOpt.get().getThumbnail(),
-                    token, userOpt.get().getArticles(), userOpt.get().getRoles());
+                    userOpt.get().getStatus(), token, userOpt.get().getArticles(), userOpt.get().getRoles());
             userDao.save(user3);
             response = new ResponseEntity<>("Success", HttpStatus.OK);
         }
@@ -160,18 +160,57 @@ public class AlarmController {
             UserDetails user2 = (UserDetails) user.getPrincipal();
             Optional<User> loginUser = userDao.findByEmail(user2.getUsername());
             List<Alarm> alarm = alarmDao.findAllByReceiveuidAndCategory(loginUser.get().getUid(), "Promise");
-            List<LikeFollowRequest> result = new ArrayList<>();
+//            List<LikeFollowRequest> result = new ArrayList<>();
             Map mapResult = new HashMap<String, Object>();
+            List<LikeFollowRequest> Game = new ArrayList<>();
+            List<LikeFollowRequest> Travel = new ArrayList<>();
+            List<LikeFollowRequest> Restaurant = new ArrayList<>();
+            List<LikeFollowRequest> Exercise = new ArrayList<>();
+            List<LikeFollowRequest> Study = new ArrayList<>();
+            List<LikeFollowRequest> Art = new ArrayList<>();
+            List<LikeFollowRequest> Etc = new ArrayList<>();
+            //Game, Travel, Restaurant, Exercise, Study, Art, Etc
             for(int i = 0; i < alarm.size(); i++){
                 Optional<User> tempUser = userDao.findByUid(alarm.get(i).getSenderuid());
                 Promise promiseUser= promiseDao.findByPromiseid(alarm.get(0).getDetail());
                 String type = promiseUser.getType();
-                result.add(new LikeFollowRequest(tempUser.get().getUid(), tempUser.get().getNickname(),
-                        tempUser.get().getThumbnail(), alarm.get(i).getTitle(), alarm.get(i).getBody(),
-                        alarm.get(i).getCheckalarm(), alarm.get(i).getCategory(), alarm.get(i).getDetail()));
-                mapResult.put(type, result);
-
+                if(type.equals("Game")){
+                    Game.add(new LikeFollowRequest(tempUser.get().getUid(), tempUser.get().getNickname(),
+                            tempUser.get().getThumbnail(), alarm.get(i).getTitle(), alarm.get(i).getBody(),
+                            alarm.get(i).getCheckalarm(), alarm.get(i).getCategory(), alarm.get(i).getDetail()));
+                }else if(type.equals("Travel")){
+                    Travel.add(new LikeFollowRequest(tempUser.get().getUid(), tempUser.get().getNickname(),
+                            tempUser.get().getThumbnail(), alarm.get(i).getTitle(), alarm.get(i).getBody(),
+                            alarm.get(i).getCheckalarm(), alarm.get(i).getCategory(), alarm.get(i).getDetail()));
+                }else if(type.equals("Restaurant")){
+                    Restaurant.add(new LikeFollowRequest(tempUser.get().getUid(), tempUser.get().getNickname(),
+                            tempUser.get().getThumbnail(), alarm.get(i).getTitle(), alarm.get(i).getBody(),
+                            alarm.get(i).getCheckalarm(), alarm.get(i).getCategory(), alarm.get(i).getDetail()));
+                }else if(type.equals("Exercise")){
+                    Exercise.add(new LikeFollowRequest(tempUser.get().getUid(), tempUser.get().getNickname(),
+                            tempUser.get().getThumbnail(), alarm.get(i).getTitle(), alarm.get(i).getBody(),
+                            alarm.get(i).getCheckalarm(), alarm.get(i).getCategory(), alarm.get(i).getDetail()));
+                }else if(type.equals("Study")){
+                    Study.add(new LikeFollowRequest(tempUser.get().getUid(), tempUser.get().getNickname(),
+                            tempUser.get().getThumbnail(), alarm.get(i).getTitle(), alarm.get(i).getBody(),
+                            alarm.get(i).getCheckalarm(), alarm.get(i).getCategory(), alarm.get(i).getDetail()));
+                }else if(type.equals("Art")){
+                    Art.add(new LikeFollowRequest(tempUser.get().getUid(), tempUser.get().getNickname(),
+                            tempUser.get().getThumbnail(), alarm.get(i).getTitle(), alarm.get(i).getBody(),
+                            alarm.get(i).getCheckalarm(), alarm.get(i).getCategory(), alarm.get(i).getDetail()));
+                }else{
+                    Etc.add(new LikeFollowRequest(tempUser.get().getUid(), tempUser.get().getNickname(),
+                            tempUser.get().getThumbnail(), alarm.get(i).getTitle(), alarm.get(i).getBody(),
+                            alarm.get(i).getCheckalarm(), alarm.get(i).getCategory(), alarm.get(i).getDetail()));
+                }
             }
+            mapResult.put("Game", Game);
+            mapResult.put("Travel", Travel);
+            mapResult.put("Restaurant", Restaurant);
+            mapResult.put("Exercise", Exercise);
+            mapResult.put("Study", Study);
+            mapResult.put("Art", Art);
+            mapResult.put("Etc", Etc);
             response = new ResponseEntity<>(mapResult, HttpStatus.OK);
         }
 
