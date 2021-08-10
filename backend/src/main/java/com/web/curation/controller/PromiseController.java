@@ -1,5 +1,6 @@
 package com.web.curation.controller;
 
+import com.web.curation.dao.alarm.AlarmDao;
 import com.web.curation.dao.article.ArticleDao;
 import com.web.curation.dao.follow.FollowDao;
 import com.web.curation.dao.promise.PromiseDao;
@@ -7,6 +8,7 @@ import com.web.curation.dao.promise.PromisepeopleDao;
 import com.web.curation.dao.scrap.ScrapDao;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
+import com.web.curation.model.alarm.Alarm;
 import com.web.curation.model.article.Article;
 import com.web.curation.model.article.ViewArticleRequest;
 import com.web.curation.model.promise.Promise;
@@ -14,6 +16,7 @@ import com.web.curation.model.promise.PromiseLocationInfo;
 import com.web.curation.model.promise.PromiseResponse;
 import com.web.curation.model.promise.Promisepeople;
 import com.web.curation.model.user.User;
+import com.web.curation.service.alarm.NotificationService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -42,6 +45,8 @@ import java.util.stream.Stream;
 @RestController
 public class PromiseController {
 
+    private final NotificationService notificationService;
+
     @Autowired
     ArticleDao articleDao;
 
@@ -59,6 +64,9 @@ public class PromiseController {
 
     @Autowired
     FollowDao followDao;
+
+    @Autowired
+    AlarmDao alarmDao;
 
     @PostMapping("/promise")
     @ApiOperation(value = "약속 생성하기")
@@ -102,7 +110,22 @@ public class PromiseController {
                                 .thumbnail(invitedUser.getThumbnail())
                                 .approve(0)
                                 .build());
+
+                //팔로잉 팔로워에게 알람 일괄 전송
+                Long alarmId = alarmDao.save(Alarm.builder()
+                        .alarmid(null)
+                        .receiveuid(invitedUser.getUid())
+                        .senderuid(userOpt.get().getUid())
+                        .title("Promise")
+                        .body(userOpt.get().getNickname()+"의 약속이 생성되었습니다.")
+                        .checkalarm(false)
+                        .category("Promise")
+                        .detail(promiseID).build()).getAlarmid();
+
+                notificationService.sendNotification(alarmDao.getOne(alarmId), invitedUser.getAlarmtoken());
             }
+
+
 
             // 약속 생성자 본인도 PromisePeople table에 저장
             User createrUser = userDao.findByUid(userOpt.get().getUid()).get();
