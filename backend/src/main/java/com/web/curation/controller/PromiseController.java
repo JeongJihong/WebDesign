@@ -97,8 +97,6 @@ public class PromiseController {
 
             // 약속 생성자의 모든 팔로워/팔로잉의 UID 저장
             List<Long> allFollowingFollower = followDao.findBySrcidAndApprove(userOpt.get().getUid());
-            allFollowingFollower.addAll(followDao.findByDstidAndApprove(userOpt.get().getUid()));
-
             // 팔로워/팔로잉 PromisePeople table에 저장
             for (int i = 0; i < allFollowingFollower.size(); i++) {
                 User invitedUser = userDao.findByUid(allFollowingFollower.get(i)).get();
@@ -152,10 +150,8 @@ public class PromiseController {
         }else {
             UserDetails user2 = (UserDetails) user.getPrincipal();
             Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
-
             // 내가 생성하고 약속 시간 전인 Promise의 List
             List<Promise> waitingList = promiseDao.waitingPromise(userOpt.get().getUid());
-
             // List<Promise>를 peopleNum을 추가한 List<PromiseResponse>로 변환
             Stream<Promise> waitingStream = waitingList.stream();
             List<PromiseResponse> waiting = waitingStream.map(promise -> new PromiseResponse(promise.getPromiseid(),
