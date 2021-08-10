@@ -63,7 +63,7 @@ public class AlarmController {
             Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
             User user3 = new User(userOpt.get().getUid(), userOpt.get().getNickname(), userOpt.get().getEmail(),
                     userOpt.get().getPassword(), userOpt.get().getIntroduction(), userOpt.get().getThumbnail(),
-                    token, userOpt.get().getArticles(), userOpt.get().getRoles());
+                    userOpt.get().getStatus(), token, userOpt.get().getArticles(), userOpt.get().getRoles());
             userDao.save(user3);
             response = new ResponseEntity<>("Success", HttpStatus.OK);
         }
