@@ -89,6 +89,7 @@ public class AccountController {
                 .email(request.getEmail())
                 .nickname(request.getNickname())
                 .password(passwordEncoder.encode(request.getPassword()))
+                .status(0L)
                 .roles(Collections.singletonList("ROLE_USER"))
                 .build()).getUid();
     }
@@ -170,7 +171,6 @@ public class AccountController {
         return response;
     }
 
-
     @DeleteMapping("/account/profile")
     @ApiOperation(value = "회원 탈퇴")
     public Object changeUserProfile(){
@@ -209,7 +209,6 @@ public class AccountController {
             return new ResponseEntity<>("Success", HttpStatus.OK);
         }
     }
-
 
     @GetMapping("/account/profile/{nickname}")
     @ApiOperation(value = "타 유저 피드 보기")
@@ -281,4 +280,41 @@ public class AccountController {
         }
         return response;
     }
+
+    @GetMapping("/account/status/{nickname}")
+    @ApiOperation(value = "유저의 status 반환")
+    public Object getStatus(@PathVariable("nickname") final String nickname) {
+        Authentication user = SecurityContextHolder.getContext().getAuthentication();
+        ResponseEntity response = null;
+        if(user.getPrincipal() == "anonymousUser"){
+            response = new ResponseEntity<>("Fail", HttpStatus.UNAUTHORIZED);
+        }else{
+            Optional<User> userOpt = userDao.findByNickname(nickname);
+            Long status = userOpt.get().getStatus();
+            response = new ResponseEntity<>(status, HttpStatus.OK);
+        }
+        return response;
+    }
+
+    @PutMapping(value = "/account/status/{nickname}")
+    @ApiOperation(value = "유저의 status 수정")
+    public Object changeStatus(@PathVariable("nickname") final String nickname,
+                               @RequestParam(required = true) Long status){
+        Authentication user = SecurityContextHolder.getContext().getAuthentication();
+        ResponseEntity response = null;
+        if(user.getPrincipal() == "anonymousUser"){
+            response = new ResponseEntity<>("Fail", HttpStatus.UNAUTHORIZED);
+        }else{
+            Optional<User> userOpt = userDao.findByNickname(nickname);
+            Long newStat = Math.max(0, userOpt.get().getStatus() + status);
+
+            User user3 = new User(userOpt.get().getUid(), userOpt.get().getNickname(), userOpt.get().getEmail(),
+                    userOpt.get().getPassword(), userOpt.get().getIntroduction(), userOpt.get().getThumbnail(),
+                    newStat, userOpt.get().getAlarmtoken(), userOpt.get().getArticles(), userOpt.get().getRoles());
+            userDao.save(user3);
+            response = new ResponseEntity<>("Success", HttpStatus.OK);
+        }
+        return response;
+    }
+
 }
