@@ -279,6 +279,7 @@ public class AccountController {
             response = new ResponseEntity<>(result, HttpStatus.OK);
         }
         return response;
+        //
     }
 
     @GetMapping("/account/status/{nickname}")
