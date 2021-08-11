@@ -86,7 +86,7 @@ public class ArticleController {
     ArticleService articleService;
 
     final String basePath = "/home/ubuntu/b302/dist/img/feed/";
-//    final String basePath = rootPath + "/" + "dist" + "/" + "img" + "/feed/";
+
 
 
     private List<String> saveFiles(List<MultipartFile> files) throws IOException{
