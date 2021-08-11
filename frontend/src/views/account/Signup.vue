@@ -48,7 +48,6 @@
     
     <form @submit="checkForm" @submit.prevent="signup">
       <div v-if="activeButton() && isSubmit">
-        <!-- <button @click="PopUpEmailModal" class="btn-bottom" >가입하기</button> -->
         <button class="btn-bottom" >가입하기</button>
       </div>
       <div v-else>
@@ -74,9 +73,6 @@ export default {
       sameCheckPassword:false,
       nickname: "",
       nicknameConfirm:false,
-
-      isTerm: false,
-      isLoading: false,
       error: {
         email: false,
         password: false,
