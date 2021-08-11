@@ -50,24 +50,34 @@
         </div>
       </div>
       <div v-else>
-        <div v-if="Object.keys(this.promiseList).length === 0"
+        <div v-if="promiseList.length !== 0 && promiseList.Travel.length === 0
+          && promiseList.Restaurant.length === 0
+          && promiseList.Study.length === 0
+          && promiseList.Art.length === 0
+          && promiseList.Game.length === 0
+          && promiseList.Exercise.length === 0
+          && promiseList.Etc.length === 0"
           class="d-flex justify-content-center">
           <p>약속 요청이 존재하지 않습니다. 😥</p>
         </div>
         <div v-else>
-          <b-list-group>
-            <b-list-group-item
-              class="border-0 my-1" v-for="user in promiseList" :key="user.senderUid"
-              @click="goToPromise(user.detail)">
-              <div class="d-flex align-items-center">
-                <span>
-                  <img v-if="user.thumnail" :src="user.thumnail"
-                    :alt="user.senderNickname + '님의 프로필'">
-                </span>
-                <span>{{ user.senderNickname }}님의 약속 초대가 왔습니다.</span>
-              </div>
-            </b-list-group-item>
-          </b-list-group>
+          <div v-for="(category, idx) in promiseList" :key="'category'+idx">
+            <div v-if="category.length !== 0">
+              <b-list-group>
+                <b-list-group-item
+                  class="border-0 my-1" v-for="user in category" :key="user.detail"
+                  @click="goToPromise(user.detail)">
+                  <div class="d-flex align-items-center">
+                    <span>
+                      <img v-if="user.thumnail" :src="user.thumnail"
+                        :alt="user.senderNickname + '님의 프로필'">
+                    </span>
+                    <span>{{ user.senderNickname }}님의 약속 초대가 왔습니다.</span>
+                  </div>
+                </b-list-group-item>
+              </b-list-group>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -131,6 +141,9 @@ export default {
   created() {
     this.$store.dispatch('alarmLikeGet', this.token)
   },
+  beforeDestroy() {
+    this.disableScroll()
+  },
   methods: {
     goBack() {
       this.$router.go(-1)
@@ -154,6 +167,11 @@ export default {
           document.getElementById('custom-button-tab').style.position = 'fixed'
           document.getElementById('custom-button-tab').style.bottom = 0
         }
+      }
+    },
+    disableScroll() {
+      window.onscroll = () => {
+        // empty
       }
     },
     goToArticle(articleid) {

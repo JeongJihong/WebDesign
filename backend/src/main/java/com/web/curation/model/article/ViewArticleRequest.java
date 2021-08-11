@@ -1,12 +1,11 @@
 package com.web.curation.model.article;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.web.curation.model.promise.Promise;
+import lombok.*;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -14,6 +13,7 @@ import lombok.NoArgsConstructor;
 public class ViewArticleRequest {
 
     private Article articleDetail;
+    private Promise promiseDetail;
 
     private Long userId;            // 로그인 된 사용자 아이디
     private String userNickname;    // 로그인 된 사용자 닉네임
