@@ -56,7 +56,7 @@ export default {
   },
   created() {
     axios({
-        url:`http://127.0.0.1:8080/article/`+this.$route.params.articleid+`/comment`,
+        url:`https://i5b302.p.ssafy.io/api/article/`+this.$route.params.articleid+`/comment`,
         method:'get',
         headers: {
             'x-auth-token': `${localStorage.getItem('token')}`,
@@ -79,7 +79,7 @@ export default {
     },
     getComments: function(){
       axios({
-        url:`http://127.0.0.1:8080/article/1/comment`,
+        url:`https://i5b302.p.ssafy.io/api/article/1/comment`,
         method:'get',
         headers: {
           'x-auth-token': `${localStorage.getItem('token')}`,
@@ -96,7 +96,7 @@ export default {
     },
     createComment(){
       axios({
-        url:'http://127.0.0.1:8080/article/'+this.$route.params.articleid+'/comment',
+        url:'https://i5b302.p.ssafy.io/api/article/'+this.$route.params.articleid+'/comment',
         method:'post',
         headers: {
           'x-auth-token': `${localStorage.getItem('token')}`,
@@ -116,7 +116,7 @@ export default {
     },
     CommentDelete(commentid){
       axios({
-        url:`http://127.0.0.1:8080/article/comment/`+commentid,
+        url:`https://i5b302.p.ssafy.io/api/article/comment/`+commentid,
         method:'delete',
         headers: {
           'x-auth-token': `${localStorage.getItem('token')}`,
@@ -134,7 +134,7 @@ export default {
       // const username = jwt_decode(localStorage.getItem('jwt')).username
       // const userid = jwt_decode(localStorage.getItem('jwt')).user_id
       axios({
-        url:`http://127.0.0.1:8080/article/comment/`+commentid,
+        url:`https://i5b302.p.ssafy.io/api/article/comment/`+commentid,
         method:'put',
         headers: {
           'x-auth-token': `${localStorage.getItem('token')}`,

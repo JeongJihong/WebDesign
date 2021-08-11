@@ -38,7 +38,7 @@ export default {
   },
   created(){
       axios({
-          url:'http://127.0.0.1:8080/promise',
+          url:'https://i5b302.p.ssafy.io/api/promise',
           method:'get',
           headers: {
             'x-auth-token': `${localStorage.getItem('token')}`,

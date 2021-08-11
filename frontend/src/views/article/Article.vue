@@ -73,7 +73,7 @@ export default {
   },
   methods:{
     infiniteHandler($state) {
-      axios.get('http://127.0.0.1:8080/article/main', {
+      axios.get('https://i5b302.p.ssafy.io/api/article/main', {
           headers: {
             'x-auth-token': `${localStorage.getItem('token')}`,
           },
@@ -109,7 +109,7 @@ export default {
       let likestat = document.getElementById('likestat')
       if (likestat.variant == "secondary"){
         axios({
-          url:`http://127.0.0.1:8080/article/`+payload.articleid+'/like',
+          url:`https://i5b302.p.ssafy.io/api/article/`+payload.articleid+'/like',
           method:'post',
           headers: {
                 'x-auth-token': `${localStorage.getItem('token')}`,
@@ -127,7 +127,7 @@ export default {
         // Like Alarm POST
         if (payload.nickname !== this.username) {
           axios({
-            url: 'http://127.0.0.1:8080/alarm',
+            url: 'https://i5b302.p.ssafy.io/api/alarm',
             method: 'post',
             headers: {
               'x-auth-token': this.token
@@ -144,7 +144,7 @@ export default {
       }
       else{
         axios({
-          url:`http://127.0.0.1:8080/article/`+payload.articleid+'/like',
+          url:`https://i5b302.p.ssafy.io/api/article/`+payload.articleid+'/like',
           method:'delete',
           headers: {
                 'x-auth-token': `${localStorage.getItem('token')}`,

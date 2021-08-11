@@ -87,7 +87,7 @@ export default {
       formData.append("file", this.userInfo.file);
       axios({
         method: 'patch',
-        url: 'http://127.0.0.1:8080/account/profile/',
+        url: 'https://i5b302.p.ssafy.io/api/account/profile/',
         data: formData,
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -107,7 +107,7 @@ export default {
     getUserInfo: function () {
       axios({
         method: 'get',
-        url: `http://127.0.0.1:8080/account/profile/${this.userInfo.nickname}`,
+        url: `https://i5b302.p.ssafy.io/api/account/profile/${this.userInfo.nickname}`,
         headers: {
           'Content-Type': 'application/json',
           'X-AUTH-TOKEN' : this.$store.state.token
@@ -146,7 +146,7 @@ export default {
     console.log(this.$store.state)
     axios({
       method: 'get',
-      url: `http://127.0.0.1:8080/account/checkJWT/`,
+      url: `https://i5b302.p.ssafy.io/api/account/checkJWT/`,
       headers: {
         'Content-Type': 'application/json',
         'X-AUTH-TOKEN' : this.$store.state.token
