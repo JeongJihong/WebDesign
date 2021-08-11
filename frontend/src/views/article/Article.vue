@@ -117,6 +117,21 @@ export default {
           this.$router.push('/');
       })
     },
+    getArtcleLike(payload){
+      axios({
+          url:`http://127.0.0.1:8080/article/`+payload.articleid+'/like',
+          method:'get',
+          headers: {
+                'x-auth-token': `${localStorage.getItem('token')}`,
+              },
+        })
+        .then(res=>{
+          console.log(res.data)
+        })
+        .catch(err=>{
+          console.log(err)
+        })
+    },
     articleLike(payload){
       let likestat = document.getElementById('likestat')
       if (likestat.variant == "secondary"){
@@ -133,6 +148,7 @@ export default {
           // this.article.likeCheck = false
           likestat.variant = "danger"
           likestat.setAttribute('variant','danger')
+          this.getArtcleLike(payload.articleid)
         })
         .catch(err=>{
           console.log(err)
@@ -170,6 +186,7 @@ export default {
           console.log("좋아요 -> 싫어요")
           likestat.variant = "secondary"
           likestat.setAttribute('variant','secondary')
+          this.getArtcleLike(payload.articleid)
         })
         .catch(err=>{
           console.log(err)

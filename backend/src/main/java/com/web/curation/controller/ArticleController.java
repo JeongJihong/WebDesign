@@ -103,7 +103,7 @@ public class ArticleController {
 //        return pathName;
 //    }
 
-    @PostMapping(value = "/article", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/article")
     @ApiOperation(value = "게시글 작성")
     public Object postArticle(@RequestBody ArticleWrite request) throws IOException {
         Authentication user = SecurityContextHolder.getContext().getAuthentication();
