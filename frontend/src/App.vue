@@ -72,13 +72,15 @@ export default {
         this.backShow = false
       }
 
-      navigator.geolocation.watchPosition((position) => {
-        let location = {
-          lat: position.coords.latitude,
-          lon: position.coords.longitude
-        }
-        this.userLocationUpdate(location)
-      })
+      if (localStorage.getItem('token')) {
+        navigator.geolocation.watchPosition((position) => {
+          let location = {
+            lat: position.coords.latitude,
+            lon: position.coords.longitude
+          }
+          this.userLocationUpdate(location)
+        })
+      }
     }
   },
   created() {
