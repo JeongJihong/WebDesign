@@ -85,32 +85,37 @@ public class ArticleController {
     @Autowired
     ArticleService articleService;
 
-//    private List<String> saveFiles(List<MultipartFile> files) throws IOException{
-//        List<String> pathName = new ArrayList<>();
-//        File Folder = new File(basePath);
-//        if(!Folder.exists()){
-//            try{
-//                Folder.mkdir();
-//            }catch (Exception e){
-//                e.getStackTrace();
-//            }
-//        }
-//        UUID uuid = null;
-//        for(int i = 0; i < files.size(); i++){
-//            uuid = UUID.randomUUID();
-//            String extension = FilenameUtils.getExtension(files.get(i).getOriginalFilename());
-//            String rename = basePath + i + "_" + uuid + "." + extension;
-//            File dest = new File(rename);
-//            files.get(i).transferTo(dest);
-//            pathName.add(rename);
-//        }
-//
-//        return pathName;
-//    }
+//    final String basePath = "/home/ubuntu/b302/dist/img/feed/";
+    final String basePath = "";
 
-    @PostMapping(value = "/article")
+
+
+    private List<String> saveFiles(List<MultipartFile> files) throws IOException{
+        List<String> pathName = new ArrayList<>();
+        File Folder = new File(basePath);
+        if(!Folder.exists()){
+            try{
+                Folder.mkdir();
+            }catch (Exception e){
+                e.getStackTrace();
+            }
+        }
+        UUID uuid = null;
+        for(int i = 0; i < files.size(); i++){
+            uuid = UUID.randomUUID();
+            String extension = FilenameUtils.getExtension(files.get(i).getOriginalFilename());
+            String rename = basePath + i + "_" + uuid + "." + extension;
+            File dest = new File(rename);
+            files.get(i).transferTo(dest);
+            pathName.add(rename);
+        }
+
+        return pathName;
+    }
+
+    @PostMapping(value = "/article" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ApiOperation(value = "게시글 작성")
-    public Object postArticle(@RequestBody ArticleWrite request) throws IOException {
+    public Object postArticle(@RequestPart String content, @RequestPart(required = false) List<MultipartFile> files, @RequestParam(required = false) Long promiseid) throws IOException {
         Authentication user = SecurityContextHolder.getContext().getAuthentication();
         ResponseEntity response = null;
         if(user.getPrincipal() == "anonymousUser"){
@@ -120,22 +125,28 @@ public class ArticleController {
             UserDetails user2 = (UserDetails) user.getPrincipal();
             Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
 
+            // 일반 게시글에 이미지 첨부가 되지 않았을 경우 게시글 작성 실패
+            if(promiseid == null && files.size() == 0) {
+                response = new ResponseEntity<>("게시글 작성 실패", HttpStatus.BAD_REQUEST);
+                return response;
+            }
+
             Long articleId = articleDao.save(Article.builder()
                     .articleid(null)
                     .id(userOpt.get().getUid())
-                    .promiseid(request.getPromiseid())
+                    .promiseid(promiseid)
                     .createdtime(null)
                     .updatedtime(null)
-                    .review(request.getContent())
+                    .review(content)
                     .build()
             ).getArticleid();
 
-
-            for(int i = 0; i < request.getFiles().size(); ++i) {
+            List<String> pathName = saveFiles(files);
+            for(int i = 0; i < files.size(); ++i) {
                 imageDao.save(Image.builder()
                         .imageid(null)
                         .articleid(articleId)
-                        .imgURL(request.getFiles().get(i))
+                        .imgURL(pathName.get(i))
                         .build()
                 );
             }

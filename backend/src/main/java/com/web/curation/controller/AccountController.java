@@ -60,8 +60,12 @@ public class AccountController {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
 
+    final String rootPath = FileSystemView.getFileSystemView().getHomeDirectory().toString();
+//    final String basePath = rootPath + "/" + "dist" + "/" + "img" + "/feed/";
+    final String basePath = "/home/ubuntu/b302/dist/img/feed/";
     @GetMapping("/test")
     public String test(){
+        System.out.println(basePath);
         return "test Success";
     }
 

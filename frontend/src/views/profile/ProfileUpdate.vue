@@ -123,7 +123,7 @@ export default {
         if (typeof this.thumbnail === 'undefined') {
           this.thumbnail = require(`@/assets/images/profile_default.png`)
         }
-        this.fixThumbnailURL()
+        // this.fixThumbnailURL()
       })
       .catch((err) => {
         console.log(err)
@@ -134,13 +134,13 @@ export default {
         name: 'ChangePassword',
       })
     },
-    fixThumbnailURL () {
-      var tmp = this.thumbnail.split('Desktop/')[1];
-      console.log('이건 왜 안돼', tmp)
-      tmp = 'http://localhost:3000/' + tmp;
-      this.thumbnail = tmp;
-      console.log('새로 바뀐 이미지 url', this.thumbnail)
-    }
+    // fixThumbnailURL () {
+    //   var tmp = this.thumbnail.split('Desktop/')[1];
+    //   console.log('이건 왜 안돼', tmp)
+    //   tmp = 'http://localhost:3000/' + tmp;
+    //   this.thumbnail = tmp;
+    //   console.log('새로 바뀐 이미지 url', this.thumbnail)
+    // }
   },
   created () {
     console.log(this.$store.state)
