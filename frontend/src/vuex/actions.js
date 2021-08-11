@@ -73,6 +73,7 @@ export default {
       },
     })
       .then((res) => {
+        //
         axios({
           url: `https://i5b302.p.ssafy.io/api/search?id=${res.data.uid}`,
           method: "get",
