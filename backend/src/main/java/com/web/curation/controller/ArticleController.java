@@ -85,7 +85,8 @@ public class ArticleController {
     @Autowired
     ArticleService articleService;
 
-    final String basePath = "/home/ubuntu/b302/dist/img/feed/";
+//    final String basePath = "/home/ubuntu/b302/dist/img/feed/";
+    final String basePath = "";
 
 
 
@@ -114,7 +115,7 @@ public class ArticleController {
 
     @PostMapping(value = "/article" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ApiOperation(value = "게시글 작성")
-    public Object postArticle(@RequestPart String content, @RequestPart(required = false) List<MultipartFile> files) throws IOException {
+    public Object postArticle(@RequestPart String content, @RequestPart(required = false) List<MultipartFile> files, @RequestParam(required = false) Long promiseid) throws IOException {
         Authentication user = SecurityContextHolder.getContext().getAuthentication();
         ResponseEntity response = null;
         if(user.getPrincipal() == "anonymousUser"){
@@ -124,10 +125,16 @@ public class ArticleController {
             UserDetails user2 = (UserDetails) user.getPrincipal();
             Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
 
+            // 일반 게시글에 이미지 첨부가 되지 않았을 경우 게시글 작성 실패
+            if(promiseid == null && files.size() == 0) {
+                response = new ResponseEntity<>("게시글 작성 실패", HttpStatus.BAD_REQUEST);
+                return response;
+            }
+
             Long articleId = articleDao.save(Article.builder()
                     .articleid(null)
                     .id(userOpt.get().getUid())
-                    .promiseid(request.getPromiseid())
+                    .promiseid(promiseid)
                     .createdtime(null)
                     .updatedtime(null)
                     .review(content)
