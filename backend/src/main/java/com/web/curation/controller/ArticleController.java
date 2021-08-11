@@ -114,7 +114,7 @@ public class ArticleController {
 
     @PostMapping(value = "/article" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ApiOperation(value = "게시글 작성")
-    public Object postArticle(@RequestPart String content, @RequestPart(required = false) List<MultipartFile> files) throws IOException {
+    public Object postArticle(@RequestPart String content, @RequestPart(required = false) List<MultipartFile> files, @RequestParam(required = false) Long promiseid) throws IOException {
         Authentication user = SecurityContextHolder.getContext().getAuthentication();
         ResponseEntity response = null;
         if(user.getPrincipal() == "anonymousUser"){
@@ -127,7 +127,7 @@ public class ArticleController {
             Long articleId = articleDao.save(Article.builder()
                     .articleid(null)
                     .id(userOpt.get().getUid())
-                    .promiseid(request.getPromiseid())
+                    .promiseid(promiseid)
                     .createdtime(null)
                     .updatedtime(null)
                     .review(content)

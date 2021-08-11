@@ -41,6 +41,7 @@ public class SearchController {
     public ResponseEntity<String> saveSearch(@RequestBody Search request){
         Optional<User> userOpt = userDao.findByNickname(request.getName());
         System.out.println(userOpt.get().getUsername());
+
         searchDao.save(Search.builder()
                 .searchid(userOpt.get().getUid())
                 .id(request.getId())
