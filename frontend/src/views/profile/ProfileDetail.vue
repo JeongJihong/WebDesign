@@ -12,7 +12,11 @@
     <div class="d-flex">
       <img :src="thumbnail" alt="image" style="width: 70px; height: 70px" >
       <div class="mx-4">
-        <h4>{{ this.nickname }}</h4>
+        <!-- <h4>{{ this.nickname }}</h4> -->
+        <div class="d-flex justify-content-between">
+          <span class="fs-4">{{ this.nickname }}</span>
+          <span class="fs-4">Pipl {{ this.status }}</span>
+        </div>
         <div class="d-flex" style="justify-content: space-between">
           <button class="d-flex" @click="goToFollowList">
             <h4>팔로잉</h4>&nbsp;&nbsp;
@@ -28,7 +32,9 @@
     </div>
     <div class="d-grid pt-3">
       <button @click="goToFollow" v-if="this.nickname !== this.myNickname && this.didIrequestFollowToYou === false" class="btn btn-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">팔로우</button>
-      <button v-if="this.nickname !== this.myNickname && this.didIrequestFollowToYou === true" @click="cancelFollow" class="btn btn-outline-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">팔로우 요청 보냄</button>
+      <!-- <button v-if="this.nickname !== this.myNickname && this.didIrequestFollowToYou === true" @click="cancelFollow" class="btn btn-outline-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">팔로우 요청 보냄</button> -->
+      <button v-if="this.nickname !== this.myNickname && this.didIrequestFollowToYou === true && this.doIFollowYou === false" @click="cancelFollow" class="btn btn-outline-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">팔로우 요청 보냄</button>
+      <button @click="unfollow" v-if="this.doIFollowYou === true" class="btn btn-outline-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">팔로우 취소</button>
     </div>
     <div v-if="this.didYouRequestFollowToMe === true">
       <p class="pt-2 pb-0 mb-0">{{ this.nickname }}님의 팔로우 요청</p>
@@ -71,6 +77,8 @@ export default {
       articles: [],
       articlesLength: 0,
       thumbnail: '',
+      doIFollowYou: false,
+      status: 0, // Pipl 지수
     }
   },
   methods: {
@@ -102,9 +110,8 @@ export default {
         },
       })
       .then((res) => {
-        console.log('팔로우 요청 보내기 성공')
-        console.log(res.data)
         this.didIrequestFollowToYou = !this.didIrequestFollowToYou
+        this.getUserInfo()
       })
       .catch((err) => {
         alert(err)
@@ -136,12 +143,11 @@ export default {
         },
       })
       .then((res) => {
-        console.log('getUserInfo 데이터')
-        console.log(res.data)
+        this.myNickname = this.$store.state.username
         this.didIrequestFollowToYou = res.data.follow
         this.introduction = res.data.userProfile.introduction
         this.articles = res.data.article
-        console.log('articles', this.articles)
+        this.doIFollowYou = res.data.followBoolean
         if (this.articles === null) {
           this.articlesLength = 0
         }
@@ -149,7 +155,6 @@ export default {
           this.articlesLength = this.articles.length
         }
         this.thumbnail = res.data.userProfile.thumbnail
-        console.log(this.thumbnail)
         if (typeof this.thumbnail === 'undefined') {
           this.thumbnail = require(`@/assets/images/profile_default.png`)
         }
@@ -157,7 +162,7 @@ export default {
         this.followerList()
       })
       .catch((err) => {
-        console.log(err)
+        alert(err)
       })
     },
     checkFollowRequest () {
@@ -170,7 +175,6 @@ export default {
         },
       })
       .then((res) => {
-        console.log(res.data)
         this.didYouRequestFollowToMe = res.data.otherToMe
         this.followid = res.data.followid
       })
@@ -193,9 +197,9 @@ export default {
       .then((res) => {
         this.didYouRequestFollowToMe = !this.didYouRequestFollowToMe
         alert(`${this.nickname}님의 팔로우 요청을 수락하셨습니다!`)
-        this.followerList()
+        this.getUserInfo()
       })
-      .then((err) => {
+      .catch((err) => {
         alert(err)
       })
     },
@@ -208,14 +212,38 @@ export default {
           'X-AUTH-TOKEN' : this.$store.state.token
         },
         params: {
-          'followid': this.followid,
+          'srcnickname': this.nickname,
+          'dstnickname': this.myNickname
         },
       })
       .then((res) => {
         this.didYouRequestFollowToMe = !this.didYouRequestFollowToMe
         alert(`${this.nickname}님의 팔로우 요청을 거절하셨습니다!`)
+        this.getUserInfo()
       })
-      .then((err) => {
+      .catch((err) => {
+        alert(err)
+      })
+    },
+    unfollow () {
+      axios({
+        method: 'delete',
+        url: `http://127.0.0.1:8080/account/profile/follow`,
+        headers: {
+          'Content-Type': 'application/json',
+          'X-AUTH-TOKEN' : this.$store.state.token
+        },
+        params: {
+          'srcnickname': this.myNickname,
+          'dstnickname': this.nickname
+        },
+      })
+      .then((res) => {
+        this.didYouRequestFollowToMe = !this.didYouRequestFollowToMe
+        alert(`${this.nickname}님 팔로우를 취소했습니다!`)
+        this.getUserInfo()
+      })
+      .catch((err) => {
         alert(err)
       })
     },
@@ -234,8 +262,6 @@ export default {
         },
       })
       .then((res) => {
-        console.log('팔로워 불러오기')
-        console.log(res.data)
         this.followerLs = res.data
         this.followers = this.followerLs.length
 
@@ -255,8 +281,6 @@ export default {
         },
       })
       .then((res) => {
-        // console.log('팔로잉 불러오기')
-        // console.log(res.data)
         this.followingLs = res.data
         this.followings = this.followingLs.length
       })
@@ -273,12 +297,12 @@ export default {
           'X-AUTH-TOKEN' : this.$store.state.token
         },
         params: {
-          'followid': this.followid,
+          'srcnickname': this.myNickname,
+          'dstnickname': this.nickname
         }
       })
       .then((res) => {
         this.didIrequestFollowToYou = !this.didIrequestFollowToYou
-        console.log('승인여부', this.didYouRequestFollowToMe)
       })
     }
   },
@@ -296,11 +320,25 @@ export default {
       this.myNickname = this.$store.state.username
       this.myUid=res.data.uid
       this.getUserInfo()
-      console.log(this.myUid)
     })
     .catch((err) => {
-      console.log(err)
+      alert(err)
     })
+
+    axios({
+      url: `http://127.0.0.1:8080/status/${this.nickname}`,
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-AUTH-TOKEN' : this.$store.state.token
+      }
+    })
+      .then(res => {
+        this.status = res.data.status
+      })
+      .catch(() => {
+        console.log('Pipl 지수 GET 실패')
+      })
   }
 }
 </script>

@@ -87,6 +87,10 @@ export default {
     GoogleLogin
   },
   created() {
+    if (this.token !== '') {
+      this.$router.push({ name: 'FeedMain' })
+    }
+    
     this.component = this;
 
     this.passwordSchema
@@ -101,7 +105,8 @@ export default {
   },
   computed: {
     ...mapState([
-      'loginState'
+      'loginState',
+      'token'
     ])
   },
   watch: {

@@ -2,7 +2,7 @@
   <div>
     <!-- 헤더 -->
     <div class="mt-3 mx-4 fs-1" style="position: relative;">
-      <button><b-icon icon="arrow-left" class="me-4"></b-icon></button>
+      <button @click="goBack"><b-icon icon="arrow-left" class="me-4"></b-icon></button>
       <span class="fw-bold">알림</span>
     </div>
 
@@ -132,6 +132,9 @@ export default {
     this.$store.dispatch('alarmLikeGet', this.token)
   },
   methods: {
+    goBack() {
+      this.$router.go(-1)
+    },
     clickLike() {
       this.click = 'Like'
     },
