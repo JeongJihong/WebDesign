@@ -13,4 +13,5 @@ public class ArticleWrite {
 
     private String content;
     private List<String> files;
+    private Long promiseid;
 }
