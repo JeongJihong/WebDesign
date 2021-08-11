@@ -326,7 +326,7 @@ export default {
     })
 
     axios({
-      url: `http://127.0.0.1:8080/status/${this.nickname}`,
+      url: `http://127.0.0.1:8080/account/status/${this.nickname}`,
       method: 'get',
       headers: {
         'Content-Type': 'application/json',
@@ -334,7 +334,7 @@ export default {
       }
     })
       .then(res => {
-        this.status = res.data.status
+        this.status = res.data
       })
       .catch(() => {
         console.log('Pipl 지수 GET 실패')
