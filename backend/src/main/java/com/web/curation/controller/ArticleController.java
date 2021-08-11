@@ -118,6 +118,7 @@ public class ArticleController {
             Long articleId = articleDao.save(Article.builder()
                     .articleid(null)
                     .id(userOpt.get().getUid())
+                    .promiseid(request.getPromiseid())
                     .createdtime(null)
                     .updatedtime(null)
                     .review(request.getContent())
