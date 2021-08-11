@@ -39,6 +39,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import "./components/css/style.scss";
 import { mapState, mapActions } from 'vuex'
 
@@ -70,6 +71,14 @@ export default {
         this.navShow = false
         this.backShow = false
       }
+
+      navigator.geolocation.watchPosition((position) => {
+        let location = {
+          lat: position.coords.latitude,
+          lon: position.coords.longitude
+        }
+        this.userLocationUpdate(location)
+      })
     }
   },
   created() {
@@ -93,6 +102,61 @@ export default {
     goBack() {
       this.$router.go(-1)
     },
+    userLocationUpdate(location) {
+      axios({
+        url: 'http://127.0.0.1:8080/promise',
+        method: 'get',
+        headers: {
+          "Content-Type": "application/json",
+          "X-AUTH-TOKEN": this.$store.state.token,
+        }
+      })
+        .then(res => {
+          let promiseIds = []
+
+          for (let idx = 0; idx < res.data.waiting.length; idx++) {
+            if (!promiseIds.includes(res.data.waiting[idx].promiseid)) {
+              promiseIds.push(res.data.waiting[idx].promiseid)
+            }
+          }
+
+          let payload = {
+            data: res.data,
+            promiseIds: promiseIds
+          }
+
+          return payload
+        })
+        .then(payload => {
+          let promiseIdsWithUpcoming = payload.promiseIds
+
+          for (let idx = 0; idx < payload.data.upcoming.length; idx++) {
+            if (!promiseIdsWithUpcoming.includes(payload.data.upcoming[idx].promiseid)) {
+              promiseIdsWithUpcoming.push(payload.data.upcoming[idx].promiseid)
+            }
+          }
+
+          return promiseIdsWithUpcoming
+        })
+        .then(promiseIds => {
+          let formdata = new FormData()
+
+          formdata.append('lat', location.lat)
+          formdata.append('lon', location.lon)
+
+          for (let idx = 0; idx < promiseIds.length; idx++) {
+            axios({
+              url: `http://127.0.0.1:8080/promise/place/${promiseIds[idx]}`,
+              method: 'put',
+              headers: {
+                "Content-Type": "application/json",
+                "X-AUTH-TOKEN": this.$store.state.token,
+              },
+              data: formdata
+            })
+          }
+        })
+    }
   }
 }
 

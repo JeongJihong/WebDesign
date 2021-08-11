@@ -50,7 +50,7 @@ export default {
             const upcomings = res.data.upcoming
             const waitings = res.data.waiting
             for( let key in upcomings){
-              upcomings[key].type = upcomings[key].type.toLowerCase();
+              // upcomings[key].type = upcomings[key].type.toLowerCase();
               this.upcomingPromises.push(upcomings[key])
             }
             for( let key in waitings){
