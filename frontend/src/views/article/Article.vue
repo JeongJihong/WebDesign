@@ -63,7 +63,19 @@ export default {
         sliding: null,
         tests:4,
         articles:[],
+        likeCheck:false,
       }
+  },
+  watch:{
+    // likestat: function(v){
+    //   let likestat = document.getElementById('likestat')
+    //   if(this.article.likeCheck){
+    //   likestat.variant = "secondary"
+    //   }else{
+    //     likestat.variant = "secondary"
+    //   }
+    // }
+
   },
   computed: {
     ...mapState([
@@ -117,6 +129,8 @@ export default {
         })
         .then(res=>{
           console.log(res.data)
+          console.log("싫어요 -> 좋아요")
+          // this.article.likeCheck = false
           likestat.variant = "danger"
           likestat.setAttribute('variant','danger')
         })
@@ -152,6 +166,8 @@ export default {
         })
         .then(res=>{
           console.log(res.data)
+          // this.article.likeCheck = true
+          console.log("좋아요 -> 싫어요")
           likestat.variant = "secondary"
           likestat.setAttribute('variant','secondary')
         })
