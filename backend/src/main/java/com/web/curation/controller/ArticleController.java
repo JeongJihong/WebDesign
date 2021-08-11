@@ -248,6 +248,23 @@ public class ArticleController {
         return response;
     }
 
+    @GetMapping("/article/{articleid}/like")
+    @ApiOperation(value = "로그인한 유저가 해당 게시글 좋아요를 눌렀는지 확인")
+    public Object getArticleLike(@PathVariable(required = true) final Long articleid){
+        Authentication user = SecurityContextHolder.getContext().getAuthentication();
+        ResponseEntity response = null;
+        if(user.getPrincipal() == "anonymousUser"){
+            response = new ResponseEntity<>("Fail", HttpStatus.UNAUTHORIZED);
+        }else{
+            UserDetails user2 = (UserDetails) user.getPrincipal();
+            Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
+            boolean isArticeLike = articleLikeDao.existsByArticleidAndId(articleid, userOpt.get().getUid());
+
+            response = new ResponseEntity<>(isArticeLike, HttpStatus.OK);
+        }
+        return response;
+    }
+
     @PostMapping("/article/{articleid}/like")
     @ApiOperation(value = "좋아요")
     public Object articleLike(@PathVariable(required = true) final Long articleid){
