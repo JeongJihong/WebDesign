@@ -15,20 +15,26 @@
         <!-- <h4>{{ this.nickname }}</h4> -->
         <div class="d-flex justify-content-between">
           <span class="fs-4">{{ this.nickname }}</span>
-          <span class="fs-4">Pipl {{ this.status }}</span>
         </div>
         <div class="d-flex" style="justify-content: space-between">
           <button class="d-flex" @click="goToFollowList">
-            <h4>팔로잉</h4>&nbsp;&nbsp;
-            <h4 style="color:blue;">{{ this.followings }}</h4>
+            <h5>팔로잉</h5>&nbsp;&nbsp;
+            <h5 style="color:blue;">{{ this.followings }}</h5>
           </button>
           &nbsp;&nbsp;&nbsp;&nbsp;
           <button class="d-flex" @click="goToFollowList">
-            <h4>팔로워</h4>&nbsp;&nbsp;
-            <h4 style="color:blue;">{{ this.followers }}</h4>
+            <h5>팔로워</h5>&nbsp;&nbsp;
+            <h5 style="color:blue;">{{ this.followers }}</h5>
           </button>
         </div>
       </div>
+    </div>
+    <div class="mt-2">
+      <div class="d-flex justify-content-between">
+        <span style="font-size: 0.9rem">피플온도</span>
+        <span style="font-size: 0.9rem">{{this.status + 10.0}}℃</span>
+      </div>
+      <b-progress :value="status+10" :max="30" class="mb-1" variant="info" height="0.5rem"></b-progress>
     </div>
     <div class="d-grid pt-3">
       <button @click="goToFollow" v-if="this.nickname !== this.myNickname && this.didIrequestFollowToYou === false" class="btn btn-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">팔로우</button>
