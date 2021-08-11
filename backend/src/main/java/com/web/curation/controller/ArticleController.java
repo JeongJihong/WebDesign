@@ -4,6 +4,7 @@ import com.web.curation.dao.article.ArticleDao;
 import com.web.curation.dao.article.ArticleLikeDao;
 import com.web.curation.dao.image.ImageDao;
 import com.web.curation.dao.follow.FollowDao;
+import com.web.curation.dao.promise.PromiseDao;
 import com.web.curation.dao.scrap.ScrapDao;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
@@ -15,6 +16,7 @@ import com.web.curation.model.comment.Comment;
 import com.web.curation.model.follow.Follow;
 import com.web.curation.model.follow.FollowRequest;
 import com.web.curation.model.image.Image;
+import com.web.curation.model.promise.Promise;
 import com.web.curation.model.scrap.Scrap;
 import com.web.curation.model.user.User;
 import com.web.curation.service.article.ArticleService;
@@ -76,6 +78,9 @@ public class ArticleController {
 
     @Autowired
     FollowDao followDao;
+
+    @Autowired
+    PromiseDao promiseDao;
 
     @Autowired
     ArticleService articleService;
@@ -161,7 +166,11 @@ public class ArticleController {
             }
             boolean likeCheck = articleLikeDao.existsByArticleidAndId(articleid, userOpt.get().getUid());
             boolean scrapCheck = scrapDao.existsByArticleidAndId(articleid, userOpt.get().getUid());
-            ViewArticleRequest result = new ViewArticleRequest(article.get(), userOpt.get().getUid(),
+            Promise promise = null;
+            if(article.get().getPromiseid() != null) {
+                promise = promiseDao.findByPromiseid(article.get().getPromiseid());
+            }
+            ViewArticleRequest result = new ViewArticleRequest(article.get(), promise, userOpt.get().getUid(),
                                                             userOpt.get().getNickname(), like, likeCheck, scrapCheck);
             response = new ResponseEntity<>(result, HttpStatus.OK);
         }
@@ -186,7 +195,7 @@ public class ArticleController {
             // Article는 피드를 나타내기에 정보가 부족하기 때문에, List<Article>을 List<ViewArticleRequest>로 변환하여 정보를 더해준다.
             List<Article> articleList = articleService.followingsArticleList(loginID);
             Stream<Article> articleStream = articleList.stream();
-            List<ViewArticleRequest> requestList = articleStream.map(article -> new ViewArticleRequest(article, loginID, loginUser,
+            List<ViewArticleRequest> requestList = articleStream.map(article -> new ViewArticleRequest(article, null, loginID, loginUser,
                                                     articleLikeDao.countArticleLike(article.getArticleid()),
                                                     articleLikeDao.existsByArticleidAndId(article.getArticleid(), loginID),
                                                     scrapDao.existsByArticleidAndId(article.getArticleid(), loginID)))
@@ -199,6 +208,13 @@ public class ArticleController {
             Map result = new HashMap<String, Object>();
             result.put("pageList", requestPage.getPageList());
             result.put("totalPages", requestPage.getPageCount());
+
+            for (int i = 0; i < requestPage.getPageList().size(); i++) {
+                if(requestPage.getPageList().get(i).getArticleDetail().getPromiseid() != null) {
+                    Promise promise = promiseDao.findByPromiseid(requestPage.getPageList().get(i).getArticleDetail().getPromiseid());
+                    requestPage.getPageList().get(i).setPromiseDetail(promise);
+                }
+            }
             return new ResponseEntity<>(result, HttpStatus.OK);
         }
     }
