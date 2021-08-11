@@ -67,7 +67,7 @@ export default {
       headCount:2,
       promiseDate: '',
       promiseTime: '',
-      Types: [{ text: 'Select One', value: null }, 'game', 'study', 'travel', 'restaurant'],
+      Types: [{ text: 'Select One', value: null }, 'Travel', 'Restaurant', 'Study', 'Art', 'Game', 'Exercise', 'Etc'],
       Type:'',
       lat:0,
       lon:0,
