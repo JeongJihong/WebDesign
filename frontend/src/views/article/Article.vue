@@ -3,7 +3,7 @@
     <div class="wrapB">
       <h1>뉴스피드</h1>
       
-      <div v-for="article in articles" :key="article.review" style="z-index:-1;">
+      <div v-for="(article,idx) in articles" :key="idx" style="z-index:-1;">
         <b-avatar src="https://placekitten.com/300/300" size="2rem"></b-avatar><span>{{article.articleDetail.user.nickname}}</span>
         <b-carousel
           id="carousel-1"
@@ -32,8 +32,8 @@
         </b-carousel>
         <p> {{ article.articleDetail.review }} </p>
         <ul class="d-flex justify-content-left" style="padding-left:3px;">
-          <li v-if="article.likeCheck"><b-icon  @click="articleLike({ articleid: article.articleDetail.articleid, nickname: article.articleDetail.user.nickname })" id="likestat" icon="hand-thumbs-up" scale="1.5" variant="danger"></b-icon></li>
-          <li v-else><b-icon @click="articleLike({ articleid: article.articleDetail.articleid, nickname: article.articleDetail.user.nickname })" id="likestat" icon="hand-thumbs-up" scale="1.5" variant="secondary"></b-icon></li>
+          <li v-if="article.likeCheck" ><b-icon  @click="articleLike({ articleid: article.articleDetail.articleid, nickname: article.articleDetail.user.nickname, likeCheck:article.likeCheck, idx:idx  })" id="likestat" icon="hand-thumbs-up" scale="1.5" variant="danger"></b-icon></li>
+          <li v-else ><b-icon  @click="articleLike({ articleid: article.articleDetail.articleid, nickname: article.articleDetail.user.nickname,idx:idx })" id="likestat" icon="hand-thumbs-up" scale="1.5" variant="secondary"></b-icon></li>
           
           <li v-if="article.scrapCheck"><b-icon icon="tags-fill" scale="1.5" variant="primary"></b-icon></li>
           <li v-else><b-icon icon="tags" scale="1.5" variant="primary"></b-icon></li>
@@ -66,17 +66,6 @@ export default {
         likeCheck:false,
       }
   },
-  watch:{
-    // likestat: function(v){
-    //   let likestat = document.getElementById('likestat')
-    //   if(this.article.likeCheck){
-    //   likestat.variant = "secondary"
-    //   }else{
-    //     likestat.variant = "secondary"
-    //   }
-    // }
-
-  },
   computed: {
     ...mapState([
       'token',
@@ -95,6 +84,7 @@ export default {
         })
         .then(res => {
           if(res.data.totalPages == this.pageNum){
+              console.log($state)
               $state.complete();
           }else{
               setTimeout(() => {
@@ -102,39 +92,24 @@ export default {
                   const data = res.data.pageList;
                             for(let key in data){
                                 this.articles.push(data[key])
+                                console.log(this.articles)
                             }
                   this.pageNum++;
                   $state.loaded();
+                  console.log($state)
               }, 1000)
           }
       })
       .catch(err => {
-          console.log(err)
-          alert('에러');
-          localStorage.clear();
-          this.$store.state.loginState = false;
-          this.$store.state.token = null;
-          this.$router.push('/');
+          if (err.response.status === 401) {
+                    localStorage.removeItem('token')
+                    localStorage.removeItem('username')
+                    this.$router.push({ name: 'Login' })
+                  }
       })
     },
-    getArtcleLike(payload){
-      axios({
-          url:`http://127.0.0.1:8080/article/`+payload.articleid+'/like',
-          method:'get',
-          headers: {
-                'x-auth-token': `${localStorage.getItem('token')}`,
-              },
-        })
-        .then(res=>{
-          console.log(res.data)
-        })
-        .catch(err=>{
-          console.log(err)
-        })
-    },
     articleLike(payload){
-      let likestat = document.getElementById('likestat')
-      if (likestat.variant == "secondary"){
+      if (!this.articles[payload.idx].likeCheck){
         axios({
           url:`http://127.0.0.1:8080/article/`+payload.articleid+'/like',
           method:'post',
@@ -144,11 +119,8 @@ export default {
         })
         .then(res=>{
           console.log(res.data)
+          this.articles[payload.idx].likeCheck = !this.articles[payload.idx].likeCheck
           console.log("싫어요 -> 좋아요")
-          // this.article.likeCheck = false
-          likestat.variant = "danger"
-          likestat.setAttribute('variant','danger')
-          this.getArtcleLike(payload.articleid)
         })
         .catch(err=>{
           console.log(err)
@@ -184,9 +156,10 @@ export default {
           console.log(res.data)
           // this.article.likeCheck = true
           console.log("좋아요 -> 싫어요")
-          likestat.variant = "secondary"
-          likestat.setAttribute('variant','secondary')
-          this.getArtcleLike(payload.articleid)
+          this.articles[payload.idx].likeCheck = !this.articles[payload.idx].likeCheck
+          // likestat.variant = "secondary"
+          // likestat.setAttribute("variant",'secondary')
+          // this.infiniteHandler()
         })
         .catch(err=>{
           console.log(err)
