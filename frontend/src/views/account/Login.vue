@@ -43,9 +43,6 @@
           <div class="sns-login">
             <div class="text">
               <p>SNS 간편 로그인</p>
-              <div class="col">
-    <a class="btn btn-lg btn-secondary" th:href="@{/kakao/oauth}">카카오로 로그인하기</a>
-</div>
               <kakaoLogin :component="component" />
               <GoogleLogin :component="component" />
               <div class="bar"></div>
@@ -67,11 +64,6 @@
               <router-link to="/account/signup" class="btn--text">가입하기</router-link>
             </div>
           </div>
-          <div>
-          <router-link :to="{ name: 'OnBoarding' }">
-            <button>혹시 처음이라면</button>
-          </router-link>
-          </div>
         </div>
       </div>
     </div>
@@ -79,6 +71,8 @@
 </template>
 
 <script>
+
+import "../../components/css/user.scss";
 import PV from "password-validator";
 import * as EmailValidator from "email-validator";
 import KakaoLogin from "../../components/user/snsLogin/Kakao.vue";
@@ -90,7 +84,7 @@ export default {
   name:'Login',
   components: {
     KakaoLogin,
-    GoogleLogin,
+    GoogleLogin
   },
   created() {
     if (this.token !== '') {
