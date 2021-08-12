@@ -17,7 +17,7 @@ import PromiseList from '@/views/promise/PromiseList.vue'
 import PromiseCreate from '@/views/promise/PromiseCreate.vue'
 import PromiseDetail from '@/views/promise/PromiseDetail.vue'
 import PromiseLocations from '@/views/promise/PromiseLocations'
-import Onboarding from '@/views/account/Onboarding.vue'
+// import Onboarding from '@/views/account/Onboarding.vue'
 
 import Vue from 'vue'
 import VueRouter from 'vue-router'
@@ -36,11 +36,11 @@ const routes = [
         name : 'Signup',
         component : Signup
     },
-    {
-        path : '/onbording',
-        name : 'Onboarding',
-        component : Onboarding
-    },
+    // {
+    //     path : '/onbording',
+    //     name : 'Onboarding',
+    //     component : Onboarding
+    // },
     {
         path : '/feed/main',
         name : 'FeedMain',
