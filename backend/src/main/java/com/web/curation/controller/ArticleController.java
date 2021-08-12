@@ -86,9 +86,8 @@ public class ArticleController {
     ArticleService articleService;
 
 //    final String basePath = "/home/ubuntu/b302/dist/img/feed/";
-    final String basePath = "";
-
-
+    final String rootPath = System.getProperty("user.dir");
+    String basePath = rootPath.substring(0, rootPath.length()-7) + "frontend\\src\\assets\\images\\";
 
     private List<String> saveFiles(List<MultipartFile> files) throws IOException{
         List<String> pathName = new ArrayList<>();
@@ -104,10 +103,11 @@ public class ArticleController {
         for(int i = 0; i < files.size(); i++){
             uuid = UUID.randomUUID();
             String extension = FilenameUtils.getExtension(files.get(i).getOriginalFilename());
-            String rename = basePath + i + "_" + uuid + "." + extension;
+            String filename = i + "_" + uuid + "." + extension;
+            String rename = basePath + filename;
             File dest = new File(rename);
             files.get(i).transferTo(dest);
-            pathName.add(rename);
+            pathName.add(filename);
         }
 
         return pathName;

@@ -25,7 +25,7 @@
                   class="d-block img-fluid w-100"
                   width="1024"
                   height="480"
-                  :src= image.imgURL
+                  :src="getArticleFeeImgUrl({ idx, imgURL: image.imgURL }).icon"
                   alt="image slot"
                 >
               </template>
@@ -226,6 +226,12 @@ export default {
     onSlideEnd(slide) {
       this.sliding = false
     },
+    getArticleFeeImgUrl (payload) {
+      return {
+        ...this.articles,
+        icon: this.articles[payload.idx] && require(`@/assets/images/${payload.imgURL}`)
+      }
+    }
   },
 };
 //
