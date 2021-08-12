@@ -59,6 +59,7 @@ export default {
       console.log(articleid+'클릭!')
       this.$router.push({ name: 'ArticleDetail', params: { articleid: articleid } })
     },
+    // 애매한 상태관리여서 직접 작성
     scrapDelete(payload) {
       axios({
         url: `http://127.0.0.1:8080/scrap/${payload.scrapid}`,
