@@ -67,6 +67,11 @@
               <router-link to="/account/signup" class="btn--text">가입하기</router-link>
             </div>
           </div>
+          <div>
+          <router-link :to="{ name: 'OnBoarding' }">
+            <button>혹시 처음이라면</button>
+          </router-link>
+          </div>
         </div>
       </div>
     </div>
@@ -74,8 +79,6 @@
 </template>
 
 <script>
-
-import "../../components/css/user.scss";
 import PV from "password-validator";
 import * as EmailValidator from "email-validator";
 import KakaoLogin from "../../components/user/snsLogin/Kakao.vue";
@@ -87,7 +90,7 @@ export default {
   name:'Login',
   components: {
     KakaoLogin,
-    GoogleLogin
+    GoogleLogin,
   },
   created() {
     if (this.token !== '') {
