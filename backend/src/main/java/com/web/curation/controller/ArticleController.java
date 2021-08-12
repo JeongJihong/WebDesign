@@ -352,7 +352,8 @@ public class ArticleController {
                     .scrapid(null)
                     .id(userOpt.get().getUid())
                     .articleid(articleid)
-                    .thumnailURL(articleDao.findByArticleid(articleid).get().getImages().get(0).getImgURL())
+                    .thumnailURL(articleDao.findByArticleid(articleid).get().getImages() == null ?
+                            null : articleDao.findByArticleid(articleid).get().getImages().get(0).getImgURL())
                     .build());
         }
 
