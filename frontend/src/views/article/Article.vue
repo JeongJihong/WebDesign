@@ -31,7 +31,7 @@
               </template>
             </b-carousel-slide>
           </b-carousel>
-          <p> {{ article.articleDetail.review }} 약속아님 </p>
+          <p> {{ article.articleDetail.review }}</p>
           <div v-if="article.articleDetail.promiseid">
             <p>약속 인원 : {{ article.promiseDetail.num }} 명</p>
             <p>약속 장소 : {{ article.promiseDetail.place }}</p>
