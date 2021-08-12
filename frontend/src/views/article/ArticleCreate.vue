@@ -23,7 +23,7 @@
     data(){
       return{
         content:"",
-        afiles:File,
+        afiles:"",
       }
     },
     methods:{

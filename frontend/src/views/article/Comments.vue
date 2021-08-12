@@ -79,7 +79,7 @@ export default {
     },
     getComments: function(){
       axios({
-        url:`http://127.0.0.1:8080/article/1/comment`,
+        url:'http://127.0.0.1:8080/article/'+this.$route.params.articleid+'/comment',
         method:'get',
         headers: {
           'x-auth-token': `${localStorage.getItem('token')}`,
