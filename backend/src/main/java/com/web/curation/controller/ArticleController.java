@@ -10,11 +10,7 @@ import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.article.Article;
 import com.web.curation.model.article.ArticleLike;
-import com.web.curation.model.article.ArticleWrite;
 import com.web.curation.model.article.ViewArticleRequest;
-import com.web.curation.model.comment.Comment;
-import com.web.curation.model.follow.Follow;
-import com.web.curation.model.follow.FollowRequest;
 import com.web.curation.model.image.Image;
 import com.web.curation.model.promise.Promise;
 import com.web.curation.model.scrap.Scrap;
@@ -27,7 +23,6 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.PagedListHolder;
-import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -36,16 +31,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-//import sun.lwawt.macosx.CSystemTray;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.swing.filechooser.FileSystemView;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -86,9 +73,12 @@ public class ArticleController {
     ArticleService articleService;
 
 //    final String basePath = "/home/ubuntu/b302/dist/img/feed/";
-    final String basePath = "";
 
 
+
+
+    final String rootPath = System.getProperty("user.dir");
+    String basePath = rootPath.substring(0, rootPath.length()-7) + "frontend\\src\\assets\\images\\";
 
     private List<String> saveFiles(List<MultipartFile> files) throws IOException{
         List<String> pathName = new ArrayList<>();
@@ -104,10 +94,11 @@ public class ArticleController {
         for(int i = 0; i < files.size(); i++){
             uuid = UUID.randomUUID();
             String extension = FilenameUtils.getExtension(files.get(i).getOriginalFilename());
-            String rename = basePath + i + "_" + uuid + "." + extension;
+            String filename = i + "_" + uuid + "." + extension;
+            String rename = basePath + filename;
             File dest = new File(rename);
             files.get(i).transferTo(dest);
-            pathName.add(rename);
+            pathName.add(filename);
         }
 
         return pathName;

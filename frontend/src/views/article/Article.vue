@@ -25,7 +25,7 @@
                   class="d-block img-fluid w-100"
                   width="1024"
                   height="480"
-                  :src= image.imgURL
+                  :src="getArticleFeeImgUrl({ idx, imgURL: image.imgURL }).icon"
                   alt="image slot"
                 >
               </template>
@@ -42,8 +42,8 @@
             <li v-if="article.likeCheck" ><b-icon  @click="articleLike({ articleid: article.articleDetail.articleid, nickname: article.articleDetail.user.nickname, likeCheck:article.likeCheck, idx:idx  })" id="likestat" icon="hand-thumbs-up" scale="1.5" variant="danger"></b-icon></li>
             <li v-else ><b-icon  @click="articleLike({ articleid: article.articleDetail.articleid, nickname: article.articleDetail.user.nickname,idx:idx })" id="likestat" icon="hand-thumbs-up" scale="1.5" variant="secondary"></b-icon></li>
             
-            <li v-if="article.scrapCheck"><b-icon icon="tags-fill" scale="1.5" variant="primary"></b-icon></li>
-            <li v-else><b-icon icon="tags" scale="1.5" variant="primary"></b-icon></li>
+            <li v-if="article.scrapCheck"><b-icon @click="undoScrap({ articleid: article.articleDetail.articleid, idx: idx })" icon="tags-fill" scale="1.5" variant="primary"></b-icon></li>
+            <li v-else><b-icon @click="doScrap({ articleid: article.articleDetail.articleid, idx: idx })" icon="tags" scale="1.5" variant="secondary"></b-icon></li>
             <li @click="getComments(article.articleDetail.articleid)"><b-icon icon="chat-dots" scale="1.5" variant="primary"></b-icon></li><span>{{ article.articleDetail.comments.length }}</span>
           </ul>
           <p>{{ article.likeCount }} 명의 유저가 이글을 좋아합니다.</p>
@@ -170,6 +170,50 @@ export default {
         })
       }
     },
+    doScrap(payload) {
+      axios({
+        url: `http://127.0.0.1:8080/scrap/${payload.articleid}`,
+        method: 'post',
+        headers: {
+          'x-auth-token': `${localStorage.getItem('token')}`,
+        }
+      })
+        .then(() => {
+          this.articles[payload.idx].scrapCheck = true
+        })
+    },
+    undoScrap(payload) {
+      axios({
+        url: 'http://127.0.0.1:8080/scrap',
+        method: 'get',
+        headers: {
+          "Content-Type": "application/json",
+          "X-AUTH-TOKEN": this.token,
+        }
+      })
+        .then(res => {
+          let scrapid = -1
+          for (let i = 0; i < res.data.length; i++) {
+            if (res.data[i].articleid === payload.articleid) {
+              scrapid = res.data[i].scrapid
+            }
+          }
+          return scrapid
+        })
+        .then(scrapid => {
+          axios({
+            url: `http://127.0.0.1:8080/scrap/${scrapid}`,
+            method: "delete",
+            headers: {
+              "Content-Type": "application/json",
+              "X-AUTH-TOKEN": this.token,
+            },
+          })
+            .then(() => {
+              this.articles[payload.idx].scrapCheck = false
+            })
+        })
+    },
     getArticle(articleid){
       this.$router.push({ name:'ArticleDetail', params:{ articleid:articleid }})
     },
@@ -182,6 +226,12 @@ export default {
     onSlideEnd(slide) {
       this.sliding = false
     },
+    getArticleFeeImgUrl (payload) {
+      return {
+        ...this.articles,
+        icon: this.articles[payload.idx] && require(`@/assets/images/${payload.imgURL}`)
+      }
+    }
   },
 };
 //

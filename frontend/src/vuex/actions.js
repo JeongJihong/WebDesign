@@ -189,44 +189,6 @@ export default {
   scrapDeleteMode({ commit }) {
     commit("SCRAP_DELETE_MODE");
   },
-  scrapDelete({ commit }, payload) {
-    axios({
-      url: `http://127.0.0.1:8080/scrap/${payload.scrapid}`,
-      method: "delete",
-      headers: {
-        "Content-Type": "application/json",
-        "X-AUTH-TOKEN": payload.token,
-      },
-    })
-      .then(() => {
-        axios({
-          url: `http://127.0.0.1:8080/account/checkJWT`,
-          method: "get",
-          headers: {
-            "Content-Type": "application/json",
-            "X-AUTH-TOKEN": payload.token,
-          },
-        })
-          .then((res) => {
-            axios({
-              url: `http://127.0.0.1:8080/scrap?userid=${res.data.uid}`,
-              method: "get",
-            })
-              .then((res) => {
-                commit("SCRAP_GET", res.data);
-              })
-              .catch((err) => {
-                alert("DELETE 성공, JWT 인증 성공, GET 실패", err);
-              });
-          })
-          .catch((err) => {
-            alert("DELETE 성공 JWT 인증 실패", err);
-          });
-      })
-      .catch((err) => {
-        alert("DELETE 실패", err);
-      });
-  },
 
   promiseDetailGet({ commit }, payload) {
     // payload: { token, promiseid }
