@@ -66,6 +66,9 @@ messaging.onMessage((payload) => {
   alert(payload.data.message);
 });
 
+// 카카오 소셜 로그인
+window.Kakao.init("6d8be51fab4c89e30255e5df438f02d6");
+
 new Vue({
   router,
   store,

@@ -16,7 +16,8 @@ import ArticleDetail from '@/views/article/ArticleDetail.vue'
 import PromiseList from '@/views/promise/PromiseList.vue'
 import PromiseCreate from '@/views/promise/PromiseCreate.vue'
 import PromiseDetail from '@/views/promise/PromiseDetail.vue'
-import PromiseLocations from '@/views/promise/PromiseLocations'
+import PromiseLocations from '@/views/promise/PromiseLocations.vue'
+import KakaoLogin from '@/components/user/snsLogin/Kakao.vue'
 
 import Vue from 'vue'
 import VueRouter from 'vue-router'
@@ -167,6 +168,11 @@ const routes = [
         meta: {
             loggedAuth: true
         }
+    },
+    {
+        path: '/account/kakaoLogin',
+        name: 'KakaoLogin',
+        component: KakaoLogin,
     },
 ]
 
