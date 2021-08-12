@@ -60,12 +60,14 @@ public class AccountController {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
 
-    final String rootPath = FileSystemView.getFileSystemView().getHomeDirectory().toString();
+    final String rootPath = System.getProperty("user.dir");
 //    final String basePath = rootPath + "/" + "dist" + "/" + "img" + "/feed/";
-    final String basePath = "/home/ubuntu/b302/dist/img/feed/";
+//    final String basePath = "/home/ubuntu/b302/dist/img/feed/";
+    final String basePath = "/Users/kimbaekjun/Desktop/SSAFY/2학기/S05P13B302/frontend/dist/img/feed/";
     @GetMapping("/test")
     public String test(){
-        System.out.println(basePath);
+        String result = rootPath.substring(0, rootPath.length()-7);
+        System.out.println(result);
         return "test Success";
     }
 
