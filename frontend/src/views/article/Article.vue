@@ -4,44 +4,52 @@
       <h1>뉴스피드</h1>
       
       <div v-for="(article,idx) in articles" :key="idx" style="z-index:-1;">
-        <b-avatar src="https://placekitten.com/300/300" size="2rem"></b-avatar><span>{{article.articleDetail.user.nickname}}</span>
-        <b-carousel
-          id="carousel-1"
-          v-model="slide"
-          :interval="0"
-          controls
-          indicators
-          background="#ababab"
-          img-width="1024"
-          img-height="480"
-          style="text-shadow: 1px 1px 2px #333;"
-          @sliding-start="onSlideStart"
-          @sliding-end="onSlideEnd"
-        >
-          <b-carousel-slide v-for ="image in article.articleDetail.images" :key="image.id">
-            <template #img>
-              <img
-                class="d-block img-fluid w-100"
-                width="1024"
-                height="480"
-                :src= image.imgURL
-                alt="image slot"
-              >
-            </template>
-          </b-carousel-slide>
-        </b-carousel>
-        <p> {{ article.articleDetail.review }} </p>
-        <ul class="d-flex justify-content-left" style="padding-left:3px;">
-          <li v-if="article.likeCheck" ><b-icon  @click="articleLike({ articleid: article.articleDetail.articleid, nickname: article.articleDetail.user.nickname, likeCheck:article.likeCheck, idx:idx  })" id="likestat" icon="hand-thumbs-up" scale="1.5" variant="danger"></b-icon></li>
-          <li v-else ><b-icon  @click="articleLike({ articleid: article.articleDetail.articleid, nickname: article.articleDetail.user.nickname,idx:idx })" id="likestat" icon="hand-thumbs-up" scale="1.5" variant="secondary"></b-icon></li>
-          
-          <li v-if="article.scrapCheck"><b-icon icon="tags-fill" scale="1.5" variant="primary"></b-icon></li>
-          <li v-else><b-icon icon="tags" scale="1.5" variant="primary"></b-icon></li>
-          <li @click="getComments(article.articleDetail.articleid)"><b-icon icon="chat-dots" scale="1.5" variant="primary"></b-icon></li><span>{{ article.articleDetail.comments.length }}</span>
-        </ul>
-        <p>{{ article.likeCount }} 명의 유저가 이글을 좋아합니다.</p>
-        <br>
+        <div>
+          <b-avatar src="https://placekitten.com/300/300" size="2rem"></b-avatar><span>{{article.articleDetail.user.nickname}}</span>
+          <b-carousel
+            id="carousel-1"
+            v-model="slide"
+            :interval="0"
+            controls
+            indicators
+            background="#ababab"
+            img-width="1024"
+            img-height="480"
+            style="text-shadow: 1px 1px 2px #333;"
+            @sliding-start="onSlideStart"
+            @sliding-end="onSlideEnd"
+          >
+            <b-carousel-slide v-for ="image in article.articleDetail.images" :key="image.id"> 
+              <template #img >
+                <img
+                  class="d-block img-fluid w-100"
+                  width="1024"
+                  height="480"
+                  :src="getArticleFeeImgUrl({ idx, imgURL: image.imgURL }).icon"
+                  alt="image slot"
+                >
+              </template>
+            </b-carousel-slide>
+          </b-carousel>
+          <p> {{ article.articleDetail.review }} 약속아님 </p>
+          <div v-if="article.articleDetail.promiseid">
+            <p>약속 인원 : {{ article.promiseDetail.num }} 명</p>
+            <p>약속 장소 : {{ article.promiseDetail.place }}</p>
+            <p>약속 시간 : {{ article.promiseDetail.promisetime }}</p>
+            <!-- <p>유형 : {{ article.promiseDetail.type }}</p> -->
+          </div>
+          <ul class="d-flex justify-content-left" style="padding-left:3px;">
+            <li v-if="article.likeCheck" ><b-icon  @click="articleLike({ articleid: article.articleDetail.articleid, nickname: article.articleDetail.user.nickname, likeCheck:article.likeCheck, idx:idx  })" id="likestat" icon="hand-thumbs-up" scale="1.5" variant="danger"></b-icon></li>
+            <li v-else ><b-icon  @click="articleLike({ articleid: article.articleDetail.articleid, nickname: article.articleDetail.user.nickname,idx:idx })" id="likestat" icon="hand-thumbs-up" scale="1.5" variant="secondary"></b-icon></li>
+            
+            <li v-if="article.scrapCheck"><b-icon @click="undoScrap({ articleid: article.articleDetail.articleid, idx: idx })" icon="tags-fill" scale="1.5" variant="primary"></b-icon></li>
+            <li v-else><b-icon @click="doScrap({ articleid: article.articleDetail.articleid, idx: idx })" icon="tags" scale="1.5" variant="secondary"></b-icon></li>
+            <li @click="getComments(article.articleDetail.articleid)"><b-icon icon="chat-dots" scale="1.5" variant="primary"></b-icon></li><span>{{ article.articleDetail.comments.length }}</span>
+          </ul>
+          <p>{{ article.likeCount }} 명의 유저가 이글을 좋아합니다.</p>
+        </div>
       </div>
+      <br>
       <infinite-loading @infinite="infiniteHandler"></infinite-loading>
     </div>
   </div>
@@ -154,17 +162,57 @@ export default {
         })
         .then(res=>{
           console.log(res.data)
-          // this.article.likeCheck = true
           console.log("좋아요 -> 싫어요")
           this.articles[payload.idx].likeCheck = !this.articles[payload.idx].likeCheck
-          // likestat.variant = "secondary"
-          // likestat.setAttribute("variant",'secondary')
-          // this.infiniteHandler()
         })
         .catch(err=>{
           console.log(err)
         })
       }
+    },
+    doScrap(payload) {
+      axios({
+        url: `http://127.0.0.1:8080/scrap/${payload.articleid}`,
+        method: 'post',
+        headers: {
+          'x-auth-token': `${localStorage.getItem('token')}`,
+        }
+      })
+        .then(() => {
+          this.articles[payload.idx].scrapCheck = true
+        })
+    },
+    undoScrap(payload) {
+      axios({
+        url: 'http://127.0.0.1:8080/scrap',
+        method: 'get',
+        headers: {
+          "Content-Type": "application/json",
+          "X-AUTH-TOKEN": this.token,
+        }
+      })
+        .then(res => {
+          let scrapid = -1
+          for (let i = 0; i < res.data.length; i++) {
+            if (res.data[i].articleid === payload.articleid) {
+              scrapid = res.data[i].scrapid
+            }
+          }
+          return scrapid
+        })
+        .then(scrapid => {
+          axios({
+            url: `http://127.0.0.1:8080/scrap/${scrapid}`,
+            method: "delete",
+            headers: {
+              "Content-Type": "application/json",
+              "X-AUTH-TOKEN": this.token,
+            },
+          })
+            .then(() => {
+              this.articles[payload.idx].scrapCheck = false
+            })
+        })
     },
     getArticle(articleid){
       this.$router.push({ name:'ArticleDetail', params:{ articleid:articleid }})
@@ -178,6 +226,12 @@ export default {
     onSlideEnd(slide) {
       this.sliding = false
     },
+    getArticleFeeImgUrl (payload) {
+      return {
+        ...this.articles,
+        icon: this.articles[payload.idx] && require(`@/assets/images/${payload.imgURL}`)
+      }
+    }
   },
 };
 //
@@ -189,4 +243,6 @@ export default {
   li {
     margin-right: 12px;
   }
+
+
 </style>

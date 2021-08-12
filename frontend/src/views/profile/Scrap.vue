@@ -11,17 +11,11 @@
       </span>
     </div>
 
-    <!-- 피드 or 게시글 상세정보 보기 구현 전 디버깅 용 -->
-    <!-- <div v-for="idx in 90" :key="idx" class="square img_1 delete-btn-wrap">
-      <b-icon v-if="scrapMode" icon="x-circle-fill" variant="warning"
-        class="delete-btn" @click="scrapDelete(idx, token)"></b-icon>
-      <img src="https://picsum.photos/110" alt="debuging area" style="position: absolute;"
-        @click="!scrapMode && goToArticleDetail(idx)">
-    </div> -->
+    <!-- 피드 or 게시글 상세정보 보기 -->
     <div v-if="scrapList.length !== 0">
-      <div v-for="scrap in scrapList" :key="scrap.articleid" class="square delete-btn-wrap bg-secondary">
+      <div v-for="(scrap, idx) in scrapList" :key="idx" class="square delete-btn-wrap bg-secondary">
         <b-icon v-if="scrapMode" icon="x-circle-fill" variant="warning" class="delete-btn"
-          @click="scrapDelete({ scrapid: scrap.scrapid, token })"></b-icon>
+          @click="scrapDelete({ scrapid: scrap.scrapid, token, idx })"></b-icon>
         <img v-if="scrap.thumnailURL" :src="scrap.thumnailURL" :alt="scrap.articleid+'번 게시글'"
           style="position: absolute;" @click="!scrapMode && goToArticleDetail(scrap.articleid)">
         <!-- <img v-else src="https://picsum.photos/110" style="position: absolute;"
@@ -35,6 +29,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import { mapState, mapActions } from 'vuex'
 
 export default {
@@ -43,6 +38,7 @@ export default {
     }
   },
   created() {
+    this.$store.state.scrapMode = false
     this.$store.dispatch('scrapGet', this.token)
   },
   computed: {
@@ -53,6 +49,9 @@ export default {
     ])
   },
   methods: {
+    ...mapActions([
+      'scrapDeleteMode',
+    ]),
     goBack() {
       this.$router.go(-1)
     },
@@ -60,10 +59,20 @@ export default {
       console.log(articleid+'클릭!')
       this.$router.push({ name: 'ArticleDetail', params: { articleid: articleid } })
     },
-    ...mapActions([
-      'scrapDeleteMode',
-      'scrapDelete'
-    ])
+    // 애매한 상태관리여서 직접 작성
+    scrapDelete(payload) {
+      axios({
+        url: `http://127.0.0.1:8080/scrap/${payload.scrapid}`,
+        method: "delete",
+        headers: {
+          "Content-Type": "application/json",
+          "X-AUTH-TOKEN": payload.token,
+        },
+      })
+        .then(() => {
+          this.$store.state.scrapList.splice(payload.idx, 1)
+        })
+    }
   }
 }
 </script>
