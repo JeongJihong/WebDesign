@@ -64,6 +64,11 @@
               <router-link to="/account/signup" class="btn--text">가입하기</router-link>
             </div>
           </div>
+          <div>
+            <router-link>
+              혹시 당신 처음 이라면?
+            </router-link>
+          </div>
         </div>
       </div>
     </div>
