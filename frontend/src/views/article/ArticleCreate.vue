@@ -36,7 +36,7 @@
     uploadImage(event) { 
       console.log(event.target.files)
       console.log(event.target.files[0], typeof event.target.files[0])
-      this.afiles = event.target.files[0]
+      this.afiles.push(event.target.files[-1])
 
       for (var image of event.target.files) {
         var reader = new FileReader(); 
