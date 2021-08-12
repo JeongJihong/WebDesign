@@ -65,9 +65,9 @@
             </div>
           </div>
           <div>
-            <router-link>
+            <!-- <router-link>
               혹시 당신 처음 이라면?
-            </router-link>
+            </router-link> -->
           </div>
         </div>
       </div>

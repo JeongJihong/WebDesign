@@ -23,7 +23,7 @@
           </template>
           <b-dropdown-item><router-link :to="{ name: 'ProfileDetail', params: { nickname: username } }"
           >자신의 프로필</router-link></b-dropdown-item>
-          <b-dropdown-item href="#">자신의 스크랩</b-dropdown-item>
+          <b-dropdown-item><router-link :to="{ name: 'Scrap'}">자신의 스크랩</router-link></b-dropdown-item>
           <b-dropdown-item><router-link :to="{ name: 'PromiseCreate', }"
           >약속잡기</router-link></b-dropdown-item>
           <b-dropdown-item ><button class="danger" @click="logout()">로그아웃</button></b-dropdown-item>
