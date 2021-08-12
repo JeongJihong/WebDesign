@@ -13,14 +13,29 @@
 
     <!-- 피드 or 게시글 상세정보 보기 -->
     <div v-if="scrapList.length !== 0">
-      <div v-for="(scrap, idx) in scrapList" :key="idx" class="square delete-btn-wrap bg-secondary">
-        <b-icon v-if="scrapMode" icon="x-circle-fill" variant="warning" class="delete-btn"
-          @click="scrapDelete({ scrapid: scrap.scrapid, token, idx })"></b-icon>
-        <img v-if="scrap.thumnailURL" :src="scrap.thumnailURL" :alt="scrap.articleid+'번 게시글'"
-          style="position: absolute;" @click="!scrapMode && goToArticleDetail(scrap.articleid)">
-        <!-- <img v-else src="https://picsum.photos/110" style="position: absolute;"
-          @click="!scrapMode && goToArticleDetail(scrap.articleid)"> -->
+
+      <div class="container mt-4">
+        <div class="row align-items-center p-0">
+
+          <div v-for="(scrap, idx) in scrapList" :key="idx" class="col-4 my-2 px-2">
+            <div class="border rounded"
+              :style="{ overflow: 'hidden', height: width + 'px' }">
+
+            <b-icon v-if="scrapMode" icon="x-circle-fill" variant="warning"
+              style="position: absolute; z-index: 100;"
+              @click="scrapDelete({ scrapid: scrap.scrapid, token, idx })"></b-icon>
+
+            <img v-if="scrap.thumnailURL" style="width: 100%; height: 100%; object-fit: cover;"
+              :src="getArticleFeeImgUrl({ idx, imgURL: scrap.thumnailURL }).thumnail"
+              :alt="scrap.articleid+'번 게시글'"
+              @click="!scrapMode && goToArticleDetail(scrap.articleid)">
+
+            </div>
+          </div>
+
+        </div>
       </div>
+
     </div>
     <div v-else>
       <p class="text-center mt-4 pt-4">스크랩한 게시물이 없습니다.</p>
@@ -35,6 +50,7 @@ import { mapState, mapActions } from 'vuex'
 export default {
   data() {
     return {
+      width: (window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth) / 3 * 0.9 
     }
   },
   created() {
@@ -72,6 +88,12 @@ export default {
         .then(() => {
           this.$store.state.scrapList.splice(payload.idx, 1)
         })
+    },
+    getArticleFeeImgUrl (payload) {
+      return {
+        ...this.scrapList,
+        thumnail: this.scrapList[payload.idx] && require(`@/assets/images/${payload.imgURL}`)
+      }
     }
   }
 }
@@ -89,10 +111,6 @@ export default {
     background-repeat:no-repeat;
     background-size:cover; /* you change this to "contain" if you don't want the images to be cropped */
 }
-
-/* .img_1{background-image:url('img-placeholder.png');} */
-.img_1{background-image:url('../../assets/images/img-placeholder.png');}
-
 
 .delete-btn-wrap {
   position: relative;
