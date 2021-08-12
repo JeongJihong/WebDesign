@@ -43,6 +43,9 @@
           <div class="sns-login">
             <div class="text">
               <p>SNS 간편 로그인</p>
+              <div class="col">
+    <a class="btn btn-lg btn-secondary" th:href="@{/kakao/oauth}">카카오로 로그인하기</a>
+</div>
               <kakaoLogin :component="component" />
               <GoogleLogin :component="component" />
               <div class="bar"></div>
