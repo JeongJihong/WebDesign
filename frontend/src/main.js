@@ -14,9 +14,6 @@ import "bootstrap-vue/dist/bootstrap-vue.css";
 import firebase from "firebase/app";
 import "firebase/messaging";
 
-//kakao 로그인
-import Kakao from 'vue-kakao-login';
-
 // Make BootstrapVue available throughout your project
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);

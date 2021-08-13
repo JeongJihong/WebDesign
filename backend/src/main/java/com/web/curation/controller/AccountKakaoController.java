@@ -10,6 +10,7 @@ import com.web.curation.model.kakao.KakaoRestapi;
 import com.web.curation.model.kakao.KakaoUserInfo;
 import com.web.curation.model.kakao.OAuth2Token;
 import com.web.curation.model.user.User;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -30,6 +31,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.util.Collections;
 
 @Controller
 @RequestMapping("/kakao")
