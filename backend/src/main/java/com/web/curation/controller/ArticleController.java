@@ -365,7 +365,6 @@ public class ArticleController {
                         .thumnailURL(articleDao.findByArticleid(articleid).get().getImages().get(0).getImgURL())
                         .build());
             }
-
         }
         return new ResponseEntity<>("Success", HttpStatus.OK);
 

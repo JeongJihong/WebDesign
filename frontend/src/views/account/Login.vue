@@ -43,8 +43,9 @@
           <div class="sns-login">
             <div class="text">
               <p>SNS 간편 로그인</p>
-              <kakaoLogin :component="component" />
+              <KakaoLogin :component="component" />
               <GoogleLogin :component="component" />
+              <button class="btn btn-danger" type="button" @click="kakaoLogin">로그인</button>
               <div class="bar"></div>
             </div>
           </div>
@@ -63,11 +64,6 @@
               <p>아직 회원이 아니신가요?</p>
               <router-link to="/account/signup" class="btn--text">가입하기</router-link>
             </div>
-          </div>
-          <div>
-            <!-- <router-link>
-              혹시 당신 처음 이라면?
-            </router-link> -->
           </div>
         </div>
       </div>
@@ -140,6 +136,24 @@ export default {
         if (v) isSubmit = false;
       });
       this.isSubmit = isSubmit;
+    },
+    kakaoLogin() {
+      window.Kakao.Auth.login({
+        scope: 'profile_nickname, profile_image, account_email',
+        success: this.getProfile
+      });
+    },
+    getProfile(authObj) {
+      console.log(authObj);
+      window.Kakao.API.request({
+        url: '/v2/user/me',
+        success: res => {
+          const kakao_account = res.kakao_account;
+          // console.log(kakao_account);
+
+          alert("로그인 성공!");
+        }
+      });
     },
     ...mapActions([
       'login'
