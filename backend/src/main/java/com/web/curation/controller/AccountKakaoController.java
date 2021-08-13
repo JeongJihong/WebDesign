@@ -42,7 +42,7 @@ public class AccountKakaoController {
 
         StringBuffer url = new StringBuffer();
         url.append("https://kauth.kakao.com/oauth/authorize?");
-        url.append("client_id=" + "0947e20aea7d614504cbb83bd1191b96");
+        url.append("client_id=" + "0fa10a70c9660a76e5542202f29797b1");
         url.append("&redirect_uri=http://localhost:3000/kakao/callback");
         url.append("&response_type=code");
 

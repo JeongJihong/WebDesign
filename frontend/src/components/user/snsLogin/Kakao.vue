@@ -27,12 +27,12 @@
     import axios from 'axios'
     export default {
         methods: {
-            kakaoLogin () {
-                    const params = {
-                    redirectUri: "http://127.0.0.1:8080/account/kakaoLogin",
-                };
-                window.Kakao.Auth.authorize(params);
-            }
+            // kakaoLogin () {
+            //         const params = {
+            //         redirectUri: "http://127.0.0.1:8080/account/kakaoLogin",
+            //     };
+            //     window.Kakao.Auth.authorize(params);
+            // }
             // kakaoLogin() {
             //     try {
             //         return new Promise((resolve, reject) => {
@@ -42,9 +42,9 @@
             //             window.Kakao.Auth.login({
             //                 success: (auth) => {
             //                     console.log('정상로그인', auth)
-            //                     this.setState({
-            //                         isLogin: true
-            //                     })
+            //                     // this.setState({
+            //                     //     isLogin: true
+            //                     // })
             //                 },
             //                 fail: (err) => {
             //                     console.error(err)
@@ -55,48 +55,54 @@
             //         console.error(err)
             //     }
             // },
-            // kakaoLogin() {
-            //     // console.log(window.Kakao);
-            //     window.Kakao.Auth.login({
-            //         scope : 'account_email, gender',
-            //         success: (authObj) => {this.GetMe(authObj)}
-            //     });
-            // },
-            // GetMe(authObj){
-            //     console.log('authObj 콘솔',authObj);
-            //     window.Kakao.API.request({
-            //         url:'/v2/user/me',
-            //         success : res => {
-            //             const kakao_account = res.kakao_account;
-            //             const userInfo = {
-            //                 nickname : kakao_account.profile.nickname,
-            //                 email : kakao_account.email,
-            //                 password : '',
-            //                 account_type : 2,
-            //             }
+            kakaoLogin() {
+                console.log(window.Kakao);
+                window.Kakao.Auth.login({
+                    scope : 'profile_nickname, profile_image, account_email',
+                    success: (authObj) => {
+                        console.log(authObj)
+                        this.GetMe(authObj)
+                    },
+                    fail: (error) => {
+                        console.log(error)
+                    }
+                });
+            },
+            GetMe(authObj){
+                console.log('authObj 콘솔',authObj);
+                window.Kakao.API.request({
+                    url:'/v2/user/me',
+                    success : res => {
+                        const kakao_account = res.kakao_account;
+                        const userInfo = {
+                            nickname : kakao_account.profile.nickname,
+                            email : kakao_account.email,
+                            password : '',
+                            account_type : 2,
+                        }
 
-            //              axios.post(`http://127.0.0.1:8080/account/kakaoLogin`,{
-            //                  email : userInfo.email,
-            //                  nickname : userInfo.nickname
-            //              })
-            //              .then(res => {
-            //                 console.log(res);
-            //                 console.log("데이터베이스에 회원 정보가 있음!");
-            //              })
-            //              .catch(err => {
-            //                  console.log(err);
-            //                 console.log("데이터베이스에 회원 정보가 없음!");
-            //              })
-            //             console.log(userInfo);
-            //             alert("로그인 성공!");
-            //             this.$bvModal.hide("bv-modal-example");
-            //         },
-            //         fail : error => {
-            //             this.$router.push("/errorPage");
-            //             console.log(error);
-            //         }
-            //     })
-            // },
+                         axios.post(`http://127.0.0.1:8080/kakao`,{
+                             email : userInfo.email,
+                             nickname : userInfo.nickname
+                         })
+                         .then(res => {
+                            console.log(res);
+                            console.log("데이터베이스에 회원 정보가 있음!");
+                         })
+                         .catch(err => {
+                             console.log(err);
+                            console.log("데이터베이스에 회원 정보가 없음!");
+                         })
+                        console.log(userInfo);
+                        alert("로그인 성공!");
+                        this.$bvModal.hide("bv-modal-example");
+                    },
+                    fail : error => {
+                        this.$router.push("/errorPage");
+                        console.log(error);
+                    }
+                })
+            },
         }
     }
 </script>

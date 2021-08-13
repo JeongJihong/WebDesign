@@ -23,7 +23,7 @@ Vue.use(IconsPlugin);
 // Optionally install the BootstrapVue icon components plugin
 Vue.config.productionTip = false;
 
-window.Kakao.init("5e434a2e824d6fcfd6ca2b69e2cdf6c2");
+// window.Kakao.init("5e434a2e824d6fcfd6ca2b69e2cdf6c2");
 
 // Vue.use(VueRouter)
 
