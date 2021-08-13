@@ -4,14 +4,12 @@
       <span class="fw-bold"></span>
     </div>
     <div class="mb-2">
-      <!-- <p>생성시간 : {{ article.createdtime }}</p> -->
       <b-avatar src="https://placekitten.com/300/300" size="2rem"></b-avatar><span> {{ article.userNickname }}</span>
       <span>
-        <!-- <button @click="articleUpdate()" class="btn-warning badge text-dark fw-bold me-2">수정</button> -->
-        <!-- <button v-if=" article.userId === article.articleDetail.id" @click="articleDelete()" class="btn-danger badge">삭제</button> -->
+        <button v-if=" article.userId === article.articleDetail.id" @click="articleDelete()" class="btn-danger badge">삭제</button>
       </span>
     </div>
-    <div>
+    <div  v-if="!article.articleDetail.promiseid"> 
       <b-carousel
           id="carousel-1"
           v-model="slide"
@@ -25,23 +23,32 @@
           @sliding-start="onSlideStart"
           @sliding-end="onSlideEnd"
         >
-          <b-carousel-slide v-for ="(idx,image) in article.articleDetail.images" :key="idx">
+          <b-carousel-slide v-for ="(image,idx) in article.articleDetail.images" :key="idx">
             <template #img>
               <img
                 class="d-block img-fluid w-100"
                 width="1024"
                 height="480"
-                :src= image
+                :src="getArticleFeeImgUrl({ imgURL: image.imgURL }).icon"
                 alt="image slot"
               >
             </template>
           </b-carousel-slide>
         </b-carousel>
     </div>
+    <div v-if="article.articleDetail.promiseid">
+            <p>약속 인원 : {{ article.promiseDetail.num }} 명</p>
+            <p>약속 장소 : {{ article.promiseDetail.place }}</p>
+            <p>약속 시간 : {{ article.promiseDetail.promisetime }}</p>
+            <p>유형 : {{ article.promiseDetail.type }}</p>
+    </div>
     <p style="margin:10px">{{ article.articleDetail.review }}</p>
     <p>생성시간: {{ article.articleDetail.createdtime }} </p>
     <p>수정시간: {{ article.articleDetail.updatedtime }} </p>
-    <p>{{ article.likeCount }} 명이 좋아해요! <b-avatar src="https://placekitten.com/300/300" size="2rem"></b-avatar><b-button style="height:35px">스크랩하기</b-button></p>
+    <p>{{ article.likeCount }} 명이 좋아해요! <b-avatar src="https://placekitten.com/300/300" size="2rem"></b-avatar>
+    <b-button style="height:35px">스크랩하기</b-button></p>
+    <li v-if="article.scrapCheck"><b-icon @click="undoScrap({ articleid: article.articleDetail.articleid })" icon="tags-fill" scale="1.5" variant="primary"></b-icon></li>
+      <li v-else><b-icon @click="doScrap({ articleid: article.articleDetail.articleid })" icon="tags" scale="1.5" variant="secondary"></b-icon></li>
     <hr>
     <Comments/>
   </div>
@@ -64,7 +71,7 @@ export default {
   },
   created(){
     axios({
-      url:`http://127.0.0.1:8080/article/`+this.$route.params.articleid+'/',
+      url:`http://127.0.0.1:8080/article/`+this.$route.params.articleid,
       method:'GET',
       headers: {
             'x-auth-token': `${localStorage.getItem('token')}`,
@@ -72,7 +79,8 @@ export default {
     })
       .then(res=>{
         this.article= res.data
-        console.log(res.data)
+        console.log(this.article,this.article.articleDetail.id, '왜못읽음?')
+        console.log(this.article,this.article.articleDetail, '왜못읽음?', typeof this.article.articleDetail)
       })
       .catch(err=>{
         console.log(err)
@@ -80,6 +88,12 @@ export default {
       })
   },
   methods:{
+    getArticleFeeImgUrl (payload) {
+      return {
+        ...this.article,
+        icon: this.article && require(`@/assets/images/${payload.imgURL}`)
+      }
+    },
     goBack() {
       this.$router.go(-1)
     },
@@ -96,22 +110,6 @@ export default {
         console.log(err)
       })
     },
-    // articleUpdate(){
-    //   axios({
-    //   url: 'http://127.0.0.1:8080/article/'+this.$route.params.articleid,
-    //   method:'put',
-    //   headers: {
-    //       'x-auth-token': `${localStorage.getItem('token')}`,
-    //     }
-    //   })
-    //   .then(res=>{
-    //     this.article= res.data
-    //     console.log(res.data)
-    //   })
-    //   .catch(err=>{
-    //     console.log(err)
-    //   })
-    // },
     articleDelete(){
       axios({
       url: 'http://127.0.0.1:8080/article/'+this.$route.params.articleid,
@@ -133,6 +131,52 @@ export default {
     },
       onSlideEnd(slide) {
         this.sliding = false
+    },
+    doScrap(payload) {
+      axios({
+        url: `http://127.0.0.1:8080/scrap/${payload.articleid}`,
+        method: 'post',
+        headers: {
+          'x-auth-token': `${localStorage.getItem('token')}`,
+        }
+      })
+        .then(() => {
+          this.article.scrapCheck = true
+        })
+    },
+    undoScrap(payload) {
+      axios({
+        url: 'http://127.0.0.1:8080/scrap',
+        method: 'get',
+        headers: {
+          "Content-Type": "application/json",
+          'x-auth-token': `${localStorage.getItem('token')}`,
+        }
+      })
+        .then(res => {
+          console.log(res)
+          console.log(payload.articleid)
+          let scrapid = -1
+          for (let i = 0; i < res.data.length; i++) {
+            if (res.data[i].articleid === payload.articleid) {
+              scrapid = res.data[i].scrapid
+            }
+          }
+          return scrapid
+        })
+        .then(scrapid => {
+          axios({
+            url: `http://127.0.0.1:8080/scrap/${scrapid}`,
+            method: "delete",
+            headers: {
+              "Content-Type": "application/json",
+              'x-auth-token': `${localStorage.getItem('token')}`,
+            },
+          })
+            .then(() => {
+              this.article.scrapCheck = false
+            })
+        })
     },
   },
 };
