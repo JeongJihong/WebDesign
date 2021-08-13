@@ -16,6 +16,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,10 +35,11 @@ import java.util.*;
 
 //@CrossOrigin(origins = { "http://localhost:3000" })
 @CrossOrigin(origins = "*")
+@RequiredArgsConstructor
 @Controller
 public class AlarmController {
 
-    private AlarmServiceImpl alarmService;
+    private final AlarmServiceImpl alarmService;
 
     @PostMapping("/alarm/register")
     @ApiOperation(value = "로그인 시 유저 알람 토큰 저장")
