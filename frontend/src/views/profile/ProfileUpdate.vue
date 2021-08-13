@@ -14,7 +14,7 @@
       <form enctype = "multipart/form-data" method="patch" >
         <!-- 프로필 사진 수정 -->
         <div class="mt-5 mx-3 d-flex justify-content-center">
-          <img @click.prevent="clickInputTag()" id='addimage' :src="thumbnail" alt="image" class="dot">
+          <img @click.prevent="clickInputTag()" id='addimage' :src="require(`@/assets/images/${thumbnail}`)" alt="image" class="dot">
           <input hidden ref="plus" id="file" type="file"  accept="image/*" @change.prevent="uploadImage($event)" multiple>
         </div>
         
@@ -84,7 +84,7 @@ export default {
       const formData = new FormData();
       formData.append("nickname", this.userInfo.nickname);
       formData.append("introduction", this.userInfo.introduction);
-      formData.append("file", this.userInfo.file);
+      formData.append("thumbnail", this.userInfo.file);
       axios({
         method: 'patch',
         url: 'http://127.0.0.1:8080/account/profile/',
@@ -119,10 +119,10 @@ export default {
         this.userInfo.nickname = res.data.userProfile.nickname
         this.userInfo.introduction = res.data.userProfile.introduction
         this.thumbnail = res.data.userProfile.thumbnail
-        console.log(this.thumbnail)
         if (typeof this.thumbnail === 'undefined') {
-          this.thumbnail = require(`@/assets/images/profile_default.png`)
+          this.thumbnail = 'profile_default.png'
         }
+        console.log(this.thumbnail)
         // this.fixThumbnailURL()
       })
       .catch((err) => {

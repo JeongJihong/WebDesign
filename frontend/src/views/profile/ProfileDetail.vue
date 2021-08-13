@@ -54,8 +54,13 @@
       <p>{{ this.introduction }}</p>
     </div>
     <hr>
-    
-    <div v-for="image in this.articlesLength" :key="image" @click="goToArticleDetail(articles[image-1].articleid)" class="square" :style="{'background-image': 'url(' + require(`@/assets/images/${articles[image-1].images[0].imgURL}`) + ')'}">
+    <div 
+      v-for="image in this.articlesLength" 
+      :key="image" 
+      @click="goToArticleDetail(articles[image-1].articleid)" 
+      class="square" 
+      :style="{'background-image': 'url(' + require(`@/assets/images/${articles[image-1].images[0].imgURL}`) + ')'}"
+    >
 
     </div>
 
@@ -149,6 +154,7 @@ export default {
         },
       })
       .then((res) => {
+        console.log(res.data)
         this.myNickname = this.$store.state.username
         this.didIrequestFollowToYou = res.data.follow
         this.introduction = res.data.userProfile.introduction
@@ -330,6 +336,7 @@ export default {
       },
     })
     .then((res) => {
+      console.log('처음부분', res.data)
       this.myNickname = this.$store.state.username
       this.myUid=res.data.uid
       this.getUserInfo()
