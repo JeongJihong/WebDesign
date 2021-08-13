@@ -23,7 +23,7 @@
     data(){
       return{
         content:"",
-        afiles:"",
+        afiles:[],
       }
     },
     methods:{
@@ -34,9 +34,9 @@
       this.$refs['plus'].click()
     },
     uploadImage(event) { 
-      console.log(event.target.files)
-      console.log(event.target.files[0], typeof event.target.files[0])
-      this.afiles = event.target.files[0]
+      console.log(event.target.files,'골라')
+      console.log(event.target.files[0], typeof event.target.files[0],'타입')
+      this.afiles.push(event.target.files[0])
 
       for (var image of event.target.files) {
         var reader = new FileReader(); 
@@ -48,8 +48,7 @@
           document.querySelector("div#image_container").appendChild(img); 
         }; 
         reader.readAsDataURL(image);
-      } 
-      console.log(this.files, typeof this.files)
+      }
     },
     articleCreate(){
       const formData = new FormData();
@@ -64,10 +63,6 @@
           'Content-Type': 'multipart/form-data'
         },
         data:formData,
-        // params: {
-        //   content: this.content,
-        // //   files: this.files,
-        // }
       })
         .then(res=>{
           this.$router.push({ name:'FeedMain'})
