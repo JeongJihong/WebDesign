@@ -45,7 +45,6 @@
               <p>SNS 간편 로그인</p>
               <kakaoLogin :component="component" />
               <GoogleLogin :component="component" />
-              <button class="btn btn-danger" type="button" @click="kakaoLogin">로그인</button>
               <div class="bar"></div>
             </div>
           </div>
@@ -136,24 +135,6 @@ export default {
         if (v) isSubmit = false;
       });
       this.isSubmit = isSubmit;
-    },
-    kakaoLogin() {
-      window.Kakao.Auth.login({
-        scope: 'profile_nickname, profile_image, account_email',
-        success: this.getProfile
-      });
-    },
-    getProfile(authObj) {
-      console.log(authObj);
-      window.Kakao.API.request({
-        url: '/v2/user/me',
-        success: res => {
-          const kakao_account = res.kakao_account;
-          // console.log(kakao_account);
-
-          alert("로그인 성공!");
-        }
-      });
     },
     ...mapActions([
       'login'
