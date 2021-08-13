@@ -8,6 +8,7 @@ import com.web.curation.model.article.Article;
 import com.web.curation.model.follow.Follow;
 import com.web.curation.model.user.*;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class AccountServiceImpl implements AccountService{
 
