@@ -43,7 +43,7 @@
           <div class="sns-login">
             <div class="text">
               <p>SNS 간편 로그인</p>
-              <kakaoLogin :component="component" />
+              <KakaoLogin :component="component" />
               <GoogleLogin :component="component" />
               <div class="bar"></div>
             </div>
@@ -62,6 +62,10 @@
             <div class="wrap">
               <p>아직 회원이 아니신가요?</p>
               <router-link to="/account/signup" class="btn--text">가입하기</router-link>
+            </div>
+            <div class="wrap">
+              <p>처음이신가요?</p>
+              <router-link to="/onboarding" class="btn--text">온보딩</router-link>
             </div>
           </div>
         </div>

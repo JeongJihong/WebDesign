@@ -54,9 +54,14 @@
       <p>{{ this.introduction }}</p>
     </div>
     <hr>
+    <div 
+      v-for="image in this.articlesLength" 
+      :key="image" 
+      @click="goToArticleDetail(articles[image-1].articleid)" 
+      class="square" 
+      :style="{'background-image': 'url(' + require(`@/assets/images/${articles[image-1].images[0].imgURL}`) + ')'}"
+    >
 
-    <div v-for="image in this.articlesLength" :key="image" class="square" :style="{ 'background-image': 'url('+articles[image-1].images[0].imgURL+')' }">
-      <!-- <img :src="articles[image-1].images[0].imgURL" alt="image" style=""> -->
     </div>
 
   </div>
@@ -149,6 +154,7 @@ export default {
         },
       })
       .then((res) => {
+        console.log(res.data)
         this.myNickname = this.$store.state.username
         this.didIrequestFollowToYou = res.data.follow
         this.introduction = res.data.userProfile.introduction
@@ -164,6 +170,7 @@ export default {
         if (typeof this.thumbnail === 'undefined') {
           this.thumbnail = require(`@/assets/images/profile_default.png`)
         }
+        console.log(this.articles)
         this.checkFollowRequest()
         this.followerList()
       })
@@ -310,6 +317,12 @@ export default {
       .then((res) => {
         this.didIrequestFollowToYou = !this.didIrequestFollowToYou
       })
+    },
+    goToArticleDetail (articleid) {
+      this.$router.push({
+        name: 'ArticleDetail',
+        params: {articleid: articleid}
+      })
     }
   },
   created () {
@@ -323,6 +336,7 @@ export default {
       },
     })
     .then((res) => {
+      console.log('처음부분', res.data)
       this.myNickname = this.$store.state.username
       this.myUid=res.data.uid
       this.getUserInfo()
@@ -358,6 +372,7 @@ export default {
     margin:1.66%;
     background-position:center center;
     background-repeat:no-repeat;
+    background-color: black;
     background-size:cover; /* you change this to "contain" if you don't want the images to be cropped */
 }
 

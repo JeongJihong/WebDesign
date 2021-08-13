@@ -79,7 +79,7 @@ export default {
     },
     getComments: function(){
       axios({
-        url:`https://i5b302.p.ssafy.io/api/article/1/comment`,
+        url:'https://i5b302.p.ssafy.io/api/article/'+this.$route.params.articleid+'/comment',
         method:'get',
         headers: {
           'x-auth-token': `${localStorage.getItem('token')}`,

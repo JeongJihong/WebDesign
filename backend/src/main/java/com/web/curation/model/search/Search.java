@@ -4,25 +4,22 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 
 @Entity
 @Getter
 @Table(name = "Search")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class Search {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long searchid;
-
     @Column(name = "id", nullable = false)
     private Long id;
     @CreationTimestamp
@@ -32,9 +29,10 @@ public class Search {
     private String name;
 
 
-    @Builder
+//    @Builder
     public Search(Long searchid, String name){
         this.searchid = searchid;
         this.name = name;
     }
+
 }

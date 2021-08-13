@@ -16,7 +16,7 @@
     </div>
     <hr>
     <div>
-      <div v-for="person in 4" :key="person">
+      <div v-for="person in attendantsLength" :key="person">
         <div class="d-flex flex-row mx-4 my-4" style="justify-content: space-between; text-align:center">
           <img src="@/assets/images/profile_default.png" alt="image" style="width: 35px; height: 35px;" >
           <p class="fw-bold">{{ nicknames[person-1]}}</p>
@@ -39,8 +39,8 @@ export default {
       promiseid : this.$route.params.promiseid,
       attendantsInfo: '',
       attendantsLength: 0,
-      promiseLat: 37.40484970442224,
-      promiseLon: 126.70718664191531,
+      promiseLat: 0,
+      promiseLon: 0,
       thumbnails: [],
       nicknames : [],
       times: [],
@@ -67,7 +67,7 @@ export default {
       var mapContainer = document.getElementById('map'), // 지도를 표시할 div
         mapOption = {
           center: new kakao.maps.LatLng(this.promiseLat, this.promiseLon), // 지도의 중심좌표
-          level: 7, // 지도의 확대 레벨
+          level: 8, // 지도의 확대 레벨
         }
 
       var map = new kakao.maps.Map(mapContainer, mapOption)
@@ -86,7 +86,7 @@ export default {
             
       // 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
       var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption),
-          markerPosition = new kakao.maps.LatLng(37.40, 126.71); // 마커가 표시될 위치입니다
+          markerPosition = new kakao.maps.LatLng(this.promiseLat, this.promiseLon); // 마커가 표시될 위치입니다
 
       // 마커를 생성합니다
       var marker = new kakao.maps.Marker({
@@ -170,14 +170,34 @@ export default {
         },
       })
       .then((res) => {
+        console.log(res.data)
         this.attendantsInfo = res.data
         this.attendantsLength = res.data.length
-        this.initMap()
+        this.getPromiseInfo()
       })
       .catch((err) => {
         alert(err)
       })
     },
+    getPromiseInfo () {
+      axios({
+        method: 'get',
+        url: `https://i5b302.p.ssafy.io/api/promise/${this.promiseid}`,
+        headers: {
+          'Content-Type': 'application/json',
+          'X-AUTH-TOKEN' : this.$store.state.token
+        },
+      })
+      .then((res) => {
+        console.log(res.data)
+        this.promiseLat = res.data.lat
+        this.promiseLon = res.data.lon
+        this.initMap()
+      })
+      .catch((err) => {
+        alert(err)
+      })
+    }
   },
 }
 </script>

@@ -54,6 +54,7 @@ export default {
               this.upcomingPromises.push(upcomings[key])
             }
             for( let key in waitings){
+              waitings[key].type = waitings[key].type.toLowerCase();
               this.waitingPromises.push(waitings[key])
             }
             console.log(this.upcomingPromises,this.waitingPromises)

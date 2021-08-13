@@ -9,11 +9,14 @@ import com.web.curation.model.alarm.AlarmRequest;
 import com.web.curation.model.alarm.LikeFollowRequest;
 import com.web.curation.model.promise.Promise;
 import com.web.curation.model.user.User;
+import com.web.curation.service.alarm.AlarmService;
+import com.web.curation.service.alarm.AlarmServiceImpl;
 import com.web.curation.service.alarm.NotificationService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,189 +35,46 @@ import java.util.*;
 
 //@CrossOrigin(origins = { "http://localhost:3000" })
 @CrossOrigin(origins = "*")
+@RequiredArgsConstructor
 @Controller
 public class AlarmController {
 
-    private final NotificationService notificationService;
-
-    public AlarmController(NotificationService notificationService) {
-        this.notificationService = notificationService;
-    }
-
-    @Autowired
-    UserDao userDao;
-
-    @Autowired
-    AlarmDao alarmDao;
-
-    @Autowired
-    PromiseDao promiseDao;
+    private final AlarmServiceImpl alarmService;
 
     @PostMapping("/alarm/register")
     @ApiOperation(value = "로그인 시 유저 알람 토큰 저장")
-    public ResponseEntity register(@RequestBody String token) {
-        Authentication user = SecurityContextHolder.getContext().getAuthentication();
-        ResponseEntity response = null;
-        if (user.getPrincipal() == "anonymousUser") {
-            response = new ResponseEntity<>("Fail", HttpStatus.UNAUTHORIZED);
-            return response;
-        } else {
-            UserDetails user2 = (UserDetails) user.getPrincipal();
-            Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
-            User user3 = new User(userOpt.get().getUid(), userOpt.get().getNickname(), userOpt.get().getEmail(),
-                    userOpt.get().getPassword(), userOpt.get().getIntroduction(), userOpt.get().getThumbnail(),
-                    userOpt.get().getStatus(), token, userOpt.get().getArticles(), userOpt.get().getRoles());
-            userDao.save(user3);
-            response = new ResponseEntity<>("Success", HttpStatus.OK);
-        }
-        return response;
+    public ResponseEntity<String> register(@RequestBody String token) {
+        alarmService.register(token);
+        return new ResponseEntity<>("Success", HttpStatus.OK);
     }
 
     @PostMapping("/alarm")
     @ApiOperation(value = "알람 전송")
-    public ResponseEntity sendAlarm(@RequestBody AlarmRequest request) {
-        Authentication user = SecurityContextHolder.getContext().getAuthentication();
-        ResponseEntity response = null;
-        if (user.getPrincipal() == "anonymousUser") {
-            response = new ResponseEntity<>("Fail", HttpStatus.UNAUTHORIZED);
-            return response;
-        } else {
-            UserDetails user2 = (UserDetails) user.getPrincipal();
-            Optional<User> sender = userDao.findByEmail(user2.getUsername());
-            Optional<User> receiver = userDao.findByNickname(request.getReceiverNickname());
-            Long alarmId = alarmDao.save(Alarm.builder()
-                    .alarmid(null)
-                    .receiveuid(receiver.get().getUid())
-                    .senderuid(sender.get().getUid())
-                    .title(request.getTitle())
-                    .body(request.getBody())
-                    .checkalarm(false)
-                    .category(request.getCategory())
-                    .detail(request.getDetail()).build()
-            ).getAlarmid();
-            notificationService.sendNotification(alarmDao.getOne(alarmId), receiver.get().getAlarmtoken());
-            response = new ResponseEntity<>("OK", HttpStatus.OK);
-        }
-        return response;
+    public ResponseEntity<String> sendAlarm(@RequestBody AlarmRequest request) {
+        alarmService.sendAlarm(request);
+        return new ResponseEntity<>("Success", HttpStatus.OK);
     }
 
     @GetMapping("/alarm/like")
     @ApiOperation(value = "좋아요 알람 정보 가져오기")
-    public Object getLikeAlarm(){
-        Authentication user = SecurityContextHolder.getContext().getAuthentication();
-        ResponseEntity response = null;
-        if (user.getPrincipal() == "anonymousUser") {
-            response = new ResponseEntity<>("Fail", HttpStatus.UNAUTHORIZED);
-            return response;
-        } else {
-            UserDetails user2 = (UserDetails) user.getPrincipal();
-            Optional<User> loginUser = userDao.findByEmail(user2.getUsername());
-            List<Alarm> alarm = alarmDao.findAllByReceiveuidAndCategory(loginUser.get().getUid(), "Like");
-            List<LikeFollowRequest> result = new ArrayList<>();
-            for(int i = 0; i < alarm.size(); i++){
-                Optional<User> tempUser = userDao.findByUid(alarm.get(i).getSenderuid());
-                result.add(new LikeFollowRequest(tempUser.get().getUid(), tempUser.get().getNickname(),
-                        tempUser.get().getThumbnail(), alarm.get(i).getTitle(), alarm.get(i).getBody(),
-                        alarm.get(i).getCheckalarm(), alarm.get(i).getCategory(), alarm.get(i).getDetail()));
-            }
-            response = new ResponseEntity<>(result, HttpStatus.OK);
-
-        }
-        return response;
+    public ResponseEntity<List<LikeFollowRequest>> getLikeAlarm(){
+        List<LikeFollowRequest> result = alarmService.getLikeAlarm();
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @GetMapping("/alarm/follow")
     @ApiOperation(value = "팔로우 알람 가져오기")
-    public Object getFollowAlarm()  {
-        Authentication user = SecurityContextHolder.getContext().getAuthentication();
-        ResponseEntity response = null;
-        if (user.getPrincipal() == "anonymousUser") {
-            response = new ResponseEntity<>("Fail", HttpStatus.UNAUTHORIZED);
-            return response;
-        } else {
-            UserDetails user2 = (UserDetails) user.getPrincipal();
-            Optional<User> loginUser = userDao.findByEmail(user2.getUsername());
-            List<Alarm> alarm = alarmDao.findAllByReceiveuidAndCategory(loginUser.get().getUid(), "Follow");
-            List<LikeFollowRequest> result = new ArrayList<>();
-            for(int i = 0; i < alarm.size(); i++){
-                Optional<User> tempUser = userDao.findByUid(alarm.get(i).getSenderuid());
-                result.add(new LikeFollowRequest(tempUser.get().getUid(), tempUser.get().getNickname(),
-                        tempUser.get().getThumbnail(), alarm.get(i).getTitle(), alarm.get(i).getBody(),
-                        alarm.get(i).getCheckalarm(), alarm.get(i).getCategory(), null));
-            }
-            response = new ResponseEntity<>(result, HttpStatus.OK);
-        }
-
-        return response;
+    public ResponseEntity<List<LikeFollowRequest>> getFollowAlarm(){
+        List<LikeFollowRequest> result = alarmService.getFollowAlarm();
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @GetMapping("/alarm/promise")
     @ApiOperation(value = "약속 알람 가져오기")
-    public Object getPromiseAlarm()  {
-        Authentication user = SecurityContextHolder.getContext().getAuthentication();
-        ResponseEntity response = null;
-        if (user.getPrincipal() == "anonymousUser") {
-            response = new ResponseEntity<>("Fail", HttpStatus.UNAUTHORIZED);
-            return response;
-        } else {
-            UserDetails user2 = (UserDetails) user.getPrincipal();
-            Optional<User> loginUser = userDao.findByEmail(user2.getUsername());
-            List<Alarm> alarm = alarmDao.findAllByReceiveuidAndCategory(loginUser.get().getUid(), "Promise");
-//            List<LikeFollowRequest> result = new ArrayList<>();
-            Map mapResult = new HashMap<String, Object>();
-            List<LikeFollowRequest> Game = new ArrayList<>();
-            List<LikeFollowRequest> Travel = new ArrayList<>();
-            List<LikeFollowRequest> Restaurant = new ArrayList<>();
-            List<LikeFollowRequest> Exercise = new ArrayList<>();
-            List<LikeFollowRequest> Study = new ArrayList<>();
-            List<LikeFollowRequest> Art = new ArrayList<>();
-            List<LikeFollowRequest> Etc = new ArrayList<>();
-            //Game, Travel, Restaurant, Exercise, Study, Art, Etc
-            for(int i = 0; i < alarm.size(); i++){
-                Optional<User> tempUser = userDao.findByUid(alarm.get(i).getSenderuid());
-                Promise promiseUser= promiseDao.findByPromiseid(alarm.get(0).getDetail());
-                String type = promiseUser.getType();
-                if(type.equals("Game")){
-                    Game.add(new LikeFollowRequest(tempUser.get().getUid(), tempUser.get().getNickname(),
-                            tempUser.get().getThumbnail(), alarm.get(i).getTitle(), alarm.get(i).getBody(),
-                            alarm.get(i).getCheckalarm(), alarm.get(i).getCategory(), alarm.get(i).getDetail()));
-                }else if(type.equals("Travel")){
-                    Travel.add(new LikeFollowRequest(tempUser.get().getUid(), tempUser.get().getNickname(),
-                            tempUser.get().getThumbnail(), alarm.get(i).getTitle(), alarm.get(i).getBody(),
-                            alarm.get(i).getCheckalarm(), alarm.get(i).getCategory(), alarm.get(i).getDetail()));
-                }else if(type.equals("Restaurant")){
-                    Restaurant.add(new LikeFollowRequest(tempUser.get().getUid(), tempUser.get().getNickname(),
-                            tempUser.get().getThumbnail(), alarm.get(i).getTitle(), alarm.get(i).getBody(),
-                            alarm.get(i).getCheckalarm(), alarm.get(i).getCategory(), alarm.get(i).getDetail()));
-                }else if(type.equals("Exercise")){
-                    Exercise.add(new LikeFollowRequest(tempUser.get().getUid(), tempUser.get().getNickname(),
-                            tempUser.get().getThumbnail(), alarm.get(i).getTitle(), alarm.get(i).getBody(),
-                            alarm.get(i).getCheckalarm(), alarm.get(i).getCategory(), alarm.get(i).getDetail()));
-                }else if(type.equals("Study")){
-                    Study.add(new LikeFollowRequest(tempUser.get().getUid(), tempUser.get().getNickname(),
-                            tempUser.get().getThumbnail(), alarm.get(i).getTitle(), alarm.get(i).getBody(),
-                            alarm.get(i).getCheckalarm(), alarm.get(i).getCategory(), alarm.get(i).getDetail()));
-                }else if(type.equals("Art")){
-                    Art.add(new LikeFollowRequest(tempUser.get().getUid(), tempUser.get().getNickname(),
-                            tempUser.get().getThumbnail(), alarm.get(i).getTitle(), alarm.get(i).getBody(),
-                            alarm.get(i).getCheckalarm(), alarm.get(i).getCategory(), alarm.get(i).getDetail()));
-                }else{
-                    Etc.add(new LikeFollowRequest(tempUser.get().getUid(), tempUser.get().getNickname(),
-                            tempUser.get().getThumbnail(), alarm.get(i).getTitle(), alarm.get(i).getBody(),
-                            alarm.get(i).getCheckalarm(), alarm.get(i).getCategory(), alarm.get(i).getDetail()));
-                }
-            }
-            mapResult.put("Game", Game);
-            mapResult.put("Travel", Travel);
-            mapResult.put("Restaurant", Restaurant);
-            mapResult.put("Exercise", Exercise);
-            mapResult.put("Study", Study);
-            mapResult.put("Art", Art);
-            mapResult.put("Etc", Etc);
-            response = new ResponseEntity<>(mapResult, HttpStatus.OK);
-        }
+    public ResponseEntity<Map> getPromiseAlarm()  {
+        Map result = alarmService.getPromiseAlarm();
+        return new ResponseEntity<>(result, HttpStatus.OK);
 
-        return response;
     }
 
 

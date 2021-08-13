@@ -11,6 +11,17 @@
         ></b-form-input>
       </b-form-group>
       <br>
+          <form enctype = "multipart/form-data" method="post" >
+          <div class="d-flex flex-row">
+            <button style="display:inline-block; margin-right:5%; margin-left:2%" @click.prevent="clickInputTag()" id='addimage'><b-icon-plus class="h1"></b-icon-plus></button>
+            <input hidden ref="plus" id="file" type="file"  accept="image/*" @change.prevent="uploadImage($event)" multiple>
+            <div id="image_container"></div>
+          </div>
+          <div>
+            <b-textarea v-model="content"  placeholder="Tall textarea" rows="8"></b-textarea>
+          </div>
+        </form>     
+      <br>
       <b-form-group id="input-group-2" label="Type:" label-for="input-2">
         <b-form-select
           id="input-2"
@@ -72,8 +83,11 @@ export default {
       lat:0,
       lon:0,
       promiseAroundPlace:" ",
-      promiseDetailPlace:""
+      promiseDetailPlace:"",
       // "kakao": false
+      content:"",
+      afiles:"",
+      promiseid:0,
     }
   },
   mounted() {
@@ -143,6 +157,27 @@ export default {
         });
       });
     },
+    clickInputTag() {
+      this.$refs['plus'].click()
+    },
+    uploadImage(event) { 
+      console.log(event.target.files)
+      console.log(event.target.files[0], typeof event.target.files[0])
+      this.afiles = event.target.files[0]
+
+      for (var image of event.target.files) {
+        var reader = new FileReader(); 
+        reader.onload = function(event) 
+        { 
+          var img = document.createElement("img"); 
+          img.setAttribute("src", event.target.result); 
+          img.setAttribute("width","25%"); 
+          document.querySelector("div#image_container").appendChild(img); 
+        }; 
+        reader.readAsDataURL(image);
+      } 
+      console.log(this.files, typeof this.files)
+    },
     promiseCreate(){
       axios({
           url:'https://i5b302.p.ssafy.io/api/promise',
@@ -152,7 +187,7 @@ export default {
           },
           data:{
             title: this.title,
-            headCount: this.headCount,
+            num: this.headCount,
             promisetime: this.promiseDate+' '+this.promiseTime,
             type: this.Type,
             lat: this.lat,
@@ -161,8 +196,10 @@ export default {
           }
         })
           .then(res=>{
-            this.$router.push({ name:'PromiseList'})
             console.log(res.data)
+            this.promiseid = res.data
+            this.promiseArticleCreate()
+            this.$router.push({ name:'PromiseList'})
           })
           .catch(err=>{
             console.log(err)
@@ -178,6 +215,34 @@ export default {
             this.promiseDetailPlace )
           })
     },
+    promiseArticleCreate(){
+      const formData = new FormData();
+      formData.append("content", this.content);
+      formData.append("files", this.afiles);
+      formData.append("promiseid", this.promiseid);
+      
+      console.log(this.content, this.afiles, typeof this.afiles)
+      axios({
+        url:'https://i5b302.p.ssafy.io/api/article',
+        method:'post',
+        headers: {
+          'x-auth-token': `${localStorage.getItem('token')}`,
+          'Content-Type': 'multipart/form-data'
+        },
+        data:formData,
+      })
+        .then(res=>{
+          this.$router.push({ name:'FeedMain'})
+          console.log(res.data)
+          console.log(this.files)
+        })
+        .catch(err=>{
+          console.log(`${localStorage.getItem('token')}`)
+          console.log(this.files)
+          console.log(this.content)
+          console.log(err)
+        })
+      },
   }
 }
 </script>

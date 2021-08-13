@@ -23,7 +23,8 @@
     data(){
       return{
         content:"",
-        afiles:File,
+        afiles:[],
+        formData: new FormData()
       }
     },
     methods:{
@@ -34,9 +35,9 @@
       this.$refs['plus'].click()
     },
     uploadImage(event) { 
-      console.log(event.target.files)
-      console.log(event.target.files[0], typeof event.target.files[0])
-      this.afiles = event.target.files[0]
+      console.log(event.target.files,'골라')
+      console.log(event.target.files[0], typeof event.target.files[0],'타입')
+      this.formData.append("files", event.target.files[0]);
 
       for (var image of event.target.files) {
         var reader = new FileReader(); 
@@ -48,13 +49,10 @@
           document.querySelector("div#image_container").appendChild(img); 
         }; 
         reader.readAsDataURL(image);
-      } 
-      console.log(this.files, typeof this.files)
+      }
     },
     articleCreate(){
-      const formData = new FormData();
-      formData.append("content", this.content);
-      formData.append("files", this.afiles);
+      this.formData.append("content", this.content);
       console.log(this.content, this.afiles, typeof this.afiles)
       axios({
         url:'https://i5b302.p.ssafy.io/api/article',
@@ -63,11 +61,7 @@
           'x-auth-token': `${localStorage.getItem('token')}`,
           'Content-Type': 'multipart/form-data'
         },
-        data:formData,
-        // params: {
-        //   content: this.content,
-        // //   files: this.files,
-        // }
+        data:this.formData,
       })
         .then(res=>{
           this.$router.push({ name:'FeedMain'})
