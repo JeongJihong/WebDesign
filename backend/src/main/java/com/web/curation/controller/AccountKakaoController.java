@@ -2,6 +2,7 @@ package com.web.curation.controller;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.web.curation.dao.user.UserDao;
@@ -9,13 +10,12 @@ import com.web.curation.model.kakao.KakaoProfile;
 import com.web.curation.model.kakao.KakaoRestapi;
 import com.web.curation.model.kakao.KakaoUserInfo;
 import com.web.curation.model.kakao.OAuth2Token;
+import com.web.curation.model.user.SignupRequest;
 import com.web.curation.model.user.User;
+import com.web.curation.service.kakaoLogin.KakaoAPIService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -32,12 +32,43 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.HashMap;
 
 @Controller
 @RequestMapping("/kakao")
 public class AccountKakaoController {
 
+    @Autowired
+    UserDao userDao;
+
+    @Autowired
+    KakaoAPIService kakaoAPIService;
+
     private KakaoRestapi kakaoRestapi = new KakaoRestapi();
+
+    @PostMapping("")
+    @ApiOperation(value = "카카오 로그인")
+    public ResponseEntity<String> kakaoLogin(@Valid @RequestParam String access_token) {
+
+        HashMap<String, Object> userInfo = kakaoAPIService.getUserInfo(access_token);
+
+        if(userDao.findByUid(Long.valueOf(userInfo.get("id").toString())).isPresent()) { // 만약 같은 이메일이 있다면 회원 테이블에 저장하지 않고 토큰만 반환
+            return new ResponseEntity<>(access_token, HttpStatus.OK);
+        }
+
+        userDao.save(User.builder()
+                .uid(Long.valueOf(userInfo.get("id").toString()))
+                .introduction("")
+                .thumbnail(userInfo.get("thumbnail").toString())
+                .email(userInfo.get("email").toString())
+                .nickname(userInfo.get("nickname").toString())
+                .password(null)
+                .status(0L)
+                .roles(Collections.singletonList("ROLE_USER"))
+                .build()).getUid();
+
+        return new ResponseEntity<>(access_token, HttpStatus.OK);
+    }
 
     @RequestMapping(value="/oauth",method= RequestMethod.GET)
     public String kakaoConnect() {
@@ -56,8 +87,8 @@ public class AccountKakaoController {
 
         System.out.println("kakao code:"+code);
         JsonNode access_token=kakaoRestapi.getKakaoAccessToken(code);
-        // access_token.get("access_token");
-        //   System.out.println("access_token:" + access_token.get("access_token"));
+        access_token.get("access_token");
+        System.out.println("access_token:" + access_token.get("access_token"));
 
         JsonNode userInfo = KakaoUserInfo.getKakaoUserInfo(access_token.get("access_token"));
 
