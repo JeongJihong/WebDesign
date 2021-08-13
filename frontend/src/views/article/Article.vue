@@ -19,13 +19,13 @@
             @sliding-start="onSlideStart"
             @sliding-end="onSlideEnd"
           >
-            <b-carousel-slide v-for ="image in article.articleDetail.images" :key="image.id"> 
+            <b-carousel-slide v-for="(image,idnum) in article.articleDetail.images" :key="idnum"> 
               <template #img >
                 <img
                   class="d-block img-fluid w-100"
                   width="1024"
                   height="480"
-                  :src="getArticleFeeImgUrl({ idx, imgURL: image.imgURL }).icon"
+                  :src="getArticleFeeImgUrl({ idx, imgURL: image.imgURL,articleid:article.articleDetail.articleid }).icon"
                   alt="image slot"
                 >
               </template>
@@ -72,6 +72,7 @@ export default {
         tests:4,
         articles:[],
         likeCheck:false,
+        imgURL:[],
       }
   },
   computed: {
@@ -99,6 +100,7 @@ export default {
                   console.log(res.data)
                   const data = res.data.pageList;
                             for(let key in data){
+                                
                                 this.articles.push(data[key])
                                 console.log(this.articles)
                             }
@@ -227,8 +229,11 @@ export default {
       this.sliding = false
     },
     getArticleFeeImgUrl (payload) {
+      console.log(payload.articleid,'몇번하니')
+      console.log(payload.imgURL,'몇번되니')
+      console.log(this.articles[payload.idx] )
       return {
-        ...this.articles,
+        ...this.articles[payload.idx],
         icon: this.articles[payload.idx] && require(`@/assets/images/${payload.imgURL}`)
       }
     }
@@ -237,12 +242,9 @@ export default {
 //
 </script>
 <style scoped>
-#carousel-1{
-  z-index: -1;
+li {
+  margin-right: 12px;
 }
-  li {
-    margin-right: 12px;
-  }
 
 
 </style>

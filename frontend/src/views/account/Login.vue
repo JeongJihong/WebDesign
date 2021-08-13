@@ -63,6 +63,10 @@
               <p>아직 회원이 아니신가요?</p>
               <router-link to="/account/signup" class="btn--text">가입하기</router-link>
             </div>
+            <div class="wrap">
+              <p>처음이신가요?</p>
+              <router-link to="/onboarding" class="btn--text">온보딩</router-link>
+            </div>
           </div>
         </div>
       </div>
