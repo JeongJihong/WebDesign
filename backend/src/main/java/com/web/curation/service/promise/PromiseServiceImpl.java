@@ -22,6 +22,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -69,6 +70,7 @@ public class PromiseServiceImpl implements PromiseService{
     }
 
     @Override
+    @Transactional
     public Long createPromise(Promise promise) {
         Optional<User> userOpt = Authentication();
         // 약속 정보 Promise table에 저장
@@ -163,6 +165,7 @@ public class PromiseServiceImpl implements PromiseService{
     }
 
     @Override
+    @Transactional
     public void deletePromise(Long promiseid) {
         Optional<User> userOpt = Authentication();
         // 만약 지금 로그인 한 유저와 약속 생성자의 UID가 같다면(약속 권한 파악)
@@ -214,12 +217,14 @@ public class PromiseServiceImpl implements PromiseService{
     }
 
     @Override
+    @Transactional
     public void rejectPromise(Long promiseid) {
         Optional<User> userOpt = Authentication();
         promisePeopleDao.deleteByPromiseidAndUid(promiseid, userOpt.get().getUid());
     }
 
     @Override
+    @Transactional
     public Map participatePromise(Long promiseid) {
         Optional<User> userOpt = Authentication();
         Promisepeople promisepeople = promisePeopleDao.findByPromiseidAndUid(promiseid, userOpt.get().getUid());
@@ -239,6 +244,7 @@ public class PromiseServiceImpl implements PromiseService{
     }
 
     @Override
+    @Transactional
     public Map participatePromise(Long promiseid, BigDecimal lat, BigDecimal lon) {
         Optional<User> userOpt = Authentication();
         Promisepeople promisepeople = promisePeopleDao.findByPromiseidAndUid(promiseid, userOpt.get().getUid());

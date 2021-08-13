@@ -36,11 +36,6 @@ public class AccountController {
 
     private final AccountServiceImpl accountService;
 
-    private final PasswordEncoder passwordEncoder;
-    private final JwtTokenProvider jwtTokenProvider;
-
-    final String rootPath = System.getProperty("user.dir");
-    final String basePath = "/Users/kimbaekjun/Desktop/SSAFY/2학기/S05P13B302/frontend/dist/img/feed/";
     @GetMapping("/test")
     public String test(){
         System.out.println(accountService.test());
@@ -86,8 +81,8 @@ public class AccountController {
     @PatchMapping(value = "/account/profile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ApiOperation(value = "유저 프로필 정보 변경")
     public ResponseEntity<String> changeUserProfile(@RequestPart(required = true) String nickname,
-                                                    @RequestPart String introduction,
-                                                    @RequestPart MultipartFile thumbnail){
+                                                    @RequestPart(required = false) String introduction,
+                                                    @RequestPart(required = false) MultipartFile thumbnail){
         accountService.changeUserProfile(nickname, introduction, thumbnail);
         return new ResponseEntity<>("Success", HttpStatus.OK);
     }

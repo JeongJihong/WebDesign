@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +26,7 @@ public class FollowServiceImpl implements FollowService{
     UserDao userDao;
 
     @Override
+    @Transactional
     public Long followReqeust(FollowRequest request) {
         return followDao.save(Follow.builder()
                 .followid(null)
@@ -35,6 +37,7 @@ public class FollowServiceImpl implements FollowService{
     }
 
     @Override
+    @Transactional
     public void followReject(String srcnickname, String dstnickname) {
         Long srcID = userDao.findByNickname(srcnickname).get().getUid();
         Long dstID = userDao.findByNickname(dstnickname).get().getUid();
@@ -42,6 +45,7 @@ public class FollowServiceImpl implements FollowService{
     }
 
     @Override
+    @Transactional
     public void followApprove(Long followid) {
         Optional<Follow> follow = followDao.findByFollowid(followid);
         Follow newFollow = new Follow(followid, follow.get().getSrcid(), follow.get().getDstid(), true);

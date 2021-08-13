@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -40,6 +41,7 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
+    @Transactional
     public void postComment(Long articleid, Comment request) {
         Optional<User> userOpt = Authentication();
         commentDao.save(Comment.builder()
@@ -59,6 +61,7 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
+    @Transactional
     public void changeComment(Long commentid, Comment request) {
         Optional<User> userOpt = Authentication();
         Comment oldComment = commentDao.findByCommentid(commentid);
@@ -66,7 +69,7 @@ public class CommentServiceImpl implements CommentService{
         // 만약 현재 로그인한 유저와 수정요청한 유저가 같을때만 수정한다
         if(userOpt.get().getUid() == oldComment.getId()) {
             Comment newComment = new Comment(oldComment.getCommentid(), oldComment.getArticleid(), userOpt.get().getUid(),
-                    request.getNickname(), request.getCreatedtime(), request.getUpdatedtime(), request.getComment(), oldComment.getArticle());
+                    userOpt.get().getNickname(), request.getCreatedtime(), request.getUpdatedtime(), request.getComment(), oldComment.getArticle());
             commentDao.save(newComment);
         }
         else {
@@ -75,6 +78,7 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
+    @Transactional
     public void deleteComment(Long commentid) {
         Optional<User> userOpt = Authentication();
         Comment deleteComment = commentDao.findByCommentid(commentid);

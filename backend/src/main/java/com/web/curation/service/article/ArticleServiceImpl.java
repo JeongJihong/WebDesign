@@ -24,6 +24,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -103,6 +104,7 @@ public class ArticleServiceImpl implements ArticleService{
     }
 
     @Override
+    @Transactional
     public void postArticle(String content, List<MultipartFile> files, Long promiseid) {
         Optional<User> userOpt = Authentication();
         // 일반 게시글에 이미지 첨부가 되지 않았을 경우 게시글 작성 실패
@@ -193,6 +195,7 @@ public class ArticleServiceImpl implements ArticleService{
     }
 
     @Override
+    @Transactional
     public void deleteArticle(Long articleid) {
         Optional<User> userOpt = Authentication();
         articleDao.deleteByArticleid(articleid);
@@ -206,6 +209,7 @@ public class ArticleServiceImpl implements ArticleService{
     }
 
     @Override
+    @Transactional
     public Long articleLike(Long articleid) {
         Optional<User> userOpt = Authentication();
         Long articlelikeid = articleLikeDao.save(ArticleLike.builder()
@@ -217,6 +221,7 @@ public class ArticleServiceImpl implements ArticleService{
     }
 
     @Override
+    @Transactional
     public void articleLikeCancel(Long articleid) {
         Optional<User> userOpt = Authentication();
         articleLikeDao.deleteByIdAndArticleid(userOpt.get().getUid(), articleid);
@@ -230,6 +235,7 @@ public class ArticleServiceImpl implements ArticleService{
     }
 
     @Override
+    @Transactional
     public void doScrap(Long articleid) {
         Optional<User> userOpt = Authentication();
         Optional<Article> article = articleDao.findByArticleid(articleid);
@@ -252,7 +258,9 @@ public class ArticleServiceImpl implements ArticleService{
     }
 
     @Override
+    @Transactional
     public void deleteScrap(Long scrapid) {
+        Optional<User> userOpt = Authentication();
         scrapDao.deleteByScrapid(scrapid);
     }
 }
