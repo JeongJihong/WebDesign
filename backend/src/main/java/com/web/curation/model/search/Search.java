@@ -29,10 +29,7 @@ public class Search {
     private String name;
 
 
-//    @Builder
-    public Search(Long searchid, String name){
-        this.searchid = searchid;
-        this.name = name;
-    }
+
+
 
 }
