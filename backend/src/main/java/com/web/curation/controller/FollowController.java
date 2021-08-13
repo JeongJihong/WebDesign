@@ -1,5 +1,6 @@
 package com.web.curation.controller;
 
+import com.google.api.Http;
 import com.web.curation.dao.follow.FollowDao;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
@@ -9,6 +10,7 @@ import com.web.curation.model.follow.Follow;
 import com.web.curation.model.follow.FollowRequest;
 import com.web.curation.model.search.Search;
 import com.web.curation.model.user.User;
+import com.web.curation.service.follow.FollowServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -40,75 +42,42 @@ import java.util.stream.Stream;
 @RestController
 public class FollowController {
 
-    @Autowired
-    FollowDao followDao;
-
-    @Autowired
-    UserDao userDao;
+    private final FollowServiceImpl followService;
 
     @PostMapping("/account/profile/follow")
     @ApiOperation(value = "팔로우 요청")
-    public Object FollowRequest(@RequestBody FollowRequest request){
-        return followDao.save(Follow.builder()
-                .followid(null)
-                .srcid(userDao.getUidFromNickname(request.getSrcnickname()))
-                .dstid(userDao.getUidFromNickname(request.getDstnickname()))
-                .approve(false)
-                .build()).getFollowid();
+    public ResponseEntity<Long> FollowRequest(@RequestBody FollowRequest request){
+        Long result = followService.followReqeust(request);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @DeleteMapping("/account/profile/follow")
     @ApiOperation(value = "팔로우 요청 취소 및 거부")
-    public Object FollowReject(@RequestParam(required = true) final String srcnickname,
+    public ResponseEntity<String> FollowReject(@RequestParam(required = true) final String srcnickname,
                                @RequestParam(required = true) final String dstnickname) {
-
-        Long srcID = userDao.findByNickname(srcnickname).get().getUid();
-        Long dstID = userDao.findByNickname(dstnickname).get().getUid();
-        followDao.deleteBySrcidAndDstid(srcID, dstID);
-        ResponseEntity response = new ResponseEntity<>("팔로우 요청 거부 또는 취소 완료", HttpStatus.OK);
-
-        return response;
+        followService.followReject(srcnickname, dstnickname);
+        return new ResponseEntity<>("팔로우 요청 거부 또는 취소 완료", HttpStatus.OK);
     }
 
     @PatchMapping("/account/profile/follow")
     @ApiOperation(value = "팔로우 요청 승인")
-    public Object FollowApprove(@RequestParam(required = true) final Long followid){
-
-        Optional<Follow> follow = followDao.findByFollowid(followid);
-        Follow newFollow = new Follow(followid, follow.get().getSrcid(), follow.get().getDstid(), true);
-        followDao.save(newFollow);
-        final BasicResponse result = new BasicResponse();
-        result.status = true;
-        result.data = "success";
-        ResponseEntity response = null;
-        response = new ResponseEntity<>("OK", HttpStatus.OK);
-        return response;
+    public ResponseEntity<String> FollowApprove(@RequestParam(required = true) final Long followid){
+        followService.followApprove(followid);
+        return new ResponseEntity<>("팔로우 요청 승인 완료", HttpStatus.OK);
     }
 
     @GetMapping("/account/profile/{nickname}/follower")
     @ApiOperation(value = "팔로워 목록 반환")
     public ResponseEntity<List<User>> followerList(@PathVariable final String nickname){
-        // 닉네임에 해당하는 User를 찾는다.
-        Optional<User> user = userDao.findByNickname(nickname);
-
-        // 해당 유저를 팔로잉하고 있는 유저의 uid를 저장한다.
-        List<Long> followerId = followDao.findByDstidAndApprove(user.get().getUid());
-        // uid에 해당하는 유저 정보를 저장한다.
-        List<User> followerUser = userDao.findByUidIn(followerId);
-        return new ResponseEntity<>(followerUser, HttpStatus.OK);
+        List<User> result = followService.followerList(nickname);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @GetMapping("/account/profile/{nickname}/following")
     @ApiOperation(value = "팔로잉 목록 반환")
     public ResponseEntity<List<User>> followingList(@PathVariable final String nickname){
-        // 닉네임에 해당하는 User를 찾는다.
-        Optional<User> user = userDao.findByNickname(nickname);
-
-        // 해당 유저가 팔로잉하고 있는 유저의 uid를 저장한다.
-        List<Long> followingId = followDao.findBySrcidAndApprove(user.get().getUid());
-        // uid에 해당하는 유저 정보를 저장한다.
-        List<User> followerUser = userDao.findByUidIn(followingId);
-        return new ResponseEntity<>(followerUser, HttpStatus.OK);
+        List<User> result = followService.followingList(nickname);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }
 
