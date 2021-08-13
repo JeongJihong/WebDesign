@@ -19,9 +19,9 @@
               @click="goToArticle(user.detail)">
               <div class="d-flex align-items-center">
                 <span class="me-2">
-                  <b-avatar v-if="user.thumbnail"
-                    :src="getThumbnailImgUrl({ idx, imgURL: user.thumbnail }).thumbnail"></b-avatar>
-                  <b-avatar v-else></b-avatar>
+                  <b-avatar v-if="user.thumbnail" class="me-2"
+                    :src="getLikeThumbnailImgUrl({ idx, imgURL: user.thumbnail }).thumbnail"></b-avatar>
+                  <b-avatar v-else class="me-2"></b-avatar>
                 </span>
                 <span>{{ user.senderNickname }}님이 좋아요를 누르셨습니다.</span>
               </div>
@@ -41,9 +41,9 @@
               @click="goToProfile(user.senderNickname)">
               <div class="d-flex align-items-center">
                 <span class="me-2">
-                  <b-avatar v-if="user.thumbnail"
-                    :src="getThumbnailImgUrl({ idx, imgURL: user.thumbnail }).thumbnail"></b-avatar>
-                  <b-avatar v-else></b-avatar>
+                  <b-avatar v-if="user.thumbnail" class="me-2"
+                    :src="getFollowThumbnailImgUrl({ idx, imgURL: user.thumbnail }).thumbnail"></b-avatar>
+                  <b-avatar v-else class="me-2"></b-avatar>
                 </span>
                 <span>{{ user.senderNickname }}님의 팔로우 요청이 왔습니다.</span>
               </div>
@@ -71,9 +71,9 @@
                   @click="goToPromise(user.detail)">
                   <div class="d-flex align-items-center">
                     <span class="me-2">
-                      <b-avatar v-if="user.thumbnail"
-                        :src="getThumbnailImgUrl({ idx: i, imgURL: user.thumbnail }).thumbnail"></b-avatar>
-                      <b-avatar v-else></b-avatar>
+                      <b-avatar v-if="user.thumbnail" class="me-2"
+                        :src="getPromiseThumbnailImgUrl({ idx: i, imgURL: user.thumbnail }).thumbnail"></b-avatar>
+                      <b-avatar v-else class="me-2"></b-avatar>
                     </span>
                     <span>{{ user.senderNickname }}님의 약속 초대가 왔습니다.</span>
                   </div>
@@ -186,10 +186,22 @@ export default {
     goToPromise(promiseid) {
       this.$router.push({ name: 'PromiseDetail', params: { promiseid }})
     },
-    getThumbnailImgUrl (payload) {
+    getLikeThumbnailImgUrl (payload) {
       return {
         ...this.likeList[payload.idx],
         thumbnail: this.likeList[payload.idx].thumbnail && require(`@/assets/images/${payload.imgURL}`)
+      }
+    },
+    getFollowThumbnailImgUrl (payload) {
+      return {
+        ...this.followList[payload.idx],
+        thumbnail: this.followList[payload.idx].thumbnail && require(`@/assets/images/${payload.imgURL}`)
+      }
+    },
+    getPromiseThumbnailImgUrl (payload) {
+      return {
+        ...this.promiseList[payload.idx],
+        thumbnail: this.promiseList[payload.idx].thumbnail && require(`@/assets/images/${payload.imgURL}`)
       }
     }
   }

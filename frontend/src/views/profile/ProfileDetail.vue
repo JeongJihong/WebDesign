@@ -61,8 +61,9 @@
       :key="image" 
       @click="goToArticleDetail(articles[image-1].articleid)" 
       class="square" 
-      :style="{'background-image': 'url(' + require(`@/assets/images/${articles[image-1].images[0].imgURL}`) + ')'}"
+      :style="{ backgroundImage: 'url(' + getArticleImgUrl({ idx: image-1, imgURL: articles[image-1].images }).thumbnail + ')' }"
     >
+      <!-- :style="{'background-image': 'url(' + require(`@/assets/images/${articles[image-1].images[0].imgURL}`) + ')'}" -->
 
     </div>
 
@@ -330,6 +331,18 @@ export default {
       return {
         ...this.thumbnail,
         thumbnail: this.thumbnail && require(`@/assets/images/${payload.imgURL}`)
+      }
+    },
+    getArticleImgUrl (payload) {
+      if (this.articles[payload.idx].images.length !== 0) {
+        return {
+          ...this.articles,
+          thumbnail: this.articles[payload.idx].images.length && require(`@/assets/images/${payload.imgURL[0].imgURL}`)
+        }
+
+      }
+      return {
+        thumbnail: '@/assets/images/img-placeholder.png'
       }
     }
   },
