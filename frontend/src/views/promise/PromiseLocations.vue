@@ -16,7 +16,7 @@
     </div>
     <hr>
     <div>
-      <div v-for="person in 4" :key="person">
+      <div v-for="person in attendantsLength" :key="person">
         <div class="d-flex flex-row mx-4 my-4" style="justify-content: space-between; text-align:center">
           <img src="@/assets/images/profile_default.png" alt="image" style="width: 35px; height: 35px;" >
           <p class="fw-bold">{{ nicknames[person-1]}}</p>
@@ -170,6 +170,7 @@ export default {
         },
       })
       .then((res) => {
+        console.log(res.data)
         this.attendantsInfo = res.data
         this.attendantsLength = res.data.length
         this.initMap()
