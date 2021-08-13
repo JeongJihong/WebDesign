@@ -23,6 +23,7 @@ public class Image{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long imageid;
 
+
     private Long articleid;
     private String imgURL;
 
