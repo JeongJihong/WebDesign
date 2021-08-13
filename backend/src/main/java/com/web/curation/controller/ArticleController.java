@@ -348,13 +348,26 @@ public class ArticleController {
         }else{
             UserDetails user2 = (UserDetails) user.getPrincipal();
             Optional<User> userOpt = userDao.findByEmail(user2.getUsername());
-            return scrapDao.save(Scrap.builder()
-                    .scrapid(null)
-                    .id(userOpt.get().getUid())
-                    .articleid(articleid)
-                    .thumnailURL(articleDao.findByArticleid(articleid).get().getImages().get(0).getImgURL())
-                    .build());
+            Optional<Article> article = articleDao.findByArticleid(articleid);
+            if(article.get().getImages().size() == 0){
+                scrapDao.save(Scrap.builder()
+                        .scrapid(null)
+                        .id(userOpt.get().getUid())
+                        .articleid(articleid)
+                        .thumnailURL(null)
+                        .build());
+            }
+            else{
+                scrapDao.save(Scrap.builder()
+                        .scrapid(null)
+                        .id(userOpt.get().getUid())
+                        .articleid(articleid)
+                        .thumnailURL(articleDao.findByArticleid(articleid).get().getImages().get(0).getImgURL())
+                        .build());
+            }
+
         }
+        return new ResponseEntity<>("Success", HttpStatus.OK);
 
     }
 
