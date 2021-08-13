@@ -14,7 +14,10 @@
       <form enctype = "multipart/form-data" method="patch" >
         <!-- 프로필 사진 수정 -->
         <div class="mt-5 mx-3 d-flex justify-content-center">
-          <img @click.prevent="clickInputTag()" id='addimage' :src="require(`@/assets/images/${thumbnail}`)" alt="image" class="dot">
+          <img v-if="this.thumbnail" @click.prevent="clickInputTag()" id='addimage'
+          :src="getThumbnailImgUrl({ imgURL: this.thumbnail }).thumbnail"
+          alt="image" class="dot">
+          <b-avatar v-else @click.prevent="clickInputTag()" id='addimage'></b-avatar>
           <input hidden ref="plus" id="file" type="file"  accept="image/*" @change.prevent="uploadImage($event)" multiple>
         </div>
         
@@ -141,6 +144,12 @@ export default {
     //   this.thumbnail = tmp;
     //   console.log('새로 바뀐 이미지 url', this.thumbnail)
     // }
+    getThumbnailImgUrl (payload) {
+      return {
+        ...this.thumbnail,
+        thumbnail: this.thumbnail && require(`@/assets/images/${payload.imgURL}`)
+      }
+    },
   },
   created () {
     console.log(this.$store.state)

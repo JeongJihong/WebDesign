@@ -69,7 +69,9 @@
           @click="goToProfile(user.nickname)">
           <div class="d-flex align-items-center">
             <span>
-              <img :src="user.thumnail" :alt="user.nickname + '의 프로필'">
+              <b-avatar v-if="user.thumbnail" class="me-2"
+                :src="getThumbnailImgUrl({ imgURL: user.thumbnail }).thumbnail"></b-avatar>
+              <b-avatar v-else class="me-2"></b-avatar>
             </span>
             <span>{{ user.nickname }}</span>
           </div>
@@ -325,6 +327,12 @@ export default {
         })
 
         this.$router.push({ name: "PromiseList"})
+      }
+    },
+    getThumbnailImgUrl (payload) {
+      return {
+        ...this.promiseDetail,
+        thumbnail: this.promiseDetail.promisePeople.length && require(`@/assets/images/${payload.imgURL}`)
       }
     }
   }
