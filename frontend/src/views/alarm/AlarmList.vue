@@ -15,11 +15,11 @@
         <div v-else>
           <b-list-group>
             <b-list-group-item
-              class="border-0 my-1" v-for="user in likeList" :key="user.senderUid"
+              class="border-0 my-1" v-for="(user, idx) in likeList" :key="user.senderUid"
               @click="goToArticle(user.detail)">
               <div class="d-flex align-items-center">
                 <span>
-                  <img v-if="user.thumnail" :src="user.thumnail"
+                  <img v-if="user.thumnail" :src="getThumbnailImgUrl({ idx, imgURL: user.thumnail }).thumbnail"
                     :alt="user.senderNickname + '님의 프로필'">
                 </span>
                 <span>{{ user.senderNickname }}님이 좋아요를 누르셨습니다.</span>
@@ -182,6 +182,12 @@ export default {
     },
     goToPromise(promiseid) {
       this.$router.push({ name: 'PromiseDetail', params: { promiseid }})
+    },
+    getThumbnailImgUrl (payload) {
+      return {
+        ...this.likeList[payload.idx],
+        thumbnail: this.likeList[payload.idx].thumnail && require(`@/assets/images/${payload.imgURL}`)
+      }
     }
   }
 }
