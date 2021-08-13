@@ -1,30 +1,17 @@
 package com.web.curation.model.kakao;
 
-import lombok.Data;
+import lombok.*;
 
-@Data
+import javax.validation.constraints.NotNull;
+
+@NotNull
+@ToString
+@Getter
+@Builder
+@AllArgsConstructor
 public class KakaoProfile {
-    private String id;
-    private Properties properties;
-    private KakaoAccount kakao_account;
-
-    @Data
-    class Properties {
-        private String nickname;
-        private String profile_image;
-        private String thumbnail_image;
-    }
-
-    @Data
-    class KakaoAccount {
-        private boolean profile_needs_agreement;
-        private Profile profile;
-
-        @Data
-        class Profile {
-            private String nickname;
-            private String thumbnail_image_url;
-            private String profile_image_url;
-        }
-    }
+    private String access_token;
+    private String email;
+    private String nickname;
+    private String thumbnail;
 }
