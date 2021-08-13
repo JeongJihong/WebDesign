@@ -5,7 +5,10 @@
       
       <div v-for="(article,idx) in articles" :key="idx" style="z-index:-1;">
         <div>
-          <b-avatar src="https://placekitten.com/300/300" size="2rem"></b-avatar><span>{{article.articleDetail.user.nickname}}</span>
+          <b-avatar v-if="article.articleDetail.user.thumbnail" class="me-2"
+            :src="getThumbnailImgUrl({ idx, imgURL: article.articleDetail.user.thumbnail }).thumbnail"></b-avatar>
+          <b-avatar v-else class="me-2"></b-avatar>
+          <span>{{article.articleDetail.user.nickname}}</span>
           <b-carousel
             id="carousel-1"
             v-model="slide"
@@ -15,11 +18,12 @@
             background="#ababab"
             img-width="1024"
             img-height="480"
-            style="text-shadow: 1px 1px 2px #333;"
+            style="text-shadow: 1px 1px 2px #333; z-index: -2;"
             @sliding-start="onSlideStart"
             @sliding-end="onSlideEnd"
           >
-            <b-carousel-slide v-for="(image,idnum) in article.articleDetail.images" :key="idnum"> 
+            <b-carousel-slide v-for="(image,idnum) in article.articleDetail.images" :key="idnum"
+              style="z-index: -1;"> 
               <template #img >
                 <img
                   class="d-block img-fluid w-100"
@@ -235,6 +239,12 @@ export default {
       return {
         ...this.articles[payload.idx],
         icon: this.articles[payload.idx] && require(`@/assets/images/${payload.imgURL}`)
+      }
+    },
+    getThumbnailImgUrl (payload) {
+      return {
+        ...this.articles[payload.idx],
+        thumbnail: this.articles[payload.idx].articleDetail.user.thumbnail && require(`@/assets/images/${payload.imgURL}`)
       }
     }
   },

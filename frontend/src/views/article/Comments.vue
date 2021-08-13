@@ -9,7 +9,6 @@
 
     <!-- 댓글 입력 -->
     <div class="d-flex justify-content-left align-items-center mx-3 mt-4">
-      <b-avatar src="https://placekitten.com/300/300" size="2.5rem" class="me-3"></b-avatar>
       <span class="d-flex justify-content-between" style="width: 100%;">
         <b-form-input v-model="content" type="text" placeholder="하고싶은말을 적어주세요"
           style="height: 38px;" class="me-3"></b-form-input>
@@ -21,7 +20,9 @@
     <b-list-group class="mt-4">
       <b-list-group-item class="d-flex justify-content-left align-items-center border-0 my-1"
         v-for="comment in comments" :key="comment.commentid" :comment="comment">
-        <b-avatar src="https://placekitten.com/300/300" size="2.5rem" class="me-3"></b-avatar>
+        <b-avatar v-if="comment.thumbnail" class="me-2"
+          :src="getThumbnailImgUrl({ imgURL: comment.thumbnail }).thumbnail"></b-avatar>
+        <b-avatar v-else class="me-2"></b-avatar>
         <span class="d-flex justify-content-between" style="width: 100%;">
           <span>{{ comment.comment }}</span>
           <span v-if="comment.createdtime == comment.updatedtime ">생성시간:{{ comment.createdtime}}</span>
@@ -152,6 +153,12 @@ export default {
           console.log(err)
         })
     },
+    getThumbnailImgUrl (payload) {
+      return {
+        ...this.comments,
+        thumbnail: this.comments.length && require(`@/assets/images/${payload.imgURL}`)
+      }
+    }
   }
 }
 </script>

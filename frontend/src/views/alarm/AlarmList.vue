@@ -15,12 +15,13 @@
         <div v-else>
           <b-list-group>
             <b-list-group-item
-              class="border-0 my-1" v-for="(user, idx) in likeList" :key="user.senderUid"
+              class="border-0 my-1" v-for="(user, idx) in likeList" :key="user.detail"
               @click="goToArticle(user.detail)">
               <div class="d-flex align-items-center">
-                <span>
-                  <img v-if="user.thumnail" :src="getThumbnailImgUrl({ idx, imgURL: user.thumnail }).thumbnail"
-                    :alt="user.senderNickname + '님의 프로필'">
+                <span class="me-2">
+                  <b-avatar v-if="user.thumbnail"
+                    :src="getThumbnailImgUrl({ idx, imgURL: user.thumbnail }).thumbnail"></b-avatar>
+                  <b-avatar v-else></b-avatar>
                 </span>
                 <span>{{ user.senderNickname }}님이 좋아요를 누르셨습니다.</span>
               </div>
@@ -36,12 +37,13 @@
         <div v-else>
           <b-list-group>
             <b-list-group-item
-              class="border-0 my-1" v-for="user in followList" :key="user.senderUid"
+              class="border-0 my-1" v-for="(user, idx) in followList" :key="user.senderUid"
               @click="goToProfile(user.senderNickname)">
               <div class="d-flex align-items-center">
-                <span>
-                  <img v-if="user.thumnail" :src="user.thumnail"
-                    :alt="user.senderNickname + '님의 프로필'">
+                <span class="me-2">
+                  <b-avatar v-if="user.thumbnail"
+                    :src="getThumbnailImgUrl({ idx, imgURL: user.thumbnail }).thumbnail"></b-avatar>
+                  <b-avatar v-else></b-avatar>
                 </span>
                 <span>{{ user.senderNickname }}님의 팔로우 요청이 왔습니다.</span>
               </div>
@@ -65,12 +67,13 @@
             <div v-if="category.length !== 0">
               <b-list-group>
                 <b-list-group-item
-                  class="border-0 my-1" v-for="user in category" :key="user.detail"
+                  class="border-0 my-1" v-for="(user, i) in category" :key="user.detail"
                   @click="goToPromise(user.detail)">
                   <div class="d-flex align-items-center">
-                    <span>
-                      <img v-if="user.thumnail" :src="user.thumnail"
-                        :alt="user.senderNickname + '님의 프로필'">
+                    <span class="me-2">
+                      <b-avatar v-if="user.thumbnail"
+                        :src="getThumbnailImgUrl({ idx: i, imgURL: user.thumbnail }).thumbnail"></b-avatar>
+                      <b-avatar v-else></b-avatar>
                     </span>
                     <span>{{ user.senderNickname }}님의 약속 초대가 왔습니다.</span>
                   </div>
@@ -186,7 +189,7 @@ export default {
     getThumbnailImgUrl (payload) {
       return {
         ...this.likeList[payload.idx],
-        thumbnail: this.likeList[payload.idx].thumnail && require(`@/assets/images/${payload.imgURL}`)
+        thumbnail: this.likeList[payload.idx].thumbnail && require(`@/assets/images/${payload.imgURL}`)
       }
     }
   }
