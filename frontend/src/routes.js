@@ -19,6 +19,7 @@ import PromiseDetail from '@/views/promise/PromiseDetail.vue'
 import PromiseLocations from '@/views/promise/PromiseLocations.vue'
 import KakaoLogin from '@/components/user/snsLogin/Kakao.vue'
 import OnBoarding from '@/views/account/OnBoarding'
+import Guide from '@/views/article/Guide.vue'
 
 
 import Vue from 'vue'
@@ -50,6 +51,11 @@ const routes = [
         path : '/onboarding',
         name : 'OnBoarding',
         component : OnBoarding,
+    },
+    {
+        path : '/guide',
+        name : 'Guide',
+        component : Guide,
     },
     {   
         path : '/article/create',
