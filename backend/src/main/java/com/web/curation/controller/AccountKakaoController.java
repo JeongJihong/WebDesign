@@ -102,10 +102,6 @@ public class AccountKakaoController {
         JsonNode kakao_account = userInfo.path("kakao_account");
         member_name = properties.path("nickname").asText(); //이름 정보 가져오는 것
         // email = kakao_account.path("email").asText();
-        if(member_name!=null) {
-            session.setAttribute("isLogOn",true);
-            session.setAttribute("member_id",member_name);        //여기 if문 안에 내용은 다 삭제해도 됩니다. 제 프로젝트에만 필요한 코드임.
-        }
         System.out.println("id : " + member_id);    //여기에서 값이 잘 나오는 것 확인 가능함.
         System.out.println("name : " + member_name);
         // System.out.println("email : " + email);
