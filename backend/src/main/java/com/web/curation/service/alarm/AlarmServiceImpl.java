@@ -50,6 +50,7 @@ public class AlarmServiceImpl implements AlarmService {
     @Transactional
     public void register(String token) {
         Optional<User> userOpt = Authentication();
+        System.out.println(userOpt.get().getUsername());
         User user3 = new User(userOpt.get().getUid(), userOpt.get().getNickname(), userOpt.get().getEmail(),
                 userOpt.get().getPassword(), userOpt.get().getIntroduction(), userOpt.get().getThumbnail(),
                 userOpt.get().getStatus(), token, userOpt.get().getArticles(), userOpt.get().getRoles());

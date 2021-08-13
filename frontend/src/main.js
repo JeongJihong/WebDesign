@@ -58,8 +58,8 @@ Notification.requestPermission().then((permission) => {
 // TODO: Send token to server for send notification
 // messaging.getToken().then(console.log);
 messaging.getToken().then((res) => {
-  // console.log(res)
-  store.dispatch('firebaseTokenGet', res)
+  // console.log(res);
+  store.dispatch("firebaseTokenGet", res);
 });
 
 // Handle received push notification at foreground
