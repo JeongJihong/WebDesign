@@ -10,6 +10,7 @@ import com.web.curation.model.kakao.KakaoRestapi;
 import com.web.curation.model.kakao.KakaoUserInfo;
 import com.web.curation.model.kakao.OAuth2Token;
 import com.web.curation.model.user.User;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -30,6 +31,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.util.Collections;
 
 @Controller
 @RequestMapping("/kakao")
@@ -42,7 +44,7 @@ public class AccountKakaoController {
 
         StringBuffer url = new StringBuffer();
         url.append("https://kauth.kakao.com/oauth/authorize?");
-        url.append("client_id=" + "0947e20aea7d614504cbb83bd1191b96");
+        url.append("client_id=" + "0fa10a70c9660a76e5542202f29797b1");
         url.append("&redirect_uri=http://localhost:3000/kakao/callback");
         url.append("&response_type=code");
 

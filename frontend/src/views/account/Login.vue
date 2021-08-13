@@ -43,7 +43,7 @@
           <div class="sns-login">
             <div class="text">
               <p>SNS 간편 로그인</p>
-              <kakaoLogin :component="component" />
+              <KakaoLogin :component="component" />
               <GoogleLogin :component="component" />
               <div class="bar"></div>
             </div>

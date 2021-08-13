@@ -20,6 +20,8 @@ Vue.use(IconsPlugin);
 // Optionally install the BootstrapVue icon components plugin
 Vue.config.productionTip = false;
 
+// window.Kakao.init("5e434a2e824d6fcfd6ca2b69e2cdf6c2");
+
 // Vue.use(VueRouter)
 
 // const router = new VueRouter({
@@ -56,8 +58,8 @@ Notification.requestPermission().then((permission) => {
 // TODO: Send token to server for send notification
 // messaging.getToken().then(console.log);
 messaging.getToken().then((res) => {
-  // console.log(res)
-  store.dispatch('firebaseTokenGet', res)
+  // console.log(res);
+  store.dispatch("firebaseTokenGet", res);
 });
 
 // Handle received push notification at foreground
@@ -65,6 +67,9 @@ messaging.onMessage((payload) => {
   console.log(payload);
   alert(payload.data.message);
 });
+
+// 카카오 소셜 로그인
+window.Kakao.init("6d8be51fab4c89e30255e5df438f02d6");
 
 new Vue({
   router,
