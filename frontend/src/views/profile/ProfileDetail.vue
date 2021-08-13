@@ -110,7 +110,7 @@ export default {
     goToFollow () {
       axios({
         method: 'post',
-        url: `http://127.0.0.1:8080/account/profile/follow`,
+        url: `https://i5b302.p.ssafy.io/api/account/profile/follow`,
         data: {
           'dstnickname': this.nickname,
           'srcnickname': this.myNickname
@@ -130,7 +130,7 @@ export default {
 
       // Follow Alarm Post
       axios({
-        url: 'http://127.0.0.1:8080/alarm',
+        url: 'https://i5b302.p.ssafy.io/api/alarm',
         method: 'post',
         headers: {
           'Content-Type': 'application/json',
@@ -147,7 +147,7 @@ export default {
     getUserInfo: function () {
       axios({
         method: 'get',
-        url: `http://127.0.0.1:8080/account/profile/${this.nickname}`,
+        url: `https://i5b302.p.ssafy.io/api/account/profile/${this.nickname}`,
         headers: {
           'Content-Type': 'application/json',
           'X-AUTH-TOKEN' : this.$store.state.token
@@ -181,7 +181,7 @@ export default {
     checkFollowRequest () {
       axios({
         method: 'get',
-        url: `http://127.0.0.1:8080/account/profile/follow/${this.nickname}`,
+        url: `https://i5b302.p.ssafy.io/api/account/profile/follow/${this.nickname}`,
         headers: {
           'Content-Type': 'application/json',
           'X-AUTH-TOKEN' : this.$store.state.token
@@ -198,7 +198,7 @@ export default {
     approveFollowRequest () {
       axios({
         method: 'patch',
-        url: `http://127.0.0.1:8080/account/profile/follow`,
+        url: `https://i5b302.p.ssafy.io/api/account/profile/follow`,
         headers: {
           'Content-Type': 'application/json',
           'X-AUTH-TOKEN' : this.$store.state.token
@@ -219,7 +219,7 @@ export default {
     rejectFollowRequest () {
       axios({
         method: 'delete',
-        url: `http://127.0.0.1:8080/account/profile/follow`,
+        url: `https://i5b302.p.ssafy.io/api/account/profile/follow`,
         headers: {
           'Content-Type': 'application/json',
           'X-AUTH-TOKEN' : this.$store.state.token
@@ -241,7 +241,7 @@ export default {
     unfollow () {
       axios({
         method: 'delete',
-        url: `http://127.0.0.1:8080/account/profile/follow`,
+        url: `https://i5b302.p.ssafy.io/api/account/profile/follow`,
         headers: {
           'Content-Type': 'application/json',
           'X-AUTH-TOKEN' : this.$store.state.token
@@ -268,7 +268,7 @@ export default {
     followerList () {
       axios({
         method: 'get',
-        url: `http://127.0.0.1:8080/account/profile/${this.nickname}/follower`,
+        url: `https://i5b302.p.ssafy.io/api/account/profile/${this.nickname}/follower`,
         headers: {
           'Content-Type': 'application/json',
           'X-AUTH-TOKEN' : this.$store.state.token
@@ -287,7 +287,7 @@ export default {
     followingList () {
       axios({
         method: 'get',
-        url: `http://127.0.0.1:8080/account/profile/${this.nickname}/following`,
+        url: `https://i5b302.p.ssafy.io/api/account/profile/${this.nickname}/following`,
         headers: {
           'Content-Type': 'application/json',
           'X-AUTH-TOKEN' : this.$store.state.token
@@ -304,7 +304,7 @@ export default {
     cancelFollow () {
       axios({
         method: 'delete',
-        url: `http://127.0.0.1:8080/account/profile/follow/`,
+        url: `https://i5b302.p.ssafy.io/api/account/profile/follow/`,
         headers: {
           'Content-Type': 'application/json',
           'X-AUTH-TOKEN' : this.$store.state.token
@@ -329,7 +329,7 @@ export default {
     // this.getUserInfo()
     axios({
       method: 'get',
-      url: `http://127.0.0.1:8080/account/checkJWT/`,
+      url: `https://i5b302.p.ssafy.io/api/account/checkJWT/`,
       headers: {
         'Content-Type': 'application/json',
         'X-AUTH-TOKEN' : this.$store.state.token
@@ -346,7 +346,7 @@ export default {
     })
 
     axios({
-      url: `http://127.0.0.1:8080/account/status/${this.nickname}`,
+      url: `https://i5b302.p.ssafy.io/api/account/status/${this.nickname}`,
       method: 'get',
       headers: {
         'Content-Type': 'application/json',

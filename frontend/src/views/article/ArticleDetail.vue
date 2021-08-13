@@ -71,7 +71,7 @@ export default {
   },
   created(){
     axios({
-      url:`http://127.0.0.1:8080/article/`+this.$route.params.articleid,
+      url:`https://i5b302.p.ssafy.io/api/article/`+this.$route.params.articleid,
       method:'GET',
       headers: {
             'x-auth-token': `${localStorage.getItem('token')}`,
@@ -91,7 +91,7 @@ export default {
     getArticleFeeImgUrl (payload) {
       return {
         ...this.article,
-        icon: this.article && require(`@/assets/images/${payload.imgURL}`)
+        icon: this.article && `https://i5b302.p.ssafy.io/img/${payload.imgURL}`
       }
     },
     goBack() {
@@ -99,7 +99,7 @@ export default {
     },
     articleDetail(){
       axios({
-      url: 'http://127.0.0.1:8080/article/'+this.$route.params.articleid,
+      url: 'https://i5b302.p.ssafy.io/api/article/'+this.$route.params.articleid,
       method:'get',
       })
       .then(res=>{
@@ -112,7 +112,7 @@ export default {
     },
     articleDelete(){
       axios({
-      url: 'http://127.0.0.1:8080/article/'+this.$route.params.articleid,
+      url: 'https://i5b302.p.ssafy.io/api/article/'+this.$route.params.articleid,
       method:'delete',
       headers: {
           'x-auth-token': `${localStorage.getItem('token')}`,
@@ -134,7 +134,7 @@ export default {
     },
     doScrap(payload) {
       axios({
-        url: `http://127.0.0.1:8080/scrap/${payload.articleid}`,
+        url: `https://i5b302.p.ssafy.io/api/scrap/${payload.articleid}`,
         method: 'post',
         headers: {
           'x-auth-token': `${localStorage.getItem('token')}`,
@@ -146,7 +146,7 @@ export default {
     },
     undoScrap(payload) {
       axios({
-        url: 'http://127.0.0.1:8080/scrap',
+        url: 'https://i5b302.p.ssafy.io/api/scrap',
         method: 'get',
         headers: {
           "Content-Type": "application/json",
@@ -166,7 +166,7 @@ export default {
         })
         .then(scrapid => {
           axios({
-            url: `http://127.0.0.1:8080/scrap/${scrapid}`,
+            url: `https://i5b302.p.ssafy.io/api/scrap/${scrapid}`,
             method: "delete",
             headers: {
               "Content-Type": "application/json",

@@ -163,7 +163,7 @@ export default {
     updateLocations () {
       axios({
         method: 'get',
-        url: `http://127.0.0.1:8080/promise/place/${this.promiseid}`,
+        url: `https://i5b302.p.ssafy.io/api/promise/place/${this.promiseid}`,
         headers: {
           'Content-Type': 'application/json',
           'X-AUTH-TOKEN' : this.$store.state.token
@@ -182,7 +182,7 @@ export default {
     getPromiseInfo () {
       axios({
         method: 'get',
-        url: `http://127.0.0.1:8080/promise/${this.promiseid}`,
+        url: `https://i5b302.p.ssafy.io/api/promise/${this.promiseid}`,
         headers: {
           'Content-Type': 'application/json',
           'X-AUTH-TOKEN' : this.$store.state.token

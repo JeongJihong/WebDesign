@@ -71,6 +71,9 @@ messaging.onMessage((payload) => {
 // 카카오 소셜 로그인
 window.Kakao.init("6d8be51fab4c89e30255e5df438f02d6");
 
+var path = window.location.pathname;
+console.log(path);
+
 new Vue({
   router,
   store,

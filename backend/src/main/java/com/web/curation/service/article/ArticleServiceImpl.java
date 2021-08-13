@@ -59,7 +59,7 @@ public class ArticleServiceImpl implements ArticleService{
 
 
     final String rootPath = System.getProperty("user.dir");
-    String basePath = rootPath.substring(0, rootPath.length()-7) + "frontend\\src\\assets\\images\\";
+    final String basePath = rootPath.substring(0, rootPath.length()-5) + "/b302/dist/img/";
 
     public Optional<User> Authentication() {
         Authentication user = SecurityContextHolder.getContext().getAuthentication();
@@ -125,6 +125,11 @@ public class ArticleServiceImpl implements ArticleService{
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println("=============================================");
+        System.out.println(rootPath);
+        System.out.println(basePath);
+        System.out.println("=============================================");
+
         for(int i = 0; i < files.size(); ++i) {
             imageDao.save(Image.builder()
                     .imageid(null)
