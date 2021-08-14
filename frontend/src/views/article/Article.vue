@@ -1,7 +1,7 @@
 <template>
-  <div class="feed newsfeed">
+  <div class="feed newsfeed app">
     <div class="wrapB">
-      <div v-for="(article,idx) in articles" :key="idx" style="z-index:-1;">
+      <div v-for="(article,idx) in articles" :key="idx">
         <div>
           <b-avatar v-if="article.articleDetail.user.thumbnail" class="me-2"
             :src="getThumbnailImgUrl({ idx, imgURL: article.articleDetail.user.thumbnail }).thumbnail"></b-avatar>
@@ -16,12 +16,13 @@
             background="#ababab"
             img-width="1024"
             img-height="480"
-            style="text-shadow: 1px 1px 2px #333; z-index: -1;"
+            style="text-shadow: 1px 1px 2px #333; position:relative;"
             @sliding-start="onSlideStart"
             @sliding-end="onSlideEnd"
+            
           >
             <b-carousel-slide v-for="(image,idnum) in article.articleDetail.images" :key="idnum"
-              style="z-index: -1;"> 
+              > 
               <template #img >
                 <img
                   class="d-block img-fluid w-100"
@@ -40,13 +41,13 @@
             <p>약속 시간 : {{ article.promiseDetail.promisetime }}</p>
             <!-- <p>유형 : {{ article.promiseDetail.type }}</p> -->
           </div>
-          <ul class="d-flex justify-content-left" style="padding-left:3px;">
-            <li v-if="article.likeCheck" ><b-icon  @click="articleLike({ articleid: article.articleDetail.articleid, nickname: article.articleDetail.user.nickname, likeCheck:article.likeCheck, idx:idx  })" id="likestat" icon="hand-thumbs-up" scale="1.5" variant="danger"></b-icon></li>
-            <li v-else ><b-icon  @click="articleLike({ articleid: article.articleDetail.articleid, nickname: article.articleDetail.user.nickname,idx:idx })" id="likestat" icon="hand-thumbs-up" scale="1.5" variant="secondary"></b-icon></li>
+          <ul class="d-flex justify-content-left article" style="padding-left:3px;">
+            <li v-if="article.likeCheck" ><b-icon @click="articleLike({ articleid: article.articleDetail.articleid, nickname: article.articleDetail.user.nickname, likeCheck:article.likeCheck, idx:idx  })" icon="hand-thumbs-up" scale="1.5" variant="danger"></b-icon></li>
+            <li v-else ><b-icon id="icon" @click="articleLike({ articleid: article.articleDetail.articleid, nickname: article.articleDetail.user.nickname,idx:idx })"  icon="hand-thumbs-up" scale="1.5"></b-icon></li>
             
-            <li v-if="article.scrapCheck"><b-icon @click="undoScrap({ articleid: article.articleDetail.articleid, idx: idx })" icon="tags-fill" scale="1.5" variant="primary"></b-icon></li>
-            <li v-else><b-icon @click="doScrap({ articleid: article.articleDetail.articleid, idx: idx })" icon="tags" scale="1.5" variant="secondary"></b-icon></li>
-            <li @click="getComments(article.articleDetail.articleid)"><b-icon icon="chat-dots" scale="1.5" variant="primary"></b-icon></li><span>{{ article.articleDetail.comments.length }}</span>
+            <li v-if="article.scrapCheck"><b-icon @click="undoScrap({ articleid: article.articleDetail.articleid, idx: idx })" icon="tags-fill" scale="1.5" ></b-icon></li>
+            <li v-else><b-icon id="icon" @click="doScrap({ articleid: article.articleDetail.articleid, idx: idx })" icon="tags" scale="1.5" ></b-icon></li>
+            <li @click="getComments(article.articleDetail.articleid)"><b-icon icon="chat-dots-fill" scale="1.5" style="color:A5E994;"></b-icon></li><span>{{ article.articleDetail.comments.length }}</span>
           </ul>
           <p>{{ article.likeCount }} 명의 유저가 이글을 좋아합니다.</p>
         </div>
@@ -250,10 +251,5 @@ export default {
 };
 //
 </script>
-<style scoped>
-li {
-  margin-right: 12px;
-}
-
-
+<style src="../../App.css">
 </style>

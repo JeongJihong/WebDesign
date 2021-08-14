@@ -1,5 +1,5 @@
 <template>
-  <div style="margin-left:10%; margin-right:10%;">
+  <div style="margin-left:10%; margin-right:10%; page">
     <br>
     <b-form>
       <b-form-group id="input-group-1" label="Title:" label-for="input-1">
@@ -230,16 +230,6 @@ export default {
 }
 </script>
 
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
-div { font-family: 'Jua', sans-serif; }
-.map_wrap {position:relative;width:100%;height:350px;}
-.map_wrap, .map_wrap * {margin:0;padding:0;font-family:'Malgun Gothic',dotum,'돋움',sans-serif;font-size:12px;}
-.map_wrap a, .map_wrap a:hover, .map_wrap a:active{color:#000;text-decoration: none;}
-.map_wrap {position:relative;width:100%;height:500px;}
-.bg_white {background:#fff;}
-#pagination {margin:10px auto;text-align: center;}
-#pagination a {display:inline-block;margin-right:10px;}
-#pagination .on {font-weight: bold; cursor: default;color:#777;}
+<style src="../../App.css">
  
 </style>

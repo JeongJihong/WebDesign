@@ -1,5 +1,5 @@
 <template>
-  <div class="scale">
+  <div class="scale page">
     <div class="mt-3 mx-4 fs-1">
       <span class="fw-bold"></span>
     </div>
