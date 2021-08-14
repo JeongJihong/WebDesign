@@ -1,8 +1,6 @@
 <template>
   <div class="feed newsfeed">
     <div class="wrapB">
-      <h1>뉴스피드</h1>
-      
       <div v-for="(article,idx) in articles" :key="idx" style="z-index:-1;">
         <div>
           <b-avatar v-if="article.articleDetail.user.thumbnail" class="me-2"
@@ -18,7 +16,7 @@
             background="#ababab"
             img-width="1024"
             img-height="480"
-            style="text-shadow: 1px 1px 2px #333; z-index: -2;"
+            style="text-shadow: 1px 1px 2px #333; z-index: -1;"
             @sliding-start="onSlideStart"
             @sliding-end="onSlideEnd"
           >
@@ -52,6 +50,7 @@
           </ul>
           <p>{{ article.likeCount }} 명의 유저가 이글을 좋아합니다.</p>
         </div>
+        <hr>
       </div>
       <br>
       <infinite-loading @infinite="infiniteHandler"></infinite-loading>

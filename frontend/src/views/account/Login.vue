@@ -1,11 +1,9 @@
 <template>
   <div class="user" id="login">
-    <div class="jb-box">
-      <video muted autoplay loop>
-        <source src="../../assets/videos/Sky.mp4" type="video/mp4">
-      </video>
       <div class="jb-text">
-        <h1 >Pipl.</h1>
+        <center>
+          <img class="main-icon" src="../../assets/images/main-icon.png" alt="2">
+        </center>
         <div class="wrapC">
           <div class="input-with-label">
             <input
@@ -44,7 +42,7 @@
             <div class="text">
               <p>SNS 간편 로그인</p>
               <KakaoLogin :component="component" />
-              <GoogleLogin :component="component" />
+              <!-- <GoogleLogin :component="component" /> -->
               <div class="bar"></div>
             </div>
           </div>
@@ -53,11 +51,6 @@
             <div class="text">
               <p>혹시</p>
               <div class="bar"></div>
-            </div>
-            <div class="wrap">
-              <p>비밀번호를 잊으셨나요?</p>
-              <!-- 수정 필요 -->
-              <router-link to="/user/ResetPassword" class="btn--text">비밀번호 변경하기</router-link>
             </div>
             <div class="wrap">
               <p>아직 회원이 아니신가요?</p>
@@ -70,7 +63,6 @@
           </div>
         </div>
       </div>
-    </div>
   </div>
 </template>
 
@@ -88,7 +80,7 @@ export default {
   name:'Login',
   components: {
     KakaoLogin,
-    GoogleLogin
+    // GoogleLogin
   },
   created() {
     if (this.token !== '') {
@@ -163,8 +155,7 @@ export default {
   @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
   template { padding: 0px; margin: 0px; }
   .jb-box {  width: 100%; overflow: hidden; margin: 0px auto; position: fixed; }
-  video { height: 150vh;  overflow: hidden;  position: relative; }
   .jb-text { position: absolute; top: 5%; width: 100%; }
-  .jb-text p {color: #ffffff; }
-  .jb-text h1 { text-align: center; color: #ffffff !important; font-family: 'Pacifico',cursive; }
+  .jb-text p {color: black; }
+  .main-icon { width: 130px; margin-bottom: 10px; }
 </style>
