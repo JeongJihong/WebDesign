@@ -172,6 +172,7 @@ export default {
       return dotTime
     },
     getImgUrl () {
+      console.log(this.promiseDetail.type && require(`@/assets/images/${this.promiseDetail.type}-icon.svg`))
       return {
         ...this.promiseDetail,
         icon: this.promiseDetail.type && require(`@/assets/images/${this.promiseDetail.type}-icon.svg`)
