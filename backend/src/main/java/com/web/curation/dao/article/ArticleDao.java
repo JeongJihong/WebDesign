@@ -6,10 +6,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
 public interface ArticleDao extends JpaRepository<Article, Long> {
+    @Transactional
     void deleteByArticleid(Long articleid);
 
     List<Article> findAllById(Long articleid);
@@ -26,4 +28,7 @@ public interface ArticleDao extends JpaRepository<Article, Long> {
 
     @Query(value = "select * from", nativeQuery = true)
     List<Article> selectListLimit(int size);
+
+    @Transactional
+    void deleteByPromiseid(Long promiseid);
 }
