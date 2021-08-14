@@ -233,7 +233,7 @@ export default {
     getArticleFeeImgUrl (payload) {
       console.log( this.articles[payload.idx] && require(`@/assets/images/${payload.imgURL}`))
       return {
-        ...this.articles[payload.idx],
+        ...this.articles,
         icon: this.articles[payload.idx] && require(`@/assets/images/${payload.imgURL}`)
       }
     }
