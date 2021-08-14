@@ -29,7 +29,7 @@
                   class="d-block img-fluid w-100"
                   width="1024"
                   height="480"
-                  :src="getArticleFeeImgUrl({ idx, imgURL: image.imgURL,articleid:article.articleDetail.articleid }).icon"
+                  :src="getArticleFeeImgUrl({ idx, imgURL: image.imgURL }).icon"
                   alt="image slot"
                 >
               </template>
@@ -134,6 +134,7 @@ export default {
         .then(res=>{
           console.log(res.data)
           this.articles[payload.idx].likeCheck = !this.articles[payload.idx].likeCheck
+          this.articles[payload.idx].likeCount +=1
           console.log("싫어요 -> 좋아요")
         })
         .catch(err=>{
@@ -170,6 +171,7 @@ export default {
           console.log(res.data)
           console.log("좋아요 -> 싫어요")
           this.articles[payload.idx].likeCheck = !this.articles[payload.idx].likeCheck
+          this.articles[payload.idx].likeCount -= 1
         })
         .catch(err=>{
           console.log(err)
@@ -233,11 +235,9 @@ export default {
       this.sliding = false
     },
     getArticleFeeImgUrl (payload) {
-      console.log(payload.articleid,'몇번하니')
-      console.log(payload.imgURL,'몇번되니')
-      console.log(this.articles[payload.idx] )
+      console.log( this.articles[payload.idx] && require(`@/assets/images/${payload.imgURL}`))
       return {
-        ...this.articles[payload.idx],
+        ...this.articles,
         icon: this.articles[payload.idx] && require(`@/assets/images/${payload.imgURL}`)
       }
     },
