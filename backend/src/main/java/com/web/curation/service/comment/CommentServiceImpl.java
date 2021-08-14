@@ -73,7 +73,7 @@ public class CommentServiceImpl implements CommentService{
         // 만약 현재 로그인한 유저와 수정요청한 유저가 같을때만 수정한다
         if(userOpt.get().getUid() == oldComment.getId()) {
             Comment newComment = new Comment(oldComment.getCommentid(), oldComment.getArticleid(), userOpt.get().getUid(),
-                    request.getNickname(), request.getCreatedtime(), request.getUpdatedtime(), request.getComment(), oldComment.getArticle());
+                    userOpt.get().getNickname(), request.getCreatedtime(), request.getUpdatedtime(), request.getComment(), oldComment.getArticle());
             commentDao.save(newComment);
         }
         else {
