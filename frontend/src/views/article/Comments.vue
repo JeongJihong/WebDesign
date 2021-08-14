@@ -1,6 +1,6 @@
 <template>
   <!-- <div class="scale"> -->
-  <div>
+  <div class="page">
      <!-- 헤더 -->
     <!-- <div class="mt-3 mx-4 fs-1">
       <button @click="goBack"><b-icon icon="arrow-left" class="me-4"></b-icon></button>

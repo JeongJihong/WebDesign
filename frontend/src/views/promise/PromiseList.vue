@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="page">
     <br>
     <router-link :to="{ name: 'PromiseCreate' }"  class="text-decoration-none me-3 text-dark d-flex justify-content-center">
           <h1>약속 생성하기</h1>

@@ -1,9 +1,9 @@
 <template>
-  <div class="scale">
+  <div class="scale page">
     <p>게시글 생성하기</p>
     <form enctype = "multipart/form-data" method="post" >
       <div class="d-flex flex-row">
-        <button style="display:inline-block; margin-right:5%; margin-left:2%" @click.prevent="clickInputTag()" id='addimage'><b-icon-plus class="h1"></b-icon-plus></button>
+        <button style="display:inline-block; margin-right:5%; margin-left:2%" @click.prevent="clickInputTag()" id='addimage'><b-icon-plus id="icon" class="h1"></b-icon-plus></button>
         <input hidden ref="plus" id="file" type="file"  accept="image/*" @change.prevent="uploadImage($event)" multiple>
         <div id="image_container"></div>
       </div>

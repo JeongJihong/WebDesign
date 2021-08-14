@@ -1,5 +1,5 @@
 <template>
-  <div class="m-4">
+  <div class="m-4 page">
     <div class="d-flex" style="justify-content: space-between">
       <div class="d-flex">
         <button @click="goBack"><b-icon icon="arrow-left" class="fs-1 me-4"></b-icon></button>
