@@ -18,10 +18,12 @@
     <div>
       <div v-for="person in attendantsLength" :key="person">
         <div class="d-flex flex-row mx-4 my-4" style="justify-content: space-between; text-align:center">
-          <img src="@/assets/images/profile_default.png" alt="image" style="width: 35px; height: 35px;" >
-          <p class="fw-bold">{{ nicknames[person-1]}}</p>
-          <p class="fw-bold" style="color:green;">{{ times[person-1]}}분전</p>
-          <p>{{ places[person-1]}}</p>
+          <b-avatar v-if="thumbnails[person-1]" class="me-2"
+            :src="getThumbnailImgUrl({ idx: person-1, imgURL: thumbnails[person-1] }).thumbnail"></b-avatar>
+          <b-avatar v-else class="me-2"></b-avatar>
+          <p class="fw-bold m-0 d-flex align-items-center">{{ nicknames[person-1]}}</p>
+          <p class="fw-bold m-0 d-flex align-items-center" style="color:green;">{{ times[person-1]}}분전</p>
+          <p class="m-0 d-flex align-items-center">{{ places[person-1]}}</p>
         </div>
       </div>
     </div>
@@ -178,6 +180,12 @@ export default {
       .catch((err) => {
         alert(err)
       })
+    },
+    getThumbnailImgUrl (payload) {
+      return {
+        ...this.thumbnails,
+        thumbnail: this.thumbnails[payload.idx] && require(`@/assets/images/${payload.imgURL}`)
+      }
     },
     getPromiseInfo () {
       axios({

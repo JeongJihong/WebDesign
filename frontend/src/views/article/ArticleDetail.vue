@@ -4,7 +4,10 @@
       <span class="fw-bold"></span>
     </div>
     <div class="mb-2">
-      <b-avatar src="https://placekitten.com/300/300" size="2rem"></b-avatar><span> {{ article.userNickname }}</span>
+      <b-avatar v-if="article.articleDetail" class="me-2"
+        :src="getThumbnailImgUrl({ imgURL: article.articleDetail.user.thumbnail }).thumbnail"></b-avatar>
+      <b-avatar v-else class="me-2"></b-avatar>
+      <span> {{ article.articleDetail.user.nickname }}</span>
       <span>
         <button v-if="article.userId === detail.id" @click="articleDelete()" class="btn-danger badge">삭제</button>
       </span>
@@ -42,10 +45,10 @@
             <p>약속 시간 : {{ article.promiseDetail.promisetime }}</p>
             <p>유형 : {{ article.promiseDetail.type }}</p>
     </div>
-    <p style="margin:10px">{{ detail.review }}</p>
-    <p>생성시간: {{ detail.createdtime }} </p>
-    <p>수정시간: {{ detail.updatedtime }} </p>
-    <p>{{ article.likeCount }} 명이 좋아해요! <b-avatar src="https://placekitten.com/300/300" size="2rem"></b-avatar>
+    <p style="margin:10px">{{ article.articleDetail.review }}</p>
+    <p>생성시간: {{ article.articleDetail.createdtime }} </p>
+    <p>수정시간: {{ article.articleDetail.updatedtime }} </p>
+    <p>{{ article.likeCount }} 명이 좋아해요!
     <b-button style="height:35px">스크랩하기</b-button></p>
     <li v-if="article.scrapCheck"><b-icon @click="undoScrap({ articleid: detail.articleid })" icon="tags-fill" scale="1.5" variant="primary"></b-icon></li>
       <li v-else><b-icon @click="doScrap({ articleid: detail.articleid })" icon="tags" scale="1.5" variant="secondary"></b-icon></li>
@@ -181,6 +184,12 @@ export default {
             })
         })
     },
+    getThumbnailImgUrl (payload) {
+      return {
+        ...this.article,
+        thumbnail: this.article.articleDetail.user.thumbnail && require(`@/assets/images/${payload.imgURL}`)
+      }
+    }
   },
 };
 </script>

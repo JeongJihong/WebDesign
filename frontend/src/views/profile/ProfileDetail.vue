@@ -10,7 +10,9 @@
       </button>
     </div>
     <div class="d-flex">
-      <img :src="thumbnail" alt="image" style="width: 70px; height: 70px" >
+      <b-avatar v-if="thumbnail" class="me-2" size="4rem"
+        :src="getThumbnailImgUrl({ imgURL: thumbnail }).thumbnail"></b-avatar>
+      <b-avatar v-else class="me-2" size="4rem"></b-avatar>
       <div class="mx-4">
         <!-- <h4>{{ this.nickname }}</h4> -->
         <div class="d-flex justify-content-between">
@@ -59,8 +61,9 @@
       :key="image" 
       @click="goToArticleDetail(articles[image-1].articleid)" 
       class="square" 
-      :style="{'background-image': 'url(' + require(`@/assets/images/${articles[image-1].images[0].imgURL}`) + ')'}"
+      :style="{ backgroundImage: 'url(' + getArticleImgUrl({ idx: image-1, imgURL: articles[image-1].images }).thumbnail + ')' }"
     >
+      <!-- :style="{'background-image': 'url(' + require(`@/assets/images/${articles[image-1].images[0].imgURL}`) + ')'}" -->
 
     </div>
 
@@ -167,9 +170,9 @@ export default {
           this.articlesLength = this.articles.length
         }
         this.thumbnail = res.data.userProfile.thumbnail
-        if (typeof this.thumbnail === 'undefined') {
-          this.thumbnail = require(`@/assets/images/profile_default.png`)
-        }
+        // if (typeof this.thumbnail === 'undefined') {
+        //   this.thumbnail = require(`@/assets/images/profile_default.png`)
+        // }
         console.log(this.articles)
         this.checkFollowRequest()
         this.followerList()
@@ -323,6 +326,24 @@ export default {
         name: 'ArticleDetail',
         params: {articleid: articleid}
       })
+    },
+    getThumbnailImgUrl (payload) {
+      return {
+        ...this.thumbnail,
+        thumbnail: this.thumbnail && require(`@/assets/images/${payload.imgURL}`)
+      }
+    },
+    getArticleImgUrl (payload) {
+      if (this.articles[payload.idx].images.length !== 0) {
+        return {
+          ...this.articles,
+          thumbnail: this.articles[payload.idx].images.length && require(`@/assets/images/${payload.imgURL[0].imgURL}`)
+        }
+
+      }
+      return {
+        thumbnail: '@/assets/images/img-placeholder.png'
+      }
     }
   },
   created () {
