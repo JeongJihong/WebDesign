@@ -28,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -109,6 +110,15 @@ public class ArticleServiceImpl implements ArticleService{
         if(promiseid == null && files.size() == 0) {
             throw new IllegalArgumentException("일반 게시글에는 이미지가 첨부 되어야 합니다.");
         }
+
+        // 현재 시각보다 이전 시각의 약속을 생성하려할 경우
+        if(promiseid != null) {
+            boolean isValid = promiseDao.findByPromiseid(promiseid).getPromisetime().isAfter(LocalDateTime.now());
+            if(!isValid) {
+                return;
+            }
+        }
+
         Long articleId = articleDao.save(Article.builder()
                 .articleid(null)
                 .id(userOpt.get().getUid())
