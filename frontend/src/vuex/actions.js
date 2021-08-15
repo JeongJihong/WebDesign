@@ -265,9 +265,9 @@ export default {
                     data: localStorage.getItem('firebaseToken')
       
                   })
-                    .then(() =>
+                    .then(() => {
                       router.push({ name: "FeedMain" })
-                    )
+                    })
                     .catch((err) => {
                       console.log('Firebase Token POST Failed' + err)
                     })
