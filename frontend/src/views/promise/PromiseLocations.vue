@@ -17,13 +17,23 @@
     <hr>
     <div>
       <div v-for="person in attendantsLength" :key="person">
-        <div class="d-flex flex-row mx-4 my-4" style="justify-content: space-between; text-align:center">
-          <b-avatar v-if="thumbnails[person-1]" class="me-2"
-            :src="getThumbnailImgUrl({ idx: person-1, imgURL: thumbnails[person-1] }).thumbnail"></b-avatar>
-          <b-avatar v-else class="me-2"></b-avatar>
-          <p class="fw-bold m-0 d-flex align-items-center">{{ nicknames[person-1]}}</p>
-          <p class="fw-bold m-0 d-flex align-items-center" style="color:green;">{{ times[person-1]}}분전</p>
-          <p class="m-0 d-flex align-items-center">{{ places[person-1]}}</p>
+        <div class="d-flex flex-row mx-2 my-4" style="justify-content: space-between; text-align:center">
+          <div v-if="thumbnails[person-1]" class="col-3 d-flex align-items-center">
+            <b-avatar 
+              :src="getThumbnailImgUrl({ idx: person-1, imgURL: thumbnails[person-1] }).thumbnail"></b-avatar>
+          </div>
+          <div v-else class="col-3 m-0 d-flex align-items-center">
+            <b-avatar></b-avatar>
+          </div>
+          <div class="col-3 fw-bold m-0 d-flex align-items-center">
+            <p>{{ nicknames[person-1]}}</p>
+          </div>
+          <div class="col-3 fw-bold m-0 d-flex align-items-center" style="color:green;">
+            <p>{{ times[person-1]}}분전</p>
+          </div>
+          <div class="col-3 m-0 d-flex align-items-center">
+            <p>{{ places[person-1]}}</p>
+          </div>
         </div>
       </div>
     </div>
@@ -154,13 +164,16 @@ export default {
         nameList.push(name);
         timeList.push(time);
         
-        this.thumbnails = thumbnailList
-        this.nicknames = nameList
-        this.places = placeList
-        this.times = timeList
+        // this.thumbnails = thumbnailList
+        // this.nicknames = nameList
+        // this.places = placeList
+        // this.times = timeList
       }
       // ------------------------------------------------------------------------
-
+      this.thumbnails = thumbnailList
+      this.nicknames = nameList
+      this.places = placeList
+      this.times = timeList
     },
     updateLocations () {
       axios({
