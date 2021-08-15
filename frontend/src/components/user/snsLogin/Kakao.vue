@@ -60,7 +60,6 @@
                 window.Kakao.Auth.login({
                     scope : 'profile_nickname, profile_image, account_email',
                     success: (authObj) => {
-                        console.log(authObj)
                         this.GetMe(authObj)
                     },
                     fail: (error) => {
@@ -77,13 +76,15 @@
                         const userInfo = {
                             nickname : kakao_account.profile.nickname,
                             email : kakao_account.email,
+                            thumbnail : kakao_account.profile.profile_image_url,
                             password : '',
                             account_type : 2,
                         }
 
                          axios.post(`http://127.0.0.1:8080/kakao`,{
                              email : userInfo.email,
-                             nickname : userInfo.nickname
+                             nickname : userInfo.nickname,
+                             thumbnail : userInfo.thumbnail,
                          })
                          .then(res => {
                             console.log(res);
