@@ -183,7 +183,7 @@ const routes = [
         }
     },
     {
-        path: '/account/kakaoLogin',
+        path: '/kakao',
         name: 'KakaoLogin',
         component: KakaoLogin,
     },
