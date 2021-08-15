@@ -35,7 +35,7 @@
       </form>
 
       <!-- 비밀번호 변경 버튼 -->
-      <div class="mt-4 mx-3 d-grid">
+      <div class="mt-4 mx-3 d-grid" v-if="!isLoginByKakao">
         <!-- <b-button squared variant="danger">비밀번호 변경</b-button> -->
           <button @click="goToChangePassword" class="btn btn-danger shadow-none" style="height: 45px;">비밀번호 변경</button>
       </div>
@@ -59,6 +59,7 @@ export default {
       },
       thumbnail: '',
       myUid:'',
+      isLoginByKakao: false,
     }
   },
   methods: {
@@ -152,7 +153,6 @@ export default {
     },
   },
   created () {
-    console.log(this.$store.state)
     axios({
       method: 'get',
       url: `http://127.0.0.1:8080/account/checkJWT/`,
@@ -163,6 +163,7 @@ export default {
     })
     .then((res) => {
       this.userInfo.nickname = this.$store.state.username
+      this.isLoginByKakao = this.$store.state.isLoginByKakao
       this.getUserInfo()
     })
     .catch((err) => {
