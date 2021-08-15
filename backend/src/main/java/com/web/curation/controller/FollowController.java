@@ -40,18 +40,19 @@ import java.util.stream.Stream;
 @CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/account/profile")
 public class FollowController {
 
     private final FollowServiceImpl followService;
 
-    @PostMapping("/account/profile/follow")
+    @PostMapping("/follow")
     @ApiOperation(value = "팔로우 요청")
     public ResponseEntity<Long> FollowRequest(@RequestBody FollowRequest request){
         Long result = followService.followReqeust(request);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @DeleteMapping("/account/profile/follow")
+    @DeleteMapping("/follow")
     @ApiOperation(value = "팔로우 요청 취소 및 거부")
     public ResponseEntity<String> FollowReject(@RequestParam(required = true) final String srcnickname,
                                @RequestParam(required = true) final String dstnickname) {
@@ -59,14 +60,14 @@ public class FollowController {
         return new ResponseEntity<>("팔로우 요청 거부 또는 취소 완료", HttpStatus.OK);
     }
 
-    @PatchMapping("/account/profile/follow")
+    @PatchMapping("/follow")
     @ApiOperation(value = "팔로우 요청 승인")
     public ResponseEntity<String> FollowApprove(@RequestParam(required = true) final Long followid){
         followService.followApprove(followid);
         return new ResponseEntity<>("팔로우 요청 승인 완료", HttpStatus.OK);
     }
 
-    @GetMapping("/account/profile/{nickname}/follower")
+    @GetMapping("/{nickname}/follower")
     @ApiOperation(value = "팔로워 목록 반환")
     public ResponseEntity<List<User>> followerList(@PathVariable final String nickname){
         List<User> result = followService.followerList(nickname);
