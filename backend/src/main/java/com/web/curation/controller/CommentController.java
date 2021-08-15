@@ -5,6 +5,7 @@ import com.web.curation.dao.comment.CommentDao;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.comment.Comment;
+import com.web.curation.model.comment.CommentResponse;
 import com.web.curation.model.user.User;
 import com.web.curation.service.comment.CommentServiceImpl;
 import io.swagger.annotations.ApiOperation;
@@ -44,8 +45,8 @@ public class CommentController {
 
     @GetMapping("/article/{articleid}/comment")
     @ApiOperation(value = "댓글목록 가져오기")
-    public ResponseEntity<List<Comment>> commentlist(@PathVariable Long articleid) {
-        List<Comment> result = commentService.commentList(articleid);
+    public ResponseEntity<List<CommentResponse>> commentlist(@PathVariable Long articleid) {
+        List<CommentResponse> result = commentService.commentList(articleid);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 

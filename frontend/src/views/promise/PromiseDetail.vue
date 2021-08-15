@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="page">
     <!-- 헤더 -->
     <div class="mt-3 mx-4 d-flex justify-content-between align-items-center">
       <span class="fs-1">
@@ -69,7 +69,9 @@
           @click="goToProfile(user.nickname)">
           <div class="d-flex align-items-center">
             <span>
-              <img :src="user.thumnail" :alt="user.nickname + '의 프로필'">
+              <b-avatar v-if="user.thumbnail" class="me-2"
+                :src="getThumbnailImgUrl({ imgURL: user.thumbnail }).thumbnail"></b-avatar>
+              <b-avatar v-else class="me-2"></b-avatar>
             </span>
             <span>{{ user.nickname }}</span>
           </div>
@@ -172,6 +174,7 @@ export default {
       return dotTime
     },
     getImgUrl () {
+      console.log(this.promiseDetail.type && require(`@/assets/images/${this.promiseDetail.type}-icon.svg`))
       return {
         ...this.promiseDetail,
         icon: this.promiseDetail.type && require(`@/assets/images/${this.promiseDetail.type}-icon.svg`)
@@ -325,6 +328,12 @@ export default {
         })
 
         this.$router.push({ name: "PromiseList"})
+      }
+    },
+    getThumbnailImgUrl (payload) {
+      return {
+        ...this.promiseDetail,
+        thumbnail: this.promiseDetail.promisePeople.length && require(`@/assets/images/${payload.imgURL}`)
       }
     }
   }

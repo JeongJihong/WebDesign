@@ -56,7 +56,7 @@ public class PromiseController {
     }
 
     @GetMapping("/promise")
-    @ApiOperation(value = "약속 목록 확인하기")
+    @ApiOperation(value = "약속 전체 목록 확인하기")
     public ResponseEntity<Map> getPromiseList() {
         Map result = promiseService.getPromiseList();
         return new ResponseEntity<>(result, HttpStatus.OK);
@@ -70,7 +70,7 @@ public class PromiseController {
     }
 
     @GetMapping("/promise/{promiseid}")
-    @ApiOperation(value = "약속 목록 확인하기")
+    @ApiOperation(value = "특정 약속 정보 확인하기")
     public ResponseEntity<Map> getPromiseList(@PathVariable(required = true) final Long promiseid) {
         Map result = promiseService.getPromiseList(promiseid);
         return new ResponseEntity<>(result, HttpStatus.OK);

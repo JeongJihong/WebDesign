@@ -18,13 +18,15 @@
         <div v-if="this.searchLive.length !== 0">
           <b-list-group>
             <b-list-group-item
-              class="border-0 my-1" v-for="user in searchGet" :key="user.searchid">
+              class="border-0 my-1" v-for="(user, idx) in searchGet" :key="user.searchid">
               <div class="d-flex justify-content-between">
                 <!-- <b-link :href="`/#/account/profile/${user.name}`" -->
                 <b-link
                   class="text-decoration-none text-dark pe-5 me-5">
                   <span class="d-flex align-items-center" @click="searchPost({token, user})">
-                    <span class="dot me-4"></span>
+                    <b-avatar v-if="user.thumbnail" class="me-2"
+                      :src="getThumbnailImgUrl({ idx, imgURL: user.thumbnail }).thumbnail"></b-avatar>
+                    <b-avatar v-else class="me-2"></b-avatar>
                     <span>{{ user.name }}</span>
                   </span>
                 </b-link>
@@ -42,10 +44,12 @@
         <b-list-group>
           <!-- <b-list-group-item :href="`/#/account/profile/${user.name}`" -->
           <b-list-group-item
-            class="border-0 my-1" v-for="user in searchLive" :key="user.searchid"
+            class="border-0 my-1" v-for="(user, idx) in searchLive" :key="user.searchid"
             @click="searchPost({token, user})">
             <div class="d-flex align-items-center">
-              <span class="dot me-4"></span>
+              <b-avatar v-if="user.thumbnail" class="me-2"
+                :src="getLiveThumbnailImgUrl({ idx, imgURL: user.thumbnail }).thumbnail"></b-avatar>
+              <b-avatar v-else class="me-2"></b-avatar>
               <span>{{ user.name }}</span>
             </div>
           </b-list-group-item>
@@ -151,6 +155,18 @@ export default {
     },
     goBack() {
       this.$router.go(-1)
+    },
+    getThumbnailImgUrl (payload) {
+      return {
+        ...this.searchGet,
+        thumbnail: this.searchGet[payload.idx].thumbnail && require(`@/assets/images/${payload.imgURL}`)
+      }
+    },
+    getLiveThumbnailImgUrl (payload) {
+      return {
+        ...this.searchGet,
+        thumbnail: this.searchGet[payload.idx].thumbnail && require(`@/assets/images/${payload.imgURL}`)
+      }
     }
   }
 }

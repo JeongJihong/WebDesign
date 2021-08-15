@@ -1,11 +1,12 @@
 <template>
-  <div class="feed newsfeed">
+  <div class="feed newsfeed app">
     <div class="wrapB">
-      <h1>뉴스피드</h1>
-      
-      <div v-for="(article,idx) in articles" :key="idx" style="z-index:-1;">
+      <div v-for="(article,idx) in articles" :key="idx">
         <div>
-          <b-avatar src="https://placekitten.com/300/300" size="2rem"></b-avatar><span>{{article.articleDetail.user.nickname}}</span>
+          <b-avatar v-if="article.articleDetail.user.thumbnail" class="me-2"
+            :src="getThumbnailImgUrl({ idx, imgURL: article.articleDetail.user.thumbnail }).thumbnail"></b-avatar>
+          <b-avatar v-else class="me-2"></b-avatar>
+          <span>{{article.articleDetail.user.nickname}}</span>
           <b-carousel
             id="carousel-1"
             v-model="slide"
@@ -15,17 +16,19 @@
             background="#ababab"
             img-width="1024"
             img-height="480"
-            style="text-shadow: 1px 1px 2px #333;"
+            style="text-shadow: 1px 1px 2px #333; position:relative;"
             @sliding-start="onSlideStart"
             @sliding-end="onSlideEnd"
+            
           >
-            <b-carousel-slide v-for="(image,idnum) in article.articleDetail.images" :key="idnum"> 
+            <b-carousel-slide v-for="(image,idnum) in article.articleDetail.images" :key="idnum"
+              > 
               <template #img >
                 <img
                   class="d-block img-fluid w-100"
                   width="1024"
                   height="480"
-                  :src="getArticleFeeImgUrl({ idx, imgURL: image.imgURL,articleid:article.articleDetail.articleid }).icon"
+                  :src="getArticleFeeImgUrl({ idx, imgURL: image.imgURL }).icon"
                   alt="image slot"
                 >
               </template>
@@ -38,16 +41,17 @@
             <p>약속 시간 : {{ article.promiseDetail.promisetime }}</p>
             <!-- <p>유형 : {{ article.promiseDetail.type }}</p> -->
           </div>
-          <ul class="d-flex justify-content-left" style="padding-left:3px;">
-            <li v-if="article.likeCheck" ><b-icon  @click="articleLike({ articleid: article.articleDetail.articleid, nickname: article.articleDetail.user.nickname, likeCheck:article.likeCheck, idx:idx  })" id="likestat" icon="hand-thumbs-up" scale="1.5" variant="danger"></b-icon></li>
-            <li v-else ><b-icon  @click="articleLike({ articleid: article.articleDetail.articleid, nickname: article.articleDetail.user.nickname,idx:idx })" id="likestat" icon="hand-thumbs-up" scale="1.5" variant="secondary"></b-icon></li>
+          <ul class="d-flex justify-content-left article" style="padding-left:3px;">
+            <li v-if="article.likeCheck" ><b-icon @click="articleLike({ articleid: article.articleDetail.articleid, nickname: article.articleDetail.user.nickname, likeCheck:article.likeCheck, idx:idx  })" icon="hand-thumbs-up" scale="1.5" variant="danger"></b-icon></li>
+            <li v-else ><b-icon id="icon" @click="articleLike({ articleid: article.articleDetail.articleid, nickname: article.articleDetail.user.nickname,idx:idx })"  icon="hand-thumbs-up" scale="1.5"></b-icon></li>
             
-            <li v-if="article.scrapCheck"><b-icon @click="undoScrap({ articleid: article.articleDetail.articleid, idx: idx })" icon="tags-fill" scale="1.5" variant="primary"></b-icon></li>
-            <li v-else><b-icon @click="doScrap({ articleid: article.articleDetail.articleid, idx: idx })" icon="tags" scale="1.5" variant="secondary"></b-icon></li>
-            <li @click="getComments(article.articleDetail.articleid)"><b-icon icon="chat-dots" scale="1.5" variant="primary"></b-icon></li><span>{{ article.articleDetail.comments.length }}</span>
+            <li v-if="article.scrapCheck"><b-icon @click="undoScrap({ articleid: article.articleDetail.articleid, idx: idx })" icon="tags-fill" scale="1.5" ></b-icon></li>
+            <li v-else><b-icon id="icon" @click="doScrap({ articleid: article.articleDetail.articleid, idx: idx })" icon="tags" scale="1.5" ></b-icon></li>
+            <li @click="getComments(article.articleDetail.articleid)"><b-icon icon="chat-dots-fill" scale="1.5" style="color:A5E994;"></b-icon></li><span>{{ article.articleDetail.comments.length }}</span>
           </ul>
           <p>{{ article.likeCount }} 명의 유저가 이글을 좋아합니다.</p>
         </div>
+        <hr>
       </div>
       <br>
       <infinite-loading @infinite="infiniteHandler"></infinite-loading>
@@ -130,6 +134,7 @@ export default {
         .then(res=>{
           console.log(res.data)
           this.articles[payload.idx].likeCheck = !this.articles[payload.idx].likeCheck
+          this.articles[payload.idx].likeCount +=1
           console.log("싫어요 -> 좋아요")
         })
         .catch(err=>{
@@ -166,6 +171,7 @@ export default {
           console.log(res.data)
           console.log("좋아요 -> 싫어요")
           this.articles[payload.idx].likeCheck = !this.articles[payload.idx].likeCheck
+          this.articles[payload.idx].likeCount -= 1
         })
         .catch(err=>{
           console.log(err)
@@ -229,22 +235,21 @@ export default {
       this.sliding = false
     },
     getArticleFeeImgUrl (payload) {
-      console.log(payload.articleid,'몇번하니')
-      console.log(payload.imgURL,'몇번되니')
-      console.log(this.articles[payload.idx] )
+      console.log( this.articles[payload.idx] && require(`@/assets/images/${payload.imgURL}`))
+      return {
+        ...this.articles,
+        icon: this.articles[payload.idx] && require(`@/assets/images/${payload.imgURL}`)
+      }
+    },
+    getThumbnailImgUrl (payload) {
       return {
         ...this.articles[payload.idx],
-        icon: this.articles[payload.idx] && require(`@/assets/images/${payload.imgURL}`)
+        thumbnail: this.articles[payload.idx].articleDetail.user.thumbnail && require(`@/assets/images/${payload.imgURL}`)
       }
     }
   },
 };
 //
 </script>
-<style scoped>
-li {
-  margin-right: 12px;
-}
-
-
+<style src="../../App.css">
 </style>

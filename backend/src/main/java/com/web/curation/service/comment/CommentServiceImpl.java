@@ -4,11 +4,10 @@ import com.web.curation.dao.article.ArticleDao;
 import com.web.curation.dao.comment.CommentDao;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.comment.Comment;
+import com.web.curation.model.comment.CommentResponse;
 import com.web.curation.model.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 @Service
@@ -54,8 +55,14 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
-    public List<Comment> commentList(Long articleid) {
-        return commentDao.findByArticleid(articleid);
+    public List<CommentResponse> commentList(Long articleid) {
+        List<Comment> commentList = commentDao.findByArticleid(articleid);
+        Stream<Comment> commentStream = commentList.stream();
+        List<CommentResponse> responseList = commentStream.map(comment -> new CommentResponse(comment.getCommentid(),
+                comment.getArticleid(), comment.getId(), comment.getNickname(), comment.getCreatedtime(),
+                comment.getUpdatedtime(), comment.getComment(), userDao.findByUid(comment.getId()).get().getThumbnail())).collect(Collectors.toList());
+
+        return responseList;
     }
 
     @Override
@@ -66,7 +73,7 @@ public class CommentServiceImpl implements CommentService{
         // 만약 현재 로그인한 유저와 수정요청한 유저가 같을때만 수정한다
         if(userOpt.get().getUid() == oldComment.getId()) {
             Comment newComment = new Comment(oldComment.getCommentid(), oldComment.getArticleid(), userOpt.get().getUid(),
-                    request.getNickname(), request.getCreatedtime(), request.getUpdatedtime(), request.getComment(), oldComment.getArticle());
+                    userOpt.get().getNickname(), request.getCreatedtime(), request.getUpdatedtime(), request.getComment(), oldComment.getArticle());
             commentDao.save(newComment);
         }
         else {
