@@ -71,7 +71,6 @@ public class AccountKakaoController {
             userDao.save(User.builder()
                     .uid(Long.valueOf(userInfo.get("id").toString()))
                     .introduction("")
-                    .thumbnail(userInfo.get("thumbnail").toString())
                     .email(userInfo.get("email").toString())
                     .nickname(userInfo.get("nickname").toString())
                     .password(null)
