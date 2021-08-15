@@ -113,7 +113,8 @@ public class KakaoAPIService {
 
             Long id = element.getAsJsonObject().get("id").getAsLong();
             String nickname = properties.getAsJsonObject().get("nickname").getAsString();
-            String thumbnail = profile.getAsJsonObject().get("thumbnail_image_url").getAsString();
+//            String thumbnail = profile.getAsJsonObject().get("thumbnail_image_url").getAsString();
+            String thumbnail = null;
             String email = kakao_account.getAsJsonObject().get("email").getAsString();
 
             userInfo.put("id", id);
