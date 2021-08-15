@@ -209,7 +209,8 @@ export default {
   },
 
   logout({ commit }) {
-    commit("LOGOUT");
+    localStorage.setItem('isLoginByKakao', false)
+    commit("LOGOUT")
   },
 
   // kakaoLogin 종우
@@ -243,6 +244,8 @@ export default {
               let token = res.data;
               commit("UPDATE_TOKEN", res.data);
               localStorage.setItem("token", res.data);
+              localStorage.setItem("isLoginByKakao", true);
+
               axios({
                 url: 'http://127.0.0.1:8080/account/checkJWT',
                 method: "get",
