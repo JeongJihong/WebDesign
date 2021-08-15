@@ -32,6 +32,7 @@ import java.util.*;
 @CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/account")
 public class AccountController {
 
     private final AccountServiceImpl accountService;
@@ -44,28 +45,28 @@ public class AccountController {
         return "test Success";
     }
 
-    @PostMapping("/account/login")
+    @PostMapping("/login")
     @ApiOperation(value = "로그인")
     public ResponseEntity<String> login(@RequestBody LoginRequest request) {
         String token = accountService.login(request);
         return new ResponseEntity<>(token, HttpStatus.OK);
     }
 
-    @PostMapping("/account/signup")
+    @PostMapping("/signup")
     @ApiOperation(value = "가입하기")
     public ResponseEntity<Long> signup(@Valid @RequestBody SignupRequest request) {
         Long uid = accountService.signup(request);
         return new ResponseEntity<>(uid, HttpStatus.OK);
     }
 
-    @PutMapping("/account/changePassword")
+    @PutMapping("/changePassword")
     @ApiOperation(value = "비밀번호변경")
     public ResponseEntity<String> changePassword(@RequestBody ChangePasswordRequest request){
         accountService.changePassword(request);
         return new ResponseEntity<>("OK", HttpStatus.OK);
     }
 
-    @GetMapping("/account/checkJWT")
+    @GetMapping("/checkJWT")
     @ApiOperation(value = "token통해서 정보 가져오기")
     @ResponseBody
     public ResponseEntity<Map> list(){
@@ -73,14 +74,14 @@ public class AccountController {
         return new ResponseEntity<>(userInfo, HttpStatus.OK);
     }
 
-    @GetMapping("/account/profile")
+    @GetMapping("/profile")
     @ApiOperation(value = "유저의 프로필 정보 확인")
     public ResponseEntity<Optional<User>> getMyProfileInfo() {
         Optional<User> userInfo = accountService.getMyProfileInfo();
         return new ResponseEntity<>(userInfo, HttpStatus.OK);
     }
 
-    @PatchMapping(value = "/account/profile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PatchMapping(value = "/profile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ApiOperation(value = "유저 프로필 정보 변경")
     public ResponseEntity<String> changeUserProfile(@RequestPart(required = true) String nickname,
                                                     @RequestPart String introduction,
@@ -89,14 +90,14 @@ public class AccountController {
         return new ResponseEntity<>("Success", HttpStatus.OK);
     }
 
-    @DeleteMapping("/account/profile")
+    @DeleteMapping("/profile")
     @ApiOperation(value = "회원 탈퇴")
     public ResponseEntity<String> deleteUserProfile(){
         accountService.deleteUserProfile();
         return new ResponseEntity<>("Success", HttpStatus.OK);
     }
 
-    @GetMapping("/account/checkEmail")
+    @GetMapping("/checkEmail")
     @ApiOperation(value = "이메일 중복 확인")
     public ResponseEntity<String> checkEmail(@RequestParam(required = true) String email){
         Boolean check = accountService.checkEmail(email);
@@ -107,7 +108,7 @@ public class AccountController {
         }
     }
 
-    @GetMapping("/account/checkNickname")
+    @GetMapping("/checkNickname")
     @ApiOperation(value = "닉네임 중복 확인")
     public ResponseEntity<String> checkNickname(@RequestParam(required = true) String nickname){
         Boolean check = accountService.checkNickname(nickname);
@@ -118,14 +119,14 @@ public class AccountController {
         }
     }
 
-    @GetMapping("/account/profile/{nickname}")
+    @GetMapping("/profile/{nickname}")
     @ApiOperation(value = "타 유저 피드 보기")
     public ResponseEntity<Map> viewOtherFeed(@PathVariable("nickname") final String nickname){
         Map result = accountService.viewOtherFeed(nickname);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @GetMapping("/account/profile/follow/{nickname}")
+    @GetMapping("/profile/follow/{nickname}")
     @ApiOperation(value = "팔로잉 유무 확인")
     @ResponseBody
     public ResponseEntity<Map> followingCheck(@PathVariable("nickname") final String othersNickname){
@@ -133,14 +134,14 @@ public class AccountController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @GetMapping("/account/status/{nickname}")
+    @GetMapping("/status/{nickname}")
     @ApiOperation(value = "유저의 status 반환")
     public ResponseEntity<Long> getStatus(@PathVariable("nickname") final String nickname) {
         Long status = accountService.getStatus(nickname);
         return new ResponseEntity<>(status, HttpStatus.OK);
     }
 
-    @PutMapping(value = "/account/status/{nickname}")
+    @PutMapping(value = "/status/{nickname}")
     @ApiOperation(value = "유저의 status 수정")
     public ResponseEntity<String> changeStatus(@PathVariable("nickname") final String nickname,
                                @RequestParam(required = true) Long status){
