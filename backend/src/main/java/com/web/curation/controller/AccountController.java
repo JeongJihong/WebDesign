@@ -36,9 +36,6 @@ public class AccountController {
 
     private final AccountServiceImpl accountService;
 
-    private final PasswordEncoder passwordEncoder;
-    private final JwtTokenProvider jwtTokenProvider;
-
     final String rootPath = System.getProperty("user.dir");
     final String basePath = "/Users/kimbaekjun/Desktop/SSAFY/2학기/S05P13B302/frontend/dist/img/feed/";
     @GetMapping("/test")
