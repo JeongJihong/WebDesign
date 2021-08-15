@@ -30,32 +30,33 @@ import java.util.*;
 @CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/search")
 public class SearchController {
 
     private final SearchServiceImpl searchService;
 
-    @PostMapping("/search")
+    @PostMapping("")
     @ApiOperation(value = "검색 시 정보 저장")
     public ResponseEntity<String> saveSearch(@RequestBody Search request){
         searchService.saveSearch(request);
         return new ResponseEntity<>("Success", HttpStatus.OK);
     }
 
-    @GetMapping("/search/live")
+    @GetMapping("/live")
     @ApiOperation(value = "실시간으로 검색 창 결과 반환")
     public ResponseEntity<List<Search>> list(@RequestParam String nickname){
         List<Search> result = searchService.list(nickname);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @DeleteMapping("/search")
+    @DeleteMapping("")
     @ApiOperation(value = "최근 검색 삭제")
     public ResponseEntity<String> deleteSearch(@RequestParam Long searchid){
         searchService.deleteSearch(searchid);
         return new ResponseEntity<>("삭제 완료", HttpStatus.OK);
     }
 
-    @GetMapping("/search")
+    @GetMapping("")
     @ApiOperation(value = "검색 버튼 클릭 시 최근 검색 반환")
     public ResponseEntity<List<Search>> searchList(){
         List<Search> result = searchService.searchList();
