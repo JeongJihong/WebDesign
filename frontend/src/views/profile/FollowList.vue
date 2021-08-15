@@ -14,9 +14,11 @@
           <b-list-group>
             <b-list-group-item class="listgroupitem" variant="light" v-for="person in this.followers" :key="person">
               <div class="d-flex" style="align-items:center" @click="goToProfileDetailFromFollower({person})">
-                <img src="@/assets/images/profile_default.png" alt="image" style="width: 40px; height: 40px" >
+                <b-avatar v-if="followerLs[person-1].thumbnail" class="me-2"
+                  :src="getFollowersThumbnailImgUrl({ idx: person-1, imgURL: followerLs[person-1].thumbnail }).thumbnail"></b-avatar>
+                <b-avatar v-else class="me-2"></b-avatar>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <p>{{ followerLs[person-1].nickname }}</p>
+                <p class="m-0">{{ followerLs[person-1].nickname }}</p>
               </div>
             </b-list-group-item>
           </b-list-group>
@@ -25,9 +27,11 @@
           <b-list-group>
             <b-list-group-item class="listgroupitem" variant="light" v-for="person in this.followings" :key="person">
               <div class="d-flex" style="align-items:center" @click="goToProfileDetailFromFollowing({person})">
-                <img src="@/assets/images/profile_default.png" alt="image" style="width: 40px; height: 40px" >
+                <b-avatar v-if="followingLs[person-1].thumbnail" class="me-2"
+                  :src="getFollowingsThumbnailImgUrl({ idx: person-1, imgURL: followingLs[person-1].thumbnail }).thumbnail"></b-avatar>
+                <b-avatar v-else class="me-2"></b-avatar>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <p>{{ followingLs[person-1].nickname }}</p>
+                <p class="m-0">{{ followingLs[person-1].nickname }}</p>
               </div>
             </b-list-group-item>
           </b-list-group>
@@ -106,6 +110,18 @@ export default {
         params: {nickname: this.followingLs[person-1].nickname}
       })
     },
+    getFollowersThumbnailImgUrl (payload) {
+      return {
+        ...this.followerLs,
+        thumbnail: this.followerLs[payload.idx].thumbnail && require(`@/assets/images/${payload.imgURL}`)
+      }
+    },
+    getFollowingsThumbnailImgUrl (payload) {
+      return {
+        ...this.followingLs,
+        thumbnail: this.followingLs[payload.idx].thumbnail && require(`@/assets/images/${payload.imgURL}`)
+      }
+    }
   },
   created () {
     this.followerList()

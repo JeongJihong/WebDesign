@@ -1,10 +1,9 @@
 <template>
-  <div class="scale">
+  <div class="scale page">
     <p>게시글 생성하기</p>
     <form enctype = "multipart/form-data" method="post" >
-    <!-- <form> -->
       <div class="d-flex flex-row">
-        <button style="display:inline-block; margin-right:5%; margin-left:2%" @click.prevent="clickInputTag()" id='addimage'><b-icon-plus class="h1"></b-icon-plus></button>
+        <button style="display:inline-block; margin-right:5%; margin-left:2%" @click.prevent="clickInputTag()" id='addimage'><b-icon-plus id="icon" class="h1"></b-icon-plus></button>
         <input hidden ref="plus" id="file" type="file"  accept="image/*" @change.prevent="uploadImage($event)" multiple>
         <div id="image_container"></div>
       </div>
@@ -35,11 +34,8 @@
       this.$refs['plus'].click()
     },
     uploadImage(event) { 
-      console.log(event.target.files,'골라')
-      console.log(event.target.files[0], typeof event.target.files[0],'타입')
-      this.formData.append("files", event.target.files[0]);
-
-      for (var image of event.target.files) {
+      for (var image of event.target.files){
+        this.formData.append("files",image)
         var reader = new FileReader(); 
         reader.onload = function(event) 
         { 
@@ -53,7 +49,6 @@
     },
     articleCreate(){
       this.formData.append("content", this.content);
-      console.log(this.content, this.afiles, typeof this.afiles)
       axios({
         url:'http://127.0.0.1:8080/article',
         method:'post',

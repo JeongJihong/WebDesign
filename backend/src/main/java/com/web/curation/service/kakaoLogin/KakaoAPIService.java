@@ -82,6 +82,7 @@ public class KakaoAPIService {
         //    요청하는 클라이언트마다 가진 정보가 다를 수 있기에 HashMap타입으로 선언
         HashMap<String, Object> userInfo = new HashMap<>();
         String reqURL = "https://kapi.kakao.com/v2/user/me";
+
         try {
             URL url = new URL(reqURL);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -108,11 +109,17 @@ public class KakaoAPIService {
 
             JsonObject properties = element.getAsJsonObject().get("properties").getAsJsonObject();
             JsonObject kakao_account = element.getAsJsonObject().get("kakao_account").getAsJsonObject();
+            JsonObject profile = kakao_account.getAsJsonObject().get("profile").getAsJsonObject();
 
+            Long id = element.getAsJsonObject().get("id").getAsLong();
             String nickname = properties.getAsJsonObject().get("nickname").getAsString();
+//            String thumbnail = profile.getAsJsonObject().get("thumbnail_image_url").getAsString();
+            String thumbnail = null;
             String email = kakao_account.getAsJsonObject().get("email").getAsString();
 
+            userInfo.put("id", id);
             userInfo.put("nickname", nickname);
+            userInfo.put("thumbnail", thumbnail);
             userInfo.put("email", email);
 
         } catch (IOException e) {

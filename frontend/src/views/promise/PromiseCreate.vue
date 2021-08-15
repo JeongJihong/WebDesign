@@ -1,5 +1,5 @@
 <template>
-  <div style="margin-left:10%; margin-right:10%;">
+  <div style="margin-left:10%; margin-right:10%; page">
     <br>
     <b-form>
       <b-form-group id="input-group-1" label="Title:" label-for="input-1">
@@ -84,10 +84,10 @@ export default {
       lon:0,
       promiseAroundPlace:" ",
       promiseDetailPlace:"",
-      // "kakao": false
       content:"",
       afiles:"",
       promiseid:0,
+      formData: new FormData()
     }
   },
   mounted() {
@@ -161,11 +161,8 @@ export default {
       this.$refs['plus'].click()
     },
     uploadImage(event) { 
-      console.log(event.target.files)
-      console.log(event.target.files[0], typeof event.target.files[0])
-      this.afiles = event.target.files[0]
-
       for (var image of event.target.files) {
+        this.formData.append("files",image)
         var reader = new FileReader(); 
         reader.onload = function(event) 
         { 
@@ -203,25 +200,11 @@ export default {
           })
           .catch(err=>{
             console.log(err)
-            console.log(this.title,
-            this.checked,
-            this.headCount,
-            
-            this.promiseDate+' '+this.promiseTime,
-            this.time,
-            this.Type,
-            this.lat,
-            this.lon,   
-            this.promiseDetailPlace )
           })
     },
     promiseArticleCreate(){
-      const formData = new FormData();
-      formData.append("content", this.content);
-      formData.append("files", this.afiles);
-      formData.append("promiseid", this.promiseid);
-      
-      console.log(this.content, this.afiles, typeof this.afiles)
+      this.formData.append("content", this.content);
+      this.formData.append("promiseid", this.promiseid);
       axios({
         url:'http://127.0.0.1:8080/article',
         method:'post',
@@ -229,7 +212,7 @@ export default {
           'x-auth-token': `${localStorage.getItem('token')}`,
           'Content-Type': 'multipart/form-data'
         },
-        data:formData,
+        data:this.formData,
       })
         .then(res=>{
           this.$router.push({ name:'FeedMain'})
@@ -247,16 +230,6 @@ export default {
 }
 </script>
 
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
-div { font-family: 'Jua', sans-serif; }
-.map_wrap {position:relative;width:100%;height:350px;}
-.map_wrap, .map_wrap * {margin:0;padding:0;font-family:'Malgun Gothic',dotum,'돋움',sans-serif;font-size:12px;}
-.map_wrap a, .map_wrap a:hover, .map_wrap a:active{color:#000;text-decoration: none;}
-.map_wrap {position:relative;width:100%;height:500px;}
-.bg_white {background:#fff;}
-#pagination {margin:10px auto;text-align: center;}
-#pagination a {display:inline-block;margin-right:10px;}
-#pagination .on {font-weight: bold; cursor: default;color:#777;}
+<style src="../../App.css">
  
 </style>

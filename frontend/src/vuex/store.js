@@ -24,6 +24,9 @@ const state = {
     scrapMode: false,
 
     promiseDetail: {},
+
+    // 카카오 로그인/로그아웃 관련 - 종우
+    isLoginByKakao: false,
 }
 
 

@@ -168,6 +168,7 @@ public class PromiseServiceImpl implements PromiseService{
         // 만약 지금 로그인 한 유저와 약속 생성자의 UID가 같다면(약속 권한 파악)
         if(userOpt.get().getUid() == promiseDao.findByPromiseid(promiseid).getCreateruid()) {
             promisePeopleDao.deleteAllByPromiseid(promiseid);
+            articleDao.deleteByPromiseid(promiseid);
             promiseDao.deleteByPromiseid(promiseid);
         } else {
             throw new IllegalArgumentException("약속 삭제 권한 없음.");

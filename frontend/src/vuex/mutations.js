@@ -40,8 +40,12 @@ export default {
 
   LOGOUT () {
     localStorage.removeItem('token') 
-    localStorage.removeItem('username') 
+    localStorage.removeItem('username')
     location.reload(); 
-  }
+  },
 
+  // kakaoLogin 종우
+  KAKAO_LOGIN(state, kakaoLogin) {
+    state.kakaoLogin = kakaoLogin
+  }
 }
