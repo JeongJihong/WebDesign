@@ -25,85 +25,78 @@
 
 <script>
     import axios from 'axios'
+    import { mapActions, mapState } from 'vuex'
     export default {
         methods: {
-            // kakaoLogin () {
-            //         const params = {
-            //         redirectUri: "http://127.0.0.1:8080/account/kakaoLogin",
-            //     };
-            //     window.Kakao.Auth.authorize(params);
-            // }
+            ...mapActions([
+                'kakaoLogin'
+            ]),
             // kakaoLogin() {
-            //     try {
-            //         return new Promise((resolve, reject) => {
-            //             if (!window.Kakao) {
-            //                 reject('Kakao 인스턴스가 존재 X')
+            //     console.log(window.Kakao);
+            //     window.Kakao.Auth.login({
+            //         scope : 'profile_nickname, profile_image, account_email',
+            //         success: (authObj) => {
+            //             this.GetMe(authObj)
+            //         },
+            //         fail: (error) => {
+            //             console.log(error)
+            //         }
+            //     });
+            // },
+            // GetMe(authObj){
+            //     console.log('authObj 콘솔',authObj);
+            //     window.Kakao.API.request({
+            //         url:'/v2/user/me',
+            //         success : res => {
+            //             const kakao_account = res.kakao_account;
+            //             const userInfo = {
+            //                 access_token : authObj.access_token,
+            //                 nickname : kakao_account.profile.nickname,
+            //                 email : kakao_account.email,
+            //                 thumbnail : kakao_account.profile.profile_image_url,
+            //                 password : '',
+            //                 account_type : 2,
             //             }
-            //             window.Kakao.Auth.login({
-            //                 success: (auth) => {
-            //                     console.log('정상로그인', auth)
-            //                     // this.setState({
-            //                     //     isLogin: true
-            //                     // })
-            //                 },
-            //                 fail: (err) => {
-            //                     console.error(err)
+            //             console.log('유저인포', userInfo)
+            //             axios({
+            //                 method: 'post',
+            //                 url: `http://127.0.0.1:8080/kakao`,
+            //                 params: {
+            //                     access_token : userInfo.access_token,
+            //                     email : userInfo.email,
+            //                     nickname : userInfo.nickname,
+            //                     thumbnail : userInfo.thumbnail,
             //                 }
             //             })
-            //         })
-            //     }catch (err) {
-            //         console.error(err)
-            //     }
+            //             .then(res => {
+            //                 console.log(res);
+            //                 console.log("데이터베이스에 회원 정보가 있음!");
+            //             })
+            //             .catch(err => {
+            //                 console.log(err);
+            //                 console.log("데이터베이스에 회원 정보가 없음!");
+            //             })
+            //             console.log(userInfo);
+            //             alert("로그인 성공!");
+            //             this.$bvModal.hide("bv-modal-example");
+            //         },
+            //         fail : error => {
+            //             this.$router.push("/errorPage");
+            //             console.log(error);
+            //         }
+            //     })
             // },
-            kakaoLogin() {
-                console.log(window.Kakao);
-                window.Kakao.Auth.login({
-                    scope : 'profile_nickname, profile_image, account_email',
-                    success: (authObj) => {
-                        this.GetMe(authObj)
-                    },
-                    fail: (error) => {
-                        console.log(error)
-                    }
-                });
-            },
-            GetMe(authObj){
-                console.log('authObj 콘솔',authObj);
-                window.Kakao.API.request({
-                    url:'/v2/user/me',
-                    success : res => {
-                        const kakao_account = res.kakao_account;
-                        const userInfo = {
-                            nickname : kakao_account.profile.nickname,
-                            email : kakao_account.email,
-                            thumbnail : kakao_account.profile.profile_image_url,
-                            password : '',
-                            account_type : 2,
-                        }
-
-                         axios.post(`http://127.0.0.1:8080/kakao`,{
-                             email : userInfo.email,
-                             nickname : userInfo.nickname,
-                             thumbnail : userInfo.thumbnail,
-                         })
-                         .then(res => {
-                            console.log(res);
-                            console.log("데이터베이스에 회원 정보가 있음!");
-                         })
-                         .catch(err => {
-                             console.log(err);
-                            console.log("데이터베이스에 회원 정보가 없음!");
-                         })
-                        console.log(userInfo);
-                        alert("로그인 성공!");
-                        this.$bvModal.hide("bv-modal-example");
-                    },
-                    fail : error => {
-                        this.$router.push("/errorPage");
-                        console.log(error);
-                    }
-                })
-            },
-        }
+        },
+        computed: {
+            ...mapState([
+                'loginState',
+                'token'
+            ])
+        },
+        created() {
+            if (this.token !== '') {
+                this.$router.push({ name: 'FeedMain' })
+            }
+        },
     }
 </script>

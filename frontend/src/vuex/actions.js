@@ -211,4 +211,129 @@ export default {
   logout({ commit }) {
     commit("LOGOUT");
   },
+
+  // kakaoLogin 종우
+  kakaoLogin({ commit }) {
+    window.Kakao.Auth.login({
+      scope : 'profile_nickname, profile_image, account_email',
+      success: (authObj) => {
+        window.Kakao.API.request({
+          url:'/v2/user/me',
+          success : res => {
+            const kakao_account = res.kakao_account;
+            const userInfo = {
+              access_token : authObj.access_token,
+              nickname : kakao_account.profile.nickname,
+              email : kakao_account.email,
+              thumbnail : kakao_account.profile.profile_image_url,
+              password : '',
+              account_type : 2,
+            }
+            axios({
+              method: 'post',
+              url: `http://127.0.0.1:8080/kakao`,
+              params: {
+                access_token : userInfo.access_token,
+                email : userInfo.email,
+                nickname : userInfo.nickname,
+                thumbnail : userInfo.thumbnail,
+              }
+            })
+            .then(res => {
+              let token = res.data;
+              commit("UPDATE_TOKEN", res.data);
+              localStorage.setItem("token", res.data);
+              axios({
+                url: 'http://127.0.0.1:8080/account/checkJWT',
+                method: "get",
+                headers: {
+                  "Content-Type": "application/json",
+                  "X-AUTH-TOKEN": res.data,
+                },
+              })
+                .then((res) => {
+                  commit("LOGGED_USER_NAME", res.data.nickname);
+                  localStorage.setItem("username", res.data.nickname);
+                  
+                  axios({
+                    url: 'http://127.0.0.1:8080/alarm/register',
+                    method: 'post',
+                    headers: {
+                      "Content-Type": "application/json",
+                      "X-AUTH-TOKEN": token,
+                    },
+                    data: localStorage.getItem('firebaseToken')
+      
+                  })
+                    .then(() =>
+                      router.push({ name: "FeedMain" })
+                    )
+                    .catch((err) => {
+                      console.log('Firebase Token POST Failed' + err)
+                    })
+                })
+                .catch((err) => {
+                  alert(err);
+                });
+            })
+            .catch(err => {
+              console.log(err);
+              console.log("데이터베이스에 회원 정보가 없음!");
+            })
+            alert("로그인 성공!");
+            // this.$bvModal.hide("bv-modal-example");
+          },
+          fail : error => {
+              this.$router.push("/errorPage");
+              console.log(error);
+          }
+        })
+      },
+      fail: (error) => {
+          console.log(error)
+      }
+    });
+  },
+  // GetMe(authObj){
+  //     window.Kakao.API.request({
+  //         url:'/v2/user/me',
+  //         success : res => {
+  //             const kakao_account = res.kakao_account;
+  //             const userInfo = {
+  //                 access_token : authObj.access_token,
+  //                 nickname : kakao_account.profile.nickname,
+  //                 email : kakao_account.email,
+  //                 thumbnail : kakao_account.profile.profile_image_url,
+  //                 password : '',
+  //                 account_type : 2,
+  //             }
+  //             axios({
+  //                 method: 'post',
+  //                 url: `http://127.0.0.1:8080/kakao`,
+  //                 params: {
+  //                     access_token : userInfo.access_token,
+  //                     email : userInfo.email,
+  //                     nickname : userInfo.nickname,
+  //                     thumbnail : userInfo.thumbnail,
+  //                 }
+  //             })
+  //             .then(res => {
+  //                 commit("UPDATE_TOKEN", res.data.access_token);
+  //                 localStorage.setItem("token", res.data.access_token);
+  //                 console.log(res);
+  //                 console.log("데이터베이스에 회원 정보가 있음!");
+  //             })
+  //             .catch(err => {
+  //                 console.log(err);
+  //                 console.log("데이터베이스에 회원 정보가 없음!");
+  //             })
+  //             alert("로그인 성공!");
+  //             this.$bvModal.hide("bv-modal-example");
+  //         },
+  //         fail : error => {
+  //             this.$router.push("/errorPage");
+  //             console.log(error);
+  //         }
+  //     })
+  // },
 };
