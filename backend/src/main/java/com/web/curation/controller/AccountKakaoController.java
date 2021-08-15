@@ -52,7 +52,7 @@ public class AccountKakaoController {
 
         HashMap<String, Object> userInfo = kakaoAPIService.getUserInfo(access_token);
 
-        if(userDao.findByUid(Long.valueOf(userInfo.get("id").toString())).isPresent()) { // 만약 같은 이메일이 있다면 회원 테이블에 저장하지 않고 토큰만 반환
+        if(userDao.findByEmail(userInfo.get("email").toString()).isPresent()) { // 만약 같은 이메일이 있다면 회원 테이블에 저장하지 않고 토큰만 반환
             return new ResponseEntity<>(access_token, HttpStatus.OK);
         }
 
