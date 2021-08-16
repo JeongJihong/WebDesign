@@ -90,7 +90,7 @@ export default {
       formData.append("introduction", this.userInfo.introduction);
       formData.append("thumbnail", this.userInfo.file);
       axios({
-        method: 'patch',
+        method: 'post',
         url: 'http://127.0.0.1:8080/account/profile/',
         data: formData,
         headers: {
