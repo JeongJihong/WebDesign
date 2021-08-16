@@ -1,79 +1,90 @@
 <template>
-  <div class="m-4">
-    <div class="d-flex my-4" style="justify-content: space-between">
-      <div class="d-flex" style="justify-content: space-between">
-        <button @click="goBack"><b-icon icon="arrow-left" class="fs-1 me-4"></b-icon></button>
-        <h4>프로필</h4>
-      </div>
-      <button @click="goToProfileUpdate" v-if="this.nickname === this.myNickname">
-        프로필 수정
-      </button>
+  <div style="margin-bottom:60px;">
+    <div class="mt-3 mb-3 mx-4 d-flex justify-content-between align-items-center">
+      <span>
+        <button @click="goBack"><b-icon id="icon" icon="arrow-left" class="fs-1 me-4"></b-icon></button>
+        <span class="fs-1 fw-bold">프로필</span>
+      </span>
+      <span>
+        <button  v-if="this.nickname === this.myNickname" class="text-primary" @click="goToProfileUpdate">수정</button>
+        <button v-else class="text-primary" @click="scrapDeleteMode">수정완료</button>
+      </span>
     </div>
-    <div class="d-flex">
-      <b-avatar v-if="thumbnail" class="me-2" size="4rem"
-        :src="getThumbnailImgUrl({ imgURL: thumbnail }).thumbnail"></b-avatar>
-      <b-avatar v-else class="me-2" size="4rem"></b-avatar>
-      <div class="mx-4">
-        <!-- <h4>{{ this.nickname }}</h4> -->
-        <div class="d-flex justify-content-between">
-          <span class="fs-4">{{ this.nickname }}</span>
-        </div>
+    <div class="m-4">
+      <!-- <div class="d-flex my-4" style="justify-content: space-between">
         <div class="d-flex" style="justify-content: space-between">
-          <button class="d-flex" @click="goToFollowList">
-            <h5>팔로잉</h5>&nbsp;&nbsp;
-            <h5 style="color:blue;">{{ this.followings }}</h5>
-          </button>
-          &nbsp;&nbsp;&nbsp;&nbsp;
-          <button class="d-flex" @click="goToFollowList">
-            <h5>팔로워</h5>&nbsp;&nbsp;
-            <h5 style="color:blue;">{{ this.followers }}</h5>
-          </button>
+          <button @click="goBack"><b-icon icon="arrow-left" class="fs-1 me-4"></b-icon></button>
+          <h4>프로필</h4>
+        </div>
+        <button @click="goToProfileUpdate" v-if="this.nickname === this.myNickname">
+          프로필 수정
+        </button>
+      </div> -->
+      <div class="d-flex">
+        <b-avatar v-if="thumbnail" class="me-2" size="4rem"
+          :src="getThumbnailImgUrl({ imgURL: thumbnail }).thumbnail"></b-avatar>
+        <b-avatar v-else class="me-2" size="4rem"></b-avatar>
+        <div class="mx-4">
+          <!-- <h4>{{ this.nickname }}</h4> -->
+          <div class="d-flex justify-content-between">
+            <span class="fs-4">{{ this.nickname }}</span>
+          </div>
+          <div class="d-flex" style="justify-content: space-between">
+            <button class="d-flex" @click="goToFollowList">
+              <h5>팔로잉</h5>&nbsp;&nbsp;
+              <h5 style="color:blue;">{{ this.followings }}</h5>
+            </button>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="d-flex" @click="goToFollowList">
+              <h5>팔로워</h5>&nbsp;&nbsp;
+              <h5 style="color:blue;">{{ this.followers }}</h5>
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="mt-2">
-      <div class="d-flex justify-content-between">
-        <span style="font-size: 0.9rem">피플온도</span>
-        <span style="font-size: 0.9rem">{{this.status + 10.0}}℃</span>
+      <div class="mt-2">
+        <div class="d-flex justify-content-between">
+          <span style="font-size: 0.9rem">피플온도</span>
+          <span style="font-size: 0.9rem">{{this.status + 10.0}}℃</span>
+        </div>
+        <b-progress :value="status+10" :max="30" class="mb-1" variant="info" height="0.5rem"></b-progress>
       </div>
-      <b-progress :value="status+10" :max="30" class="mb-1" variant="info" height="0.5rem"></b-progress>
-    </div>
-    <div class="d-grid pt-3">
-      <button @click="goToFollow" v-if="this.nickname !== this.myNickname && this.didIrequestFollowToYou === false" class="btn btn-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">팔로우</button>
-      <!-- <button v-if="this.nickname !== this.myNickname && this.didIrequestFollowToYou === true" @click="cancelFollow" class="btn btn-outline-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">팔로우 요청 보냄</button> -->
-      <button v-if="this.nickname !== this.myNickname && this.didIrequestFollowToYou === true && this.doIFollowYou === false" @click="cancelFollow" class="btn btn-outline-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">팔로우 요청 보냄</button>
-      <button @click="unfollow" v-if="this.doIFollowYou === true" class="btn btn-outline-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">팔로우 취소</button>
-    </div>
-    <div v-if="this.didYouRequestFollowToMe === true">
-      <p class="pt-2 pb-0 mb-0">{{ this.nickname }}님의 팔로우 요청</p>
-      <div class="d-flex">
-        <button @click="approveFollowRequest" class="col-6 btn btn-outline-secondary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">승인</button>
-        <button @click="rejectFollowRequest" class="col-6 btn btn-dark shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">거절</button>
+      <div class="d-grid pt-3">
+        <button @click="goToFollow" v-if="this.nickname !== this.myNickname && this.didIrequestFollowToYou === false" class="btn btn-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">팔로우</button>
+        <!-- <button v-if="this.nickname !== this.myNickname && this.didIrequestFollowToYou === true" @click="cancelFollow" class="btn btn-outline-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">팔로우 요청 보냄</button> -->
+        <button v-if="this.nickname !== this.myNickname && this.didIrequestFollowToYou === true && this.doIFollowYou === false" @click="cancelFollow" class="btn btn-outline-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">팔로우 요청 보냄</button>
+        <button @click="unfollow" v-if="this.doIFollowYou === true" class="btn btn-outline-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">팔로우 취소</button>
       </div>
-    </div>
-    <div class="pt-4">
-      <p>본인소개글</p>
-      <p>{{ this.introduction }}</p>
-    </div>
-    <hr>
-    <div 
-      v-for="image in this.articlesLength" 
-      :key="image" 
-      @click="goToArticleDetail(articles[image-1].articleid)" 
-      class="square" 
-      :style="{ backgroundImage: 'url(' + getArticleImgUrl({ idx: image-1, imgURL: articles[image-1].images }).thumbnail + ')' }"
-    >
-      <!-- :style="{'background-image': 'url(' + require(`@/assets/images/${articles[image-1].images[0].imgURL}`) + ')'}" -->
+      <div v-if="this.didYouRequestFollowToMe === true">
+        <p class="pt-2 pb-0 mb-0">{{ this.nickname }}님의 팔로우 요청</p>
+        <div class="d-flex">
+          <button @click="approveFollowRequest" class="col-6 btn btn-outline-secondary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">승인</button>
+          <button @click="rejectFollowRequest" class="col-6 btn btn-dark shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">거절</button>
+        </div>
+      </div>
+      <div class="pt-4">
+        <p>본인소개글</p>
+        <p>{{ this.introduction }}</p>
+      </div>
+      <hr>
+      <div 
+        v-for="image in this.articlesLength" 
+        :key="image" 
+        @click="goToArticleDetail(articles[image-1].articleid)" 
+        class="square" 
+        :style="{ backgroundImage: 'url(' + getArticleImgUrl({ idx: image-1, imgURL: articles[image-1].images }).thumbnail + ')' }"
+      >
+        <!-- :style="{'background-image': 'url(' + require(`@/assets/images/${articles[image-1].images[0].imgURL}`) + ')'}" -->
+
+      </div>
 
     </div>
-
   </div>
 </template>
 
 <script>
 import axios from 'axios'
 import { mapActions,mapState } from 'vuex'
-
 export default {
   data () {
     return {

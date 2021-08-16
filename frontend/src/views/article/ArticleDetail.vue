@@ -1,5 +1,11 @@
 <template>
-  <div class="scale page">
+  <div class="page" style="margin-bottom:60px;">
+    <div class="mt-3 mx-4 d-flex justify-content-between align-items-center">
+      <span class="fs-1">
+        <button @click="goBack"><b-icon id="icon" icon="arrow-left" class="me-4"></b-icon></button>
+        <span class="fw-bold">게시글 정보</span>
+      </span>
+    </div>
     <div class="mt-3 mx-4 fs-1">
       <span class="fw-bold"></span>
     </div>
@@ -8,8 +14,8 @@
         :src="getThumbnailImgUrl({ imgURL: article.articleDetail.user.thumbnail }).thumbnail"></b-avatar>
       <b-avatar v-else class="me-2"></b-avatar>
       <span> {{ article.articleDetail.user.nickname }}</span>
-      <span>
-        <button v-if="article.userId === detail.id" @click="articleDelete()" class="btn-danger badge">삭제</button>
+      <span style = "float: right; ">
+        <button v-if="article.userId === detail.id" @click="articleDelete()" class="btn-danger badge" style="margin:5px;">삭제</button>
       </span>
     </div>
     <div  v-if="imgOn"> 
@@ -39,11 +45,18 @@
           </b-carousel-slide>
         </b-carousel>
     </div>
-    <div v-if="detail.promiseid">
-            <p>약속 인원 : {{ article.promiseDetail.num }} 명</p>
-            <p>약속 장소 : {{ article.promiseDetail.place }}</p>
-            <p>약속 시간 : {{ article.promiseDetail.promisetime }}</p>
-            <p>유형 : {{ article.promiseDetail.type }}</p>
+    <div v-if="article.articleDetail.promiseid" style="positon:relative;">
+        <div id="demo">
+          <div class="post-it">
+            <div class="inner" style="color:black;" >
+              Title : {{ article.promiseDetail.title }} <br>
+              약속 인원 : {{ article.promiseDetail.num }} 명<br>
+              약속 장소 : {{ article.promiseDetail.place }} <br>
+              약속 시간 : {{ article.promiseDetail.promisetime.substr(5,2) }}.{{article.promiseDetail.promisetime.substr(8,2)}} {{article.promiseDetail.promisetime.substr(11,5) }} <br>
+              유형 : {{ article.promiseDetail.type }} <br>
+            </div>
+          </div>
+        </div>
     </div>
     <p style="margin:10px">{{ article.articleDetail.review }}</p>
     <p>생성시간: {{ article.articleDetail.createdtime }} </p>
@@ -194,11 +207,5 @@ export default {
 };
 </script>
 
-<style>
-  .scale {
-    margin: 10%;
-    margin-top: 4%;
-    align-content: center;
-    justify-content: center;
-  }
+<style src="../../App.css">
 </style>

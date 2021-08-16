@@ -1,9 +1,12 @@
 <template>
-  <div class="user" id="login">
+  <div class="user d-flex justify-content-center" id="login" >
+    <br>
       <div class="jb-text">
         <center>
-          <img class="main-icon" src="../../assets/images/main-icon.png" alt="2">
+          <!-- <img class="main-icon" src="../../assets/images/main-icon.png" alt="2"> -->
+          <h1 style="font-family: 'Pacifico', cursive;">Pipl.</h1>
         </center>
+        <br>
         <div class="wrapC">
           <div class="input-with-label">
             <input
@@ -34,36 +37,30 @@
               class="btn btn-primary shadow-none"
               @click="login({ email, password })"
               :disabled="!isSubmit"
-              style="height: 2.7rem; width: 100%;"
+              style="height: 2.7rem; width: 100%; margin-bottom:10px;"
             >로그인</button>
           </div>
-
-          <div class="sns-login">
-            <div class="text mb-2">
-              <div class="d-flex justify-content-between">
-                <span style="font-size: 0.857em; color: #787878;">SNS 간편 로그인</span>
-                <span class="bar"></span>
-              </div>
+          <div class="hr-sect">OR</div>
+          <div style="margin-top:10px;">
               <KakaoLogin :component="component" />
-              <!-- <GoogleLogin :component="component" /> -->
-            </div>
           </div>
-          
+          <br>
+          <br>
           <div class="add-option">
-            <div class="text">
+            <!-- <div class="text">
               <p>혹시</p>
               <div class="bar"></div>
-            </div>
+            </div> -->
             <div class="wrap">
               <p>아직 회원이 아니신가요?</p>
               <router-link to="/account/signup" class="btn--text">가입하기</router-link>
             </div>
-            <div class="wrap">
-              <p>처음이신가요?</p>
-              <router-link to="/onboarding" class="btn--text">온보딩</router-link>
-            </div>
           </div>
         </div>
+      </div>
+      <div  style="position:fixed; bottom:5px; text-align:center;">
+          <p style="margin-bottom:2px;">made by</p>
+          <p style="font-size:1.1rem; font-weight:1000;">지금 어디시조</p>
       </div>
   </div>
 </template>
@@ -74,7 +71,6 @@ import "../../components/css/user.scss";
 import PV from "password-validator";
 import * as EmailValidator from "email-validator";
 import KakaoLogin from "../../components/user/snsLogin/Kakao.vue";
-import GoogleLogin from "../../components/user/snsLogin/Google.vue";
 
 import { mapActions, mapState } from 'vuex'
 
@@ -82,7 +78,6 @@ export default {
   name:'Login',
   components: {
     KakaoLogin,
-    // GoogleLogin
   },
   created() {
     if (this.token !== '') {
@@ -161,4 +156,22 @@ export default {
   .jb-text { position: absolute; top: 5%; width: 100%; }
   .jb-text p {color: black; }
   .main-icon { width: 130px; margin-bottom: 10px; }
+  .hr-sect {
+        display: flex;
+        flex-basis: 100%;
+        align-items: center;
+        color: rgba(0, 0, 0, 0.35);
+        font-size: 12px;
+        margin: 8px 0px;
+      }
+      .hr-sect::before,
+      .hr-sect::after {
+        content: "";
+        flex-grow: 1;
+        background: rgba(0, 0, 0, 0.35);
+        height: 1px;
+        font-size: 0px;
+        line-height: 0px;
+        margin: 0px 16px;
+      }
 </style>

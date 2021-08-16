@@ -1,48 +1,79 @@
 <template>
   <div id="app">
-    <b-nav v-if="navShow" id="top-custom-navbar" class="d-flex justify-content-between nav" style="position:absolute;">
+    <b-nav justified v-if="navShow" id="top-custom-navbar" class="d-flex justify-content-between nav">
       <b-nav-item>
-        <img src="./assets/images/main-icon-2.png" alt="" style="width: 83px; height: 35px;">
+        <!-- <img src="./assets/images/main-icon-2.png" alt="" style="width: 83px; height: 35px;"> -->
+        <h1 style="font-family: 'Pacifico', cursive;">Pipl.</h1>
       </b-nav-item>
-      <button type="button" @click="onToggleDarkMode"><b-icon id="icon" icon="moon"></b-icon></button>
       <b-nav-item class="d-flex align-items-center nav-item">
         <router-link :to="{ name: 'AlarmList' }"  class="text-decoration-none me-3 text-dark">
           <b-icon id="icon" icon="bell-fill"></b-icon>
+          <p style="font-size:0.8rem">알람</p>
         </router-link>
+      </b-nav-item>
+      <b-nav-item>
         <router-link :to="{ name: 'SearchUser' }" class="text-decoration-none me-3 text-dark">
           <b-icon id="icon" icon="search"></b-icon>
+          <p style="font-size:0.8rem">유저검색</p>
         </router-link>
+      </b-nav-item>
+        <b-nav-item>
         <b-dropdown id="dropdownMenuButton" size="sm" right variant="link" toggle-class="text-decoration-none" no-caret>
           <template #button-content >
             <b-icon id="icon"  icon="person-fill"></b-icon>
+            <p style="font-size:0.8rem">프로필</p>
           </template>
           <b-dropdown-item id="dropdownitem" :to="{ name: 'ProfileDetail', params: { nickname: username } }">자신의 프로필</b-dropdown-item>
           <b-dropdown-item id="dropdownitem" :to="{ name: 'Scrap'}">자신의 스크랩</b-dropdown-item>
           <b-dropdown-item id="dropdownitem" :to="{ name: 'PromiseCreate', }">약속 생성하기</b-dropdown-item>
+          <b-dropdown-item id="dropdownitem "><b-icon icon= "moon"></b-icon><button id="mode" type="button" @click="onToggleDarkMode">{{ mode }}</button></b-dropdown-item>
+
           <b-dropdown-item-button id="dropdownitem"  class="danger" @click="logout()">로그아웃</b-dropdown-item-button>
         </b-dropdown>
       </b-nav-item>
     </b-nav>
-    <b-nav v-if="navShow" id="bottom-custom-navbar" class="d-flex justify-content-between nav" style="position:absolute;">
-      <b-nav-item style="width:100%;">
-          <router-link :to="{ name: 'PromiseList' }"  class="text-decoration-none me-3 text-dark" style="flex-direction:col;" >
-            <b-icon font-scale="2.5" id="icon" icon="signpost" ></b-icon>
-
+    <b-nav justified v-if="navShow" id="bottom-custom-navbar">
+      <b-nav-item>
+          <router-link :to="{ name: 'PromiseList' }"  class="text-decoration-none me-3 text-dark" >
+            <b-icon font-scale="2.3" id="icon" icon="signpost" ></b-icon>
+            <p style="font-size:0.8rem">PromiseList</p>
           </router-link>
+      </b-nav-item>
+      <b-nav-item>
           <router-link :to="{ name: 'FeedMain' }"  class="text-decoration-none me-3 text-dark">
-            <b-icon font-scale="2.5" id="icon" icon="house-door" ></b-icon>
-
+            <b-icon font-scale="2.3" id="icon" icon="house-door" ></b-icon>
+            <p style="font-size:0.8rem">Home</p>
           </router-link>
+      </b-nav-item>
+      <b-nav-item>
           <router-link :to="{ name: 'ArticleCreate' }" class="text-decoration-none me-3 text-dark">
-            <b-icon font-scale="2.5" id="icon" icon="pencil-square"></b-icon>
+            <b-icon font-scale="2.3" id="icon" icon="pencil-square"></b-icon>
+            <p style="font-size:0.8rem">Create</p>
           </router-link>
       </b-nav-item>
     </b-nav>
-    <b-nav v-if="backShow">
-    <!-- <b-nav v-if="backShow">
-      <button @click="goBack"><b-icon icon="arrow-left" class="me-4"></b-icon></button>
-      <span class="fw-bold" style="font-size:2rem;">{{ this.$route.name }}</span>
-    </b-nav> -->
+    <div>
+    <b-nav justified v-if="bottomNavShow" id="bottom-custom-navbar2">
+      <b-nav-item>
+          <router-link :to="{ name: 'PromiseList' }"  class="text-decoration-none me-3 text-dark" >
+            <b-icon font-scale="2.3" id="icon" icon="signpost" ></b-icon>
+            <p style="font-size:0.8rem">PromiseList</p>
+          </router-link>
+      </b-nav-item>
+      <b-nav-item>
+          <router-link :to="{ name: 'FeedMain' }"  class="text-decoration-none me-3 text-dark">
+            <b-icon font-scale="2.3" id="icon" icon="house-door" ></b-icon>
+            <p style="font-size:0.8rem">Home</p>
+          </router-link>
+      </b-nav-item>
+      <b-nav-item>
+          <router-link :to="{ name: 'ArticleCreate' }" class="text-decoration-none me-3 text-dark">
+            <b-icon font-scale="2.3" id="icon" icon="pencil-square"></b-icon>
+            <p style="font-size:0.8rem">Create</p>
+          </router-link>
+      </b-nav-item>
+    </b-nav>
+  </div>
     <router-view></router-view>
   </div>
 </template>
@@ -57,7 +88,8 @@ export default {
   data() {
     return {
       navShow: true,
-      backShow: true,
+      bottomNavShow: false,
+      mode:"",
     }
   },
   computed: {
@@ -70,15 +102,15 @@ export default {
     $route () {
       if (this.$route.name === 'FeedMain') {
         this.navShow = true
-        this.backShow = false
-      } 
-      else if (this.$route.name === 'ArticleCreate' || this.$route.name === 'ArticleDetail' || this.$route.name === 'Comments' || this.$route.name === 'PromiseCreate' || this.$route.name === 'PromiseList') {
+        this.bottomNavShow= false
+      }
+      else if( this.$route.name === 'ArticleCreate' || this.$route.name === 'ArticleDetail' || this.$route.name === 'Comments' || this.$route.name === 'FollowList' || this.$route.name === 'ProfileDetail' || this.$route.name === 'ProfileUpdate' || this.$route.name === 'Scrap' || this.$route.name === 'PromiseCreate' || this.$route.name === 'PromiseLsit'|| this.$route.name === 'PromiseLocation'|| this.$route.name === 'SearchUser'|| this.$route.name === 'ChangePassword'|| this.$route.name === 'PromiseDetail' ){
         this.navShow = false
-        this.backShow = true
-      } 
+        this.bottomNavShow= true
+      }
       else {
         this.navShow = false
-        this.backShow = false
+        this.bottomNavShow= false
       }
 
       if (localStorage.getItem('token')) {
@@ -94,16 +126,21 @@ export default {
   },
   created() {
     if (this.$route.name === 'FeedMain') {
-      this.navShow = true
-      this.backShow = false
-    }  
-    else if (this.$route.name === 'ArticleCreate' || this.$route.name === 'ArticleDetail' || this.$route.name === 'Comments') {
+        this.navShow = true
+        this.bottomNavShow= false
+      }
+      else if( this.$route.name === 'ArticleCreate' || this.$route.name === 'ArticleDetail' || this.$route.name === 'Comments' || this.$route.name === 'FollowList' || this.$route.name === 'ProfileDetail' || this.$route.name === 'ProfileUpdate' || this.$route.name === 'Scrap' || this.$route.name === 'PromiseCreate' || this.$route.name === 'PromiseLsit'|| this.$route.name === 'PromiseLocation'|| this.$route.name === 'SearchUser' || this.$route.name === 'ChangePassword' || this.$route.name === 'PromiseDetail' ){
         this.navShow = false
-        this.backShow = true
-    }
-    else {
-      this.navShow = false
-      this.backShow = false
+        this.bottomNavShow= true
+      }
+      else {
+        this.navShow = false
+        this.bottomNavShow= false
+      }
+    if(window && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      this.mode= "lightmode"
+    } else {
+      this.mode= "darkmode"
     }
   },
   mounted() {
@@ -115,6 +152,8 @@ export default {
   },
   methods:{
     onToggleDarkMode() {
+      var darkmode = document.getElementById("mode")
+
       if (window) {
         console.log(window.matchMedia('(prefers-color-scheme: dark)').matches);
 
@@ -122,18 +161,22 @@ export default {
           if(document.documentElement.classList.contains('darkmode')) {
             document.documentElement.classList.remove("darkmode");
             document.documentElement.classList.add("lightmode");
-            document.getElementById("custom-navbar").style.position
+            this.mode= "darkmode"
+
           } else {
             document.documentElement.classList.remove("lightmode");
             document.documentElement.classList.add("darkmode");
+            this.mode= "lightmode"
           }
         } else {
           if(document.documentElement.classList.contains('lightmode')) {
             document.documentElement.classList.remove("lightmode");
             document.documentElement.classList.add("darkmode");
+            this.mode= "lightmode"
           } else {
             document.documentElement.classList.remove("darkmode");
             document.documentElement.classList.add("lightmode");
+            this.mode= "darkmode"
           }
         }
 
@@ -210,8 +253,8 @@ window.onscroll = function() {
   if (document.getElementById('top-custom-navbar') !== null && document.getElementById('bottom-custom-navbar') !== null) {
     var currentScrollPos = window.pageYOffset;
     if (prevScrollpos < 100) {
-      document.getElementById("top-custom-navbar").style.position = 'absolute'
-      document.getElementById("bottom-custom-navbar").style.position = 'absolute'
+      document.getElementById("top-custom-navbar").style.position = 'fixed'
+      document.getElementById("bottom-custom-navbar").style.position = 'fixed'
     } else if (prevScrollpos > currentScrollPos) {
       document.getElementById("top-custom-navbar").style.top = "0"
       document.getElementById("top-custom-navbar").style.position = 'fixed'
@@ -221,8 +264,8 @@ window.onscroll = function() {
       document.getElementById("bottom-custom-navbar").style.position = 'fixed'
       document.getElementById("bottom-custom-navbar").style.zIndex = 2
     } else {
-      document.getElementById("top-custom-navbar").style.top = "-50px"
-      document.getElementById("bottom-custom-navbar").style.bottom = "50px"
+      document.getElementById("top-custom-navbar").style.top = "-75px"
+      document.getElementById("bottom-custom-navbar").style.bottom = "-75px"
     }
     prevScrollpos = currentScrollPos;
   }

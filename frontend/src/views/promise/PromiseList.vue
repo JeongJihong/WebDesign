@@ -1,5 +1,5 @@
 <template>
-  <div class="page">
+  <div class="page" style="margin-bottom:60px;">
     <div class="mt-3 mx-4 d-flex justify-content-between align-items-center">
       <span class="fs-1">
         <button @click="goBack"><b-icon icon="arrow-left" class="me-4"></b-icon></button>
@@ -77,6 +77,7 @@
 <script>
 import axios from 'axios'
 export default {
+  name:"PromiseList",
   data(){
     return{
       upcomingPromises:[],
