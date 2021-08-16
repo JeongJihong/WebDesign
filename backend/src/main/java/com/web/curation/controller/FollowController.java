@@ -74,7 +74,7 @@ public class FollowController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @GetMapping("/account/profile/{nickname}/following")
+    @GetMapping("/{nickname}/following")
     @ApiOperation(value = "팔로잉 목록 반환")
     public ResponseEntity<List<User>> followingList(@PathVariable final String nickname){
         List<User> result = followService.followingList(nickname);
