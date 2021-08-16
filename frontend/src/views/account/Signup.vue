@@ -12,7 +12,7 @@
       <div class="input-with-label">
         <input  @change="reNickname()" v-model="nickname" id="nickname" placeholder="닉네임을 입력하세요." type="text" />
         <label for="nickname">닉네임</label>
-        <b-button class="subbtn" id="nicknameConfirm" @click="confirmNickname()">중복확인</b-button>
+        <button class="subbtn" id="nicknameConfirm" @click="confirmNickname()">중복확인</button>
       </div>
 
       <div class="input-with-label">
@@ -20,7 +20,7 @@
         v-bind:class="{error : error.email, complete:!error.email&&email.length!==0}"
         />
         <label for="email">이메일</label>
-        <b-button class="subbtn" id="emailConfirm"  @click="confirmEmail()">중복확인</b-button>
+        <button class="subbtn" id="emailConfirm"  @click="confirmEmail()">중복확인</button>
         <div class="error-text" v-if="error.email">{{error.email}}</div>
       </div>
 

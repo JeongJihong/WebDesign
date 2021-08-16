@@ -1,22 +1,16 @@
 <template>
   <div id="app">
-    <b-nav v-if="navShow" id="custom-navbar" class="d-flex justify-content-between nav" style="position:absolute;">
+    <b-nav v-if="navShow" id="top-custom-navbar" class="d-flex justify-content-between nav" style="position:absolute;">
       <b-nav-item>
         <img src="./assets/images/main-icon-2.png" alt="" style="width: 83px; height: 35px;">
       </b-nav-item>
       <button type="button" @click="onToggleDarkMode"><b-icon id="icon" icon="moon"></b-icon></button>
       <b-nav-item class="d-flex align-items-center nav-item">
-        <router-link :to="{ name: 'PromiseList' }"  class="text-decoration-none me-3 text-dark">
-          <b-icon id="icon" icon="signpost" ></b-icon>
-        </router-link>
         <router-link :to="{ name: 'AlarmList' }"  class="text-decoration-none me-3 text-dark">
           <b-icon id="icon" icon="bell-fill"></b-icon>
         </router-link>
         <router-link :to="{ name: 'SearchUser' }" class="text-decoration-none me-3 text-dark">
           <b-icon id="icon" icon="search"></b-icon>
-        </router-link>
-        <router-link :to="{ name: 'ArticleCreate' }" class="text-decoration-none me-3 text-dark">
-          <b-icon id="icon" icon="pencil-square"></b-icon>
         </router-link>
         <b-dropdown id="dropdownMenuButton" size="sm" right variant="link" toggle-class="text-decoration-none" no-caret>
           <template #button-content >
@@ -27,6 +21,21 @@
           <b-dropdown-item id="dropdownitem" :to="{ name: 'PromiseCreate', }">약속 생성하기</b-dropdown-item>
           <b-dropdown-item-button id="dropdownitem"  class="danger" @click="logout()">로그아웃</b-dropdown-item-button>
         </b-dropdown>
+      </b-nav-item>
+    </b-nav>
+    <b-nav v-if="navShow" id="bottom-custom-navbar" class="d-flex justify-content-center nav" style="position:absolute;">
+      <b-nav-item>
+          <router-link :to="{ name: 'PromiseList' }"  class="text-decoration-none me-3 text-dark" style="flex-direction:col;" >
+            <b-icon font-scale="2.5" id="icon" icon="signpost" ></b-icon>
+
+          </router-link>
+          <router-link :to="{ name: 'FeedMain' }"  class="text-decoration-none me-3 text-dark">
+            <b-icon font-scale="2.5" id="icon" icon="house-door" ></b-icon>
+
+          </router-link>
+          <router-link :to="{ name: 'ArticleCreate' }" class="text-decoration-none me-3 text-dark">
+            <b-icon font-scale="2.5" id="icon" icon="pencil-square"></b-icon>
+          </router-link>
       </b-nav-item>
     </b-nav>
     <b-nav v-if="backShow">
@@ -199,16 +208,22 @@ export default {
 
 var prevScrollpos = window.pageYOffset
 window.onscroll = function() {
-  if (document.getElementById('custom-navbar') !== null) {
+  if (document.getElementById('top-custom-navbar') !== null && document.getElementById('bottom-custom-navbar') !== null) {
     var currentScrollPos = window.pageYOffset;
     if (prevScrollpos < 100) {
-      document.getElementById("custom-navbar").style.position = 'absolute'
+      document.getElementById("top-custom-navbar").style.position = 'absolute'
+      document.getElementById("bottom-custom-navbar").style.position = 'absolute'
     } else if (prevScrollpos > currentScrollPos) {
-      document.getElementById("custom-navbar").style.top = "0"
-      document.getElementById("custom-navbar").style.position = 'fixed'
-      document.getElementById("custom-navbar").style.zIndex = 2
+      document.getElementById("top-custom-navbar").style.top = "0"
+      document.getElementById("top-custom-navbar").style.position = 'fixed'
+      document.getElementById("top-custom-navbar").style.zIndex = 2
+
+      document.getElementById("bottom-custom-navbar").style.bottom = "0"
+      document.getElementById("bottom-custom-navbar").style.position = 'fixed'
+      document.getElementById("bottom-custom-navbar").style.zIndex = 2
     } else {
-      document.getElementById("custom-navbar").style.top = "-50px"
+      document.getElementById("top-custom-navbar").style.top = "-50px"
+      document.getElementById("bottom-custom-navbar").style.bottom = "50px"
     }
     prevScrollpos = currentScrollPos;
   }

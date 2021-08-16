@@ -28,6 +28,8 @@
   --dropdown-color:#ffffff;
   --dropdown-text-color:#ffffff;
   --sub-button-color:#2FA8FF;
+  --sub-text-color:#ffffff;
+  
 }
 
 :root.darkmode {
@@ -41,10 +43,10 @@
   --dropdown-color:#373840;
   --dropdown-text-color:#B1B1B1;
   --sub-button-color:#FFF5C3;
-  
+  --sub-text-color:#ffffff;
 }
 
-#custom-navbar {
+#top-custom-navbar {
   background-color: var(--background-color);
   color:  var(--text-color);
   position: static;
@@ -56,6 +58,20 @@
   transition: top 0.3s;
   padding: 1px;
 }
+#bottom-custom-navbar {
+  background-color: var(--background-color);
+  color:  var(--text-color);
+  position: static;
+  z-index: 1;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  transition: bottom 0.3s;
+  padding: 1px;
+}
+
+
 #dropdownMenuButton__BV_toggle_ {
   width: 100%;
   height: 30px;
@@ -90,12 +106,16 @@
 }
 
 /* Signup */
-.subbtn{
+.subbtn {
+  float: right;
   box-shadow: none;
   background-color: var(--sub-button-color);
+  color: var(--sub-text-color);
   height: 40px;
+  padding: 8px;
+  border-radius: 5px;
+  margin:2px;
 }
-
 
 /*  Promise Create  */
 @import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
