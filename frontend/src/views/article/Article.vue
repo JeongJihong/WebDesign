@@ -1,5 +1,5 @@
 <template>
-  <div class="feed newsfeed app" style="margin-top:60px;">
+  <div class="feed newsfeed app" style="margin-top:60px; margin-bottom:60px;">
     <div class="wrapB">
       <div v-for="(article,idx) in articles" :key="idx">
         <div>
@@ -11,7 +11,6 @@
             id="carousel-1"
             v-model="slide"
             :interval="0"
-            controls
             indicators
             background="#ababab"
             img-width="1024"
@@ -34,21 +33,32 @@
               </template>
             </b-carousel-slide>
           </b-carousel>
-          <p> {{ article.articleDetail.review }}</p>
-          <div v-if="article.articleDetail.promiseid">
-            <p>약속 인원 : {{ article.promiseDetail.num }} 명</p>
-            <p>약속 장소 : {{ article.promiseDetail.place }}</p>
-            <p>약속 시간 : {{ article.promiseDetail.promisetime }}</p>
-            <!-- <p>유형 : {{ article.promiseDetail.type }}</p> -->
+          <div style="margin:10px;">
+            <p> {{ article.articleDetail.review }}</p>
           </div>
-          <ul class="d-flex justify-content-left article" style="padding-left:3px;">
-            <li v-if="article.likeCheck" ><b-icon @click="articleLike({ articleid: article.articleDetail.articleid, nickname: article.articleDetail.user.nickname, likeCheck:article.likeCheck, idx:idx  })" icon="hand-thumbs-up" scale="1.5" variant="danger"></b-icon></li>
-            <li v-else ><b-icon id="icon" @click="articleLike({ articleid: article.articleDetail.articleid, nickname: article.articleDetail.user.nickname,idx:idx })"  icon="hand-thumbs-up" scale="1.5"></b-icon></li>
-            
-            <li v-if="article.scrapCheck"><b-icon @click="undoScrap({ articleid: article.articleDetail.articleid, idx: idx })" icon="tags-fill" scale="1.5" ></b-icon></li>
-            <li v-else><b-icon id="icon" @click="doScrap({ articleid: article.articleDetail.articleid, idx: idx })" icon="tags" scale="1.5" ></b-icon></li>
-            <li @click="getComments(article.articleDetail.articleid)"><b-icon icon="chat-dots-fill" scale="1.5" style="color:A5E994;"></b-icon></li><span>{{ article.articleDetail.comments.length }}</span>
-          </ul>
+          <div v-if="article.articleDetail.promiseid" style="positon:relative;">
+              <div id="demo">
+                <div class="post-it">
+                  <div class="inner" style="color:black;" >
+                    Title : {{ article.promiseDetail.title }} <br>
+                    약속 인원 : {{ article.promiseDetail.num }} 명<br>
+                    약속 장소 : {{ article.promiseDetail.place }} <br>
+                    약속 시간 : {{ article.promiseDetail.promisetime.substr(5,2) }}.{{article.promiseDetail.promisetime.substr(8,2)}} {{article.promiseDetail.promisetime.substr(11,5) }} <br>
+                    유형 : {{ article.promiseDetail.type }} <br>
+                  </div>
+                </div>
+              </div>
+          </div>
+          <div style="positon:relative;">
+            <ul class="d-flex justify-content-left article" style="padding-left:3px;">
+              <li v-if="article.likeCheck" ><b-icon @click="articleLike({ articleid: article.articleDetail.articleid, nickname: article.articleDetail.user.nickname, likeCheck:article.likeCheck, idx:idx  })" icon="hand-thumbs-up" scale="1.5" variant="danger"></b-icon></li>
+              <li v-else ><b-icon id="icon" @click="articleLike({ articleid: article.articleDetail.articleid, nickname: article.articleDetail.user.nickname,idx:idx })"  icon="hand-thumbs-up" scale="1.5"></b-icon></li>
+              
+              <li v-if="article.scrapCheck"><b-icon @click="undoScrap({ articleid: article.articleDetail.articleid, idx: idx })" icon="tags-fill" scale="1.5" ></b-icon></li>
+              <li v-else><b-icon id="icon" @click="doScrap({ articleid: article.articleDetail.articleid, idx: idx })" icon="tags" scale="1.5" ></b-icon></li>
+              <li @click="getComments(article.articleDetail.articleid)"><b-icon icon="chat-dots-fill" scale="1.5" style="color:10598D;"></b-icon></li><span>{{ article.articleDetail.comments.length }}</span>
+            </ul>
+          </div>
           <p>{{ article.likeCount }} 명의 유저가 이글을 좋아합니다.</p>
         </div>
         <hr>
@@ -77,6 +87,7 @@ export default {
         articles:[],
         likeCheck:false,
         imgURL:[],
+        place:""
       }
   },
   computed: {
@@ -104,7 +115,11 @@ export default {
                   console.log(res.data)
                   const data = res.data.pageList;
                             for(let key in data){
-                                
+                              if(data[key].articleDetail.promiseid){
+                                  if(data[key].promiseDetail.place == ""){
+                                    data[key].promiseDetail.place = "화상 모임"
+                                  }
+                                }
                                 this.articles.push(data[key])
                                 console.log(this.articles)
                             }

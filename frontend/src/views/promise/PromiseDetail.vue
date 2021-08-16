@@ -1,9 +1,9 @@
 <template>
-  <div class="page">
+  <div class="page" style="margin-bottom:60px;">
     <!-- 헤더 -->
     <div class="mt-3 mx-4 d-flex justify-content-between align-items-center">
       <span class="fs-1">
-        <button @click="goBack"><b-icon icon="arrow-left" class="me-4"></b-icon></button>
+        <button @click="goBack"><b-icon id="icon" icon="arrow-left" class="me-4"></b-icon></button>
         <span class="fw-bold">{{ promiseDetail.title }}</span>
       </span>
       <button v-if="promiseDetail.place && aHourAgo" style="color: #0d6efd;"

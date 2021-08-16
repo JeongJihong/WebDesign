@@ -1,15 +1,21 @@
 <template>
-  <div class="scale page">
-    <p>게시글 생성하기</p>
-    <form enctype = "multipart/form-data" method="post" >
-      <div class="d-flex flex-row">
-        <button style="display:inline-block; margin-right:5%; margin-left:2%" @click.prevent="clickInputTag()" id='addimage'><b-icon-plus id="icon" class="h1"></b-icon-plus></button>
+  <div class="page" style="margin-bottom:60px;">
+    <div class="mt-3 mx-4 d-flex justify-content-between align-items-center">
+      <span class="fs-1">
+        <button @click="goBack"><b-icon id="icon" icon="arrow-left" class="me-4"></b-icon></button>
+        <span class="fw-bold">게시글 생성</span>
+      </span>
+    </div>
+    <br>
+    <form enctype = "multipart/form-data" method="post">
+      <div class="d-flex flex-row" style="margin:10px">
+        <button style="display:inline-block; margin-right:5%; margin-left:2%; height:70px" @click.prevent="clickInputTag()" id='addimage'><b-icon-plus-square id="icon" class="h1"></b-icon-plus-square><p id="icon">이미지 업로드</p></button>
         <input hidden ref="plus" id="file" type="file"  accept="image/*" @change.prevent="uploadImage($event)" multiple>
         <div id="image_container"></div>
       </div>
-      <div>
-        <b-textarea v-model="content"  placeholder="Tall textarea" rows="8"></b-textarea>
-        <b-button @click="articleCreate()">전송</b-button>
+      <div style="margin:10px">
+        <b-textarea v-model="content"  placeholder="게시글 내용을 적어주세요!" rows="10"></b-textarea>
+        <b-button style="height: 2.7rem; width: 100%; margin-bottom:10px; background-color:#002E4F;" @click="articleCreate()">전송</b-button>
       </div>
     </form>
   </div>
@@ -27,7 +33,7 @@
       }
     },
     methods:{
-      goBack() {
+    goBack() {
       this.$router.go(-1)
     },
     clickInputTag() {
@@ -74,10 +80,5 @@
   }
 </script>
 
-<style>
-  .scale {
-    margin: 5%;
-    align-content: center;
-    justify-content: center;
-  }
+<style src="../../App.css">
 </style>
