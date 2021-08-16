@@ -108,6 +108,10 @@ export default {
   data() {
     return {
       promisetime: '',
+      location: {
+        lat: 0.0,
+        lon: 0.0
+      }
     }
   },
   mounted() {
@@ -127,6 +131,13 @@ export default {
       promiseid: this.$route.params.promiseid
     }
     this.$store.dispatch('promiseDetailGet', payload)
+
+    if (localStorage.getItem('token')) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        this.location.lat = position.coords.latitude
+        this.location.lon = position.coords.longitude
+      })
+    }
   },
   computed: {
     ...mapState([
@@ -244,6 +255,7 @@ export default {
     },
     promiseDetailAccept() {
       if (this.promiseDetail.createrNickname !== this.username && this.promiseDetail.approve === 0) {
+        // 약속 수락
         axios({
           url: `http://127.0.0.1:8080/promise/people/${this.$route.params.promiseid}`,
           method: "put",
@@ -260,6 +272,7 @@ export default {
             this.$store.dispatch('promiseDetailGet', payload)
           })
         
+
         // 약속 수락 -> 참가자'status +2
         let formdataAttender = new FormData()
         formdataAttender.append('status', 2)
@@ -285,6 +298,20 @@ export default {
             "X-AUTH-TOKEN": this.token
           },
           data: formdataMaker
+        })
+
+        // 위치 정보 업데이트
+        let formdata = new FormData()
+        formdata.append('lat', this.location.lat)
+        formdata.append('lon', this.location.lon)
+        axios({
+          url: `http://127.0.0.1:8080/promise/place/${this.$route.params.promiseid}`,
+          method: 'put',
+          headers: {
+            "Content-Type": "application/json",
+            "X-AUTH-TOKEN": this.token,
+          },
+          data: formdata
         })
       }
     },
