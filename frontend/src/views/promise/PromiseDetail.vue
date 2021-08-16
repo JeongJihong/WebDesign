@@ -185,7 +185,6 @@ export default {
       return dotTime
     },
     getImgUrl () {
-      console.log(this.promiseDetail.type && require(`@/assets/images/${this.promiseDetail.type}-icon.svg`))
       return {
         ...this.promiseDetail,
         icon: this.promiseDetail.type && require(`@/assets/images/${this.promiseDetail.type}-icon.svg`)
@@ -202,31 +201,41 @@ export default {
     },
     // kakao 지도 관련
     initMap() {
-      if (this.promiseDetail.place) {
+      // if (this.promiseDetail.place) {
         // lat: 위도 == y, lon: 경도 == x
-        // ######     좌표를 중심으로 지도가 그려짐      ######
-        var mapContainer = document.getElementById('map'),
-            mapOption = {
-              center: new kakao.maps.LatLng(this.promiseDetail.lat, this.promiseDetail.lon),
-              level: 4,
-            }
+        var mapContainer = document.getElementById('map')
+        var mapOption = {
+          center: new kakao.maps.LatLng(50, 120),
+          level: 4
+        }
+        if (this.promiseDetail.place) {
+          // var mapOption = {
+          //   center: new kakao.maps.LatLng(this.promiseDetail.lat, this.promiseDetail.lon),
+          //   level: 4,
+          // }
+          mapOption.center = new kakao.maps.LatLng(this.promiseDetail.lat, this.promiseDetail.lon)
+          mapOption.level = 4
+        }
+
         var map = new kakao.maps.Map(mapContainer, mapOption)
   
         map.setDraggable(false)
         map.setZoomable(false)
   
-  
-        // ######    여기부터는 지도에 마커 표시하기     ######
-        var markerPosition = new kakao.maps.LatLng(this.promiseDetail.lat, this.promiseDetail.lon)
+        var markerPosition = new kakao.maps.LatLng(50, 120)
+        if (this.promiseDetail.place) {
+          markerPosition = new kakao.maps.LatLng(this.promiseDetail.lat, this.promiseDetail.lon)
+        }
         var marker = new kakao.maps.Marker({ position: markerPosition })
         marker.setMap(map)
-      }
+      // }
     },
     goToProfile(nickname) {
       this.$router.push({ name: 'ProfileDetail', params: { nickname } })
     },
     promiseDetailDelete() {
       if (this.promiseDetail.createrNickname === this.username) {
+        this.$store.state.promiseDeleteMode = true
         axios({
           url: `http://127.0.0.1:8080/promise/${this.$route.params.promiseid}`,
           method: "delete",
@@ -235,6 +244,9 @@ export default {
             "X-AUTH-TOKEN": this.token
           },
         })
+          .then(() => {
+            this.$store.state.promiseDeleteMode = false
+          })
 
         // 약속 삭제(취소) -> 생성자'status -(2*num)
         let formdataMaker = new FormData()

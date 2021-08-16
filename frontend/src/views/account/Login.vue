@@ -39,11 +39,13 @@
           </div>
 
           <div class="sns-login">
-            <div class="text">
-              <p>SNS 간편 로그인</p>
+            <div class="text mb-2">
+              <div class="d-flex justify-content-between">
+                <span style="font-size: 0.857em; color: #787878;">SNS 간편 로그인</span>
+                <span class="bar"></span>
+              </div>
               <KakaoLogin :component="component" />
               <!-- <GoogleLogin :component="component" /> -->
-              <div class="bar"></div>
             </div>
           </div>
           
@@ -102,7 +104,8 @@ export default {
   computed: {
     ...mapState([
       'loginState',
-      'token'
+      'token',
+      'loginFailed'
     ])
   },
   watch: {
