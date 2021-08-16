@@ -87,7 +87,11 @@ export default {
       content:"",
       afiles:"",
       promiseid:0,
-      formData: new FormData()
+      formData: new FormData(),
+      location: {
+        lat: 0.0,
+        lon: 0.0
+      }
     }
   },
   mounted() {
@@ -101,6 +105,14 @@ export default {
       document.head.appendChild(script)
     }
     console.log(`${process.env.VUE_APP_MAP_API}`)
+  },
+  created() {
+    if (localStorage.getItem('token')) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        this.location.lat = position.coords.latitude
+        this.location.lon = position.coords.longitude
+      })
+    }
   },
   methods: {
     initMap() {
@@ -196,7 +208,7 @@ export default {
             console.log(res.data)
             this.promiseid = res.data
             this.promiseArticleCreate()
-            this.$router.push({ name:'PromiseList'})
+            // this.$router.push({ name:'PromiseList'})
           })
           .catch(err=>{
             console.log(err)

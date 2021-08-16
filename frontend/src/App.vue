@@ -72,7 +72,7 @@ export default {
       }
 
       if (localStorage.getItem('token')) {
-        navigator.geolocation.watchPosition((position) => {
+        navigator.geolocation.getCurrentPosition((position) => {
           let location = {
             lat: position.coords.latitude,
             lon: position.coords.longitude
