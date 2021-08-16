@@ -23,8 +23,8 @@
         </b-dropdown>
       </b-nav-item>
     </b-nav>
-    <b-nav v-if="navShow" id="bottom-custom-navbar" class="d-flex justify-content-center nav" style="position:absolute;">
-      <b-nav-item>
+    <b-nav v-if="navShow" id="bottom-custom-navbar" class="d-flex justify-content-between nav" style="position:absolute;">
+      <b-nav-item style="width:100%;">
           <router-link :to="{ name: 'PromiseList' }"  class="text-decoration-none me-3 text-dark" style="flex-direction:col;" >
             <b-icon font-scale="2.5" id="icon" icon="signpost" ></b-icon>
 
