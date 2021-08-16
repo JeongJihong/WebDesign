@@ -62,7 +62,7 @@ messaging.getToken().then((res) => {
   store.dispatch("firebaseTokenGet", res);
 });
 
-// Handle received push notification at foreground
+// Handle received push notification at foreground (수정)
 messaging.onMessage((payload) => {
   const title = payload.notification.title;
   const options = {
