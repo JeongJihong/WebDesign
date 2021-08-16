@@ -1,27 +1,74 @@
 <template>
   <div class="page">
-    <br>
-    <router-link :to="{ name: 'PromiseCreate' }"  class="text-decoration-none me-3 text-dark d-flex justify-content-center">
-          <h1>약속 생성하기</h1>
-    </router-link>
-    <br>
-    <ul>
-      <h2>대기중인 약속!</h2>
-      <br>
-      <div v-for="(waitingPromise,idx) in waitingPromises" :key="waitingPromise.promiseid">
-        <router-link :to="{ name: 'PromiseDetail', params: {promiseid: waitingPromise.promiseid } }">
-          <li><img :src="getwaitingPromiseFeeImgUrl({idx, imgURL: waitingPromise.type }).icon" alt=type> {{ waitingPromise.title }} {{ waitingPromise.promisetime }}</li>
-        </router-link>
+    <div class="mt-3 mx-4 d-flex justify-content-between align-items-center">
+      <span class="fs-1">
+        <button @click="goBack"><b-icon icon="arrow-left" class="me-4"></b-icon></button>
+        <span class="fw-bold">약속 정보</span>
+      </span>
+      <button @click="goToPromiseCreate" style="color: #0d6efd;">약속 생성</button>
+    </div>
+
+    <ul class="p-0">
+      <p class="mt-3 my-0 mx-3 fs-4 fw-bold">Waiting</p>
+      <div class="mt-2 mx-3 px-3 border rounded bg-light">
+        <div v-for="(waitingPromise,idx) in waitingPromises"
+          :key="waitingPromise.promiseid" class="my-4 mx-1">
+          <router-link class="text-decoration-none"
+            :to="{ name: 'PromiseDetail', params: {promiseid: waitingPromise.promiseid } }">
+            <li>
+              <span class="d-flex justify-content-start align-items-center">
+                <span>
+                  <img class="me-4"
+                    :src="getwaitingPromiseFeeImgUrl({idx, imgURL: waitingPromise.type }).icon"
+                    :alt="waitingPromise.type">
+                </span>
+                <span class="d-flex flex-column" style="color: black;">
+                  <span class="me-2" style="font-size: 1.2rem;">{{ waitingPromise.title }}</span>
+                  <span style="font-size: 0.9rem;">
+                    <span>{{ waitingPromise.promisetime.substr(5,2) }}</span>
+                    <span>.</span>
+                    <span class="me-2">{{ waitingPromise.promisetime.substr(8,2) }}</span>
+                    <span>{{ waitingPromise.promisetime.substr(11,5) }}</span>
+                  </span>
+                </span>
+              </span>
+            </li>
+          </router-link>
+        </div>
       </div>
     </ul>
-    <hr>
-    <ul>
-      <h2>다가오는 약속!</h2>
-      <br>
-      <div v-for="(upcomingPromise,idx) in upcomingPromises" :key="upcomingPromise.promiseid">
-        <router-link :to="{ name: 'PromiseDetail', params: {promiseid:upcomingPromise.promiseid } }">
-          <li><img :src="getupcomingPromisesFeeImgUrl({ idx, imgURL: upcomingPromise.type }).icon" alt=type> {{ upcomingPromise.title }} {{ upcomingPromise.promisetime }}</li>
-        </router-link>
+
+    <div class="d-flex justify-content-center">
+      <hr class="style-one" style="width: 90%;">
+    </div>
+
+    <ul class="p-0">
+      <p class="mt-3 my-0 mx-3 fs-4 fw-bold">Upcoming</p>
+      <div class="mt-2 mx-3 px-3 border rounded bg-light">
+        <div v-for="(upcomingPromise,idx) in upcomingPromises"
+          :key="upcomingPromise.promiseid" class="my-4 mx-1">
+          <router-link class="text-decoration-none"
+            :to="{ name: 'PromiseDetail', params: {promiseid:upcomingPromise.promiseid } }">
+            <li>
+              <span class="d-flex justify-content-start align-items-center">
+                <span>
+                  <img class="me-4"
+                    :src="getupcomingPromisesFeeImgUrl({ idx, imgURL: upcomingPromise.type }).icon"
+                    :alt="upcomingPromise.type">
+                </span>
+                <span class="d-flex flex-column" style="color: black;">
+                  <span class="me-2" style="font-size: 1.2rem;">{{ upcomingPromise.title }}</span>
+                  <span style="font-size: 0.9rem;">
+                    <span>{{ upcomingPromise.promisetime.substr(5,2) }}</span>
+                    <span>.</span>
+                    <span class="me-2">{{ upcomingPromise.promisetime.substr(8,2) }}</span>
+                    <span>{{ upcomingPromise.promisetime.substr(11,5) }}</span>
+                  </span>
+                </span>
+              </span>
+            </li>
+          </router-link>
+        </div>
       </div>
     </ul>
   </div>
@@ -63,6 +110,12 @@ export default {
           })
   },
   methods:{
+    goBack() {
+      this.$router.go(-1)
+    },
+    goToPromiseCreate() {
+      this.$router.push({ name: 'PromiseCreate' })
+    },
     getwaitingPromiseFeeImgUrl(payload) {
 
       const firstChar = payload.imgURL[0];
@@ -97,5 +150,12 @@ img {
   width: 50px;
   height: 50px;
 
+}
+
+hr.style-one {
+  border: 0;
+  height: 0.5px;
+  background: #333;
+  background-image: linear-gradient(to right, #ccc, #333, #ccc);
 }
 </style>
