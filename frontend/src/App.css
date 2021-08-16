@@ -27,6 +27,7 @@
   --icon-color:#181c40;
   --dropdown-color:#ffffff;
   --dropdown-text-color:#ffffff;
+  --sub-button-color:#2FA8FF;
 }
 
 :root.darkmode {
@@ -39,6 +40,7 @@
   --icon-color:#FFF5C3;
   --dropdown-color:#373840;
   --dropdown-text-color:#B1B1B1;
+  --sub-button-color:#FFF5C3;
   
 }
 
@@ -86,6 +88,14 @@
 .article li{
   margin-right: 12px;
 }
+
+/* Signup */
+.subbtn{
+  box-shadow: none;
+  background-color: var(--sub-button-color);
+  height: 40px;
+}
+
 
 /*  Promise Create  */
 @import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');

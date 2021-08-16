@@ -142,7 +142,7 @@ export default {
           method: 'get',
           headers: {
             "Content-Type": "application/json",
-            "X-AUTH-TOKEN": this.$store.state.token,
+            "X-AUTH-TOKEN": this.$store.state.token
           }
         })
           .then(res => {
