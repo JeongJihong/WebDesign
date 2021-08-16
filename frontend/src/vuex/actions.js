@@ -52,17 +52,17 @@ export default {
               .then(() =>
                 router.push({ name: "FeedMain" })
               )
-              .catch((err) => {
-                console.log('Firebase Token POST Failed' + err)
-              })
+              // .catch((err) => {
+              //   console.log('Firebase Token POST Failed' + err)
+              // })
           })
-          .catch((err) => {
-            alert(err);
-          });
+          // .catch((err) => {
+          //   alert(err);
+          // });
       })
       .catch((err) => {
         // console.log('에러!', err)
-        alert(err);
+        // alert(err);
       });
   },
   firebaseTokenGet({ commit }, firebaseToken) {

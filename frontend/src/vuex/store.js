@@ -13,6 +13,7 @@ const state = {
     token: localStorage.getItem('token') || '',
     username: localStorage.getItem('username') || '',
     firebaseToken: localStorage.getItem('firebaseToken') || '',
+    promiseDeleteMode: false,
 
     likeList: [],
     followList: [],

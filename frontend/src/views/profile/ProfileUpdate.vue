@@ -102,7 +102,7 @@ export default {
       formData.append("thumbnail", this.userInfo.file);
       console.log(typeof this.userInfo.file, this.userInfo.file)
       axios({
-        method: 'patch',
+        method: 'post',
         url: 'http://127.0.0.1:8080/account/profile/',
         data: formData,
         headers: {

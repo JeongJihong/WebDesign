@@ -5,13 +5,14 @@
     Sub PJT I에서는 UX, 디자인 등을 포함하여 백엔드를 제외하여 개발합니다.
  -->
 <template>
-  <div class="user join wrapC">
-    <h1>가입하기</h1>
+  <div class="user join wrapC app">
+    <br>
+    <h1>회원가입</h1>
     <div class="form-wrap">
       <div class="input-with-label">
         <input  @change="reNickname()" v-model="nickname" id="nickname" placeholder="닉네임을 입력하세요." type="text" />
         <label for="nickname">닉네임</label>
-        <b-button @click="confirmNickname()">중복확인</b-button>
+        <b-button class="subbtn" id="nicknameConfirm" @click="confirmNickname()">중복확인</b-button>
       </div>
 
       <div class="input-with-label">
@@ -19,7 +20,7 @@
         v-bind:class="{error : error.email, complete:!error.email&&email.length!==0}"
         />
         <label for="email">이메일</label>
-        <b-button @click="confirmEmail()">중복확인</b-button>
+        <b-button class="subbtn" id="emailConfirm"  @click="confirmEmail()">중복확인</b-button>
         <div class="error-text" v-if="error.email">{{error.email}}</div>
       </div>
 
@@ -100,12 +101,17 @@ export default {
   },
   watch: {
     nickname: function(v) {
+      const confirm =  document.getElementById("nicknameConfirm")
+      confirm.innerText = "중복확인"
       this.nicknameConfirm=false;
+
     },
     password: function(v) {
       this.checkForm();
     },
     email: function(v) {
+      const confirm =  document.getElementById("emailConfirm")
+      confirm.innerText = "중복확인"
       this.emailConfirm=false;
       this.checkForm();
     },
@@ -118,6 +124,8 @@ export default {
       this.nicknameConfirm = false
     },
     confirmNickname(){
+      const confirm =  document.getElementById("nicknameConfirm")
+
       axios({
         url:'http://127.0.0.1:8080/account/checkNickname',
         method:'get',
@@ -134,6 +142,7 @@ export default {
           }else{
             alert('사용 가능한 닉네임 입니다.')
             this.nicknameConfirm=true
+            confirm.innerText = "확인완료"
           }
         })
         .catch(err=>{
@@ -141,6 +150,7 @@ export default {
         })
     },
     confirmEmail(){
+      const confirm =  document.getElementById("emailConfirm")
       axios({
         url:'http://127.0.0.1:8080/account/checkEmail',
         method:'get',
@@ -156,6 +166,7 @@ export default {
           }else{
             alert('사용 가능한 이메일 입니다.')
             this.emailConfirm=true
+            confirm.innerText = "확인완료"
           }
 
         })
@@ -217,5 +228,7 @@ export default {
   }
 };
 </script>
+<style src="../../App.css">
+</style>
 
 
