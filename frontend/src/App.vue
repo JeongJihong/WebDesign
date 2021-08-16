@@ -39,9 +39,10 @@
       </b-nav-item>
     </b-nav>
     <b-nav v-if="backShow">
+    <!-- <b-nav v-if="backShow">
       <button @click="goBack"><b-icon icon="arrow-left" class="me-4"></b-icon></button>
       <span class="fw-bold" style="font-size:2rem;">{{ this.$route.name }}</span>
-    </b-nav>
+    </b-nav> -->
     <router-view></router-view>
   </div>
 </template>
