@@ -64,8 +64,13 @@ messaging.getToken().then((res) => {
 
 // Handle received push notification at foreground
 messaging.onMessage((payload) => {
-  console.log(payload);
-  alert(payload.data.message);
+  const title = payload.notification.title;
+  const options = {
+    body: payload.notification.body,
+  };
+  navigator.serviceWorker.ready.then((registration) => {
+    registration.showNotification(title, options);
+  });
 });
 
 // 카카오 소셜 로그인
