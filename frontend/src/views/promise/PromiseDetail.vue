@@ -250,7 +250,8 @@ export default {
           data: formdataMaker
         })
 
-        this.$router.push({ name: 'PromiseList' })
+        // this.$router.push({ name: 'PromiseList' })
+        this.$router.push({ name: 'FeedMain' })
       }
     },
     promiseDetailAccept() {
