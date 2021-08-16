@@ -44,53 +44,54 @@ import java.util.stream.Stream;
 @CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/promise")
 public class PromiseController {
 
     private final PromiseServiceImpl promiseService;
 
-    @PostMapping("/promise")
+    @PostMapping("")
     @ApiOperation(value = "약속 생성하기")
     public ResponseEntity<Long> createPromise(@RequestBody Promise promise) {
         Long result = promiseService.createPromise(promise);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @GetMapping("/promise")
+    @GetMapping("")
     @ApiOperation(value = "약속 전체 목록 확인하기")
     public ResponseEntity<Map> getPromiseList() {
         Map result = promiseService.getPromiseList();
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @DeleteMapping("/promise/{promiseid}")
+    @DeleteMapping("/{promiseid}")
     @ApiOperation(value = "약속 삭제")
     public ResponseEntity<String> deletePromise(@PathVariable final Long promiseid){
         promiseService.deletePromise(promiseid);
         return new ResponseEntity<>("약속 삭제 완료", HttpStatus.OK);
     }
 
-    @GetMapping("/promise/{promiseid}")
+    @GetMapping("/{promiseid}")
     @ApiOperation(value = "특정 약속 정보 확인하기")
     public ResponseEntity<Map> getPromiseList(@PathVariable(required = true) final Long promiseid) {
         Map result = promiseService.getPromiseList(promiseid);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @DeleteMapping("/promise/people/{promiseid}")
+    @DeleteMapping("/people/{promiseid}")
     @ApiOperation(value = "약속 불참")
     public ResponseEntity<String > rejectPromise(@PathVariable final Long promiseid){
         promiseService.rejectPromise(promiseid);
         return new ResponseEntity<>("약속 불참 완료", HttpStatus.OK);
     }
 
-    @PutMapping("/promise/people/{promiseid}")
+    @PutMapping("/people/{promiseid}")
     @ApiOperation(value = "약속 참가하기")
     public ResponseEntity<Map> participatePromise(@PathVariable final Long promiseid) {
         Map result = promiseService.participatePromise(promiseid);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @PutMapping("promise/place/{promiseid}")
+    @PutMapping("/place/{promiseid}")
     @ApiOperation(value = "특정 약속 참가자의 위도, 경도를 업데이트")
     public ResponseEntity<Map> participatePromise(@PathVariable final Long promiseid,
                                      @RequestParam(required = true) BigDecimal lat, @RequestParam(required = true) BigDecimal lon) {
@@ -98,7 +99,7 @@ public class PromiseController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @GetMapping("promise/place/{promiseid}")
+    @GetMapping("/place/{promiseid}")
     @ApiOperation(value = "약속 참가자들의 최근위치, 목적지")
     public ResponseEntity<List<PromiseLocationInfo>> locationInfo(@PathVariable final Long promiseid) {
         List<PromiseLocationInfo> result = promiseService.locationInfo(promiseid);

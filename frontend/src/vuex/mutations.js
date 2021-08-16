@@ -47,5 +47,10 @@ export default {
   // kakaoLogin 종우
   KAKAO_LOGIN(state, kakaoLogin) {
     state.kakaoLogin = kakaoLogin
-  }
+  },
+
+  // 카카오 로그인인지 그냥 로그인인지
+  UPDATE_ISLOGINBYKAKAO(state, isLoginByKakao) {
+    state.isLoginByKakao = isLoginByKakao
+  },
 }

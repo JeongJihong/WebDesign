@@ -1,5 +1,5 @@
 <template>
-  <div class="feed newsfeed app">
+  <div class="feed newsfeed app" style="margin-top:60px;">
     <div class="wrapB">
       <div v-for="(article,idx) in articles" :key="idx">
         <div>

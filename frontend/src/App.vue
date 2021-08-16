@@ -72,7 +72,7 @@ export default {
       }
 
       if (localStorage.getItem('token')) {
-        navigator.geolocation.watchPosition((position) => {
+        navigator.geolocation.getCurrentPosition((position) => {
           let location = {
             lat: position.coords.latitude,
             lon: position.coords.longitude
@@ -145,6 +145,7 @@ export default {
         }
       })
         .then(res => {
+          console.log("니가문제니?1")
           let promiseIds = []
 
           for (let idx = 0; idx < res.data.waiting.length; idx++) {
@@ -161,6 +162,7 @@ export default {
           return payload
         })
         .then(payload => {
+          console.log("니가문제니?2")
           let promiseIdsWithUpcoming = payload.promiseIds
 
           for (let idx = 0; idx < payload.data.upcoming.length; idx++) {
@@ -172,6 +174,8 @@ export default {
           return promiseIdsWithUpcoming
         })
         .then(promiseIds => {
+          console.log("니가문제니?3",promiseIds)
+          
           let formdata = new FormData()
 
           formdata.append('lat', location.lat)
