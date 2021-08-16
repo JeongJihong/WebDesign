@@ -67,13 +67,13 @@
             <div v-if="category.length !== 0">
               <b-list-group>
                 <b-list-group-item
-                  class="border-0 my-1" v-for="(user, i) in category" :key="user.detail"
+                  class="border-0 my-1" v-for="user in category" :key="user.detail"
                   @click="goToPromise(user.detail)">
                   <div class="d-flex align-items-center">
                     <span class="me-2">
-                      <b-avatar v-if="user.thumbnail" class="me-2"
-                        :src="getPromiseThumbnailImgUrl({ idx: i, imgURL: user.thumbnail }).thumbnail"></b-avatar>
-                      <b-avatar v-else class="me-2"></b-avatar>
+                      <b-avatar class="me-2"
+                        :src="getPromiseThumbnailImgUrl({ idx }).thumbnail"></b-avatar>
+                      <!-- <b-avatar v-else class="me-2"></b-avatar> -->
                     </span>
                     <span>{{ user.senderNickname }}님의 약속 초대가 왔습니다.</span>
                   </div>
@@ -200,8 +200,7 @@ export default {
     },
     getPromiseThumbnailImgUrl (payload) {
       return {
-        ...this.promiseList[payload.idx],
-        thumbnail: this.promiseList[payload.idx].thumbnail && require(`@/assets/images/${payload.imgURL}`)
+        thumbnail: payload.idx && require(`@/assets/images/${payload.idx}-icon.svg`)
       }
     }
   }

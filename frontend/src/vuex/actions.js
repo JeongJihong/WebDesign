@@ -22,6 +22,10 @@ export default {
 
         commit("UPDATE_TOKEN", res.data);
         localStorage.setItem("token", res.data);
+        // 카카오로그인인지 그냥 로그인인지 구별하기 위한 변수 - 종우
+        commit("UPDATE_ISLOGINBYKAKAO", false);
+        localStorage.setItem("isLoginByKakao", false);
+
         // vuex 및 localStorage 에 로그인한 유저의 nickname 저장
         axios({
           url: 'http://127.0.0.1:8080/account/checkJWT',
@@ -209,6 +213,7 @@ export default {
   },
 
   logout({ commit }) {
+    commit("UPDATE_ISLOGINBYKAKAO", false);
     localStorage.setItem('isLoginByKakao', false)
     commit("LOGOUT")
   },
@@ -244,6 +249,7 @@ export default {
               let token = res.data;
               commit("UPDATE_TOKEN", res.data);
               localStorage.setItem("token", res.data);
+              commit("UPDATE_ISLOGINBYKAKAO", true);
               localStorage.setItem("isLoginByKakao", true);
 
               axios({
@@ -297,46 +303,4 @@ export default {
       }
     });
   },
-  // GetMe(authObj){
-  //     window.Kakao.API.request({
-  //         url:'/v2/user/me',
-  //         success : res => {
-  //             const kakao_account = res.kakao_account;
-  //             const userInfo = {
-  //                 access_token : authObj.access_token,
-  //                 nickname : kakao_account.profile.nickname,
-  //                 email : kakao_account.email,
-  //                 thumbnail : kakao_account.profile.profile_image_url,
-  //                 password : '',
-  //                 account_type : 2,
-  //             }
-  //             axios({
-  //                 method: 'post',
-  //                 url: `http://127.0.0.1:8080/kakao`,
-  //                 params: {
-  //                     access_token : userInfo.access_token,
-  //                     email : userInfo.email,
-  //                     nickname : userInfo.nickname,
-  //                     thumbnail : userInfo.thumbnail,
-  //                 }
-  //             })
-  //             .then(res => {
-  //                 commit("UPDATE_TOKEN", res.data.access_token);
-  //                 localStorage.setItem("token", res.data.access_token);
-  //                 console.log(res);
-  //                 console.log("데이터베이스에 회원 정보가 있음!");
-  //             })
-  //             .catch(err => {
-  //                 console.log(err);
-  //                 console.log("데이터베이스에 회원 정보가 없음!");
-  //             })
-  //             alert("로그인 성공!");
-  //             this.$bvModal.hide("bv-modal-example");
-  //         },
-  //         fail : error => {
-  //             this.$router.push("/errorPage");
-  //             console.log(error);
-  //         }
-  //     })
-  // },
 };
