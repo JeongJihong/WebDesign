@@ -194,6 +194,18 @@ export default {
     commit("SCRAP_DELETE_MODE");
   },
 
+  promiseListGet({ commit }) {
+    axios({
+      url: 'http://127.0.0.1:8080/promise',
+      method: 'get',
+      headers: {
+        'x-auth-token': `${localStorage.getItem('token')}`
+      }
+    })
+      .then(res => {
+        commit('PROMISE_LIST_GET', res.data)
+      })
+  },
   promiseDetailGet({ commit }, payload) {
     // payload: { token, promiseid }
     axios({
@@ -207,9 +219,9 @@ export default {
       .then(res => {
         commit("PROMISE_DETAIL_GET", res.data)
       })
-      .catch(() => {
-        router.push({ name: 'PromiseList' })
-      });
+      // .catch(() => {
+      //   router.push({ name: 'PromiseList' })
+      // });
   },
 
   logout({ commit }) {

@@ -16,7 +16,6 @@ import ArticleDetail from '@/views/article/ArticleDetail.vue'
 import PromiseList from '@/views/promise/PromiseList.vue'
 import PromiseCreate from '@/views/promise/PromiseCreate.vue'
 import PromiseDetail from '@/views/promise/PromiseDetail.vue'
-import PromiseDetailWithoutMap from '@/views/promise/PromiseDetailWithoutMap.vue'
 import PromiseLocations from '@/views/promise/PromiseLocations.vue'
 import KakaoLogin from '@/components/user/snsLogin/Kakao.vue'
 import OnBoarding from '@/views/account/OnBoarding'
@@ -171,14 +170,6 @@ const routes = [
         path: '/promise/:promiseid',
         name: 'PromiseDetail',
         component: PromiseDetail,
-        meta: {
-            loggedAuth: true
-        }
-    },
-    {
-        path: '/promiseHome/:promiseid',
-        name: 'PromiseDetailWithoutMap',
-        component: PromiseDetailWithoutMap,
         meta: {
             loggedAuth: true
         }

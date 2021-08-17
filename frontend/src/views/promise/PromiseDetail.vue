@@ -44,7 +44,7 @@
     </div>
 
     <!-- 카카오 맵 api 참고 -->
-    <div class="mt-4 pt-3">
+    <div v-show="promiseDetail.place" class="mt-4 pt-3">
       <div class="d-flex justify-content-between align-items-center">
         <span class="fw-bold mx-3">약속 장소</span>
         <b-icon @click="initMap" icon="arrow-clockwise" variant="primary" class="me-3"></b-icon>
@@ -142,7 +142,6 @@ export default {
         this.location.lon = position.coords.longitude
       })
     }
-
   },
   computed: {
     ...mapState([
