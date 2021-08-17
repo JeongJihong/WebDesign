@@ -60,6 +60,7 @@ public class ArticleServiceImpl implements ArticleService{
 
 
     final String rootPath = System.getProperty("user.dir");
+    //    String basePath = rootPath.substring(0, rootPath.length()-7) + "frontend\\src\\assets\\images\\";
     String basePath = rootPath.substring(0, rootPath.length()-7) + "frontend/src/assets/images/";
 
     public Optional<User> Authentication() {
