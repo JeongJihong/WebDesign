@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface AlarmDao extends JpaRepository<Alarm, Long> {
-    List<Alarm> findAllByReceiveuidAndCategory(Long receiveUid, String category);
+    List<Alarm> findAllByReceiveuidAndCategoryOrderByAlarmidDesc(Long receiveUid, String category);
 
 }
