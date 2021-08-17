@@ -1,9 +1,9 @@
 <template>
-  <div class="page">
+  <div class="page" style="margin-bottom:60px;">
     <!-- 헤더 -->
     <div class="mt-3 mx-4 d-flex justify-content-between align-items-center">
       <span class="fs-1">
-        <button @click="goBack"><b-icon icon="arrow-left" class="me-4"></b-icon></button>
+        <button @click="goBack"><b-icon id="icon" icon="arrow-left" class="me-4"></b-icon></button>
         <span class="fw-bold">{{ promiseDetail.title }}</span>
       </span>
       <button v-if="promiseDetail.place && aHourAgo" style="color: #0d6efd;"
@@ -44,8 +44,11 @@
     </div>
 
     <!-- 카카오 맵 api 참고 -->
-    <div v-if="promiseDetail.place" class="mt-4 pt-3">
-      <p class="fw-bold mx-3">약속 장소</p>
+    <div v-show="promiseDetail.place" class="mt-4 pt-3">
+      <div class="d-flex justify-content-between align-items-center">
+        <span class="fw-bold mx-3">약속 장소</span>
+        <b-icon @click="initMap" icon="arrow-clockwise" variant="primary" class="me-3"></b-icon>
+      </div>
       <div>
         <!-- padding-bottom: 56.25% 는 16:9 비율로 고정한다는 style -->
         <div id="map" style="padding-bottom: 56.25%; width: 100%; height: 100%;">
@@ -109,8 +112,8 @@ export default {
     return {
       promisetime: '',
       location: {
-        lat: 0.0,
-        lon: 0.0
+        lat: 50,
+        lon: 120
       }
     }
   },
@@ -122,7 +125,8 @@ export default {
       /* global kakao */
       script.onload = () => kakao.maps.load(this.initMap)
       script.src = `http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${process.env.VUE_APP_MAP_API}`
-      document.head.appendChild(script)
+      // script.src = `http://dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.VUE_APP_MAP_API}`
+      this.kakaoScript = document.head.appendChild(script)
     }
   },
   created() {
@@ -138,6 +142,7 @@ export default {
         this.location.lon = position.coords.longitude
       })
     }
+
   },
   computed: {
     ...mapState([

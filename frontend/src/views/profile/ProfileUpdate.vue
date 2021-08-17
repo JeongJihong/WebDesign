@@ -1,12 +1,21 @@
 <template>
-  <div>
+  <div style="margin-bottom:60px;">
     <!-- 헤더 -->
-    <div class="mt-3 mx-4 d-flex justify-content-between align-items-center">
+    <!-- <div class="mt-3 mx-4 d-flex justify-content-between align-items-center">
       <span class="fs-1">
         <button @click="goBack"><b-icon icon="arrow-left" class="fs-1 me-4"></b-icon></button>
         <span class="fw-bold">프로필 정보 수정</span>
       </span>
       <button class="text-decoration-none" v-if="activeButton()" @click="updateProfileInfo">저장하기</button>
+    </div> -->
+    <div class="mt-3 mb-3 mx-4 d-flex justify-content-between align-items-center">
+      <span>
+        <button @click="goBack"><b-icon id="icon" icon="arrow-left" class="fs-1 me-4"></b-icon></button>
+        <span class="fs-1 fw-bold">프로필 정보 수정</span>
+      </span>
+      <span>
+        <button v-if="activeButton()" class="text-primary" @click="updateProfileInfo">저장하기</button>
+      </span>
     </div>
 
     <!-- 프로필 수정 -->
@@ -242,7 +251,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 /* 프로필 이미지 들어가기 전 디버깅 용 */
 .dot {
   height: 200px;

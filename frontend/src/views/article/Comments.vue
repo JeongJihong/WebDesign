@@ -1,12 +1,5 @@
 <template>
-  <!-- <div class="scale"> -->
-  <div class="page">
-     <!-- 헤더 -->
-    <!-- <div class="mt-3 mx-4 fs-1">
-      <button @click="goBack"><b-icon icon="arrow-left" class="me-4"></b-icon></button>
-      <span class="fw-bold">댓글</span>
-    </div> -->
-
+  <div style="margin-bottom:60px;">
     <!-- 댓글 입력 -->
     <div class="d-flex justify-content-left align-items-center mx-3 mt-4">
       <span class="d-flex justify-content-between" style="width: 100%;">
@@ -164,11 +157,4 @@ export default {
 </script>
 
 <style>
-.scale {
-    margin: 10%;
-    margin-top: 4%;
-    align-content: center;
-    justify-content: center;
-  }
-
 </style>
