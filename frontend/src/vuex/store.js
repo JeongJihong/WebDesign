@@ -30,6 +30,10 @@ const state = {
 
     // 카카오 로그인/로그아웃 관련 - 종우
     isLoginByKakao: false,
+
+    // 지금어디 페이지 약속참가자 위치정보
+    attendantsInfo: {},
+    attendantsLength: 0,
 }
 
 
