@@ -191,7 +191,7 @@ export default {
     getImgUrl () {
       return {
         ...this.promiseDetail,
-        icon: this.promiseDetail.type && require(`@/assets/images/${this.promiseDetail.type}-icon.svg`)
+        icon: this.promiseDetail.type && require(`https://i5b302.p.ssafy.io/img/${this.promiseDetail.type}-icon.svg`)
       }
     }
   },
@@ -241,7 +241,7 @@ export default {
       if (this.promiseDetail.createrNickname === this.username) {
         this.$store.state.promiseDeleteMode = true
         axios({
-          url: `http://127.0.0.1:8080/promise/${this.$route.params.promiseid}`,
+          url: `https://i5b302.p.ssafy.io/api/promise/${this.$route.params.promiseid}`,
           method: "delete",
           headers: {
             "Content-Type": "application/json",
@@ -257,7 +257,7 @@ export default {
         formdataMaker.append('status', -(2*this.promiseDetail.peopleNum))
         axios({
           // 어짜피 약속 삭제는 생성자만 가능하다 -> this.username 사용
-          url: `http://127.0.0.1:8080/account/status/${this.username}`,
+          url: `https://i5b302.p.ssafy.io/api/account/status/${this.username}`,
           method: 'put',
           headers: {
             "Content-Type": "application/json",
@@ -274,7 +274,7 @@ export default {
       if (this.promiseDetail.createrNickname !== this.username && this.promiseDetail.approve === 0) {
         // 약속 수락
         axios({
-          url: `http://127.0.0.1:8080/promise/people/${this.$route.params.promiseid}`,
+          url: `https://i5b302.p.ssafy.io/api/promise/people/${this.$route.params.promiseid}`,
           method: "put",
           headers: {
             "Content-Type": "application/json",
@@ -295,7 +295,7 @@ export default {
         formdataAttender.append('status', 2)
 
         axios({
-          url: `http://127.0.0.1:8080/account/status/${this.username}`,
+          url: `https://i5b302.p.ssafy.io/api/account/status/${this.username}`,
           method: 'put',
           headers: {
             "Content-Type": "application/json",
@@ -308,7 +308,7 @@ export default {
         let formdataMaker = new FormData()
         formdataMaker.append('status', 1)
         axios({
-          url: `http://127.0.0.1:8080/account/status/${this.promiseDetail.createrNickname}`,
+          url: `https://i5b302.p.ssafy.io/api/account/status/${this.promiseDetail.createrNickname}`,
           method: 'put',
           headers: {
             "Content-Type": "application/json",
@@ -322,7 +322,7 @@ export default {
         formdata.append('lat', this.location.lat)
         formdata.append('lon', this.location.lon)
         axios({
-          url: `http://127.0.0.1:8080/promise/place/${this.$route.params.promiseid}`,
+          url: `https://i5b302.p.ssafy.io/api/promise/place/${this.$route.params.promiseid}`,
           method: 'put',
           headers: {
             "Content-Type": "application/json",
@@ -335,7 +335,7 @@ export default {
     promiseDetailReject() {
       if (this.promiseDetail.createrNickname !== this.username && this.promiseDetail.approve === 0) {
         axios({
-          url: `http://127.0.0.1:8080/promise/people/${this.$route.params.promiseid}`,
+          url: `https://i5b302.p.ssafy.io/api/promise/people/${this.$route.params.promiseid}`,
           method: "delete",
           headers: {
             "Content-Type": "application/json",
@@ -350,7 +350,7 @@ export default {
     promiseDetailRejectAfterAccept() {
       if (this.promiseDetail.createrNickname !== this.username && this.promiseDetail.approve === 1) {
         axios({
-          url: `http://127.0.0.1:8080/promise/people/${this.$route.params.promiseid}`,
+          url: `https://i5b302.p.ssafy.io/api/promise/people/${this.$route.params.promiseid}`,
           method: "delete",
           headers: {
             "Content-Type": "application/json",
@@ -362,7 +362,7 @@ export default {
         let formdataAttender = new FormData()
         formdataAttender.append('status', -3)
         axios({
-          url: `http://127.0.0.1:8080/account/status/${this.username}`,
+          url: `https://i5b302.p.ssafy.io/api/account/status/${this.username}`,
           method: 'put',
           headers: {
             "Content-Type": "application/json",
@@ -377,7 +377,7 @@ export default {
     getThumbnailImgUrl (payload) {
       return {
         ...this.promiseDetail,
-        thumbnail: this.promiseDetail.promisePeople.length && require(`@/assets/images/${payload.imgURL}`)
+        thumbnail: this.promiseDetail.promisePeople.length && require(`https://i5b302.p.ssafy.io/img/${payload.imgURL}`)
       }
     }
   }

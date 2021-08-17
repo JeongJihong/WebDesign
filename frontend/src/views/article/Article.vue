@@ -98,7 +98,7 @@ export default {
   },
   methods:{
     infiniteHandler($state) {
-      axios.get('http://127.0.0.1:8080/article/main', {
+      axios.get('https://i5b302.p.ssafy.io/api/article/main', {
           headers: {
             'x-auth-token': `${localStorage.getItem('token')}`,
           },
@@ -140,7 +140,7 @@ export default {
     articleLike(payload){
       if (!this.articles[payload.idx].likeCheck){
         axios({
-          url:`http://127.0.0.1:8080/article/`+payload.articleid+'/like',
+          url:`https://i5b302.p.ssafy.io/api/article/`+payload.articleid+'/like',
           method:'post',
           headers: {
                 'x-auth-token': `${localStorage.getItem('token')}`,
@@ -159,7 +159,7 @@ export default {
         // Like Alarm POST
         if (payload.nickname !== this.username) {
           axios({
-            url: 'http://127.0.0.1:8080/alarm',
+            url: 'https://i5b302.p.ssafy.io/api/alarm',
             method: 'post',
             headers: {
               'x-auth-token': this.token
@@ -176,7 +176,7 @@ export default {
       }
       else{
         axios({
-          url:`http://127.0.0.1:8080/article/`+payload.articleid+'/like',
+          url:`https://i5b302.p.ssafy.io/api/article/`+payload.articleid+'/like',
           method:'delete',
           headers: {
                 'x-auth-token': `${localStorage.getItem('token')}`,
@@ -195,7 +195,7 @@ export default {
     },
     doScrap(payload) {
       axios({
-        url: `http://127.0.0.1:8080/scrap/${payload.articleid}`,
+        url: `https://i5b302.p.ssafy.io/api/scrap/${payload.articleid}`,
         method: 'post',
         headers: {
           'x-auth-token': `${localStorage.getItem('token')}`,
@@ -207,7 +207,7 @@ export default {
     },
     undoScrap(payload) {
       axios({
-        url: 'http://127.0.0.1:8080/scrap',
+        url: 'https://i5b302.p.ssafy.io/api/scrap',
         method: 'get',
         headers: {
           "Content-Type": "application/json",
@@ -225,7 +225,7 @@ export default {
         })
         .then(scrapid => {
           axios({
-            url: `http://127.0.0.1:8080/scrap/${scrapid}`,
+            url: `https://i5b302.p.ssafy.io/api/scrap/${scrapid}`,
             method: "delete",
             headers: {
               "Content-Type": "application/json",
@@ -250,16 +250,16 @@ export default {
       this.sliding = false
     },
     getArticleFeeImgUrl (payload) {
-      console.log( this.articles[payload.idx] && require(`@/assets/images/${payload.imgURL}`))
+      console.log( this.articles[payload.idx] && require(`https://i5b302.p.ssafy.io/img/${payload.imgURL}`))
       return {
         ...this.articles,
-        icon: this.articles[payload.idx] && require(`@/assets/images/${payload.imgURL}`)
+        icon: this.articles[payload.idx] && require(`https://i5b302.p.ssafy.io/img/${payload.imgURL}`)
       }
     },
     getThumbnailImgUrl (payload) {
       return {
         ...this.articles[payload.idx],
-        thumbnail: this.articles[payload.idx].articleDetail.user.thumbnail && require(`@/assets/images/${payload.imgURL}`)
+        thumbnail: this.articles[payload.idx].articleDetail.user.thumbnail && require(`https://i5b302.p.ssafy.io/img/${payload.imgURL}`)
       }
     }
   },

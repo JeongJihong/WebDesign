@@ -191,18 +191,18 @@ export default {
     getLikeThumbnailImgUrl (payload) {
       return {
         ...this.likeList[payload.idx],
-        thumbnail: this.likeList[payload.idx].thumbnail && require(`@/assets/images/${payload.imgURL}`)
+        thumbnail: this.likeList[payload.idx].thumbnail && require(`https://i5b302.p.ssafy.io/img/${payload.imgURL}`)
       }
     },
     getFollowThumbnailImgUrl (payload) {
       return {
         ...this.followList[payload.idx],
-        thumbnail: this.followList[payload.idx].thumbnail && require(`@/assets/images/${payload.imgURL}`)
+        thumbnail: this.followList[payload.idx].thumbnail && require(`https://i5b302.p.ssafy.io/img/${payload.imgURL}`)
       }
     },
     getPromiseThumbnailImgUrl (payload) {
       return {
-        thumbnail: payload.idx && require(`@/assets/images/${payload.idx}-icon.svg`)
+        thumbnail: payload.idx && require(`https://i5b302.p.ssafy.io/img/${payload.idx}-icon.svg`)
       }
     }
   }

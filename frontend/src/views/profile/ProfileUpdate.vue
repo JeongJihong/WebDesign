@@ -112,7 +112,7 @@ export default {
       console.log(typeof this.userInfo.file, this.userInfo.file)
       axios({
         method: 'post',
-        url: 'http://127.0.0.1:8080/account/profile/',
+        url: 'https://i5b302.p.ssafy.io/api/account/profile/',
         data: formData,
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -133,7 +133,7 @@ export default {
       console.log('getUserInfo에 있는 닉네임',this.userInfo.nickname)
       axios({
         method: 'get',
-        url: `http://127.0.0.1:8080/account/profile/${this.userInfo.nickname}`,
+        url: `https://i5b302.p.ssafy.io/api/account/profile/${this.userInfo.nickname}`,
         headers: {
           'Content-Type': 'application/json',
           'X-AUTH-TOKEN' : this.$store.state.token
@@ -170,7 +170,7 @@ export default {
     getThumbnailImgUrl (payload) {
       return {
         ...this.thumbnail,
-        thumbnail: this.thumbnail && require(`@/assets/images/${payload.imgURL}`)
+        thumbnail: this.thumbnail && require(`https://i5b302.p.ssafy.io/img/${payload.imgURL}`)
       }
     },
     reNickname(){
@@ -183,7 +183,7 @@ export default {
     },
     confirmNickname(){
       axios({
-        url:'http://127.0.0.1:8080/account/checkNickname',
+        url:'https://i5b302.p.ssafy.io/api/account/checkNickname',
         method:'get',
         headers: {
           'Content-Type': 'application/json',
@@ -231,7 +231,7 @@ export default {
   created () {
     axios({
       method: 'get',
-      url: `http://127.0.0.1:8080/account/checkJWT/`,
+      url: `https://i5b302.p.ssafy.io/api/account/checkJWT/`,
       headers: {
         'Content-Type': 'application/json',
         'X-AUTH-TOKEN' : this.$store.state.token

@@ -219,7 +219,7 @@ export default {
     updateLocations () {
       axios({
         method: 'get',
-        url: `http://127.0.0.1:8080/promise/place/${this.promiseid}`,
+        url: `https://i5b302.p.ssafy.io/api/promise/place/${this.promiseid}`,
         headers: {
           'Content-Type': 'application/json',
           'X-AUTH-TOKEN' : this.$store.state.token
@@ -238,13 +238,13 @@ export default {
     getThumbnailImgUrl (payload) {
       return {
         ...this.thumbnails,
-        thumbnail: this.thumbnails[payload.idx] && require(`@/assets/images/${payload.imgURL}`)
+        thumbnail: this.thumbnails[payload.idx] && require(`https://i5b302.p.ssafy.io/img/${payload.imgURL}`)
       }
     },
     getPromiseInfo () {
       axios({
         method: 'get',
-        url: `http://127.0.0.1:8080/promise/${this.promiseid}`,
+        url: `https://i5b302.p.ssafy.io/api/promise/${this.promiseid}`,
         headers: {
           'Content-Type': 'application/json',
           'X-AUTH-TOKEN' : this.$store.state.token

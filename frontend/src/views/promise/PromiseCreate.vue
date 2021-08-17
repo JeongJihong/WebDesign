@@ -214,7 +214,7 @@ export default {
     },
     promiseCreate(){
       axios({
-          url:'http://127.0.0.1:8080/promise',
+          url:'https://i5b302.p.ssafy.io/api/promise',
           method:'post',
           headers: {
             'x-auth-token': `${localStorage.getItem('token')}`,
@@ -243,7 +243,7 @@ export default {
       this.formData.append("content", this.content);
       this.formData.append("promiseid", this.promiseid);
       axios({
-        url:'http://127.0.0.1:8080/article',
+        url:'https://i5b302.p.ssafy.io/api/article',
         method:'post',
         headers: {
           'x-auth-token': `${localStorage.getItem('token')}`,

@@ -91,7 +91,7 @@ export default {
     // 애매한 상태관리여서 직접 작성
     scrapDelete(payload) {
       axios({
-        url: `http://127.0.0.1:8080/scrap/${payload.scrapid}`,
+        url: `https://i5b302.p.ssafy.io/api/scrap/${payload.scrapid}`,
         method: "delete",
         headers: {
           "Content-Type": "application/json",
@@ -105,7 +105,7 @@ export default {
     getArticleFeeImgUrl (payload) {
       return {
         ...this.scrapList,
-        thumnail: this.scrapList[payload.idx] && require(`@/assets/images/${payload.imgURL}`)
+        thumnail: this.scrapList[payload.idx] && require(`https://i5b302.p.ssafy.io/img/${payload.imgURL}`)
       }
     }
   }

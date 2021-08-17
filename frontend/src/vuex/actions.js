@@ -10,7 +10,7 @@ export default {
   // 로그인 - 두호
   login({ commit }, credentials) {
     axios({
-      url: "http://127.0.0.1:8080/account/login",
+      url: "https://i5b302.p.ssafy.io/api/account/login",
       method: "post",
       data: {
         email: credentials.email,
@@ -18,7 +18,7 @@ export default {
       },
     })
       .then((res) => {
-        let token = res.data
+        let token = res.data;
 
         commit("UPDATE_TOKEN", res.data);
         localStorage.setItem("token", res.data);
@@ -28,37 +28,32 @@ export default {
 
         // vuex 및 localStorage 에 로그인한 유저의 nickname 저장
         axios({
-          url: 'http://127.0.0.1:8080/account/checkJWT',
+          url: "https://i5b302.p.ssafy.io/api/account/checkJWT",
           method: "get",
           headers: {
             "Content-Type": "application/json",
             "X-AUTH-TOKEN": res.data,
           },
-        })
-          .then((res) => {
-            commit("LOGGED_USER_NAME", res.data.nickname);
-            localStorage.setItem("username", res.data.nickname);
-            
-            axios({
-              url: 'http://127.0.0.1:8080/alarm/register',
-              method: 'post',
-              headers: {
-                "Content-Type": "application/json",
-                "X-AUTH-TOKEN": token,
-              },
-              data: localStorage.getItem('firebaseToken')
+        }).then((res) => {
+          commit("LOGGED_USER_NAME", res.data.nickname);
+          localStorage.setItem("username", res.data.nickname);
 
-            })
-              .then(() =>
-                router.push({ name: "FeedMain" })
-              )
-              // .catch((err) => {
-              //   console.log('Firebase Token POST Failed' + err)
-              // })
-          })
+          axios({
+            url: "https://i5b302.p.ssafy.io/api/alarm/register",
+            method: "post",
+            headers: {
+              "Content-Type": "application/json",
+              "X-AUTH-TOKEN": token,
+            },
+            data: localStorage.getItem("firebaseToken"),
+          }).then(() => router.push({ name: "FeedMain" }));
           // .catch((err) => {
-          //   alert(err);
-          // });
+          //   console.log('Firebase Token POST Failed' + err)
+          // })
+        });
+        // .catch((err) => {
+        //   alert(err);
+        // });
       })
       .catch((err) => {
         // console.log('에러!', err)
@@ -66,13 +61,13 @@ export default {
       });
   },
   firebaseTokenGet({ commit }, firebaseToken) {
-    localStorage.setItem('firebaseToken', firebaseToken)
-    commit('FIREBASE_TOKEN_GET', firebaseToken)
+    localStorage.setItem("firebaseToken", firebaseToken);
+    commit("FIREBASE_TOKEN_GET", firebaseToken);
   },
 
   searchGet({ commit }, token) {
     axios({
-      url: `http://127.0.0.1:8080/account/checkJWT`,
+      url: `https://i5b302.p.ssafy.io/api/account/checkJWT`,
       method: "get",
       headers: {
         "Content-Type": "application/json",
@@ -81,7 +76,7 @@ export default {
     })
       .then((res) => {
         axios({
-          url: `http://127.0.0.1:8080/search?id=${res.data.uid}`,
+          url: `https://i5b302.p.ssafy.io/api/search?id=${res.data.uid}`,
           method: "get",
           headers: {
             "Content-Type": "application/json",
@@ -101,7 +96,7 @@ export default {
   },
   searchLive({ commit }, data) {
     axios({
-      url: `http://127.0.0.1:8080/search/live?nickname=${data.nickname}`,
+      url: `https://i5b302.p.ssafy.io/api/search/live?nickname=${data.nickname}`,
       method: "get",
     })
       .then((res) => {
@@ -114,56 +109,56 @@ export default {
 
   alarmLikeGet({ commit }, token) {
     axios({
-      url: 'http://127.0.0.1:8080/alarm/like',
+      url: "https://i5b302.p.ssafy.io/api/alarm/like",
       method: "get",
       headers: {
         "Content-Type": "application/json",
         "X-AUTH-TOKEN": token,
       },
     })
-      .then(res => {
-        commit("ALARM_LIKE_GET", res.data)
+      .then((res) => {
+        commit("ALARM_LIKE_GET", res.data);
       })
-      .catch(err => {
-        alert(err)
-      })
+      .catch((err) => {
+        alert(err);
+      });
   },
   alarmFollowGet({ commit }, token) {
     axios({
-      url: 'http://127.0.0.1:8080/alarm/follow',
+      url: "https://i5b302.p.ssafy.io/api/alarm/follow",
       method: "get",
       headers: {
         "Content-Type": "application/json",
         "X-AUTH-TOKEN": token,
       },
     })
-      .then(res => {
-        commit("ALARM_FOLLOW_GET", res.data)
+      .then((res) => {
+        commit("ALARM_FOLLOW_GET", res.data);
       })
-      .catch(err => {
-        alert(err)
-      })
+      .catch((err) => {
+        alert(err);
+      });
   },
   alarmPromiseGet({ commit }, token) {
     axios({
-      url: 'http://127.0.0.1:8080/alarm/promise',
-      method: 'get',
+      url: "https://i5b302.p.ssafy.io/api/alarm/promise",
+      method: "get",
       headers: {
         "Content-Type": "application/json",
         "X-AUTH-TOKEN": token,
-      }
+      },
     })
-      .then(res => {
-        commit("ALARM_PROMISE_GET", res.data)
+      .then((res) => {
+        commit("ALARM_PROMISE_GET", res.data);
       })
-      .catch(err => {
-        alert(err)
-      })
+      .catch((err) => {
+        alert(err);
+      });
   },
 
   scrapGet({ commit }, token) {
     axios({
-      url: `http://127.0.0.1:8080/account/checkJWT`,
+      url: `https://i5b302.p.ssafy.io/api/account/checkJWT`,
       method: "get",
       headers: {
         "Content-Type": "application/json",
@@ -172,7 +167,7 @@ export default {
     })
       .then(() => {
         axios({
-          url: `http://127.0.0.1:8080/scrap`,
+          url: `https://i5b302.p.ssafy.io/api/scrap`,
           method: "get",
           headers: {
             "Content-Type": "application/json",
@@ -196,123 +191,120 @@ export default {
 
   promiseListGet({ commit }) {
     axios({
-      url: 'http://127.0.0.1:8080/promise',
-      method: 'get',
+      url: "https://i5b302.p.ssafy.io/api/promise",
+      method: "get",
       headers: {
-        'x-auth-token': `${localStorage.getItem('token')}`
-      }
-    })
-      .then(res => {
-        commit('PROMISE_LIST_GET', res.data)
-      })
+        "x-auth-token": `${localStorage.getItem("token")}`,
+      },
+    }).then((res) => {
+      commit("PROMISE_LIST_GET", res.data);
+    });
   },
   promiseDetailGet({ commit }, payload) {
     // payload: { token, promiseid }
     axios({
-      url: `http://127.0.0.1:8080/promise/${payload.promiseid}`,
+      url: `https://i5b302.p.ssafy.io/api/promise/${payload.promiseid}`,
       method: "get",
       headers: {
         "Content-Type": "application/json",
         "X-AUTH-TOKEN": payload.token,
       },
-    })
-      .then(res => {
-        commit("PROMISE_DETAIL_GET", res.data)
-      })
-      // .catch(() => {
-      //   router.push({ name: 'PromiseList' })
-      // });
+    }).then((res) => {
+      commit("PROMISE_DETAIL_GET", res.data);
+    });
+    // .catch(() => {
+    //   router.push({ name: 'PromiseList' })
+    // });
   },
 
   logout({ commit }) {
     commit("UPDATE_ISLOGINBYKAKAO", false);
-    localStorage.setItem('isLoginByKakao', false)
-    commit("LOGOUT")
+    localStorage.setItem("isLoginByKakao", false);
+    commit("LOGOUT");
   },
 
   // kakaoLogin 종우
   kakaoLogin({ commit }) {
     window.Kakao.Auth.login({
-      scope : 'profile_nickname, profile_image, account_email',
+      scope: "profile_nickname, profile_image, account_email",
       success: (authObj) => {
         window.Kakao.API.request({
-          url:'/v2/user/me',
-          success : res => {
+          url: "/v2/user/me",
+          success: (res) => {
             const kakao_account = res.kakao_account;
             const userInfo = {
-              access_token : authObj.access_token,
-              nickname : kakao_account.profile.nickname,
-              email : kakao_account.email,
-              thumbnail : kakao_account.profile.profile_image_url,
-              password : '',
-              account_type : 2,
-            }
+              access_token: authObj.access_token,
+              nickname: kakao_account.profile.nickname,
+              email: kakao_account.email,
+              thumbnail: kakao_account.profile.profile_image_url,
+              password: "",
+              account_type: 2,
+            };
             axios({
-              method: 'post',
-              url: `http://127.0.0.1:8080/kakao`,
+              method: "post",
+              url: `https://i5b302.p.ssafy.io/api/kakao`,
               params: {
-                access_token : userInfo.access_token,
-                email : userInfo.email,
-                nickname : userInfo.nickname,
-                thumbnail : userInfo.thumbnail,
-              }
+                access_token: userInfo.access_token,
+                email: userInfo.email,
+                nickname: userInfo.nickname,
+                thumbnail: userInfo.thumbnail,
+              },
             })
-            .then(res => {
-              let token = res.data;
-              commit("UPDATE_TOKEN", res.data);
-              localStorage.setItem("token", res.data);
-              commit("UPDATE_ISLOGINBYKAKAO", true);
-              localStorage.setItem("isLoginByKakao", true);
+              .then((res) => {
+                let token = res.data;
+                commit("UPDATE_TOKEN", res.data);
+                localStorage.setItem("token", res.data);
+                commit("UPDATE_ISLOGINBYKAKAO", true);
+                localStorage.setItem("isLoginByKakao", true);
 
-              axios({
-                url: 'http://127.0.0.1:8080/account/checkJWT',
-                method: "get",
-                headers: {
-                  "Content-Type": "application/json",
-                  "X-AUTH-TOKEN": res.data,
-                },
-              })
-                .then((res) => {
-                  commit("LOGGED_USER_NAME", res.data.nickname);
-                  localStorage.setItem("username", res.data.nickname);
-                  
-                  axios({
-                    url: 'http://127.0.0.1:8080/alarm/register',
-                    method: 'post',
-                    headers: {
-                      "Content-Type": "application/json",
-                      "X-AUTH-TOKEN": token,
-                    },
-                    data: localStorage.getItem('firebaseToken')
-      
-                  })
-                    .then(() => {
-                      router.push({ name: "FeedMain" })
-                    })
-                    .catch((err) => {
-                      console.log('Firebase Token POST Failed' + err)
-                    })
+                axios({
+                  url: "https://i5b302.p.ssafy.io/api/account/checkJWT",
+                  method: "get",
+                  headers: {
+                    "Content-Type": "application/json",
+                    "X-AUTH-TOKEN": res.data,
+                  },
                 })
-                .catch((err) => {
-                  alert(err);
-                });
-            })
-            .catch(err => {
-              console.log(err);
-              console.log("데이터베이스에 회원 정보가 없음!");
-            })
+                  .then((res) => {
+                    commit("LOGGED_USER_NAME", res.data.nickname);
+                    localStorage.setItem("username", res.data.nickname);
+
+                    axios({
+                      url: "https://i5b302.p.ssafy.io/api/alarm/register",
+                      method: "post",
+                      headers: {
+                        "Content-Type": "application/json",
+                        "X-AUTH-TOKEN": token,
+                      },
+                      data: localStorage.getItem("firebaseToken"),
+                    })
+                      .then(() => {
+                        router.push({ name: "FeedMain" });
+                      })
+                      .catch((err) => {
+                        console.log("Firebase Token POST Failed" + err);
+                      });
+                  })
+                  .catch((err) => {
+                    alert(err);
+                  });
+              })
+              .catch((err) => {
+                console.log(err);
+                console.log("데이터베이스에 회원 정보가 없음!");
+              });
             alert("로그인 성공!");
             // this.$bvModal.hide("bv-modal-example");
           },
-          fail : error => {
-              this.$router.push("/errorPage");
-              console.log(error);
-          }
-        })
+          fail: (error) => {
+            this.$router.push("/errorPage");
+            console.log(error);
+          },
+        });
       },
       fail: (error) => {
-          console.log(error)
-      }
+        console.log(error);
+      },
     });
   },
 };

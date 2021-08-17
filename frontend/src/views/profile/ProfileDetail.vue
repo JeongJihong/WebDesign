@@ -73,7 +73,7 @@
         class="square" 
         :style="{ backgroundImage: 'url(' + getArticleImgUrl({ idx: image-1, imgURL: articles[image-1].images }).thumbnail + ')' }"
       >
-        <!-- :style="{'background-image': 'url(' + require(`@/assets/images/${articles[image-1].images[0].imgURL}`) + ')'}" -->
+        <!-- :style="{'background-image': 'url(' + require(`https://i5b302.p.ssafy.io/img/${articles[image-1].images[0].imgURL}`) + ')'}" -->
 
       </div>
 
@@ -123,7 +123,7 @@ export default {
     goToFollow () {
       axios({
         method: 'post',
-        url: `http://127.0.0.1:8080/account/profile/follow`,
+        url: `https://i5b302.p.ssafy.io/api/account/profile/follow`,
         data: {
           'dstnickname': this.nickname,
           'srcnickname': this.myNickname
@@ -143,7 +143,7 @@ export default {
 
       // Follow Alarm Post
       axios({
-        url: 'http://127.0.0.1:8080/alarm',
+        url: 'https://i5b302.p.ssafy.io/api/alarm',
         method: 'post',
         headers: {
           'Content-Type': 'application/json',
@@ -160,7 +160,7 @@ export default {
     getUserInfo: function () {
       axios({
         method: 'get',
-        url: `http://127.0.0.1:8080/account/profile/${this.nickname}`,
+        url: `https://i5b302.p.ssafy.io/api/account/profile/${this.nickname}`,
         headers: {
           'Content-Type': 'application/json',
           'X-AUTH-TOKEN' : this.$store.state.token
@@ -181,7 +181,7 @@ export default {
         }
         this.thumbnail = res.data.userProfile.thumbnail
         // if (typeof this.thumbnail === 'undefined') {
-        //   this.thumbnail = require(`@/assets/images/profile_default.png`)
+        //   this.thumbnail = require(`https://i5b302.p.ssafy.io/img/profile_default.png`)
         // }
         console.log(this.articles)
         this.checkFollowRequest()
@@ -194,7 +194,7 @@ export default {
     checkFollowRequest () {
       axios({
         method: 'get',
-        url: `http://127.0.0.1:8080/account/profile/follow/${this.nickname}`,
+        url: `https://i5b302.p.ssafy.io/api/account/profile/follow/${this.nickname}`,
         headers: {
           'Content-Type': 'application/json',
           'X-AUTH-TOKEN' : this.$store.state.token
@@ -211,7 +211,7 @@ export default {
     approveFollowRequest () {
       axios({
         method: 'patch',
-        url: `http://127.0.0.1:8080/account/profile/follow`,
+        url: `https://i5b302.p.ssafy.io/api/account/profile/follow`,
         headers: {
           'Content-Type': 'application/json',
           'X-AUTH-TOKEN' : this.$store.state.token
@@ -232,7 +232,7 @@ export default {
     rejectFollowRequest () {
       axios({
         method: 'delete',
-        url: `http://127.0.0.1:8080/account/profile/follow`,
+        url: `https://i5b302.p.ssafy.io/api/account/profile/follow`,
         headers: {
           'Content-Type': 'application/json',
           'X-AUTH-TOKEN' : this.$store.state.token
@@ -254,7 +254,7 @@ export default {
     unfollow () {
       axios({
         method: 'delete',
-        url: `http://127.0.0.1:8080/account/profile/follow`,
+        url: `https://i5b302.p.ssafy.io/api/account/profile/follow`,
         headers: {
           'Content-Type': 'application/json',
           'X-AUTH-TOKEN' : this.$store.state.token
@@ -281,7 +281,7 @@ export default {
     followerList () {
       axios({
         method: 'get',
-        url: `http://127.0.0.1:8080/account/profile/${this.nickname}/follower`,
+        url: `https://i5b302.p.ssafy.io/api/account/profile/${this.nickname}/follower`,
         headers: {
           'Content-Type': 'application/json',
           'X-AUTH-TOKEN' : this.$store.state.token
@@ -300,7 +300,7 @@ export default {
     followingList () {
       axios({
         method: 'get',
-        url: `http://127.0.0.1:8080/account/profile/${this.nickname}/following`,
+        url: `https://i5b302.p.ssafy.io/api/account/profile/${this.nickname}/following`,
         headers: {
           'Content-Type': 'application/json',
           'X-AUTH-TOKEN' : this.$store.state.token
@@ -317,7 +317,7 @@ export default {
     cancelFollow () {
       axios({
         method: 'delete',
-        url: `http://127.0.0.1:8080/account/profile/follow/`,
+        url: `https://i5b302.p.ssafy.io/api/account/profile/follow/`,
         headers: {
           'Content-Type': 'application/json',
           'X-AUTH-TOKEN' : this.$store.state.token
@@ -340,19 +340,19 @@ export default {
     getThumbnailImgUrl (payload) {
       return {
         ...this.thumbnail,
-        thumbnail: this.thumbnail && require(`@/assets/images/${payload.imgURL}`)
+        thumbnail: this.thumbnail && require(`https://i5b302.p.ssafy.io/img/${payload.imgURL}`)
       }
     },
     getArticleImgUrl (payload) {
       if (this.articles[payload.idx].images.length !== 0) {
         return {
           ...this.articles,
-          thumbnail: this.articles[payload.idx].images.length && require(`@/assets/images/${payload.imgURL[0].imgURL}`)
+          thumbnail: this.articles[payload.idx].images.length && require(`https://i5b302.p.ssafy.io/img/${payload.imgURL[0].imgURL}`)
         }
 
       }
       return {
-        thumbnail: '@/assets/images/img-placeholder.png'
+        thumbnail: 'https://i5b302.p.ssafy.io/img/img-placeholder.png'
       }
     }
   },
@@ -360,7 +360,7 @@ export default {
     // this.getUserInfo()
     axios({
       method: 'get',
-      url: `http://127.0.0.1:8080/account/checkJWT/`,
+      url: `https://i5b302.p.ssafy.io/api/account/checkJWT/`,
       headers: {
         'Content-Type': 'application/json',
         'X-AUTH-TOKEN' : this.$store.state.token
@@ -377,7 +377,7 @@ export default {
     })
 
     axios({
-      url: `http://127.0.0.1:8080/account/status/${this.nickname}`,
+      url: `https://i5b302.p.ssafy.io/api/account/status/${this.nickname}`,
       method: 'get',
       headers: {
         'Content-Type': 'application/json',

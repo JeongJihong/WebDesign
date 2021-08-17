@@ -76,7 +76,7 @@ export default {
     },
     changepassword(){
         axios({
-          url:'http://127.0.0.1:8080/account/changePassword',
+          url:'https://i5b302.p.ssafy.io/api/account/changePassword',
           method:'put',
           data:{
             email: this.email,

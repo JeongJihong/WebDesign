@@ -95,7 +95,7 @@ export default {
   methods: {
     searchPost({ token, user }) {
       axios({
-        url: `http://127.0.0.1:8080/account/checkJWT`,
+        url: `https://i5b302.p.ssafy.io/api/account/checkJWT`,
         method: 'get',
         headers: {
           'Content-Type': 'application/json',
@@ -104,7 +104,7 @@ export default {
       })
         .then(res => {
           axios({
-            url: 'http://127.0.0.1:8080/search',
+            url: 'https://i5b302.p.ssafy.io/api/search',
             method: 'post',
             data: {
               id: res.data.uid,
@@ -125,7 +125,7 @@ export default {
     },
     searchDelete({ token, user }) {
       axios({
-        url: `http://127.0.0.1:8080/account/checkJWT`,
+        url: `https://i5b302.p.ssafy.io/api/account/checkJWT`,
         method: 'get',
         headers: {
           'Content-Type': 'application/json',
@@ -134,7 +134,7 @@ export default {
       })
         .then(() => {
           axios({
-            url: `http://127.0.0.1:8080/search`,
+            url: `https://i5b302.p.ssafy.io/api/search`,
             method: 'delete',
             headers: {
               'Content-Type': 'application/json',
@@ -161,13 +161,13 @@ export default {
     getThumbnailImgUrl (payload) {
       return {
         ...this.searchGet,
-        thumbnail: this.searchGet[payload.idx].thumbnail && require(`@/assets/images/${payload.imgURL}`)
+        thumbnail: this.searchGet[payload.idx].thumbnail && require(`https://i5b302.p.ssafy.io/img/${payload.imgURL}`)
       }
     },
     getLiveThumbnailImgUrl (payload) {
       return {
         ...this.searchGet,
-        thumbnail: this.searchGet[payload.idx].thumbnail && require(`@/assets/images/${payload.imgURL}`)
+        thumbnail: this.searchGet[payload.idx].thumbnail && require(`https://i5b302.p.ssafy.io/img/${payload.imgURL}`)
       }
     }
   }
