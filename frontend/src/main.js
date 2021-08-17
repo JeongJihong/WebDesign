@@ -29,6 +29,7 @@ Vue.config.productionTip = false;
 // });
 
 //firebase main.js alarm(FCM)
+
 const firebaseConfig = {
   apiKey: "AIzaSyBF2i3yoTsOyPq8ftdBLVtxrSCUTMX1cvM",
   authDomain: "fcm-springboot-dbe2f.firebaseapp.com",
@@ -63,9 +64,31 @@ messaging.getToken().then((res) => {
 });
 
 // Handle received push notification at foreground
+// messaging.onMessage((payload) => {
+//   console.log(payload);
+//   alert(payload.data.message);
+// });
+
+// messaging.setBackgroundMessageHandler((payload) => {
+//   console.log("[firebase-messaging-sw.js] Received background message ", payload);
+//   // Customize notification here
+//   const notificationTitle = "Background Message Title";
+//   const notificationOptions = {
+//     body: "Background Message body.",
+//     icon: "/firebase-logo.png",
+//   };
+
+//   return self.registration.showNotification(notificationTitle, notificationOptions);
+// });
+
 messaging.onMessage((payload) => {
-  console.log(payload);
-  alert(payload.data.message);
+  const title = payload.notification.title;
+  const options = {
+    body: payload.notification.body,
+  };
+  navigator.serviceWorker.ready.then((registration) => {
+    registration.showNotification(title, options);
+  });
 });
 
 // 카카오 소셜 로그인

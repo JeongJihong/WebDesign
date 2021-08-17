@@ -29,3 +29,15 @@ messaging.setBackgroundMessageHandler((payload) => {
 
   return self.registration.showNotification(notificationTitle, notificationOptions);
 });
+
+messaging.onMessage((payload) => {
+  const title = payload.notification.title;
+  const options = {
+    body: payload.notification.body,
+  };
+  navigator.serviceWorker.ready.then((registration) => {
+    registration.showNotification(title, options);
+  });
+});
+
+messaging.set;
