@@ -1,69 +1,81 @@
 <template>
-  <div style="margin-left:10%; margin-right:10%;">
-    <br>
-    <b-form>
-      <b-form-group id="input-group-1" label="Title:" label-for="input-1">
-        <b-form-input
-          id="input-1"
-          v-model="title"
-          placeholder="Enter Title"
-          required
-        ></b-form-input>
-      </b-form-group>
+  <div style="margin-bottom:60px;">
+    <div class="mt-3 mx-4 d-flex justify-content-between align-items-center">
+      <span class="fs-1">
+        <button @click="goBack"><b-icon id="icon" icon="arrow-left" class="me-4"></b-icon></button>
+        <span class="fw-bold">약속 생성하기</span>
+      </span>
+    </div>
+    <div style="margin-left:10%; margin-right:10%; page">
       <br>
-          <form enctype = "multipart/form-data" method="post" >
-          <div class="d-flex flex-row">
-            <button style="display:inline-block; margin-right:5%; margin-left:2%" @click.prevent="clickInputTag()" id='addimage'><b-icon-plus class="h1"></b-icon-plus></button>
-            <input hidden ref="plus" id="file" type="file"  accept="image/*" @change.prevent="uploadImage($event)" multiple>
-            <div id="image_container"></div>
-          </div>
+      <b-form>
+        <b-form-group id="input-group-1" label="Title:" label-for="input-1">
+          <b-form-input
+            id="input-1"
+            v-model="title"
+            :state="nameState"
+            placeholder="Enter Title"
+            required
+          ></b-form-input>
+          <b-form-invalid-feedback id="input-live-feedback">
+            20자 이하로 입력하세요.
+          </b-form-invalid-feedback>
+        </b-form-group>
+        <br>
+            <form enctype = "multipart/form-data" method="post" >
+            <div class="d-flex flex-row">
+              <button style="display:inline-block; margin-right:5%; margin-left:2%" @click.prevent="clickInputTag()" id='addimage'><b-icon-plus class="h1"></b-icon-plus></button>
+              <input hidden ref="plus" id="file" type="file"  accept="image/*" @change.prevent="uploadImage($event)" multiple>
+              <div id="image_container"></div>
+            </div>
+            <div>
+              <b-textarea v-model="content"  placeholder="Tall textarea" rows="8"></b-textarea>
+            </div>
+          </form>     
+        <br>
+        <b-form-group id="input-group-2" label="Type:" label-for="input-2">
+          <b-form-select
+            id="input-2"
+            v-model="Type"
+            :options="Types"
+            required
+          ></b-form-select>
+        </b-form-group>
+        <br>
+        <b-form-group id="input-group-3" label="인원" label-for="input-3">
+          <b-form-spinbutton id="input-3" v-model="headCount" min="2" max="100"></b-form-spinbutton>
+        </b-form-group>
+        <br>
+        
+        <h5 class="mt-3">화상회의 여부</h5>
+        <b-button :pressed.sync="virtual" variant="primary">{{ virtual }}</b-button>
+        <br>
+        <b-form-group id="input-group-5">
+          <label :for="`type-date`">날짜:</label>
+          <b-form-datepicker id=type-date v-model="promiseDate" :min="min"></b-form-datepicker>
+          <label :for="`type-time`">시간:</label>
+          <b-time id=type-time  v-model="promiseTime" ></b-time>
+        </b-form-group>
+        <br>
+        <div v-if="!virtual">
+          <label for="around">주변 장소 검색</label><input id='around'  v-model="promiseAroundPlace" type="text">
+          <button type="button" @click='initMap()' id='around'>검색</button>
+          <hr>
+          <br>
           <div>
-            <b-textarea v-model="content"  placeholder="Tall textarea" rows="8"></b-textarea>
+            약속 장소 정하기 : <p id='place'></p>
           </div>
-        </form>     
-      <br>
-      <b-form-group id="input-group-2" label="Type:" label-for="input-2">
-        <b-form-select
-          id="input-2"
-          v-model="Type"
-          :options="Types"
-          required
-        ></b-form-select>
-      </b-form-group>
-      <br>
-      <b-form-group id="input-group-3" label="인원" label-for="input-3">
-        <b-form-spinbutton id="input-3" v-model="headCount" min="2" max="100"></b-form-spinbutton>
-      </b-form-group>
-      <br>
-      
-      <h5 class="mt-3">화상회의 여부</h5>
-      <b-button :pressed.sync="virtual" variant="primary">{{ virtual }}</b-button>
-      <br>
-      <b-form-group id="input-group-5">
-        <label :for="`type-date`">날짜:</label>
-        <b-form-datepicker id=type-date v-model="promiseDate"></b-form-datepicker>
-        <label :for="`type-time`">시간:</label>
-        <b-time id=type-time  v-model="promiseTime" ></b-time>
-      </b-form-group>
-      <br>
-      <div v-if="!virtual">
-        <label for="around">주변 장소 검색</label><input id='around'  v-model="promiseAroundPlace" type="text">
-        <button type="button" @click='initMap()' id='around'>검색</button>
-        <hr>
-        <br>
-        <div>
-          약속 장소 정하기 : <p id='place'></p>
+          <div class="map_wrap">
+          <div id="map" style="width:100%;height:100%;position:relative;overflow:hidden;"></div>
+          </div>
+          <hr>
+          <br>
         </div>
-        <div class="map_wrap">
-        <div id="map" style="width:100%;height:100%;position:relative;overflow:hidden;"></div>
+        <div class="d-flex justify-content-center">
+          <b-button @click="promiseCreate()" variant="primary" style="width:40%;">Submit</b-button>
         </div>
-        <hr>
-        <br>
-      </div>
-      <div class="d-flex justify-content-center">
-        <b-button @click="promiseCreate()" variant="primary" style="width:40%;">Submit</b-button>
-      </div>
-    </b-form>
+      </b-form>
+    </div>
   </div>
 </template>
 
@@ -72,6 +84,10 @@
 import axios from 'axios';
 export default {
   data() {
+    const now = new Date()
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+    const minDate = new Date(today)
+    minDate.setDate(minDate.getDate())
     return{
       virtual: false,
       title: '',
@@ -84,10 +100,15 @@ export default {
       lon:0,
       promiseAroundPlace:" ",
       promiseDetailPlace:"",
-      // "kakao": false
       content:"",
       afiles:"",
       promiseid:0,
+      formData: new FormData(),
+      location: {
+        lat: 0.0,
+        lon: 0.0
+      },
+      min: minDate
     }
   },
   mounted() {
@@ -102,7 +123,23 @@ export default {
     }
     console.log(`${process.env.VUE_APP_MAP_API}`)
   },
+  created() {
+    if (localStorage.getItem('token')) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        this.location.lat = position.coords.latitude
+        this.location.lon = position.coords.longitude
+      })
+    }
+  },
+  computed: {
+    nameState() {
+      return this.title.length <= 20 ? true : false
+    }
+  },
   methods: {
+    goBack() {
+      this.$router.go(-1)
+    },
     initMap() {
       var mapContainer = document.getElementById('map'), // 지도를 표시할 div
           mapOption = {
@@ -161,11 +198,8 @@ export default {
       this.$refs['plus'].click()
     },
     uploadImage(event) { 
-      console.log(event.target.files)
-      console.log(event.target.files[0], typeof event.target.files[0])
-      this.afiles = event.target.files[0]
-
       for (var image of event.target.files) {
+        this.formData.append("files",image)
         var reader = new FileReader(); 
         reader.onload = function(event) 
         { 
@@ -199,29 +233,15 @@ export default {
             console.log(res.data)
             this.promiseid = res.data
             this.promiseArticleCreate()
-            this.$router.push({ name:'PromiseList'})
+            // this.$router.push({ name:'PromiseList'})
           })
           .catch(err=>{
             console.log(err)
-            console.log(this.title,
-            this.checked,
-            this.headCount,
-            
-            this.promiseDate+' '+this.promiseTime,
-            this.time,
-            this.Type,
-            this.lat,
-            this.lon,   
-            this.promiseDetailPlace )
           })
     },
     promiseArticleCreate(){
-      const formData = new FormData();
-      formData.append("content", this.content);
-      formData.append("files", this.afiles);
-      formData.append("promiseid", this.promiseid);
-      
-      console.log(this.content, this.afiles, typeof this.afiles)
+      this.formData.append("content", this.content);
+      this.formData.append("promiseid", this.promiseid);
       axios({
         url:'https://i5b302.p.ssafy.io/api/article',
         method:'post',
@@ -229,7 +249,7 @@ export default {
           'x-auth-token': `${localStorage.getItem('token')}`,
           'Content-Type': 'multipart/form-data'
         },
-        data:formData,
+        data:this.formData,
       })
         .then(res=>{
           this.$router.push({ name:'FeedMain'})
@@ -247,16 +267,6 @@ export default {
 }
 </script>
 
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
-div { font-family: 'Jua', sans-serif; }
-.map_wrap {position:relative;width:100%;height:350px;}
-.map_wrap, .map_wrap * {margin:0;padding:0;font-family:'Malgun Gothic',dotum,'돋움',sans-serif;font-size:12px;}
-.map_wrap a, .map_wrap a:hover, .map_wrap a:active{color:#000;text-decoration: none;}
-.map_wrap {position:relative;width:100%;height:500px;}
-.bg_white {background:#fff;}
-#pagination {margin:10px auto;text-align: center;}
-#pagination a {display:inline-block;margin-right:10px;}
-#pagination .on {font-weight: bold; cursor: default;color:#777;}
+<style src="../../App.css">
  
 </style>

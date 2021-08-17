@@ -30,10 +30,9 @@ public class ArticleController {
 
     @PostMapping(value = "/article" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ApiOperation(value = "게시글 작성")
-    public ResponseEntity<String> postArticle(@RequestPart String content, @RequestPart(required = false) List<MultipartFile> files, @RequestParam(required = false) Long promiseid) {
+    public ResponseEntity<String> postArticle(@RequestPart String content, @RequestPart(required = false) List<MultipartFile> files, @RequestParam(required = false) Long promiseid){
         articleService.postArticle(content, files, promiseid);
         return new ResponseEntity<>("게시글 작성 완료", HttpStatus.OK);
-
     }
 
     @GetMapping("/article/{articleid}")

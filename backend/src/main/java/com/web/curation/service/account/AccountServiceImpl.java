@@ -40,7 +40,8 @@ public class AccountServiceImpl implements AccountService{
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     final String rootPath = System.getProperty("user.dir");
-    String basePath = rootPath.substring(0, rootPath.length()-5) + "/b302/dist/img/";
+//    String basePath = rootPath.substring(0, rootPath.length()-7) + "frontend\\src\\assets\\images\\";
+String basePath = rootPath.substring(0, rootPath.length()-5) + "/b302/dist/img/";
 
     private Optional<User> Authentication() {
         Authentication user = SecurityContextHolder.getContext().getAuthentication();
@@ -157,10 +158,14 @@ public class AccountServiceImpl implements AccountService{
     public void changeUserProfile(String nickname, String introduction, MultipartFile thumbnail) {
         Optional<User> userOpt = Authentication();
         String pathName = null;
-        try {
-            pathName = saveFiles(thumbnail);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if(thumbnail == null){
+            pathName = userOpt.get().getThumbnail();
+        }else{
+            try {
+                pathName = saveFiles(thumbnail);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         User user3 = new User(userOpt.get().getUid(), nickname, userOpt.get().getEmail(),
                 userOpt.get().getPassword(), introduction, pathName,

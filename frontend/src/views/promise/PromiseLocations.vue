@@ -1,5 +1,5 @@
 <template>
-  <div class="m-4">
+  <div class="m-4 page" style="margin-bottom:60px;">
     <div class="d-flex" style="justify-content: space-between">
       <div class="d-flex">
         <button @click="goBack"><b-icon icon="arrow-left" class="fs-1 me-4"></b-icon></button>
@@ -8,7 +8,7 @@
           다들 어디
         </h2>
       </div>
-      <b-icon @click="updateLocations" icon="arrow-clockwise" animation="spin" font-scale="2"></b-icon>
+      <b-icon @click="updateLocations" icon="arrow-clockwise" animation="spin 1s" font-scale="2"></b-icon>
     </div>
     <hr>
     <div class="my-2">
@@ -17,11 +17,23 @@
     <hr>
     <div>
       <div v-for="person in attendantsLength" :key="person">
-        <div class="d-flex flex-row mx-4 my-4" style="justify-content: space-between; text-align:center">
-          <img src="@/assets/images/profile_default.png" alt="image" style="width: 35px; height: 35px;" >
-          <p class="fw-bold">{{ nicknames[person-1]}}</p>
-          <p class="fw-bold" style="color:green;">{{ times[person-1]}}분전</p>
-          <p>{{ places[person-1]}}</p>
+        <div class="d-flex flex-row mx-2 my-4" style="justify-content: space-between; text-align:center">
+          <div v-if="thumbnails[person-1]" class="col-3 d-flex align-items-center">
+            <b-avatar 
+              :src="getThumbnailImgUrl({ idx: person-1, imgURL: thumbnails[person-1] }).thumbnail"></b-avatar>
+          </div>
+          <div v-else class="col-3 m-0 d-flex align-items-center">
+            <b-avatar></b-avatar>
+          </div>
+          <div class="col-3 fw-bold m-0 d-flex align-items-center">
+            <p>{{ nicknames[person-1]}}</p>
+          </div>
+          <div class="col-3 fw-bold m-0 d-flex align-items-center" style="color:green;">
+            <p>{{ times[person-1]}}</p>
+          </div>
+          <div class="col-3 m-0 d-flex align-items-center">
+            <p>{{ places[person-1]}}</p>
+          </div>
         </div>
       </div>
     </div>
@@ -44,31 +56,54 @@ export default {
       thumbnails: [],
       nicknames : [],
       times: [],
-      places: []
+      places: [],
+      promiseType: '',
+      attendantsLat: [],
+      attendantsLon: [],
+      centerLat: 0,
+      centerLon: 0,
+      level: 10,
     }
   },
   mounted () {
     if (window.kakao && window.kakao.maps) {
-      this.initMap();
+      this.updateLocations();
     } else {
-      const script = document.createElement('script')
-      /* global kakao */
-      script.onload = () => kakao.maps.load(this.updateLocations)
-      script.src =
-        `http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${process.env.VUE_APP_MAP_API}&libraries=services,clusterer`
-      document.head.appendChild(script)
+      this.addKakaoMapScript();
+      // const script = document.createElement('script')
+      // /* global kakao */
+      // script.onload = () => kakao.maps.load(this.initMap)
+      // script.src =
+      //   `http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${process.env.VUE_APP_MAP_API}&libraries=services,clusterer`
+      // document.head.appendChild(script)
     }
   },
   methods: {
     goBack() {
       this.$router.go(-1)
     },
+    addKakaoMapScript () {
+      const script = document.createElement('script')
+      /* global kakao */
+      script.onload = () => kakao.maps.load(this.initMap)
+      script.src =
+        `http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${process.env.VUE_APP_MAP_API}&libraries=services,clusterer`
+      document.head.appendChild(script)
+    },
     initMap() {
-      var mapContainer = document.getElementById('map'), // 지도를 표시할 div
-        mapOption = {
-          center: new kakao.maps.LatLng(this.promiseLat, this.promiseLon), // 지도의 중심좌표
-          level: 8, // 지도의 확대 레벨
-        }
+      // 마커 중심, 지도 범위 설정을 위한 배열
+      // this.attendantsLat = [];
+      // this.attendantsLon = [];
+
+      var mapContainer = document.getElementById('map') // 지도를 표시할 div
+      var mapOption = {
+        center: new kakao.maps.LatLng(50, 120), // 지도의 중심좌표
+        level: this.level, // 지도의 확대 레벨
+      }
+      if (this.places) {
+        mapOption.center = new kakao.maps.LatLng(this.centerLat, this.centerLon)
+        mapOption.level = this.level
+      }
 
       var map = new kakao.maps.Map(mapContainer, mapOption)
       // 약속장소
@@ -108,6 +143,9 @@ export default {
         const lon = this.attendantsInfo[point].lon;
         const markerPosition = new kakao.maps.LatLng(lat, lon);
 
+        // this.attendantsLat.push(this.lat);
+        // this.attendantsLon.push(this.lon);
+
         const marker = new kakao.maps.Marker({
           position: markerPosition
         });
@@ -122,13 +160,27 @@ export default {
         var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
         var d = R * c; // Distance in km
         var time = parseInt(d / 15 * 60); // 평균 시속 15km/h로 나누고 분으로 환산
-
-
-
-        var iwContent = '<div class="d-flex px-3" style="padding:5px; width:150px; justify-content: space-between; align-items:top;">'+ 
-          '<span>'+'<font size="3em" color="black">'+name+'</font>'+'</span>'+
-          '<span>'+'<font size="2em" color="green">도착'+time+'분전</font></span></div>',
+        
+        if (time < 60) {
+          var iwContent = '<div class="d-flex px-3" style="padding:5px; width:150px; justify-content: space-between; align-items:top;">'+ 
+            '<span>'+'<font size="3em" color="black">'+name+'</font>'+'</span>'+
+            '<span>'+'<font size="2em" color="green">도착'+time+'분전</font></span></div>',
           iwPosition = new kakao.maps.LatLng(lat, lon);
+          var timeToStr = String(time) + "분전";
+          timeList.push(timeToStr);
+        }
+        else {
+          var hour = parseInt(time / 60);
+          var minute = time % 60;
+          var iwContent = '<div class="d-flex px-3" style="padding:5px; width:150px; justify-content: space-between; align-items:top;">'+ 
+            '<span>'+'<font size="3em" color="black">'+name+'</font>'+'</span>'+
+            '<span>'+'<font size="2em" color="green">'+hour+'시간'+minute+'분전</font></span></div>',
+          iwPosition = new kakao.maps.LatLng(lat, lon);
+          // var timeToStr = String(hour) + "시간" + String(minute) + "분전";
+          var timeToStr = String(hour) + "시간전";
+          timeList.push(timeToStr);
+        }
+        
         var infowindow = new kakao.maps.InfoWindow({
           position : iwPosition, 
           content : iwContent 
@@ -150,14 +202,18 @@ export default {
         });
         thumbnailList.push(thumbnail);
         nameList.push(name);
-        timeList.push(time);
+        // timeList.push(time);
         
-        this.thumbnails = thumbnailList
-        this.nicknames = nameList
-        this.places = placeList
-        this.times = timeList
+        // this.thumbnails = thumbnailList
+        // this.nicknames = nameList
+        // this.places = placeList
+        // this.times = timeList
       }
       // ------------------------------------------------------------------------
+      this.thumbnails = thumbnailList
+      this.nicknames = nameList
+      this.places = placeList
+      this.times = timeList
 
     },
     updateLocations () {
@@ -179,6 +235,12 @@ export default {
         alert(err)
       })
     },
+    getThumbnailImgUrl (payload) {
+      return {
+        ...this.thumbnails,
+        thumbnail: this.thumbnails[payload.idx] && require(`https://i5b302.p.ssafy.io/img/${payload.imgURL}`)
+      }
+    },
     getPromiseInfo () {
       axios({
         method: 'get',
@@ -192,6 +254,59 @@ export default {
         console.log(res.data)
         this.promiseLat = res.data.lat
         this.promiseLon = res.data.lon
+
+        // -----------------------------------------------------------------------
+        // 지도 중앙 좌표, 범위 설정
+        this.attendantsLat = [];
+        this.attendantsLon = [];
+        this.attendantsLat.push(res.data.lat);
+        this.attendantsLon.push(res.data.lon);
+
+        for (var i = 0; i < this.attendantsLength; i++) {
+          const lat = this.attendantsInfo[i].lat;
+          const lon = this.attendantsInfo[i].lon;
+
+          this.attendantsLat.push(lat);
+          this.attendantsLon.push(lon);
+        }
+        
+        // 마커 중심, 지도 범위 설정을 위한 계산
+        var maxLat = Math.max.apply(null, this.attendantsLat);
+        var minLat = Math.min.apply(null, this.attendantsLat);
+        var maxLon = Math.max.apply(null, this.attendantsLon);
+        var minLon = Math.min.apply(null, this.attendantsLon);
+
+        var differenceLat = maxLat - minLat;
+        var differenceLon = maxLon - minLon;
+
+        var maxDifference = Math.max.apply(null, [differenceLat, differenceLon]);
+        console.log(maxDifference);
+        
+        console.log(this.attendantsLat, '최대값은', Math.max.apply(null, this.attendantsLat))
+        const avgLat = (maxLat + minLat) / 2;
+        const avgLon = (maxLon + minLon) / 2;
+        console.log('센터좌표', avgLat, avgLon);
+
+        if (maxDifference > 0.11) {
+          this.level = 11
+        }
+        else if (maxDifference > 0.06) {
+          this.level = 10
+        }
+        else if (maxDifference > 0.03) {
+          this.level = 9
+        }
+        else if (maxDifference > 0.01) {
+          this.level = 8
+        }
+        else {
+          this.level = 7
+        }
+
+        this.centerLat = avgLat;
+        this.centerLon = avgLon;
+
+        // -----------------------------------------------------------------------
         this.initMap()
       })
       .catch((err) => {

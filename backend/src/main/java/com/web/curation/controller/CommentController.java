@@ -5,6 +5,7 @@ import com.web.curation.dao.comment.CommentDao;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.comment.Comment;
+import com.web.curation.model.comment.CommentResponse;
 import com.web.curation.model.user.User;
 import com.web.curation.service.comment.CommentServiceImpl;
 import io.swagger.annotations.ApiOperation;
@@ -31,32 +32,33 @@ import java.util.Optional;
 @CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/article")
 public class CommentController {
 
     private final CommentServiceImpl commentService;
 
-    @PostMapping("/article/{articleid}/comment")
+    @PostMapping("/{articleid}/comment")
     @ApiOperation(value = "댓글 작성하기")
     public ResponseEntity<String> postComment(@PathVariable Long articleid, @RequestBody Comment request) {
         commentService.postComment(articleid, request);
         return new ResponseEntity<>("댓글 작성 완료", HttpStatus.OK);
     }
 
-    @GetMapping("/article/{articleid}/comment")
+    @GetMapping("/{articleid}/comment")
     @ApiOperation(value = "댓글목록 가져오기")
-    public ResponseEntity<List<Comment>> commentlist(@PathVariable Long articleid) {
-        List<Comment> result = commentService.commentList(articleid);
+    public ResponseEntity<List<CommentResponse>> commentlist(@PathVariable Long articleid) {
+        List<CommentResponse> result = commentService.commentList(articleid);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @PutMapping("/article/comment/{commentid}")
+    @PutMapping("/comment/{commentid}")
     @ApiOperation(value = "댓글 수정하기")
     public ResponseEntity<String> changeComment(@PathVariable Long commentid, @RequestBody Comment request){
         commentService.changeComment(commentid, request);
         return new ResponseEntity<>("댓글 수정 완료", HttpStatus.OK);
     }
 
-    @DeleteMapping("/article/comment/{commentid}")
+    @DeleteMapping("/comment/{commentid}")
     @ApiOperation(value = "댓글 삭제하기")
     public ResponseEntity<String> deleteComment(@PathVariable Long commentid){
         commentService.deleteComment(commentid);

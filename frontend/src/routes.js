@@ -30,7 +30,7 @@ Vue.use(VueRouter)
 
 const routes = [
     {
-        path : '/',
+        path : '/Login',
         name : 'Login',
         component : Login
     },
@@ -48,7 +48,7 @@ const routes = [
         }
     },
     {
-        path : '/onboarding',
+        path : '/',
         name : 'OnBoarding',
         component : OnBoarding,
     },
@@ -183,7 +183,7 @@ const routes = [
         }
     },
     {
-        path: '/account/kakaoLogin',
+        path: '/kakao',
         name: 'KakaoLogin',
         component: KakaoLogin,
     },

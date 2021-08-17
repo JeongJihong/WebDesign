@@ -62,17 +62,19 @@ messaging.getToken().then((res) => {
   store.dispatch("firebaseTokenGet", res);
 });
 
-// Handle received push notification at foreground
+// Handle received push notification at foreground (수정)
 messaging.onMessage((payload) => {
-  console.log(payload);
-  alert(payload.data.message);
+  const title = payload.notification.title;
+  const options = {
+    body: payload.notification.body,
+  };
+  navigator.serviceWorker.ready.then((registration) => {
+    registration.showNotification(title, options);
+  });
 });
 
 // 카카오 소셜 로그인
 window.Kakao.init("6d8be51fab4c89e30255e5df438f02d6");
-
-var path = window.location.pathname;
-console.log(path);
 
 new Vue({
   router,
