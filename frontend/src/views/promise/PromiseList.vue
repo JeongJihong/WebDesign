@@ -108,7 +108,7 @@ export default {
       
       return {
         ...this.waitingPromises,
-        icon: this.waitingPromises[payload.idx] && require(`@/assets/images/${payload.imgURL}-icon.svg`)
+        icon: this.waitingPromises[payload.idx] && `https://i5b302.p.ssafy.io/img/${payload.imgURL}-icon.svg`
       }
     },
     getupcomingPromisesFeeImgUrl(payload) {
@@ -119,7 +119,7 @@ export default {
       
       return {
         ...this.upcomingPromises,
-        icon: this.upcomingPromises[payload.idx] && require(`@/assets/images/${payload.imgURL}-icon.svg`)
+        icon: this.upcomingPromises[payload.idx] && `https://i5b302.p.ssafy.io/img/${payload.imgURL}-icon.svg`
       }
     }
   }

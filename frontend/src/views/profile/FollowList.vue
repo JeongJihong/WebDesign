@@ -114,13 +114,13 @@ export default {
     getFollowersThumbnailImgUrl (payload) {
       return {
         ...this.followerLs,
-        thumbnail: this.followerLs[payload.idx].thumbnail && require(`@/assets/images/${payload.imgURL}`)
+        thumbnail: this.followerLs[payload.idx].thumbnail && `https://i5b302.p.ssafy.io/img/${payload.imgURL}`
       }
     },
     getFollowingsThumbnailImgUrl (payload) {
       return {
         ...this.followingLs,
-        thumbnail: this.followingLs[payload.idx].thumbnail && require(`@/assets/images/${payload.imgURL}`)
+        thumbnail: this.followingLs[payload.idx].thumbnail && `https://i5b302.p.ssafy.io/img/${payload.imgURL}`
       }
     }
   },

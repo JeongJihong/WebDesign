@@ -105,7 +105,7 @@ export default {
     getArticleFeeImgUrl (payload) {
       return {
         ...this.scrapList,
-        thumnail: this.scrapList[payload.idx] && require(`@/assets/images/${payload.imgURL}`)
+        thumnail: this.scrapList[payload.idx] && `https://i5b302.p.ssafy.io/img/${payload.imgURL}`
       }
     }
   }
