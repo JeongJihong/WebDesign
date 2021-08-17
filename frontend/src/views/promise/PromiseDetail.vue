@@ -191,7 +191,7 @@ export default {
     getImgUrl () {
       return {
         ...this.promiseDetail,
-        icon: this.promiseDetail.type && require(`https://i5b302.p.ssafy.io/img/${this.promiseDetail.type}-icon.svg`)
+        icon: this.promiseDetail.type && require(`@/assets/images/${this.promiseDetail.type}-icon.svg`)
       }
     }
   },
@@ -377,7 +377,7 @@ export default {
     getThumbnailImgUrl (payload) {
       return {
         ...this.promiseDetail,
-        thumbnail: this.promiseDetail.promisePeople.length && require(`https://i5b302.p.ssafy.io/img/${payload.imgURL}`)
+        thumbnail: this.promiseDetail.promisePeople.length && require(`@/assets/images/${payload.imgURL}`)
       }
     }
   }

@@ -109,7 +109,7 @@ export default {
     getArticleFeeImgUrl (payload) {
       return {
         ...this.article,
-        icon: this.article && require(`https://i5b302.p.ssafy.io/img/${payload.imgURL}`)
+        icon: this.article && require(`@/assets/images/${payload.imgURL}`)
       }
     },
     goBack() {
@@ -200,7 +200,7 @@ export default {
     getThumbnailImgUrl (payload) {
       return {
         ...this.article,
-        thumbnail: this.article.articleDetail.user.thumbnail && require(`https://i5b302.p.ssafy.io/img/${payload.imgURL}`)
+        thumbnail: this.article.articleDetail.user.thumbnail && require(`@/assets/images/${payload.imgURL}`)
       }
     }
   },

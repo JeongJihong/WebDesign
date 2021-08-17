@@ -161,13 +161,13 @@ export default {
     getThumbnailImgUrl (payload) {
       return {
         ...this.searchGet,
-        thumbnail: this.searchGet[payload.idx].thumbnail && require(`https://i5b302.p.ssafy.io/img/${payload.imgURL}`)
+        thumbnail: this.searchGet[payload.idx].thumbnail && require(`@/assets/images/${payload.imgURL}`)
       }
     },
     getLiveThumbnailImgUrl (payload) {
       return {
         ...this.searchGet,
-        thumbnail: this.searchGet[payload.idx].thumbnail && require(`https://i5b302.p.ssafy.io/img/${payload.imgURL}`)
+        thumbnail: this.searchGet[payload.idx].thumbnail && require(`@/assets/images/${payload.imgURL}`)
       }
     }
   }
