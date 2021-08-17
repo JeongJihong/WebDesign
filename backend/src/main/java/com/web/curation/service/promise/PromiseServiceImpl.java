@@ -22,7 +22,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -70,7 +69,6 @@ public class PromiseServiceImpl implements PromiseService{
     }
 
     @Override
-    @Transactional
     public Long createPromise(Promise promise) {
         Optional<User> userOpt = Authentication();
         // 약속 정보 Promise table에 저장
@@ -134,7 +132,7 @@ public class PromiseServiceImpl implements PromiseService{
         // List<Promise>를 peopleNum을 추가한 List<PromiseResponse>로 변환
         Stream<Promise> waitingStream = waitingList.stream();
         List<PromiseResponse> waiting = waitingStream.map(promise -> new PromiseResponse(promise.getPromiseid(),
-                promise.getType(), promise.getNum(), promisePeopleDao.findAllByPromiseidAndApprove(promise.getPromiseid(), 1).size(),
+                promise.getType(), promise.getPlace(),promise.getNum(), promisePeopleDao.findAllByPromiseidAndApprove(promise.getPromiseid(), 1).size(),
                 promise.getTitle(), promise.getPromisetime()))
                 .collect(Collectors.toList());
 
@@ -152,6 +150,7 @@ public class PromiseServiceImpl implements PromiseService{
         Stream<Promisepeople> upcomingStream = upcomingList.stream();
         List<PromiseResponse> upcoming = upcomingStream.map(promisepeople -> new PromiseResponse(promisepeople.getPromiseid(),
                 promiseDao.findByPromiseid(promisepeople.getPromiseid()).getType(),
+                promiseDao.findByPromiseid(promisepeople.getPromiseid()).getPlace(),
                 promiseDao.findByPromiseid(promisepeople.getPromiseid()).getNum(),
                 promisePeopleDao.findAllByPromiseidAndApprove(promisepeople.getPromiseid(), 1).size(),
                 promiseDao.findByPromiseid(promisepeople.getPromiseid()).getTitle(),
@@ -165,12 +164,12 @@ public class PromiseServiceImpl implements PromiseService{
     }
 
     @Override
-    @Transactional
     public void deletePromise(Long promiseid) {
         Optional<User> userOpt = Authentication();
         // 만약 지금 로그인 한 유저와 약속 생성자의 UID가 같다면(약속 권한 파악)
         if(userOpt.get().getUid() == promiseDao.findByPromiseid(promiseid).getCreateruid()) {
             promisePeopleDao.deleteAllByPromiseid(promiseid);
+            articleDao.deleteByPromiseid(promiseid);
             promiseDao.deleteByPromiseid(promiseid);
         } else {
             throw new IllegalArgumentException("약속 삭제 권한 없음.");
@@ -217,14 +216,12 @@ public class PromiseServiceImpl implements PromiseService{
     }
 
     @Override
-    @Transactional
     public void rejectPromise(Long promiseid) {
         Optional<User> userOpt = Authentication();
         promisePeopleDao.deleteByPromiseidAndUid(promiseid, userOpt.get().getUid());
     }
 
     @Override
-    @Transactional
     public Map participatePromise(Long promiseid) {
         Optional<User> userOpt = Authentication();
         Promisepeople promisepeople = promisePeopleDao.findByPromiseidAndUid(promiseid, userOpt.get().getUid());
@@ -244,7 +241,6 @@ public class PromiseServiceImpl implements PromiseService{
     }
 
     @Override
-    @Transactional
     public Map participatePromise(Long promiseid, BigDecimal lat, BigDecimal lon) {
         Optional<User> userOpt = Authentication();
         Promisepeople promisepeople = promisePeopleDao.findByPromiseidAndUid(promiseid, userOpt.get().getUid());

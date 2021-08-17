@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 @Table(name = "Search")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @AllArgsConstructor
-@NoArgsConstructor
 @Builder
 public class Search {
 
@@ -29,7 +28,13 @@ public class Search {
     private String name;
 
 
+//    @Builder
+    public Search(Long searchid, String name){
+        this.searchid = searchid;
+        this.name = name;
+    }
 
+    public Search() {
 
-
+    }
 }

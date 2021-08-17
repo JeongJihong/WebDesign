@@ -34,14 +34,28 @@ export default {
     state.scrapMode = !state.scrapMode
   },
 
+  PROMISE_LIST_GET(state, promiseListGet) {
+    // console.log(promiseListGet)
+    state.upcomingPromises = promiseListGet.upcoming
+    state.waitingPromises = promiseListGet.waiting
+  },
   PROMISE_DETAIL_GET(state, promiseDetail) {
     state.promiseDetail = promiseDetail
   },
 
   LOGOUT () {
     localStorage.removeItem('token') 
-    localStorage.removeItem('username') 
+    localStorage.removeItem('username')
     location.reload(); 
-  }
+  },
 
+  // kakaoLogin 종우
+  KAKAO_LOGIN(state, kakaoLogin) {
+    state.kakaoLogin = kakaoLogin
+  },
+
+  // 카카오 로그인인지 그냥 로그인인지
+  UPDATE_ISLOGINBYKAKAO(state, isLoginByKakao) {
+    state.isLoginByKakao = isLoginByKakao
+  },
 }

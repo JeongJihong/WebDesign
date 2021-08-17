@@ -24,11 +24,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -60,7 +60,8 @@ public class ArticleServiceImpl implements ArticleService{
 
 
     final String rootPath = System.getProperty("user.dir");
-    final String basePath = rootPath.substring(0, rootPath.length()-5) + "/b302/dist/img/";
+    //    String basePath = rootPath.substring(0, rootPath.length()-7) + "frontend\\src\\assets\\images\\";
+    String basePath = rootPath.substring(0, rootPath.length()-7) + "frontend/src/assets/images/";
 
     public Optional<User> Authentication() {
         Authentication user = SecurityContextHolder.getContext().getAuthentication();
@@ -104,13 +105,21 @@ public class ArticleServiceImpl implements ArticleService{
     }
 
     @Override
-    @Transactional
     public void postArticle(String content, List<MultipartFile> files, Long promiseid) {
         Optional<User> userOpt = Authentication();
         // 일반 게시글에 이미지 첨부가 되지 않았을 경우 게시글 작성 실패
         if(promiseid == null && files.size() == 0) {
             throw new IllegalArgumentException("일반 게시글에는 이미지가 첨부 되어야 합니다.");
         }
+
+        // 현재 시각보다 이전 시각의 약속을 생성하려할 경우
+        if(promiseid != null) {
+            boolean isValid = promiseDao.findByPromiseid(promiseid).getPromisetime().isAfter(LocalDateTime.now());
+            if(!isValid) {
+                return;
+            }
+        }
+
         Long articleId = articleDao.save(Article.builder()
                 .articleid(null)
                 .id(userOpt.get().getUid())
@@ -127,10 +136,6 @@ public class ArticleServiceImpl implements ArticleService{
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("=============================================");
-        System.out.println(rootPath);
-        System.out.println(basePath);
-        System.out.println("=============================================");
 
         for(int i = 0; i < files.size(); ++i) {
             imageDao.save(Image.builder()
@@ -195,7 +200,6 @@ public class ArticleServiceImpl implements ArticleService{
     }
 
     @Override
-    @Transactional
     public void deleteArticle(Long articleid) {
         Optional<User> userOpt = Authentication();
         articleDao.deleteByArticleid(articleid);
@@ -209,7 +213,6 @@ public class ArticleServiceImpl implements ArticleService{
     }
 
     @Override
-    @Transactional
     public Long articleLike(Long articleid) {
         Optional<User> userOpt = Authentication();
         Long articlelikeid = articleLikeDao.save(ArticleLike.builder()
@@ -221,7 +224,6 @@ public class ArticleServiceImpl implements ArticleService{
     }
 
     @Override
-    @Transactional
     public void articleLikeCancel(Long articleid) {
         Optional<User> userOpt = Authentication();
         articleLikeDao.deleteByIdAndArticleid(userOpt.get().getUid(), articleid);
@@ -235,7 +237,6 @@ public class ArticleServiceImpl implements ArticleService{
     }
 
     @Override
-    @Transactional
     public void doScrap(Long articleid) {
         Optional<User> userOpt = Authentication();
         Optional<Article> article = articleDao.findByArticleid(articleid);
@@ -258,9 +259,7 @@ public class ArticleServiceImpl implements ArticleService{
     }
 
     @Override
-    @Transactional
     public void deleteScrap(Long scrapid) {
-        Optional<User> userOpt = Authentication();
         scrapDao.deleteByScrapid(scrapid);
     }
 }

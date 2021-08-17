@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="margin-bottom:60px;">
     <div class="mt-3 mb-3 mx-4 d-flex justify-content-between align-items-center">
       <span>
         <button @click="goBack"><b-icon icon="arrow-left" class="fs-1 me-4"></b-icon></button>
@@ -91,7 +91,7 @@ export default {
     // 애매한 상태관리여서 직접 작성
     scrapDelete(payload) {
       axios({
-        url: `https://i5b302.p.ssafy.io/api/scrap/${payload.scrapid}`,
+        url: `http://127.0.0.1:8080/scrap/${payload.scrapid}`,
         method: "delete",
         headers: {
           "Content-Type": "application/json",
@@ -105,7 +105,7 @@ export default {
     getArticleFeeImgUrl (payload) {
       return {
         ...this.scrapList,
-        thumnail: this.scrapList[payload.idx] && `https://i5b302.p.ssafy.io/img/${payload.imgURL}`
+        thumnail: this.scrapList[payload.idx] && require(`@/assets/images/${payload.imgURL}`)
       }
     }
   }

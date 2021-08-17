@@ -3,7 +3,6 @@ package com.web.curation.service.search;
 import com.web.curation.dao.search.SearchDao;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.search.Search;
-import com.web.curation.model.search.SearchUserLive;
 import com.web.curation.model.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -38,30 +36,28 @@ public class SearchServiceImpl implements SearchService{
     }
 
     @Override
-    @Transactional
     public void saveSearch(Search request) {
-        Optional<User> userOpt = userDao.findByNickname(request.getName());
-        searchDao.save(Search.builder()
-                .searchid(userOpt.get().getUid())
-                .id(request.getId())
-                .searchDate(LocalDateTime.now())
-                .name(request.getName())
-//                .thumbnail(userOpt.get().getThumbnail())
-                .build());
+        if(!searchDao.existsByIdAndName(request.getId(), request.getName())){
+            searchDao.save(Search.builder()
+                    .searchid(null)
+                    .id(request.getId())
+                    .searchDate(LocalDateTime.now())
+                    .name(request.getName())
+                    .build());
+        }
     }
 
     @Override
-    public List<SearchUserLive> list(String nickname) {
+    public List<Search> list(String nickname) {
         List<User> user = userDao.findByNicknameIsContaining(nickname);
-        List<SearchUserLive> live = new ArrayList<>();
+        List<Search> live = new ArrayList<>();
         for(int i = 0; i < user.size(); i++){
-            live.add(new SearchUserLive(user.get(i).getUid(), user.get(i).getNickname(), user.get(i).getThumbnail()));
+            live.add(new Search(user.get(i).getUid(), user.get(i).getNickname()));
         }
         return live;
     }
 
     @Override
-    @Transactional
     public void deleteSearch(Long searchid) {
         Optional<User> userOpt = Authentication();
         if(searchDao.deleteBySearchidAndId(searchid, userOpt.get().getUid()) == 0){
@@ -73,13 +69,7 @@ public class SearchServiceImpl implements SearchService{
     public List<Search> searchList() {
         Optional<User> userOpt = Authentication();
         List<Search> list = searchDao.findById(userOpt.get().getUid());
-        List<SearchUserLive> result = new ArrayList<>();
-        for(int i = 0; i < list.size(); i++){
-            Optional<User> user = userDao.findByUid(userOpt.get().getUid());
-            result.add(new SearchUserLive(list.get(i).getSearchid(), list.get(i).getName(),
-                    user.get().getThumbnail(), list.get(i).getSearchDate(), list.get(i).getId()));
-        }
-        Collections.sort(result, Comparator.comparing(SearchUserLive::getSearchDate));
+        Collections.sort(list, Comparator.comparing(Search::getSearchDate));
         return list;
     }
 }

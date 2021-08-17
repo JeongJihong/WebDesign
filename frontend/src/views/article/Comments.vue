@@ -1,15 +1,7 @@
 <template>
-  <!-- <div class="scale"> -->
-  <div>
-     <!-- 헤더 -->
-    <!-- <div class="mt-3 mx-4 fs-1">
-      <button @click="goBack"><b-icon icon="arrow-left" class="me-4"></b-icon></button>
-      <span class="fw-bold">댓글</span>
-    </div> -->
-
+  <div style="margin-bottom:60px;">
     <!-- 댓글 입력 -->
     <div class="d-flex justify-content-left align-items-center mx-3 mt-4">
-      <b-avatar src="https://placekitten.com/300/300" size="2.5rem" class="me-3"></b-avatar>
       <span class="d-flex justify-content-between" style="width: 100%;">
         <b-form-input v-model="content" type="text" placeholder="하고싶은말을 적어주세요"
           style="height: 38px;" class="me-3"></b-form-input>
@@ -21,7 +13,9 @@
     <b-list-group class="mt-4">
       <b-list-group-item class="d-flex justify-content-left align-items-center border-0 my-1"
         v-for="comment in comments" :key="comment.commentid" :comment="comment">
-        <b-avatar src="https://placekitten.com/300/300" size="2.5rem" class="me-3"></b-avatar>
+        <b-avatar v-if="comment.thumbnail" class="me-2"
+          :src="getThumbnailImgUrl({ imgURL: comment.thumbnail }).thumbnail"></b-avatar>
+        <b-avatar v-else class="me-2"></b-avatar>
         <span class="d-flex justify-content-between" style="width: 100%;">
           <span>{{ comment.comment }}</span>
           <span v-if="comment.createdtime == comment.updatedtime ">생성시간:{{ comment.createdtime}}</span>
@@ -56,7 +50,7 @@ export default {
   },
   created() {
     axios({
-        url:`https://i5b302.p.ssafy.io/api/article/`+this.$route.params.articleid+`/comment`,
+        url:`http://127.0.0.1:8080/article/`+this.$route.params.articleid+`/comment`,
         method:'get',
         headers: {
             'x-auth-token': `${localStorage.getItem('token')}`,
@@ -79,7 +73,7 @@ export default {
     },
     getComments: function(){
       axios({
-        url:'https://i5b302.p.ssafy.io/api/article/'+this.$route.params.articleid+'/comment',
+        url:'http://127.0.0.1:8080/article/'+this.$route.params.articleid+'/comment',
         method:'get',
         headers: {
           'x-auth-token': `${localStorage.getItem('token')}`,
@@ -96,7 +90,7 @@ export default {
     },
     createComment(){
       axios({
-        url:'https://i5b302.p.ssafy.io/api/article/'+this.$route.params.articleid+'/comment',
+        url:'http://127.0.0.1:8080/article/'+this.$route.params.articleid+'/comment',
         method:'post',
         headers: {
           'x-auth-token': `${localStorage.getItem('token')}`,
@@ -116,7 +110,7 @@ export default {
     },
     CommentDelete(commentid){
       axios({
-        url:`https://i5b302.p.ssafy.io/api/article/comment/`+commentid,
+        url:`http://127.0.0.1:8080/article/comment/`+commentid,
         method:'delete',
         headers: {
           'x-auth-token': `${localStorage.getItem('token')}`,
@@ -134,7 +128,7 @@ export default {
       // const username = jwt_decode(localStorage.getItem('jwt')).username
       // const userid = jwt_decode(localStorage.getItem('jwt')).user_id
       axios({
-        url:`https://i5b302.p.ssafy.io/api/article/comment/`+commentid,
+        url:`http://127.0.0.1:8080/article/comment/`+commentid,
         method:'put',
         headers: {
           'x-auth-token': `${localStorage.getItem('token')}`,
@@ -152,16 +146,15 @@ export default {
           console.log(err)
         })
     },
+    getThumbnailImgUrl (payload) {
+      return {
+        ...this.comments,
+        thumbnail: this.comments.length && require(`@/assets/images/${payload.imgURL}`)
+      }
+    }
   }
 }
 </script>
 
 <style>
-.scale {
-    margin: 10%;
-    margin-top: 4%;
-    align-content: center;
-    justify-content: center;
-  }
-
 </style>

@@ -37,39 +37,40 @@ import java.util.*;
 @CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 @Controller
+@RequestMapping("/alarm")
 public class AlarmController {
 
     private final AlarmServiceImpl alarmService;
 
-    @PostMapping("/alarm/register")
+    @PostMapping("/register")
     @ApiOperation(value = "로그인 시 유저 알람 토큰 저장")
     public ResponseEntity<String> register(@RequestBody String token) {
         alarmService.register(token);
         return new ResponseEntity<>("Success", HttpStatus.OK);
     }
 
-    @PostMapping("/alarm")
+    @PostMapping("")
     @ApiOperation(value = "알람 전송")
     public ResponseEntity<String> sendAlarm(@RequestBody AlarmRequest request) {
         alarmService.sendAlarm(request);
         return new ResponseEntity<>("Success", HttpStatus.OK);
     }
 
-    @GetMapping("/alarm/like")
+    @GetMapping("/like")
     @ApiOperation(value = "좋아요 알람 정보 가져오기")
     public ResponseEntity<List<LikeFollowRequest>> getLikeAlarm(){
         List<LikeFollowRequest> result = alarmService.getLikeAlarm();
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @GetMapping("/alarm/follow")
+    @GetMapping("/follow")
     @ApiOperation(value = "팔로우 알람 가져오기")
     public ResponseEntity<List<LikeFollowRequest>> getFollowAlarm(){
         List<LikeFollowRequest> result = alarmService.getFollowAlarm();
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @GetMapping("/alarm/promise")
+    @GetMapping("/promise")
     @ApiOperation(value = "약속 알람 가져오기")
     public ResponseEntity<Map> getPromiseAlarm()  {
         Map result = alarmService.getPromiseAlarm();

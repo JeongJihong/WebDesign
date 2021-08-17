@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div class="page" style="margin-bottom:60px;">
     <!-- 헤더 -->
     <div class="mt-3 mx-4 d-flex justify-content-between align-items-center">
       <span class="fs-1">
-        <button @click="goBack"><b-icon icon="arrow-left" class="me-4"></b-icon></button>
+        <button @click="goBack"><b-icon id="icon" icon="arrow-left" class="me-4"></b-icon></button>
         <span class="fw-bold">{{ promiseDetail.title }}</span>
       </span>
       <button v-if="promiseDetail.place && aHourAgo" style="color: #0d6efd;"
@@ -44,8 +44,11 @@
     </div>
 
     <!-- 카카오 맵 api 참고 -->
-    <div v-if="promiseDetail.place" class="mt-4 pt-3">
-      <p class="fw-bold mx-3">약속 장소</p>
+    <div v-show="promiseDetail.place" class="mt-4 pt-3">
+      <div class="d-flex justify-content-between align-items-center">
+        <span class="fw-bold mx-3">약속 장소</span>
+        <b-icon @click="initMap" icon="arrow-clockwise" variant="primary" class="me-3"></b-icon>
+      </div>
       <div>
         <!-- padding-bottom: 56.25% 는 16:9 비율로 고정한다는 style -->
         <div id="map" style="padding-bottom: 56.25%; width: 100%; height: 100%;">
@@ -69,7 +72,9 @@
           @click="goToProfile(user.nickname)">
           <div class="d-flex align-items-center">
             <span>
-              <img :src="user.thumnail" :alt="user.nickname + '의 프로필'">
+              <b-avatar v-if="user.thumbnail" class="me-2"
+                :src="getThumbnailImgUrl({ imgURL: user.thumbnail }).thumbnail"></b-avatar>
+              <b-avatar v-else class="me-2"></b-avatar>
             </span>
             <span>{{ user.nickname }}</span>
           </div>
@@ -106,6 +111,10 @@ export default {
   data() {
     return {
       promisetime: '',
+      location: {
+        lat: 50,
+        lon: 120
+      }
     }
   },
   mounted() {
@@ -116,7 +125,8 @@ export default {
       /* global kakao */
       script.onload = () => kakao.maps.load(this.initMap)
       script.src = `http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${process.env.VUE_APP_MAP_API}`
-      document.head.appendChild(script)
+      // script.src = `http://dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.VUE_APP_MAP_API}`
+      this.kakaoScript = document.head.appendChild(script)
     }
   },
   created() {
@@ -125,6 +135,13 @@ export default {
       promiseid: this.$route.params.promiseid
     }
     this.$store.dispatch('promiseDetailGet', payload)
+
+    if (localStorage.getItem('token')) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        this.location.lat = position.coords.latitude
+        this.location.lon = position.coords.longitude
+      })
+    }
   },
   computed: {
     ...mapState([
@@ -188,46 +205,59 @@ export default {
     },
     // kakao 지도 관련
     initMap() {
-      if (this.promiseDetail.place) {
+      // if (this.promiseDetail.place) {
         // lat: 위도 == y, lon: 경도 == x
-        // ######     좌표를 중심으로 지도가 그려짐      ######
-        var mapContainer = document.getElementById('map'),
-            mapOption = {
-              center: new kakao.maps.LatLng(this.promiseDetail.lat, this.promiseDetail.lon),
-              level: 4,
-            }
+        var mapContainer = document.getElementById('map')
+        var mapOption = {
+          center: new kakao.maps.LatLng(50, 120),
+          level: 4
+        }
+        if (this.promiseDetail.place) {
+          // var mapOption = {
+          //   center: new kakao.maps.LatLng(this.promiseDetail.lat, this.promiseDetail.lon),
+          //   level: 4,
+          // }
+          mapOption.center = new kakao.maps.LatLng(this.promiseDetail.lat, this.promiseDetail.lon)
+          mapOption.level = 4
+        }
+
         var map = new kakao.maps.Map(mapContainer, mapOption)
   
         map.setDraggable(false)
         map.setZoomable(false)
   
-  
-        // ######    여기부터는 지도에 마커 표시하기     ######
-        var markerPosition = new kakao.maps.LatLng(this.promiseDetail.lat, this.promiseDetail.lon)
+        var markerPosition = new kakao.maps.LatLng(50, 120)
+        if (this.promiseDetail.place) {
+          markerPosition = new kakao.maps.LatLng(this.promiseDetail.lat, this.promiseDetail.lon)
+        }
         var marker = new kakao.maps.Marker({ position: markerPosition })
         marker.setMap(map)
-      }
+      // }
     },
     goToProfile(nickname) {
       this.$router.push({ name: 'ProfileDetail', params: { nickname } })
     },
     promiseDetailDelete() {
       if (this.promiseDetail.createrNickname === this.username) {
+        this.$store.state.promiseDeleteMode = true
         axios({
-          url: `https://i5b302.p.ssafy.io/api/promise/${this.$route.params.promiseid}`,
+          url: `http://127.0.0.1:8080/promise/${this.$route.params.promiseid}`,
           method: "delete",
           headers: {
             "Content-Type": "application/json",
             "X-AUTH-TOKEN": this.token
           },
         })
+          .then(() => {
+            this.$store.state.promiseDeleteMode = false
+          })
 
         // 약속 삭제(취소) -> 생성자'status -(2*num)
         let formdataMaker = new FormData()
         formdataMaker.append('status', -(2*this.promiseDetail.peopleNum))
         axios({
           // 어짜피 약속 삭제는 생성자만 가능하다 -> this.username 사용
-          url: `https://i5b302.p.ssafy.io/api/account/status/${this.username}`,
+          url: `http://127.0.0.1:8080/account/status/${this.username}`,
           method: 'put',
           headers: {
             "Content-Type": "application/json",
@@ -236,13 +266,15 @@ export default {
           data: formdataMaker
         })
 
-        this.$router.push({ name: 'PromiseList' })
+        // this.$router.push({ name: 'PromiseList' })
+        this.$router.push({ name: 'FeedMain' })
       }
     },
     promiseDetailAccept() {
       if (this.promiseDetail.createrNickname !== this.username && this.promiseDetail.approve === 0) {
+        // 약속 수락
         axios({
-          url: `https://i5b302.p.ssafy.io/api/promise/people/${this.$route.params.promiseid}`,
+          url: `http://127.0.0.1:8080/promise/people/${this.$route.params.promiseid}`,
           method: "put",
           headers: {
             "Content-Type": "application/json",
@@ -257,12 +289,13 @@ export default {
             this.$store.dispatch('promiseDetailGet', payload)
           })
         
+
         // 약속 수락 -> 참가자'status +2
         let formdataAttender = new FormData()
         formdataAttender.append('status', 2)
 
         axios({
-          url: `https://i5b302.p.ssafy.io/api/account/status/${this.username}`,
+          url: `http://127.0.0.1:8080/account/status/${this.username}`,
           method: 'put',
           headers: {
             "Content-Type": "application/json",
@@ -275,7 +308,7 @@ export default {
         let formdataMaker = new FormData()
         formdataMaker.append('status', 1)
         axios({
-          url: `https://i5b302.p.ssafy.io/api/account/status/${this.promiseDetail.createrNickname}`,
+          url: `http://127.0.0.1:8080/account/status/${this.promiseDetail.createrNickname}`,
           method: 'put',
           headers: {
             "Content-Type": "application/json",
@@ -283,12 +316,26 @@ export default {
           },
           data: formdataMaker
         })
+
+        // 위치 정보 업데이트
+        let formdata = new FormData()
+        formdata.append('lat', this.location.lat)
+        formdata.append('lon', this.location.lon)
+        axios({
+          url: `http://127.0.0.1:8080/promise/place/${this.$route.params.promiseid}`,
+          method: 'put',
+          headers: {
+            "Content-Type": "application/json",
+            "X-AUTH-TOKEN": this.token,
+          },
+          data: formdata
+        })
       }
     },
     promiseDetailReject() {
       if (this.promiseDetail.createrNickname !== this.username && this.promiseDetail.approve === 0) {
         axios({
-          url: `https://i5b302.p.ssafy.io/api/promise/people/${this.$route.params.promiseid}`,
+          url: `http://127.0.0.1:8080/promise/people/${this.$route.params.promiseid}`,
           method: "delete",
           headers: {
             "Content-Type": "application/json",
@@ -303,7 +350,7 @@ export default {
     promiseDetailRejectAfterAccept() {
       if (this.promiseDetail.createrNickname !== this.username && this.promiseDetail.approve === 1) {
         axios({
-          url: `https://i5b302.p.ssafy.io/api/promise/people/${this.$route.params.promiseid}`,
+          url: `http://127.0.0.1:8080/promise/people/${this.$route.params.promiseid}`,
           method: "delete",
           headers: {
             "Content-Type": "application/json",
@@ -315,7 +362,7 @@ export default {
         let formdataAttender = new FormData()
         formdataAttender.append('status', -3)
         axios({
-          url: `https://i5b302.p.ssafy.io/api/account/status/${this.username}`,
+          url: `http://127.0.0.1:8080/account/status/${this.username}`,
           method: 'put',
           headers: {
             "Content-Type": "application/json",
@@ -325,6 +372,12 @@ export default {
         })
 
         this.$router.push({ name: "PromiseList"})
+      }
+    },
+    getThumbnailImgUrl (payload) {
+      return {
+        ...this.promiseDetail,
+        thumbnail: this.promiseDetail.promisePeople.length && require(`@/assets/images/${payload.imgURL}`)
       }
     }
   }

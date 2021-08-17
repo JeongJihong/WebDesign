@@ -1,53 +1,67 @@
 <template>
-  <div class="feed newsfeed">
+  <div class="feed newsfeed app" style="margin-top:60px; margin-bottom:60px;">
     <div class="wrapB">
-      <h1>뉴스피드</h1>
-      
-      <div v-for="(article,idx) in articles" :key="idx" style="z-index:-1;">
+      <div v-for="(article,idx) in articles" :key="idx">
         <div>
-          <b-avatar src="https://placekitten.com/300/300" size="2rem"></b-avatar><span>{{article.articleDetail.user.nickname}}</span>
+          <b-avatar v-if="article.articleDetail.user.thumbnail" class="me-2"
+            :src="getThumbnailImgUrl({ idx, imgURL: article.articleDetail.user.thumbnail }).thumbnail"></b-avatar>
+          <b-avatar v-else class="me-2"></b-avatar>
+          <span>{{article.articleDetail.user.nickname}}</span>
           <b-carousel
             id="carousel-1"
             v-model="slide"
             :interval="0"
-            controls
             indicators
             background="#ababab"
             img-width="1024"
             img-height="480"
-            style="text-shadow: 1px 1px 2px #333;"
+            style="text-shadow: 1px 1px 2px #333; position:relative;"
             @sliding-start="onSlideStart"
             @sliding-end="onSlideEnd"
+            
           >
-            <b-carousel-slide v-for="(image,idnum) in article.articleDetail.images" :key="idnum"> 
+            <b-carousel-slide v-for="(image,idnum) in article.articleDetail.images" :key="idnum"
+              > 
               <template #img >
                 <img
                   class="d-block img-fluid w-100"
                   width="1024"
                   height="480"
-                  :src="getArticleFeeImgUrl({ idx, imgURL: image.imgURL,articleid:article.articleDetail.articleid }).icon"
+                  :src="getArticleFeeImgUrl({ idx, imgURL: image.imgURL }).icon"
                   alt="image slot"
                 >
               </template>
             </b-carousel-slide>
           </b-carousel>
-          <p> {{ article.articleDetail.review }}</p>
-          <div v-if="article.articleDetail.promiseid">
-            <p>약속 인원 : {{ article.promiseDetail.num }} 명</p>
-            <p>약속 장소 : {{ article.promiseDetail.place }}</p>
-            <p>약속 시간 : {{ article.promiseDetail.promisetime }}</p>
-            <!-- <p>유형 : {{ article.promiseDetail.type }}</p> -->
+          <div style="margin:10px;">
+            <p> {{ article.articleDetail.review }}</p>
           </div>
-          <ul class="d-flex justify-content-left" style="padding-left:3px;">
-            <li v-if="article.likeCheck" ><b-icon  @click="articleLike({ articleid: article.articleDetail.articleid, nickname: article.articleDetail.user.nickname, likeCheck:article.likeCheck, idx:idx  })" id="likestat" icon="hand-thumbs-up" scale="1.5" variant="danger"></b-icon></li>
-            <li v-else ><b-icon  @click="articleLike({ articleid: article.articleDetail.articleid, nickname: article.articleDetail.user.nickname,idx:idx })" id="likestat" icon="hand-thumbs-up" scale="1.5" variant="secondary"></b-icon></li>
-            
-            <li v-if="article.scrapCheck"><b-icon @click="undoScrap({ articleid: article.articleDetail.articleid, idx: idx })" icon="tags-fill" scale="1.5" variant="primary"></b-icon></li>
-            <li v-else><b-icon @click="doScrap({ articleid: article.articleDetail.articleid, idx: idx })" icon="tags" scale="1.5" variant="secondary"></b-icon></li>
-            <li @click="getComments(article.articleDetail.articleid)"><b-icon icon="chat-dots" scale="1.5" variant="primary"></b-icon></li><span>{{ article.articleDetail.comments.length }}</span>
-          </ul>
+          <div v-if="article.articleDetail.promiseid" style="positon:relative;">
+              <div id="demo">
+                <div class="post-it">
+                  <div class="inner" style="color:black;" >
+                    Title : {{ article.promiseDetail.title }} <br>
+                    약속 인원 : {{ article.promiseDetail.num }} 명<br>
+                    약속 장소 : {{ article.promiseDetail.place }} <br>
+                    약속 시간 : {{ article.promiseDetail.promisetime.substr(5,2) }}.{{article.promiseDetail.promisetime.substr(8,2)}} {{article.promiseDetail.promisetime.substr(11,5) }} <br>
+                    유형 : {{ article.promiseDetail.type }} <br>
+                  </div>
+                </div>
+              </div>
+          </div>
+          <div style="positon:relative;">
+            <ul class="d-flex justify-content-left article" style="padding-left:3px;">
+              <li v-if="article.likeCheck" ><b-icon @click="articleLike({ articleid: article.articleDetail.articleid, nickname: article.articleDetail.user.nickname, likeCheck:article.likeCheck, idx:idx  })" icon="hand-thumbs-up" scale="1.5" variant="danger"></b-icon></li>
+              <li v-else ><b-icon id="icon" @click="articleLike({ articleid: article.articleDetail.articleid, nickname: article.articleDetail.user.nickname,idx:idx })"  icon="hand-thumbs-up" scale="1.5"></b-icon></li>
+              
+              <li v-if="article.scrapCheck"><b-icon @click="undoScrap({ articleid: article.articleDetail.articleid, idx: idx })" icon="tags-fill" scale="1.5" ></b-icon></li>
+              <li v-else><b-icon id="icon" @click="doScrap({ articleid: article.articleDetail.articleid, idx: idx })" icon="tags" scale="1.5" ></b-icon></li>
+              <li @click="getComments(article.articleDetail.articleid)"><b-icon icon="chat-dots-fill" scale="1.5" style="color:10598D;"></b-icon></li><span>{{ article.articleDetail.comments.length }}</span>
+            </ul>
+          </div>
           <p>{{ article.likeCount }} 명의 유저가 이글을 좋아합니다.</p>
         </div>
+        <hr>
       </div>
       <br>
       <infinite-loading @infinite="infiniteHandler"></infinite-loading>
@@ -73,6 +87,7 @@ export default {
         articles:[],
         likeCheck:false,
         imgURL:[],
+        place:""
       }
   },
   computed: {
@@ -83,7 +98,7 @@ export default {
   },
   methods:{
     infiniteHandler($state) {
-      axios.get('https://i5b302.p.ssafy.io/api/article/main', {
+      axios.get('http://127.0.0.1:8080/article/main', {
           headers: {
             'x-auth-token': `${localStorage.getItem('token')}`,
           },
@@ -100,7 +115,11 @@ export default {
                   console.log(res.data)
                   const data = res.data.pageList;
                             for(let key in data){
-                                
+                              if(data[key].articleDetail.promiseid){
+                                  if(data[key].promiseDetail.place == ""){
+                                    data[key].promiseDetail.place = "화상 모임"
+                                  }
+                                }
                                 this.articles.push(data[key])
                                 console.log(this.articles)
                             }
@@ -121,7 +140,7 @@ export default {
     articleLike(payload){
       if (!this.articles[payload.idx].likeCheck){
         axios({
-          url:`https://i5b302.p.ssafy.io/api/article/`+payload.articleid+'/like',
+          url:`http://127.0.0.1:8080/article/`+payload.articleid+'/like',
           method:'post',
           headers: {
                 'x-auth-token': `${localStorage.getItem('token')}`,
@@ -130,6 +149,7 @@ export default {
         .then(res=>{
           console.log(res.data)
           this.articles[payload.idx].likeCheck = !this.articles[payload.idx].likeCheck
+          this.articles[payload.idx].likeCount +=1
           console.log("싫어요 -> 좋아요")
         })
         .catch(err=>{
@@ -139,7 +159,7 @@ export default {
         // Like Alarm POST
         if (payload.nickname !== this.username) {
           axios({
-            url: 'https://i5b302.p.ssafy.io/api/alarm',
+            url: 'http://127.0.0.1:8080/alarm',
             method: 'post',
             headers: {
               'x-auth-token': this.token
@@ -156,7 +176,7 @@ export default {
       }
       else{
         axios({
-          url:`https://i5b302.p.ssafy.io/api/article/`+payload.articleid+'/like',
+          url:`http://127.0.0.1:8080/article/`+payload.articleid+'/like',
           method:'delete',
           headers: {
                 'x-auth-token': `${localStorage.getItem('token')}`,
@@ -166,6 +186,7 @@ export default {
           console.log(res.data)
           console.log("좋아요 -> 싫어요")
           this.articles[payload.idx].likeCheck = !this.articles[payload.idx].likeCheck
+          this.articles[payload.idx].likeCount -= 1
         })
         .catch(err=>{
           console.log(err)
@@ -174,7 +195,7 @@ export default {
     },
     doScrap(payload) {
       axios({
-        url: `https://i5b302.p.ssafy.io/api/scrap/${payload.articleid}`,
+        url: `http://127.0.0.1:8080/scrap/${payload.articleid}`,
         method: 'post',
         headers: {
           'x-auth-token': `${localStorage.getItem('token')}`,
@@ -186,7 +207,7 @@ export default {
     },
     undoScrap(payload) {
       axios({
-        url: 'https://i5b302.p.ssafy.io/api/scrap',
+        url: 'http://127.0.0.1:8080/scrap',
         method: 'get',
         headers: {
           "Content-Type": "application/json",
@@ -204,7 +225,7 @@ export default {
         })
         .then(scrapid => {
           axios({
-            url: `https://i5b302.p.ssafy.io/api/scrap/${scrapid}`,
+            url: `http://127.0.0.1:8080/scrap/${scrapid}`,
             method: "delete",
             headers: {
               "Content-Type": "application/json",
@@ -229,22 +250,21 @@ export default {
       this.sliding = false
     },
     getArticleFeeImgUrl (payload) {
-      console.log(payload.articleid,'몇번하니')
-      console.log(payload.imgURL,'몇번되니')
-      console.log(this.articles[payload.idx] )
+      console.log( this.articles[payload.idx] && require(`@/assets/images/${payload.imgURL}`))
+      return {
+        ...this.articles,
+        icon: this.articles[payload.idx] && require(`@/assets/images/${payload.imgURL}`)
+      }
+    },
+    getThumbnailImgUrl (payload) {
       return {
         ...this.articles[payload.idx],
-        icon: this.articles[payload.idx] && `https://i5b302.p.ssafy.io/img/${payload.imgURL}`
+        thumbnail: this.articles[payload.idx].articleDetail.user.thumbnail && require(`@/assets/images/${payload.imgURL}`)
       }
     }
   },
 };
 //
 </script>
-<style scoped>
-li {
-  margin-right: 12px;
-}
-
-
+<style src="../../App.css">
 </style>

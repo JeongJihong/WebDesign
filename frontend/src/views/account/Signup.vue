@@ -5,55 +5,64 @@
     Sub PJT I에서는 UX, 디자인 등을 포함하여 백엔드를 제외하여 개발합니다.
  -->
 <template>
-  <div class="user join wrapC">
-    <h1>가입하기</h1>
-    <div class="form-wrap">
-      <div class="input-with-label">
-        <input  @change="reNickname()" v-model="nickname" id="nickname" placeholder="닉네임을 입력하세요." type="text" />
-        <label for="nickname">닉네임</label>
-        <b-button @click="confirmNickname()">중복확인</b-button>
-      </div>
-
-      <div class="input-with-label">
-        <input @change="reEmail()" v-model="email" id="email" placeholder="이메일을 입력하세요." type="text" 
-        v-bind:class="{error : error.email, complete:!error.email&&email.length!==0}"
-        />
-        <label for="email">이메일</label>
-        <b-button @click="confirmEmail()">중복확인</b-button>
-        <div class="error-text" v-if="error.email">{{error.email}}</div>
-      </div>
-
-      <div class="input-with-label">
-        <input v-model="password" 
-        id="password" 
-        :type="passwordType" 
-        placeholder="비밀번호를 입력하세요."
-        v-bind:class="{error : error.password, complete:!error.password&&password.length!==0}" 
-        />
-        <label for="password">비밀번호</label>
-        <div class="error-text" v-if="error.password">{{error.password}}</div>
-      </div>
-
-      <div class="input-with-label">
-        <input
-          v-model="passwordConfirm"
-          :type="passwordConfirmType"
-          id="password-confirm"
-          placeholder="비밀번호를 다시한번 입력하세요."
-          @input="checkPassword()"
-        />
-        <label for="password-confirm">비밀번호 확인</label>
-      </div>
+  <div>
+    <div class="mt-3 mx-4 d-flex justify-content-between align-items-center">
+      <span class="fs-1">
+        <button @click="goBack"><b-icon id="icon" icon="arrow-left" class="me-4"></b-icon></button>
+        <span class="fw-bold">알림</span>
+      </span>
     </div>
-    
-    <form @submit="checkForm" @submit.prevent="signup">
-      <div v-if="activeButton() && isSubmit">
-        <button class="btn-bottom" >가입하기</button>
+    <br>
+    <br>
+    <div class="user join wrapC app">
+      <div class="form-wrap">
+        <div class="input-with-label">
+          <input  @change="reNickname()" v-model="nickname" id="nickname" placeholder="닉네임을 입력하세요." type="text" />
+          <label for="nickname">닉네임</label>
+          <button class="subbtn" id="nicknameConfirm" @click="confirmNickname()">중복확인</button>
+        </div>
+
+        <div class="input-with-label">
+          <input @change="reEmail()" v-model="email" id="email" placeholder="이메일을 입력하세요." type="text" 
+          v-bind:class="{error : error.email, complete:!error.email&&email.length!==0}"
+          />
+          <label for="email">이메일</label>
+          <button class="subbtn" id="emailConfirm"  @click="confirmEmail()">중복확인</button>
+          <div class="error-text" v-if="error.email">{{error.email}}</div>
+        </div>
+
+        <div class="input-with-label">
+          <input v-model="password" 
+          id="password" 
+          :type="passwordType" 
+          placeholder="비밀번호를 입력하세요."
+          v-bind:class="{error : error.password, complete:!error.password&&password.length!==0}" 
+          />
+          <label for="password">비밀번호</label>
+          <div class="error-text" v-if="error.password">{{error.password}}</div>
+        </div>
+
+        <div class="input-with-label">
+          <input
+            v-model="passwordConfirm"
+            :type="passwordConfirmType"
+            id="password-confirm"
+            placeholder="비밀번호를 다시한번 입력하세요."
+            @input="checkPassword()"
+          />
+          <label for="password-confirm">비밀번호 확인</label>
+        </div>
       </div>
-      <div v-else>
-        <button class="btn-bottom disabled" disabled >가입하기</button>
-      </div>
-    </form>
+      
+      <form @submit="checkForm" @submit.prevent="signup">
+        <div v-if="activeButton() && isSubmit">
+          <button class="btn-bottom" >가입하기</button>
+        </div>
+        <div v-else>
+          <button class="btn-bottom disabled" disabled >가입하기</button>
+        </div>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -100,17 +109,25 @@ export default {
   },
   watch: {
     nickname: function(v) {
+      const confirm =  document.getElementById("nicknameConfirm")
+      confirm.innerText = "중복확인"
       this.nicknameConfirm=false;
+
     },
     password: function(v) {
       this.checkForm();
     },
     email: function(v) {
+      const confirm =  document.getElementById("emailConfirm")
+      confirm.innerText = "중복확인"
       this.emailConfirm=false;
       this.checkForm();
     },
   },
   methods:{
+    goBack() {
+      this.$router.go(-1)
+    },
     reEmail(){
       this.emailConfirm = false
     },
@@ -118,8 +135,10 @@ export default {
       this.nicknameConfirm = false
     },
     confirmNickname(){
+      const confirm =  document.getElementById("nicknameConfirm")
+
       axios({
-        url:'https://i5b302.p.ssafy.io/api/account/checkNickname',
+        url:'http://127.0.0.1:8080/account/checkNickname',
         method:'get',
         params:{
           nickname:this.nickname,
@@ -134,6 +153,7 @@ export default {
           }else{
             alert('사용 가능한 닉네임 입니다.')
             this.nicknameConfirm=true
+            confirm.innerText = "확인완료"
           }
         })
         .catch(err=>{
@@ -141,8 +161,9 @@ export default {
         })
     },
     confirmEmail(){
+      const confirm =  document.getElementById("emailConfirm")
       axios({
-        url:'https://i5b302.p.ssafy.io/api/account/checkEmail',
+        url:'http://127.0.0.1:8080/account/checkEmail',
         method:'get',
         params:{
           email: this.email,
@@ -156,6 +177,7 @@ export default {
           }else{
             alert('사용 가능한 이메일 입니다.')
             this.emailConfirm=true
+            confirm.innerText = "확인완료"
           }
 
         })
@@ -165,7 +187,7 @@ export default {
     },
     signup(){
       axios({
-        url:"https://i5b302.p.ssafy.io/api/account/signup",
+        url:"http://127.0.0.1:8080/account/signup",
         method:'post',
         data:{
           nickname:this.nickname,
@@ -217,5 +239,7 @@ export default {
   }
 };
 </script>
+<style src="../../App.css">
+</style>
 
 
