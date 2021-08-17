@@ -9,30 +9,35 @@
     <div class="mt-3 mx-4 d-flex justify-content-between align-items-center">
       <span class="fs-1">
         <button @click="goBack"><b-icon id="icon" icon="arrow-left" class="me-4"></b-icon></button>
-        <span class="fw-bold">알림</span>
+        <span class="fw-bold">회원가입</span>
       </span>
     </div>
     <br>
     <br>
     <div class="user join wrapC app">
       <div class="form-wrap">
-        <div class="input-with-label">
-          <input  @change="reNickname()" v-model="nickname" id="nickname" placeholder="닉네임을 입력하세요." type="text" />
+        <div class="input-with-label d-flex justify-content-between align-items-center">
+          <input  @change="reNickname()" v-model="nickname" id="nickname" class="me-2"
+            placeholder="닉네임을 입력하세요." type="text" style="padding-inline-start: 4rem;" />
           <label for="nickname">닉네임</label>
-          <button class="subbtn" id="nicknameConfirm" @click="confirmNickname()">중복확인</button>
+          <button class="subbtn" id="nicknameConfirm" @click="confirmNickname()" style="height: 3rem;">
+            중복확인
+          </button>
         </div>
 
-        <div class="input-with-label">
-          <input @change="reEmail()" v-model="email" id="email" placeholder="이메일을 입력하세요." type="text" 
-          v-bind:class="{error : error.email, complete:!error.email&&email.length!==0}"
-          />
+        <div class="input-with-label mt-3 d-flex justify-content-between align-items-center">
+          <input @change="reEmail()" v-model="email" id="email" class="me-2"
+            placeholder="이메일을 입력하세요." type="text" style="padding-inline-start: 4rem;"
+            v-bind:class="{error : error.email, complete:!error.email&&email.length!==0}" />
           <label for="email">이메일</label>
-          <button class="subbtn" id="emailConfirm"  @click="confirmEmail()">중복확인</button>
-          <div class="error-text" v-if="error.email">{{error.email}}</div>
+          <button class="subbtn" id="emailConfirm"  @click="confirmEmail()" style="height: 3rem;">
+            중복확인
+          </button>
         </div>
+        <div class="error-text" style="color: #EE4B55;" v-if="error.email">{{error.email}}</div>
 
-        <div class="input-with-label">
-          <input v-model="password" 
+        <div class="input-with-label mt-3">
+          <input v-model="password"
           id="password" 
           :type="passwordType" 
           placeholder="비밀번호를 입력하세요."
@@ -42,12 +47,12 @@
           <div class="error-text" v-if="error.password">{{error.password}}</div>
         </div>
 
-        <div class="input-with-label">
+        <div class="input-with-label mt-3">
           <input
             v-model="passwordConfirm"
             :type="passwordConfirmType"
             id="password-confirm"
-            placeholder="비밀번호를 다시한번 입력하세요."
+            placeholder="비밀번호를 재입력하세요."
             @input="checkPassword()"
           />
           <label for="password-confirm">비밀번호 확인</label>

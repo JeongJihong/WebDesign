@@ -12,10 +12,10 @@
 
     <div class="d-flex" style= "position: fixed; bottom: 10%; left:50%; transform:translateX(-50%);">
       <router-link :to="{ name: 'Login' }">
-          <div id="btn" class="Rectangle-42">로그인</div>
+          <div id="btn" class="Rectangle-42 d-flex justify-content-center align-items-center">로그인</div>
         </router-link>
       <router-link :to="{ name: 'Signup' }">
-          <div id="btn" class="Rectangle-42">회원가입</div>
+          <div id="btn" class="Rectangle-42 d-flex justify-content-center align-items-center">회원가입</div>
         </router-link>
     </div>
   </div>
