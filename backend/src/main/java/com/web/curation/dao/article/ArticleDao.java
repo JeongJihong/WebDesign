@@ -31,4 +31,6 @@ public interface ArticleDao extends JpaRepository<Article, Long> {
 
     @Transactional
     void deleteByPromiseid(Long promiseid);
+
+    Article findByPromiseid(Long promiseid);
 }
