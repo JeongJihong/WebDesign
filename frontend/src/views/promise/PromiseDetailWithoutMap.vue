@@ -6,10 +6,6 @@
         <button @click="goBack"><b-icon id="icon" icon="arrow-left" class="me-4"></b-icon></button>
         <span class="fw-bold">{{ promiseDetail.title }}</span>
       </span>
-      <button v-if="promiseDetail.place && aHourAgo" style="color: #0d6efd;"
-        @click="goToPromiseLocations()">
-        지금 어디?</button>
-      <button v-else style="color: grey;">지금 어디?</button>
     </div>
 
     <!-- 상단 약속 정보 -->
@@ -44,7 +40,7 @@
     </div>
 
     <!-- 카카오 맵 api 참고 -->
-    <div class="mt-4 pt-3">
+    <div v-show="promiseDetail.place" class="mt-4 pt-3">
       <div class="d-flex justify-content-between align-items-center">
         <span class="fw-bold mx-3">약속 장소</span>
         <b-icon @click="initMap" icon="arrow-clockwise" variant="primary" class="me-3"></b-icon>
@@ -117,32 +113,12 @@ export default {
       }
     }
   },
-  mounted() {
-    if (window.kakao && window.kakao.maps) {
-      this.initMap();
-    } else {
-      const script = document.createElement('script')
-      /* global kakao */
-      script.onload = () => kakao.maps.load(this.initMap)
-      script.src = `http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${process.env.VUE_APP_MAP_API}`
-      // script.src = `http://dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.VUE_APP_MAP_API}`
-      this.kakaoScript = document.head.appendChild(script)
-    }
-  },
   created() {
     let payload = {
       token: this.token,
       promiseid: this.$route.params.promiseid
     }
     this.$store.dispatch('promiseDetailGet', payload)
-
-    if (localStorage.getItem('token')) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        this.location.lat = position.coords.latitude
-        this.location.lon = position.coords.longitude
-      })
-    }
-
   },
   computed: {
     ...mapState([
@@ -150,45 +126,6 @@ export default {
       'username',
       'promiseDetail'
     ]),
-    aHourAgo: function () {
-      let promiseYear = Number(this.promiseDetail.promisetime.substr(0, 4))
-      let promiseMonth = Number(this.promiseDetail.promisetime.substr(5, 2))
-      let promiseDate = Number(this.promiseDetail.promisetime.substr(8, 2))
-      let promiseHours = Number(this.promiseDetail.promisetime.substr(11, 2))
-      let promiseMinutes = Number(this.promiseDetail.promisetime.substr(14, 2))
-      
-      let today = new Date()
-      let currentYear = today.getFullYear()
-      let currentMonth = today.getMonth() + 1
-      let currentDate = today.getDate()
-      let currentHours = today.getHours()
-      let currentMinutes = today.getMinutes()
-
-      if (promiseYear === currentYear && promiseMonth === currentMonth && promiseDate === currentDate) {
-        let promiseAbsoluteTime = promiseHours + promiseMinutes / 60
-        let currentAbsoluteTime = currentHours + currentMinutes / 60
-        if (promiseAbsoluteTime - currentAbsoluteTime <= 1) {
-          return true
-        }
-      }
-      return false
-    },
-    promiseDate: function () {
-      let originTime = this.promiseDetail.promisetime
-      let dotDate = ''
-      if (originTime) {
-        dotDate = originTime.substr(5, 2) + '.' + originTime.substr(8, 2)
-      }
-      return dotDate
-    },
-    promiseTime: function () {
-      let originTime = this.promiseDetail.promisetime
-      let dotTime = ''
-      if (dotTime) {
-        dotTime = originTime.substr(11, 5)
-      }
-      return dotTime
-    },
     getImgUrl () {
       return {
         ...this.promiseDetail,
@@ -199,41 +136,6 @@ export default {
   methods: {
     goBack() {
       this.$router.go(-1)
-    },
-    goToPromiseLocations() {
-      let promiseid = this.$route.params.promiseid
-      this.$router.push({ name: 'PromiseLocations', params: { promiseid } })
-    },
-    // kakao 지도 관련
-    initMap() {
-      // if (this.promiseDetail.place) {
-        // lat: 위도 == y, lon: 경도 == x
-        var mapContainer = document.getElementById('map')
-        var mapOption = {
-          center: new kakao.maps.LatLng(50, 120),
-          level: 4
-        }
-        if (this.promiseDetail.place) {
-          // var mapOption = {
-          //   center: new kakao.maps.LatLng(this.promiseDetail.lat, this.promiseDetail.lon),
-          //   level: 4,
-          // }
-          mapOption.center = new kakao.maps.LatLng(this.promiseDetail.lat, this.promiseDetail.lon)
-          mapOption.level = 4
-        }
-
-        var map = new kakao.maps.Map(mapContainer, mapOption)
-  
-        map.setDraggable(false)
-        map.setZoomable(false)
-  
-        var markerPosition = new kakao.maps.LatLng(50, 120)
-        if (this.promiseDetail.place) {
-          markerPosition = new kakao.maps.LatLng(this.promiseDetail.lat, this.promiseDetail.lon)
-        }
-        var marker = new kakao.maps.Marker({ position: markerPosition })
-        marker.setMap(map)
-      // }
     },
     goToProfile(nickname) {
       this.$router.push({ name: 'ProfileDetail', params: { nickname } })

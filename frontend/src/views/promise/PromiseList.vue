@@ -13,8 +13,11 @@
       <div class="mt-2 mx-3 px-3 border rounded bg-light">
         <div v-for="(waitingPromise,idx) in waitingPromises"
           :key="waitingPromise.promiseid" class="my-4 mx-1">
-          <router-link class="text-decoration-none"
-            :to="{ name: 'PromiseDetail', params: {promiseid: waitingPromise.promiseid } }">
+          <!-- <router-link class="text-decoration-none"
+            :to="{ name: 'PromiseDetail', params: {promiseid: waitingPromise.promiseid } }"> -->
+          <div
+            @click="goToPromiseDetail({ place: waitingPromise, promiseid: waitingPromise.promiseid })"
+            class="text-decoration-none">
             <li>
               <span class="d-flex justify-content-start align-items-center">
                 <span>
@@ -33,7 +36,8 @@
                 </span>
               </span>
             </li>
-          </router-link>
+          </div>
+          <!-- </router-link> -->
         </div>
       </div>
     </ul>
@@ -47,8 +51,11 @@
       <div class="mt-2 mx-3 px-3 border rounded bg-light">
         <div v-for="(upcomingPromise,idx) in upcomingPromises"
           :key="upcomingPromise.promiseid" class="my-4 mx-1">
-          <router-link class="text-decoration-none"
-            :to="{ name: 'PromiseDetail', params: {promiseid:upcomingPromise.promiseid } }">
+          <!-- <router-link class="text-decoration-none"
+            :to="{ name: 'PromiseDetail', params: {promiseid:upcomingPromise.promiseid } }"> -->
+          <div
+            @click="goToPromiseDetail({ place: upcomingPromise, promiseid: upcomingPromise.promiseid })"
+            class="text-decoration-none">
             <li>
               <span class="d-flex justify-content-start align-items-center">
                 <span>
@@ -67,7 +74,8 @@
                 </span>
               </span>
             </li>
-          </router-link>
+          </div>
+          <!-- </router-link> -->
         </div>
       </div>
     </ul>
@@ -76,6 +84,7 @@
 
 <script>
 import axios from 'axios'
+import PromiseDetailWithoutMapVue from './PromiseDetailWithoutMap.vue'
 export default {
   name:"PromiseList",
   data(){
@@ -85,34 +94,38 @@ export default {
     }
   },
   created(){
-      axios({
-          url:'http://127.0.0.1:8080/promise',
-          method:'get',
-          headers: {
-            'x-auth-token': `${localStorage.getItem('token')}`,
-          },
-        })
-          .then(res=>{
-            console.log(res.data)
+    axios({
+        url:'http://127.0.0.1:8080/promise',
+        method:'get',
+        headers: {
+          'x-auth-token': `${localStorage.getItem('token')}`,
+        },
+      })
+        .then(res=>{
+          // console.log(res.data)
 
-            const upcomings = res.data.upcoming
-            const waitings = res.data.waiting
-            for( let key in upcomings){
-              this.upcomingPromises.push(upcomings[key])
-            }
-            for( let key in waitings){
-              waitings[key].type = waitings[key].type.toLowerCase();
-              this.waitingPromises.push(waitings[key])
-            }
-            console.log(this.upcomingPromises,this.waitingPromises)
-          })
-          .catch(err=>{
-            console.log(err)
-          })
+          const upcomings = res.data.upcoming
+          const waitings = res.data.waiting
+          for( let key in upcomings){
+            this.upcomingPromises.push(upcomings[key])
+          }
+          for( let key in waitings){
+            waitings[key].type = waitings[key].type.toLowerCase();
+            this.waitingPromises.push(waitings[key])
+          }
+          // console.log(this.upcomingPromises,this.waitingPromises)
+        })
   },
   methods:{
     goBack() {
       this.$router.go(-1)
+    },
+    gotoPromiseDetail(payload) {
+      if (payload.place) {
+        this.$router.push({ name: 'PromiseDetailWithoutMap', params: { promiseid: payload.promiseid } })
+      } else {
+        this.$router.push({ name: 'PromiseDetail', params: { promiseid: payload.promiseid } })
+      }
     },
     goToPromiseCreate() {
       this.$router.push({ name: 'PromiseCreate' })
