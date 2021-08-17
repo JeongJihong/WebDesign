@@ -14,7 +14,7 @@
         <div v-for="(waitingPromise,idx) in waitingPromises"
           :key="waitingPromise.promiseid" class="my-4 mx-1">
           <router-link class="text-decoration-none"
-            :to="{ name: 'PromiseDetail', params: {promiseid: waitingPromise.promiseid } }">
+            :to="{ name: 'PromiseDetail', params: { promiseid: waitingPromise.promiseid } }">
             <li>
               <span class="d-flex justify-content-start align-items-center">
                 <span>
@@ -48,7 +48,7 @@
         <div v-for="(upcomingPromise,idx) in upcomingPromises"
           :key="upcomingPromise.promiseid" class="my-4 mx-1">
           <router-link class="text-decoration-none"
-            :to="{ name: 'PromiseDetail', params: {promiseid:upcomingPromise.promiseid } }">
+            :to="{ name: 'PromiseDetail', params: { promiseid: upcomingPromise.promiseid } }">
             <li>
               <span class="d-flex justify-content-start align-items-center">
                 <span>
@@ -75,40 +75,22 @@
 </template>
 
 <script>
-import axios from 'axios'
+import { mapState } from 'vuex'
+
 export default {
   name:"PromiseList",
   data(){
     return{
-      upcomingPromises:[],
-      waitingPromises:[]
     }
   },
+  computed: {
+    ...mapState([
+      'upcomingPromises',
+      'waitingPromises'
+    ]),
+  },
   created(){
-      axios({
-          url:'http://127.0.0.1:8080/promise',
-          method:'get',
-          headers: {
-            'x-auth-token': `${localStorage.getItem('token')}`,
-          },
-        })
-          .then(res=>{
-            console.log(res.data)
-
-            const upcomings = res.data.upcoming
-            const waitings = res.data.waiting
-            for( let key in upcomings){
-              this.upcomingPromises.push(upcomings[key])
-            }
-            for( let key in waitings){
-              waitings[key].type = waitings[key].type.toLowerCase();
-              this.waitingPromises.push(waitings[key])
-            }
-            console.log(this.upcomingPromises,this.waitingPromises)
-          })
-          .catch(err=>{
-            console.log(err)
-          })
+    this.$store.dispatch('promiseListGet')
   },
   methods:{
     goBack() {

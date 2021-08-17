@@ -24,6 +24,8 @@ const state = {
     scrapList: [],
     scrapMode: false,
 
+    upcomingPromises: [],
+    waitingPromises: [],
     promiseDetail: {},
 
     // 카카오 로그인/로그아웃 관련 - 종우
