@@ -8,6 +8,7 @@ import com.web.curation.dao.promise.PromisepeopleDao;
 import com.web.curation.dao.scrap.ScrapDao;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.alarm.Alarm;
+import com.web.curation.model.article.Article;
 import com.web.curation.model.promise.Promise;
 import com.web.curation.model.promise.PromiseLocationInfo;
 import com.web.curation.model.promise.PromiseResponse;
@@ -182,6 +183,7 @@ public class PromiseServiceImpl implements PromiseService{
         Optional<User> userOpt = Authentication();
         // 내가 확인하고 싶은 약속
         Promise promise = promiseDao.findByPromiseid(promiseid);
+        Article article = articleDao.findByPromiseid(promiseid);
 
         // 해당 약속에 관련된 나의 정보
         Promisepeople myPromise = promisePeopleDao.findByPromiseidAndUid(promiseid, userOpt.get().getUid());
@@ -212,6 +214,7 @@ public class PromiseServiceImpl implements PromiseService{
         result.put("lat", promise.getLat());
         result.put("lon", promise.getLon());
         result.put("approve", approve);
+        result.put("articleId", article.getArticleid());
         return result;
     }
 
