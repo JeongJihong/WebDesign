@@ -58,4 +58,13 @@ export default {
   UPDATE_ISLOGINBYKAKAO(state, isLoginByKakao) {
     state.isLoginByKakao = isLoginByKakao
   },
+
+  // 지금어디 페이지 약속 참가자 정보 업데이트
+  UPDATE_LOCATIONS(state, attendantsInfo) {
+    state.attendantsInfo = attendantsInfo
+  },
+
+  GET_ATTENDANTS_NUM(state, attendantsLength) {
+    state.attendantsLength = attendantsLength
+  }
 }
