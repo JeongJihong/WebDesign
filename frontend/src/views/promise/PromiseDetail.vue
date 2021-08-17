@@ -142,7 +142,6 @@ export default {
         this.location.lon = position.coords.longitude
       })
     }
-
   },
   computed: {
     ...mapState([

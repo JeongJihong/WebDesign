@@ -132,7 +132,7 @@ public class PromiseServiceImpl implements PromiseService{
         // List<Promise>를 peopleNum을 추가한 List<PromiseResponse>로 변환
         Stream<Promise> waitingStream = waitingList.stream();
         List<PromiseResponse> waiting = waitingStream.map(promise -> new PromiseResponse(promise.getPromiseid(),
-                promise.getType(), promise.getNum(), promisePeopleDao.findAllByPromiseidAndApprove(promise.getPromiseid(), 1).size(),
+                promise.getType(), promise.getPlace(),promise.getNum(), promisePeopleDao.findAllByPromiseidAndApprove(promise.getPromiseid(), 1).size(),
                 promise.getTitle(), promise.getPromisetime()))
                 .collect(Collectors.toList());
 
@@ -150,6 +150,7 @@ public class PromiseServiceImpl implements PromiseService{
         Stream<Promisepeople> upcomingStream = upcomingList.stream();
         List<PromiseResponse> upcoming = upcomingStream.map(promisepeople -> new PromiseResponse(promisepeople.getPromiseid(),
                 promiseDao.findByPromiseid(promisepeople.getPromiseid()).getType(),
+                promiseDao.findByPromiseid(promisepeople.getPromiseid()).getPlace(),
                 promiseDao.findByPromiseid(promisepeople.getPromiseid()).getNum(),
                 promisePeopleDao.findAllByPromiseidAndApprove(promisepeople.getPromiseid(), 1).size(),
                 promiseDao.findByPromiseid(promisepeople.getPromiseid()).getTitle(),
