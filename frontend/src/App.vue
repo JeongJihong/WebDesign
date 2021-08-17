@@ -191,7 +191,7 @@ export default {
     userLocationUpdate(location) {
       if (!this.$store.state.promiseDeleteMode) {
         axios({
-          url: 'http://127.0.0.1:8080/promise',
+          url: 'https://i5b302.p.ssafy.io/api/promise',
           method: 'get',
           headers: {
             "Content-Type": "application/json",
@@ -233,7 +233,7 @@ export default {
   
             for (let idx = 0; idx < promiseIds.length; idx++) {
               axios({
-                url: `http://127.0.0.1:8080/promise/place/${promiseIds[idx]}`,
+                url: `https://i5b302.p.ssafy.io/api/promise/place/${promiseIds[idx]}`,
                 method: 'put',
                 headers: {
                   "Content-Type": "application/json",
