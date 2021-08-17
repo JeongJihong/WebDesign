@@ -41,7 +41,7 @@
             >로그인</button>
           </div>
           <div class="hr-sect">OR</div>
-          <div style="margin-top:10px;">
+          <div style="margin-top:10px; width:100%;">
               <KakaoLogin :component="component" />
           </div>
           <br>
