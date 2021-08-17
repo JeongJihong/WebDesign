@@ -224,19 +224,27 @@ public class PromiseServiceImpl implements PromiseService{
     @Override
     public Map participatePromise(Long promiseid) {
         Optional<User> userOpt = Authentication();
+        Promise promise = promiseDao.findByPromiseid(promiseid);
         Promisepeople promisepeople = promisePeopleDao.findByPromiseidAndUid(promiseid, userOpt.get().getUid());
-        Promisepeople newpeople = new Promisepeople(promisepeople.getPromisepeopleid(),
-                promisepeople.getUid(), promisepeople.getPromiseid(), promisepeople.getCreateruid(),
-                promisepeople.getUpdatedtime(), promisepeople.getNickname(), promisepeople.getLat(),
-                promisepeople.getLon(), promisepeople.getThumbnail(), 1);
 
-        promisePeopleDao.save(newpeople);
+        // 해당 약속에 참여하는 사람
+        List<Promisepeople> promisepeopleList = promisePeopleDao.findAllByPromiseidAndApprove(promiseid, 1);
+
+        // 만약 참가자 모집이 완료되지 않은 약속이라면 참속 참여로 변환
+        if(promise.getNum() > promisepeopleList.size()) {
+            Promisepeople newpeople = new Promisepeople(promisepeople.getPromisepeopleid(),
+                    promisepeople.getUid(), promisepeople.getPromiseid(), promisepeople.getCreateruid(),
+                    promisepeople.getUpdatedtime(), promisepeople.getNickname(), promisepeople.getLat(),
+                    promisepeople.getLon(), promisepeople.getThumbnail(), 1);
+
+            promisePeopleDao.save(newpeople);
+        }
 
         Map result = new HashMap<String, Object>();
-        result.put("nickname", newpeople.getNickname());
-        result.put("updatedtime",newpeople.getUpdatedtime());
-        result.put("lat", newpeople.getLat());
-        result.put("lon", newpeople.getLon());
+        result.put("nickname", promisepeople.getNickname());
+        result.put("updatedtime",promisepeople.getUpdatedtime());
+        result.put("lat", promisepeople.getLat());
+        result.put("lon", promisepeople.getLon());
         return result;
     }
 
