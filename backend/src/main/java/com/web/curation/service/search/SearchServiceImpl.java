@@ -37,13 +37,14 @@ public class SearchServiceImpl implements SearchService{
 
     @Override
     public void saveSearch(Search request) {
-        Optional<User> userOpt = userDao.findByNickname(request.getName());
-        searchDao.save(Search.builder()
-                .searchid(userOpt.get().getUid())
-                .id(request.getId())
-                .searchDate(LocalDateTime.now())
-                .name(request.getName())
-                .build());
+        if(!searchDao.existsByIdAndName(request.getId(), request.getName())){
+            searchDao.save(Search.builder()
+                    .searchid(null)
+                    .id(request.getId())
+                    .searchDate(LocalDateTime.now())
+                    .name(request.getName())
+                    .build());
+        }
     }
 
     @Override

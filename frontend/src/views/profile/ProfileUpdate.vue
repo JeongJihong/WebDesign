@@ -23,7 +23,7 @@
       <form enctype = "multipart/form-data" method="patch" >
         <!-- 프로필 사진 수정 -->
         <div class="mt-5 mx-3 d-flex justify-content-center">
-          <img v-if="this.thumbnail" @click.prevent="clickInputTag()" id='addimage'
+          <img v-if="this.thumbnail" @click.prevent="clickInputTag()" id='addimage' style="border: 2px solid black"
           :src="getThumbnailImgUrl({ imgURL: this.thumbnail }).thumbnail"
           alt="image" class="dot">
           <b-avatar v-else @click.prevent="clickInputTag()" id='addimage'></b-avatar>

@@ -17,4 +17,7 @@ public interface SearchDao extends JpaRepository<Search, String> {
     @Transactional
     int deleteBySearchidAndId(Long searchid, Long id);
 
+    Boolean existsByIdAndName(Long id, String name);
+    Boolean existsSearchByIdAndName(Long id, String name);
+
 }
