@@ -124,7 +124,7 @@ export default {
       const script = document.createElement('script')
       /* global kakao */
       script.onload = () => kakao.maps.load(this.initMap)
-      script.src = `http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${process.env.VUE_APP_MAP_API}`
+      script.src = `https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${process.env.VUE_APP_MAP_API}`
       // script.src = `http://dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.VUE_APP_MAP_API}`
       this.kakaoScript = document.head.appendChild(script)
     }
