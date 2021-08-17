@@ -150,7 +150,6 @@ export default {
         }
       })
         .then(res=>{
-          console.log(res)
           if (res.data === 'Fail'){
             alert('중복된 닉네임 입니다!')
             this.nickname=""
@@ -160,9 +159,6 @@ export default {
             this.nicknameConfirm=true
             confirm.innerText = "확인완료"
           }
-        })
-        .catch(err=>{
-          console.log(err)
         })
     },
     confirmEmail(){
@@ -175,7 +171,6 @@ export default {
         }
       })
         .then(res=>{
-          console.log(res)
           if (res.data === 'Fail'){
             alert('중복된 이메일 입니다!')
             this.email=""
@@ -185,9 +180,6 @@ export default {
             confirm.innerText = "확인완료"
           }
 
-        })
-        .catch(err=>{
-          console.log(err)
         })
     },
     signup(){
@@ -201,13 +193,10 @@ export default {
         }
       })
         .then(res=>{
-          console.log(res)
           this.$router.push({ name:'Login' })
         })
         .catch(err=>{
-          console.log(err)
-          alert('가입이 불가능 합니다.')
-          
+          alert('가입이 불가능 합니다.')        
         })
     },
     checkPassword: function(){

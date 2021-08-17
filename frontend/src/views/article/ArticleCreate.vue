@@ -15,7 +15,10 @@
       </div>
       <div style="margin:10px">
         <b-textarea v-model="content"  placeholder="게시글 내용을 적어주세요!" rows="10"></b-textarea>
-        <b-button style="height: 2.7rem; width: 100%; margin-bottom:10px; background-color:#002E4F;" @click="articleCreate()">전송</b-button>
+        <b-button style="height: 2.7rem; width: 100%; margin-bottom:10px; background-color:#002E4F;"
+          class="d-flex justify-content-center align-items-center"
+          @click="articleCreate()">
+          전송</b-button>
       </div>
     </form>
   </div>

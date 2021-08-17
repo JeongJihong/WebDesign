@@ -50,7 +50,7 @@
     </div>
 
     <div class="p-0 mt-4 d-flex justify-content-center">
-      <button class="btn btn-primary shadow-none"
+      <button class="btn btn-primary shadow-none d-flex justify-content-center align-items-center"
         style="height: 2.3rem; width: 7rem;" @click="goBack">
         되돌아가기</button>
     </div>

@@ -10,21 +10,11 @@
       </span>
     </div>
     <div class="m-4">
-      <!-- <div class="d-flex my-4" style="justify-content: space-between">
-        <div class="d-flex" style="justify-content: space-between">
-          <button @click="goBack"><b-icon icon="arrow-left" class="fs-1 me-4"></b-icon></button>
-          <h4>프로필</h4>
-        </div>
-        <button @click="goToProfileUpdate" v-if="this.nickname === this.myNickname">
-          프로필 수정
-        </button>
-      </div> -->
       <div class="d-flex">
         <b-avatar v-if="thumbnail" class="me-2" size="4rem" style="border: 1px solid black;"
           :src="getThumbnailImgUrl({ imgURL: thumbnail }).thumbnail"></b-avatar>
         <b-avatar v-else class="me-2" size="4rem"></b-avatar>
         <div class="mx-4">
-          <!-- <h4>{{ this.nickname }}</h4> -->
           <div class="d-flex justify-content-between">
             <span class="fs-4">{{ this.nickname }}</span>
           </div>
@@ -50,7 +40,6 @@
       </div>
       <div class="d-grid pt-3">
         <button @click="goToFollow" v-if="this.nickname !== this.myNickname && this.didIrequestFollowToYou === false" class="btn btn-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">팔로우</button>
-        <!-- <button v-if="this.nickname !== this.myNickname && this.didIrequestFollowToYou === true" @click="cancelFollow" class="btn btn-outline-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">팔로우 요청 보냄</button> -->
         <button v-if="this.nickname !== this.myNickname && this.didIrequestFollowToYou === true && this.doIFollowYou === false" @click="cancelFollow" class="btn btn-outline-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">팔로우 요청 보냄</button>
         <button @click="unfollow" v-if="this.doIFollowYou === true" class="btn btn-outline-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">팔로우 취소</button>
       </div>
@@ -73,8 +62,6 @@
         class="square" 
         :style="{ backgroundImage: 'url(' + getArticleImgUrl({ idx: image-1, imgURL: articles[image-1].images }).thumbnail + ')' }"
       >
-        <!-- :style="{'background-image': 'url(' + `https://i5b302.p.ssafy.io/img/${articles[image-1].images[0].imgURL}`) + ')'}" -->
-
       </div>
 
     </div>
@@ -137,9 +124,6 @@ export default {
         this.didIrequestFollowToYou = !this.didIrequestFollowToYou
         this.getUserInfo()
       })
-      .catch((err) => {
-        alert(err)
-      })
 
       // Follow Alarm Post
       axios({
@@ -167,7 +151,6 @@ export default {
         },
       })
       .then((res) => {
-        console.log(res.data)
         this.myNickname = this.$store.state.username
         this.didIrequestFollowToYou = res.data.follow
         this.introduction = res.data.userProfile.introduction
@@ -183,12 +166,8 @@ export default {
         // if (typeof this.thumbnail === 'undefined') {
         //   this.thumbnail = `https://i5b302.p.ssafy.io/img/profile_default.png`)
         // }
-        console.log(this.articles)
         this.checkFollowRequest()
         this.followerList()
-      })
-      .catch((err) => {
-        alert(err)
       })
     },
     checkFollowRequest () {
@@ -203,9 +182,6 @@ export default {
       .then((res) => {
         this.didYouRequestFollowToMe = res.data.otherToMe
         this.followid = res.data.followid
-      })
-      .catch((err) => {
-        alert(err)
       })
     },
     approveFollowRequest () {
@@ -224,9 +200,6 @@ export default {
         this.didYouRequestFollowToMe = !this.didYouRequestFollowToMe
         alert(`${this.nickname}님의 팔로우 요청을 수락하셨습니다!`)
         this.getUserInfo()
-      })
-      .catch((err) => {
-        alert(err)
       })
     },
     rejectFollowRequest () {
@@ -247,9 +220,6 @@ export default {
         alert(`${this.nickname}님의 팔로우 요청을 거절하셨습니다!`)
         this.getUserInfo()
       })
-      .catch((err) => {
-        alert(err)
-      })
     },
     unfollow () {
       axios({
@@ -268,9 +238,6 @@ export default {
         this.didYouRequestFollowToMe = !this.didYouRequestFollowToMe
         alert(`${this.nickname}님 팔로우를 취소했습니다!`)
         this.getUserInfo()
-      })
-      .catch((err) => {
-        alert(err)
       })
     },
     goToChangePassword () {
@@ -293,9 +260,6 @@ export default {
 
         this.followingList()
       })
-      .catch((err) => {
-        alert(err)
-      })
     },
     followingList () {
       axios({
@@ -309,9 +273,6 @@ export default {
       .then((res) => {
         this.followingLs = res.data
         this.followings = this.followingLs.length
-      })
-      .catch((err) => {
-        alert(err)
       })
     },
     cancelFollow () {
@@ -349,7 +310,6 @@ export default {
           ...this.articles,
           thumbnail: this.articles[payload.idx].images.length && `https://i5b302.p.ssafy.io/img/${payload.imgURL[0].imgURL}`
         }
-
       }
       return {
         thumbnail: '@/assets/images/img-placeholder.png'
@@ -367,7 +327,6 @@ export default {
       },
     })
     .then((res) => {
-      console.log('처음부분', res.data)
       this.myNickname = this.$store.state.username
       this.myUid=res.data.uid
       this.getUserInfo()
@@ -386,9 +345,6 @@ export default {
     })
       .then(res => {
         this.status = res.data
-      })
-      .catch(() => {
-        console.log('Pipl 지수 GET 실패')
       })
   }
 }

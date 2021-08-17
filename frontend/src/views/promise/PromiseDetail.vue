@@ -87,17 +87,23 @@
       <div v-if="promiseDetail.createrNickname === username"
         class="d-flex justify-content-center">
         <button @click="promiseDetailDelete()"
-          class="ms-4 me-4 btn-danger px-4 py-2 rounded">약속 취소하기</button>
+          class="ms-4 me-4 btn-danger px-4 py-2 rounded d-flex justify-content-center align-items-center">
+          약속 취소하기</button>
       </div>
       <div v-else-if="promiseDetail.createrNickname !== username && promiseDetail.approve === 0"
         class="d-flex justify-content-center">
-        <button @click="promiseDetailReject()" class="me-4 btn-danger px-4 py-2 rounded">거절하기</button>
-        <button @click="promiseDetailAccept()" class="ms-4 btn-primary px-4 py-2 rounded">수락하기</button>
+        <button @click="promiseDetailReject()"
+          class="me-4 btn-danger px-4 py-2 rounded d-flex justify-content-center align-items-center">
+          거절하기</button>
+        <button @click="promiseDetailAccept()"
+          class="ms-4 btn-primary px-4 py-2 rounded d-flex justify-content-center align-items-center">
+          수락하기</button>
       </div>
       <div v-else-if="promiseDetail.createrNickname !== username && promiseDetail.approve === 1"
         class="d-flex justify-content-center">
         <button @click="promiseDetailRejectAfterAccept()"
-          class="ms-4 me-4 btn-danger px-4 py-2 rounded">불참하기</button>
+          class="ms-4 me-4 btn-danger px-4 py-2 rounded d-flex justify-content-center align-items-center">
+          불참하기</button>
       </div>
     </div>
   </div>
@@ -187,12 +193,6 @@ export default {
         dotTime = originTime.substr(11, 5)
       }
       return dotTime
-    },
-    getImgUrl () {
-      return {
-        ...this.promiseDetail,
-        icon: this.promiseDetail.type && `https://i5b302.p.ssafy.io/img/${this.promiseDetail.type}-icon.svg`
-      }
     }
   },
   methods: {
@@ -288,12 +288,25 @@ export default {
             }
             this.$store.dispatch('promiseDetailGet', payload)
           })
+          .then(() => {
+            // 위치 정보 업데이트
+            let formdata = new FormData()
+            formdata.append('lat', this.location.lat)
+            formdata.append('lon', this.location.lon)
+            axios({
+              url: `https://i5b302.p.ssafy.io/api/promise/place/${this.$route.params.promiseid}`,
+              method: 'put',
+              headers: {
+                "Content-Type": "application/json",
+                "X-AUTH-TOKEN": this.token,
+              },
+              data: formdata
+            })
+          })
         
-
         // 약속 수락 -> 참가자'status +2
         let formdataAttender = new FormData()
         formdataAttender.append('status', 2)
-
         axios({
           url: `https://i5b302.p.ssafy.io/api/account/status/${this.username}`,
           method: 'put',
@@ -315,20 +328,6 @@ export default {
             "X-AUTH-TOKEN": this.token
           },
           data: formdataMaker
-        })
-
-        // 위치 정보 업데이트
-        let formdata = new FormData()
-        formdata.append('lat', this.location.lat)
-        formdata.append('lon', this.location.lon)
-        axios({
-          url: `https://i5b302.p.ssafy.io/api/promise/place/${this.$route.params.promiseid}`,
-          method: 'put',
-          headers: {
-            "Content-Type": "application/json",
-            "X-AUTH-TOKEN": this.token,
-          },
-          data: formdata
         })
       }
     },
@@ -372,6 +371,29 @@ export default {
         })
 
         this.$router.push({ name: "PromiseList"})
+      }
+    },
+    getImgUrl () {
+      const typeList = ['Travel', 'Restaurante', 'study', 'Art', 'game', 'Exercise', 'Etc']
+      const hashList = ['d51b70dd', '47b19d87', '611d4729', '8a36a18c', 'c33764ce', '9324f5ac', '4abb6ca0']
+
+      let type = this.promiseDetail.type
+      if (this.promiseDetail.type) {
+        if (this.promiseDetail.type.charAt(0) === 'G') {
+          const l = this.promiseDetail.type.length
+          type = 'g' + this.promiseDetail.type.substr(1, l-1)
+        } else if (this.promiseDetail.type.charAt(0) === 'S') {
+          const l = this.promiseDetail.type.length
+          type = 's' + this.promiseDetail.type.substr(1, l)
+        }
+      }
+
+      const typeIdx = typeList.indexOf(type)
+      const typeHash = hashList[typeIdx]
+
+      return {
+        ...this.promiseDetail,
+        icon: this.promiseDetail.type && `https://i5b302.p.ssafy.io/img/${this.promiseDetail.type}-icon.${typeHash}.svg`
       }
     },
     getThumbnailImgUrl (payload) {

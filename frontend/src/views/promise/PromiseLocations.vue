@@ -226,7 +226,6 @@ export default {
         },
       })
       .then((res) => {
-        console.log(res.data)
         this.attendantsInfo = res.data
         this.attendantsLength = res.data.length
         this.getPromiseInfo()
@@ -251,7 +250,6 @@ export default {
         },
       })
       .then((res) => {
-        console.log(res.data)
         this.promiseLat = res.data.lat
         this.promiseLon = res.data.lon
 
@@ -280,12 +278,9 @@ export default {
         var differenceLon = maxLon - minLon;
 
         var maxDifference = Math.max.apply(null, [differenceLat, differenceLon]);
-        console.log(maxDifference);
         
-        console.log(this.attendantsLat, '최대값은', Math.max.apply(null, this.attendantsLat))
         const avgLat = (maxLat + minLat) / 2;
         const avgLon = (maxLon + minLon) / 2;
-        console.log('센터좌표', avgLat, avgLon);
 
         if (maxDifference > 0.11) {
           this.level = 11
