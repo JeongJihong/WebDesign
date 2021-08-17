@@ -60,11 +60,11 @@
   height: 60px;
   transition: top 0.3s;
   padding: 1px;
-  border: 1px solid #000;
-  border-bottom-left-radius: 30px;
-  border-bottom-right-radius: 30px;
-  border-top-left-radius: 30px;
-  border-top-right-radius: 30px;
+  border-bottom: 1px solid #000;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
 }
 #top-custom-navbar h1 {
   color:  var(--icon-color);
@@ -86,7 +86,7 @@
   height: 75px;
   transition: bottom 0.3s;
   padding: 1px;
-  border: 1px solid #000;
+  border-top: 1px solid #000;
 }
 
 #bottom-custom-navbar p{
@@ -101,7 +101,7 @@
   height: 75px;
   width:100%; 
   z-index:100;
-  border: 1px solid #000;
+  border-top:  0 1px 0 0 solid #000;
 }
 
 #bottom-custom-navbar2 p{
