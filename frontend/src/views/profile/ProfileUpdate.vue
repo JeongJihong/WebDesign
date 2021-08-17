@@ -170,7 +170,7 @@ export default {
     getThumbnailImgUrl (payload) {
       return {
         ...this.thumbnail,
-        thumbnail: this.thumbnail && require(`@/assets/images/${payload.imgURL}`)
+        thumbnail: this.thumbnail && `https://i5b302.p.ssafy.io/img/${payload.imgURL}`
       }
     },
     reNickname(){
