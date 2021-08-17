@@ -87,7 +87,7 @@ export default {
       /* global kakao */
       script.onload = () => kakao.maps.load(this.initMap)
       script.src =
-        `http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${process.env.VUE_APP_MAP_API}&libraries=services,clusterer`
+        `https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${process.env.VUE_APP_MAP_API}&libraries=services,clusterer`
       document.head.appendChild(script)
     },
     initMap() {

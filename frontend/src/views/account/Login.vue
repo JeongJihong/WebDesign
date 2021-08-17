@@ -1,5 +1,5 @@
 <template>
-  <div class="user d-flex justify-content-center" id="login" >
+  <div class="user d-flex flex-column justify-content-between mt-2" id="login" >
     <br>
       <div class="jb-text">
         <center>
@@ -34,10 +34,10 @@
           </div>
           <div>
             <button
-              class="btn btn-primary shadow-none"
+              class="d-flex align-items-center justify-content-center btn btn-primary shadow-none"
               @click="login({ email, password })"
               :disabled="!isSubmit"
-              style="height: 2.7rem; width: 100%; margin-bottom:10px;"
+              style="height: 2.7rem; width: 100%; margin-bottom: 2rem;"
             >로그인</button>
           </div>
           <div class="hr-sect">OR</div>
@@ -51,16 +51,17 @@
               <p>혹시</p>
               <div class="bar"></div>
             </div> -->
-            <div class="wrap">
-              <p>아직 회원이 아니신가요?</p>
+            <div class="wrap d-flex justify-content-between align-items-center">
+              <p class="m-0">아직 회원이 아니신가요?</p>
               <router-link to="/account/signup" class="btn--text">가입하기</router-link>
             </div>
           </div>
         </div>
       </div>
-      <div  style="position:fixed; bottom:5px; text-align:center;">
-          <p style="margin-bottom:2px;">made by</p>
-          <p style="font-size:1.1rem; font-weight:1000;">지금 어디시조</p>
+      <div style="height: 8vh;"></div>
+      <div class="d-flex flex-column align-items-center">
+          <p class="my-1" style="font-size: 0.85rem;">made by</p>
+          <p style="font-size: 1.1rem; font-weight: 1000;">지금 어디시조</p>
       </div>
   </div>
 </template>
@@ -153,7 +154,8 @@ export default {
   @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
   template { padding: 0px; margin: 0px; }
   .jb-box {  width: 100%; overflow: hidden; margin: 0px auto; position: fixed; }
-  .jb-text { position: absolute; top: 5%; width: 100%; }
+  /* .jb-text { position: absolute; top: 5%; width: 100%; } */
+  .jb-text { top: 5%; width: 100%; }
   .jb-text p {color: black; }
   .main-icon { width: 130px; margin-bottom: 10px; }
   .hr-sect {

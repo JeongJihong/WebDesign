@@ -18,7 +18,7 @@
         </router-link>
       </b-nav-item>
         <b-nav-item>
-        <b-dropdown id="dropdownMenuButton" size="sm" right variant="link" toggle-class="text-decoration-none" no-caret>
+        <b-dropdown id="dropdownMenuButton" size="sm" right variant="link" toggle-class="text-decoration-none d-flex flex-column align-items-center" no-caret>
           <template #button-content >
             <b-icon id="icon"  icon="person-fill"></b-icon>
             <p style="font-size:0.8rem">프로필</p>
