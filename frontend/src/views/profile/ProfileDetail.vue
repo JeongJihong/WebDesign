@@ -20,7 +20,7 @@
         </button>
       </div> -->
       <div class="d-flex">
-        <b-avatar v-if="thumbnail" class="me-2" size="4rem"
+        <b-avatar v-if="thumbnail" class="me-2" size="4rem" style="border: 1px solid black;"
           :src="getThumbnailImgUrl({ imgURL: thumbnail }).thumbnail"></b-avatar>
         <b-avatar v-else class="me-2" size="4rem"></b-avatar>
         <div class="mx-4">

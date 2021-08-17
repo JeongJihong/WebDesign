@@ -20,6 +20,7 @@ public class PromiseResponse {
     private Long promiseid;
 
     private String type;
+    private String place;
     private int num;
     private int peopleNum;
     private String title;

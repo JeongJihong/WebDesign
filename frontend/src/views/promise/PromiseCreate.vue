@@ -13,9 +13,13 @@
           <b-form-input
             id="input-1"
             v-model="title"
+            :state="nameState"
             placeholder="Enter Title"
             required
           ></b-form-input>
+          <b-form-invalid-feedback id="input-live-feedback">
+            20자 이하로 입력하세요.
+          </b-form-invalid-feedback>
         </b-form-group>
         <br>
             <form enctype = "multipart/form-data" method="post" >
@@ -120,6 +124,11 @@ export default {
         this.location.lat = position.coords.latitude
         this.location.lon = position.coords.longitude
       })
+    }
+  },
+  computed: {
+    nameState() {
+      return this.title.length <= 20 ? true : false
     }
   },
   methods: {
