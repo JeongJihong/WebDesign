@@ -250,16 +250,17 @@ export default {
       this.sliding = false
     },
     getArticleFeeImgUrl (payload) {
-      console.log( this.articles[payload.idx] && require(`https://i5b302.p.ssafy.io/img/${payload.imgURL}`))
+      // console.log( this.articles[payload.idx] && require(`https://i5b302.p.ssafy.io/img/${payload.imgURL}`))
+      console.log( this.articles[payload.idx] && `https://i5b302.p.ssafy.io/img/${payload.imgURL}`)
       return {
         ...this.articles,
-        icon: this.articles[payload.idx] && require(`https://i5b302.p.ssafy.io/img/${payload.imgURL}`)
+        icon: this.articles[payload.idx] && `https://i5b302.p.ssafy.io/img/${payload.imgURL}`
       }
     },
     getThumbnailImgUrl (payload) {
       return {
         ...this.articles[payload.idx],
-        thumbnail: this.articles[payload.idx].articleDetail.user.thumbnail && require(`https://i5b302.p.ssafy.io/img/${payload.imgURL}`)
+        thumbnail: this.articles[payload.idx].articleDetail.user.thumbnail && `https://i5b302.p.ssafy.io/img/${payload.imgURL}`
       }
     }
   },

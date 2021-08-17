@@ -149,7 +149,7 @@ export default {
     getThumbnailImgUrl (payload) {
       return {
         ...this.comments,
-        thumbnail: this.comments.length && require(`https://i5b302.p.ssafy.io/img/${payload.imgURL}`)
+        thumbnail: this.comments.length && require(`@/assets/images/${payload.imgURL}`)
       }
     }
   }

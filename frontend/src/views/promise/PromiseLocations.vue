@@ -238,7 +238,7 @@ export default {
     getThumbnailImgUrl (payload) {
       return {
         ...this.thumbnails,
-        thumbnail: this.thumbnails[payload.idx] && require(`https://i5b302.p.ssafy.io/img/${payload.imgURL}`)
+        thumbnail: this.thumbnails[payload.idx] && require(`@/assets/images/${payload.imgURL}`)
       }
     },
     getPromiseInfo () {
