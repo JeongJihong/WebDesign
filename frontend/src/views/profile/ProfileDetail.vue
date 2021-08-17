@@ -6,8 +6,7 @@
         <span class="fs-1 fw-bold">프로필</span>
       </span>
       <span>
-        <button  v-if="this.nickname === this.myNickname" class="text-primary" @click="goToProfileUpdate">수정</button>
-        <button v-else class="text-primary" @click="scrapDeleteMode">수정완료</button>
+        <button  v-if="this.nickname === this.myNickname" class="text-primary" @click="goToProfileUpdate">프로필 수정</button>
       </span>
     </div>
     <div class="m-4">

@@ -13,9 +13,13 @@
           <b-form-input
             id="input-1"
             v-model="title"
+            :state="nameState"
             placeholder="Enter Title"
             required
           ></b-form-input>
+          <b-form-invalid-feedback id="input-live-feedback">
+            20자 이하로 입력하세요.
+          </b-form-invalid-feedback>
         </b-form-group>
         <br>
             <form enctype = "multipart/form-data" method="post" >
@@ -48,7 +52,7 @@
         <br>
         <b-form-group id="input-group-5">
           <label :for="`type-date`">날짜:</label>
-          <b-form-datepicker id=type-date v-model="promiseDate"></b-form-datepicker>
+          <b-form-datepicker id=type-date v-model="promiseDate" :min="min"></b-form-datepicker>
           <label :for="`type-time`">시간:</label>
           <b-time id=type-time  v-model="promiseTime" ></b-time>
         </b-form-group>
@@ -80,6 +84,10 @@
 import axios from 'axios';
 export default {
   data() {
+    const now = new Date()
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+    const minDate = new Date(today)
+    minDate.setDate(minDate.getDate())
     return{
       virtual: false,
       title: '',
@@ -99,7 +107,8 @@ export default {
       location: {
         lat: 0.0,
         lon: 0.0
-      }
+      },
+      min: minDate
     }
   },
   mounted() {
@@ -120,6 +129,11 @@ export default {
         this.location.lat = position.coords.latitude
         this.location.lon = position.coords.longitude
       })
+    }
+  },
+  computed: {
+    nameState() {
+      return this.title.length <= 20 ? true : false
     }
   },
   methods: {
