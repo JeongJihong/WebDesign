@@ -17,7 +17,7 @@
         <div v-else>
           <b-list-group>
             <b-list-group-item
-              class="border-0 my-1" v-for="(user, idx) in likeList" :key="user.detail"
+              class="border-0 my-1" v-for="(user, idx) in likeList" :key="user.detail" id="app"
               @click="goToArticle(user.detail)">
               <div class="d-flex align-items-center">
                 <span class="me-2">
