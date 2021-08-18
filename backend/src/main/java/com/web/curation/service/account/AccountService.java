@@ -1,9 +1,10 @@
 package com.web.curation.service.account;
 
-import com.web.curation.model.user.*;
-import org.springframework.http.ResponseEntity;
+import com.web.curation.model.user.ChangePasswordRequest;
+import com.web.curation.model.user.LoginRequest;
+import com.web.curation.model.user.SignupRequest;
+import com.web.curation.model.user.User;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.Map;
 import java.util.Optional;
 
