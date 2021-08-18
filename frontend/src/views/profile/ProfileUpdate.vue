@@ -15,16 +15,33 @@
       <form enctype = "multipart/form-data" method="patch" >
         <!-- 프로필 사진 수정 -->
         <div class="mt-5 mx-3 d-flex justify-content-center">
-          <img 
+          <b-avatar 
+            v-if="thumbnail" 
+            @click.prevent="clickInputTag()" 
+            id='addimage' 
+            size="10rem" 
+            style="border: 2px solid black;"
+            :src="getThumbnailImgUrl({ imgURL: this.thumbnail }).thumbnail"
+          >
+          </b-avatar>
+          <b-avatar 
+            v-else 
+            @click.prevent="clickInputTag()" 
+            id='addimage' 
+            size="10rem"
+            style="background-color: #bbb"
+          >
+          </b-avatar>
+          <!-- <img 
             v-if="this.thumbnail" 
             @click.prevent="clickInputTag()" 
             id='addimage' 
             style="border: 2px solid black"
             :src="getThumbnailImgUrl({ imgURL: this.thumbnail }).thumbnail"
-            alt="image" 
+            alt="image"
             class="dot"
           >
-          <b-avatar v-else @click.prevent="clickInputTag()" id='addimage' class="dot"></b-avatar>
+          <b-avatar v-else @click.prevent="clickInputTag()" id='addimage' class="dot2"></b-avatar> -->
           <input hidden ref="plus" id="file" type="file"  accept="image/*" @change.prevent="uploadImage($event)" multiple>
         </div>
         
@@ -37,8 +54,8 @@
             <div class="d-flex flex-row">
               <b-form-input @change="reNickname()" v-model="userInfo.nickname" id="nickname" placeholder="username" type="text"></b-form-input>
               &nbsp;&nbsp;
-              <b-button v-if="!checkNicknameValidation" @click="confirmNickname()" style="height:100%" >중복확인</b-button>
-              <b-button v-if="checkNicknameValidation" @click="confirmNickname()" style="height:100%" disabled>중복확인</b-button>
+              <b-button class="shadow-none" v-if="!checkNicknameValidation" @click="confirmNickname()" style="height:80%" >중복확인</b-button>
+              <b-button class="shadow-none" v-if="checkNicknameValidation" @click="confirmNickname()" style="height:80%" disabled>중복확인</b-button>
             </div>
           </div>
           <div class="mt-3 mx-3">
@@ -132,9 +149,9 @@ export default {
         this.userInfo.nickname = res.data.userProfile.nickname
         this.userInfo.introduction = res.data.userProfile.introduction
         this.thumbnail = res.data.userProfile.thumbnail
-        // if (typeof this.thumbnail === 'undefined') {
-        //   this.thumbnail = 'profile_default.png'
-        // }
+        if (typeof this.thumbnail === 'undefined') {
+          this.thumbnail = ""
+        }
         if (this.userInfo.introduction === 'undefined') {
           this.userInfo.introduction = ""
         }

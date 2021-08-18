@@ -8,7 +8,7 @@
     </div>
     <br>
     <form enctype = "multipart/form-data" method="post">
-      <div class="d-flex flex-row" style="margin:10px">
+      <div class="d-flex flex-row" style="margin:10px height:5rem">
         <button style="display:inline-block; margin-right:5%; margin-left:2%; height:70px" @click.prevent="clickInputTag()" id='addimage'><b-icon-plus-square id="icon" class="h1"></b-icon-plus-square><p id="icon">이미지 업로드</p></button>
         <input hidden ref="plus" id="file" type="file"  accept="image/*" @change.prevent="uploadImage($event)" multiple>
         <div id="image_container"></div>
