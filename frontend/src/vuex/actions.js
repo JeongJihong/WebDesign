@@ -76,7 +76,8 @@ export default {
     })
       .then((res) => {
         axios({
-          url: `https://i5b302.p.ssafy.io/api/search?id=${res.data.uid}`,
+          // url: `https://i5b302.p.ssafy.io/api/search?id=${res.data.uid}`,
+          url: "https://i5b302.p.ssafy.io/api/search",
           method: "get",
           headers: {
             "Content-Type": "application/json",
@@ -84,6 +85,7 @@ export default {
           },
         })
           .then((res) => {
+            console.log(res.data)
             commit("SEARCH_GET", res.data);
           })
           .catch((err) => {
@@ -100,6 +102,7 @@ export default {
       method: "get",
     })
       .then((res) => {
+        console.log(res.data)
         commit("SEARCH_LIVE", res.data);
       })
       .catch((err) => {
@@ -150,6 +153,7 @@ export default {
     })
       .then((res) => {
         commit("ALARM_PROMISE_GET", res.data);
+        console.log(res.data)
       })
       .catch((err) => {
         alert(err);
@@ -307,24 +311,24 @@ export default {
       },
     });
   },
-  updateLocations ({ commit }, payload) {
+  updateLocations({ commit }, payload) {
     axios({
-      method: 'get',
+      method: "get",
       url: `https://i5b302.p.ssafy.io/api/promise/place/${payload.promiseid}`,
       headers: {
-        'Content-Type': 'application/json',
-        'X-AUTH-TOKEN' : payload.token
+        "Content-Type": "application/json",
+        "X-AUTH-TOKEN": payload.token,
       },
     })
-    .then((res) => {
-      commit("UPDATE_LOCATIONS", res.data);
-      commit("GET_ATTENDANTS_NUM", res.data.length);
-      // this.attendantsInfo = res.data
-      // this.attendantsLength = res.data.length
-      // this.getPromiseInfo()
-    })
-    .catch((err) => {
-      alert(err)
-    })
+      .then((res) => {
+        commit("UPDATE_LOCATIONS", res.data);
+        commit("GET_ATTENDANTS_NUM", res.data.length);
+        // this.attendantsInfo = res.data
+        // this.attendantsLength = res.data.length
+        // this.getPromiseInfo()
+      })
+      .catch((err) => {
+        alert(err);
+      });
   },
 };

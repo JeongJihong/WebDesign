@@ -74,6 +74,14 @@
           </router-link>
       </b-nav-item>
     </b-nav>
+    <div v-if="commentNavShow">
+      <div class="mt-3 mx-4 d-flex justify-content-between align-items-center">
+        <span class="fs-1">
+          <button @click="goBack"><b-icon id="icon" icon="arrow-left" class="me-4"></b-icon></button>
+          <span class="fw-bold">댓글 목록</span>
+        </span>
+      </div>
+    </div>
   </div>
     <router-view></router-view>
   </div>
@@ -90,6 +98,7 @@ export default {
     return {
       navShow: true,
       bottomNavShow: false,
+      commentNavShow: false,
       mode:"",
     }
   },
@@ -104,14 +113,22 @@ export default {
       if (this.$route.name === 'FeedMain') {
         this.navShow = true
         this.bottomNavShow= false
+        this.commentNavShow= false
       }
       else if( this.$route.name === 'ArticleCreate' || this.$route.name === 'ArticleDetail' || this.$route.name === 'Comments' || this.$route.name === 'FollowList' || this.$route.name === 'ProfileDetail' || this.$route.name === 'ProfileUpdate' || this.$route.name === 'Scrap' || this.$route.name === 'PromiseCreate' || this.$route.name === 'PromiseLsit'|| this.$route.name === 'PromiseLocation'|| this.$route.name === 'SearchUser'|| this.$route.name === 'ChangePassword'|| this.$route.name === 'PromiseDetail' ){
         this.navShow = false
         this.bottomNavShow= true
+        this.commentNavShow= false
+      }
+      else if( this.$route.name === 'Comments' ){
+        this.navShow = false
+        this.bottomNavShow= false
+        this.commentNavShow= true
       }
       else {
         this.navShow = false
         this.bottomNavShow= false
+        this.commentNavShow= false
       }
 
       if (localStorage.getItem('token')) {
@@ -129,14 +146,22 @@ export default {
     if (this.$route.name === 'FeedMain') {
         this.navShow = true
         this.bottomNavShow= false
+        this.commentNavShow= false
       }
-      else if( this.$route.name === 'ArticleCreate' || this.$route.name === 'ArticleDetail' || this.$route.name === 'Comments' || this.$route.name === 'FollowList' || this.$route.name === 'ProfileDetail' || this.$route.name === 'ProfileUpdate' || this.$route.name === 'Scrap' || this.$route.name === 'PromiseCreate' || this.$route.name === 'PromiseLsit'|| this.$route.name === 'PromiseLocation'|| this.$route.name === 'SearchUser' || this.$route.name === 'ChangePassword' || this.$route.name === 'PromiseDetail' ){
+      else if( this.$route.name === 'ArticleCreate' || this.$route.name === 'ArticleDetail' || this.$route.name === 'FollowList' || this.$route.name === 'ProfileDetail' || this.$route.name === 'ProfileUpdate' || this.$route.name === 'Scrap' || this.$route.name === 'PromiseCreate' || this.$route.name === 'PromiseLsit'|| this.$route.name === 'PromiseLocation'|| this.$route.name === 'SearchUser' || this.$route.name === 'ChangePassword' || this.$route.name === 'PromiseDetail' ){
         this.navShow = false
         this.bottomNavShow= true
+        this.commentNavShow= false
+      }
+      else if( this.$route.name === 'Comments' ){
+        this.navShow = false
+        this.bottomNavShow= false
+        this.commentNavShow= true
       }
       else {
         this.navShow = false
         this.bottomNavShow= false
+        this.commentNavShow= false
       }
     if(window && window.matchMedia('(prefers-color-scheme: dark)').matches) {
       this.mode= "lightmode"
