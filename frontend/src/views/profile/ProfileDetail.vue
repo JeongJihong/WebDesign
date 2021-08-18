@@ -163,6 +163,9 @@ export default {
           this.articlesLength = this.articles.length
         }
         this.thumbnail = res.data.userProfile.thumbnail
+        if (this.introduction === 'undefined') {
+          this.introduction = ''
+        }
         // if (typeof this.thumbnail === 'undefined') {
         //   this.thumbnail = `https://i5b302.p.ssafy.io/img/profile_default.png`)
         // }
