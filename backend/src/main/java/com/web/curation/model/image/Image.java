@@ -19,7 +19,7 @@ import javax.persistence.*;
 @Builder
 public class Image{
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long imageid;
 
 

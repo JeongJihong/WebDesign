@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @Builder
 public class Follow{
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long followid;
 
     private Long srcid;
