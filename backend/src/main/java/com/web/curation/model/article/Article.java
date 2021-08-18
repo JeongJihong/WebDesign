@@ -21,7 +21,7 @@ import java.util.List;
 @Builder
 public class Article {   // 게시글 보여줄 때 필요한 정보
     @Id @Column(name = "articleid")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long articleid;
     private Long id;
     private Long promiseid;

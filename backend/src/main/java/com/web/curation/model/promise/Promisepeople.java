@@ -21,7 +21,7 @@ public class Promisepeople {
 
     @Id
     @Column(name = "promisepeopleid")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long promisepeopleid;
 
     private Long uid;

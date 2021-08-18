@@ -2,7 +2,6 @@ package com.web.curation.service.kakaoLogin;
 
 import com.web.curation.config.security.JwtTokenProvider;
 import com.web.curation.dao.user.UserDao;
-import com.web.curation.model.follow.FollowRequest;
 import com.web.curation.model.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

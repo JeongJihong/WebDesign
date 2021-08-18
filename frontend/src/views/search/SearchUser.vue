@@ -20,7 +20,7 @@
         <div v-if="this.searchLive.length !== 0">
           <b-list-group>
             <b-list-group-item
-              class="border-0 my-1" v-for="(user, idx) in searchGet" :key="user.searchid">
+              class="border-0 my-1" v-for="(user, idx) in searchGet" :key="user.searchid" id="app">
               <div class="d-flex justify-content-between">
                 <!-- <b-link :href="`/#/account/profile/${user.name}`" -->
                 <b-link
