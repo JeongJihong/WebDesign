@@ -44,7 +44,6 @@ public class CommentServiceImpl implements CommentService{
     public void postComment(Long articleid, Comment request) {
         Optional<User> userOpt = Authentication();
         commentDao.save(Comment.builder()
-                .commentid(null)
                 .articleid(articleid)
                 .id(userOpt.get().getUid())
                 .nickname(userOpt.get().getNickname())

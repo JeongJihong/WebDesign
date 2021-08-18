@@ -2,10 +2,7 @@ package com.web.curation.model.comment;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.Column;
-import javax.validation.Valid;
 import java.time.LocalDateTime;
 
 @Getter
