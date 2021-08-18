@@ -85,6 +85,7 @@ export default {
           },
         })
           .then((res) => {
+            console.log(res.data)
             commit("SEARCH_GET", res.data);
           })
           .catch((err) => {
@@ -101,6 +102,7 @@ export default {
       method: "get",
     })
       .then((res) => {
+        console.log(res.data)
         commit("SEARCH_LIVE", res.data);
       })
       .catch((err) => {
@@ -151,6 +153,7 @@ export default {
     })
       .then((res) => {
         commit("ALARM_PROMISE_GET", res.data);
+        console.log(res.data)
       })
       .catch((err) => {
         alert(err);

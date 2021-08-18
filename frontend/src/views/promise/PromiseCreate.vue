@@ -108,7 +108,8 @@ export default {
         lat: 0.0,
         lon: 0.0
       },
-      min: minDate
+      min: minDate,
+      count: 1
     }
   },
   mounted() {
@@ -129,8 +130,6 @@ export default {
         this.location.lon = position.coords.longitude
       })
     }
-
-    this.initMap()
   },
   computed: {
     nameState() {
@@ -194,6 +193,11 @@ export default {
           }   
         });
       });
+
+      if (this.count === 1) {
+        this.count = 0
+        this.initMap()
+      }
     },
     clickInputTag() {
       this.$refs['plus'].click()
