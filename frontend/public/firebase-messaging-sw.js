@@ -26,16 +26,3 @@ messaging.setBackgroundMessageHandler((payload) => {
   };
   return self.registration.showNotification(notificationTitle, notificationOptions);
 });
-
-// Handle received push notification at foreground (수정)
-// messaging.onMessage((payload) => {
-//   console.log('onMessage: ', payload);
-//         var title = "고라니 서비스";
-//         var options = {
-//                 body: payload.notification.body
-//         };
-
-//         var notification = new Notification(title, options);
-//   console.log(payload);
-//   alert(payload.data.message);
-// });
