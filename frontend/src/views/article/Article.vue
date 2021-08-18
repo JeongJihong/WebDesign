@@ -1,5 +1,5 @@
 <template>
-  <div class="feed newsfeed app" style="margin-top: 5rem; margin-bottom:60px;">
+  <div class="feed newsfeed app" style="margin-top: 5rem; margin-bottom:80px;">
     <div class="wrapB">
       <div v-for="(article,idx) in articles" :key="idx">
         <div>
@@ -33,7 +33,7 @@
             </b-carousel-slide>
           </b-carousel>
 
-          <div v-if="article.articleDetail.promiseid" style="positon:relative;">
+          <div v-if="article.articleDetail.promiseid">
               <div id="demo">
                 <div class="post-it">
                   <div class="inner" style="color:black; font-size: 1.1rem;">
@@ -51,14 +51,14 @@
             <p> {{ article.articleDetail.review }}</p>
           </div>
 
-          <div style="positon:relative;">
+          <div>
             <ul class="ms-3 pt-2 d-flex justify-content-left article" style="padding-left:3px;">
               <li class="me-4" v-if="article.likeCheck" ><b-icon @click="articleLike({ articleid: article.articleDetail.articleid, nickname: article.articleDetail.user.nickname, likeCheck:article.likeCheck, idx:idx  })" icon="hand-thumbs-up" scale="1.5" variant="danger"></b-icon></li>
               <li class="me-4" v-else ><b-icon id="icon" @click="articleLike({ articleid: article.articleDetail.articleid, nickname: article.articleDetail.user.nickname,idx:idx })"  icon="hand-thumbs-up" scale="1.5"></b-icon></li>
               
-              <li class="me-4" v-if="article.scrapCheck"><b-icon @click="undoScrap({ articleid: article.articleDetail.articleid, idx: idx })" icon="tags-fill" scale="1.5" ></b-icon></li>
-              <li class="me-4" v-else><b-icon id="icon" @click="doScrap({ articleid: article.articleDetail.articleid, idx: idx })" icon="tags" scale="1.5" ></b-icon></li>
-              <li @click="getComments(article.articleDetail.articleid)"><b-icon icon="chat-dots-fill" scale="1.5" style="color:10598D;"></b-icon></li><span>{{ article.articleDetail.comments.length }}</span>
+              <li v-if="article.scrapCheck"><b-icon @click="undoScrap({ articleid: article.articleDetail.articleid, idx: idx })" icon="tags-fill" scale="1.5" ></b-icon></li>
+              <li v-else><b-icon id="icon" @click="doScrap({ articleid: article.articleDetail.articleid, idx: idx })" icon="tags" scale="1.5" ></b-icon></li>
+              <li @click="getComments(article.articleDetail.articleid)"><b-icon icon="chat-dots-fill" scale="1.5" style="color:#10598;"></b-icon></li><span>{{ article.articleDetail.comments.length }}</span>
             </ul>
           </div>
           <p class="mx-3 mt-2">{{ article.likeCount }} 명의 유저가 이글을 좋아합니다.</p>
