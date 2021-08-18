@@ -241,6 +241,7 @@
 }
 
 
+
 /*  Promise Create  */
 @import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
 div { font-family: 'Jua', sans-serif; }
@@ -252,3 +253,4 @@ div { font-family: 'Jua', sans-serif; }
 #pagination {margin:10px auto;text-align: center;}
 #pagination a {display:inline-block;margin-right:10px;}
 #pagination .on {font-weight: bold; cursor: default;color:#777;}
+.b-form-spinbutton button { height: 2rem; }

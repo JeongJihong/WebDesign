@@ -1,5 +1,5 @@
 <template>
-  <div style="margin-bottom:60px;">
+  <div style="margin-bottom:80px;">
     <!-- 헤더 -->
     <div class="mt-3 mx-4 d-flex justify-content-between align-items-center">
       <span class="fs-1">

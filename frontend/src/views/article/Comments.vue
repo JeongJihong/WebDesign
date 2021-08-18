@@ -1,5 +1,5 @@
 <template>
-  <div style="margin-bottom:60px;">
+  <div style="margin-bottom:80px;">
     <!-- 댓글 입력 -->
     <div class="d-flex justify-content-left align-items-center mx-3 mt-4">
       <span class="d-flex justify-content-between" style="width: 100%;">
