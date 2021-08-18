@@ -26,7 +26,7 @@
                 <b-link
                   class="text-decoration-none text-dark pe-5 me-5">
                   <span class="d-flex align-items-center" @click="searchPost({token, user})">
-                    <b-avatar v-if="user.thumbnail" class="me-2"
+                    <b-avatar v-if="user.thumbnail !== null" class="me-2"
                       :src="getThumbnailImgUrl({ idx, imgURL: user.thumbnail }).thumbnail"></b-avatar>
                     <b-avatar v-else class="me-2"></b-avatar>
                     <span>{{ user.name }}</span>
@@ -49,7 +49,7 @@
             class="border-0 my-1" v-for="(user, idx) in searchLive" :key="user.searchid"
             @click="searchPost({token, user})">
             <div class="d-flex align-items-center">
-              <b-avatar v-if="user.thumbnail" class="me-2"
+              <b-avatar v-if="user.thumbnail !== null" class="me-2"
                 :src="getLiveThumbnailImgUrl({ idx, imgURL: user.thumbnail }).thumbnail"></b-avatar>
               <b-avatar v-else class="me-2"></b-avatar>
               <span>{{ user.name }}</span>
@@ -73,6 +73,7 @@ export default {
   },
   created() {
     this.$store.dispatch('searchGet', this.token)
+    console.log(this.searchLive)
   },
   computed: {
     ...mapState([
@@ -162,14 +163,14 @@ export default {
       console.log('getThumbnailImgUrl', payload)
       return {
         ...this.searchGet,
-        thumbnail: this.searchGet[payload.idx].thumbnail && `https://i5b302.p.ssafy.io/img/${payload.imgURL}`
+        thumbnail: this.searchGet.length && `https://i5b302.p.ssafy.io/img/${payload.imgURL}`
       }
     },
     getLiveThumbnailImgUrl (payload) {
       console.log('getLiveThumbnailImgUrl', payload)
       return {
         ...this.searchGet,
-        thumbnail: this.searchGet[payload.idx].thumbnail && `https://i5b302.p.ssafy.io/img/${payload.imgURL}`
+        thumbnail: this.searchGet.length && `https://i5b302.p.ssafy.io/img/${payload.imgURL}`
       }
     }
   }
