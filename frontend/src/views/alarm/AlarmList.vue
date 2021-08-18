@@ -39,7 +39,7 @@
         <div v-else>
           <b-list-group>
             <b-list-group-item
-              class="border-0 my-1" v-for="(user, idx) in followList" :key="user.senderUid"
+              class="border-0 my-1" v-for="(user, idx) in followList" :key="user.senderUid" id="app"
               @click="goToProfile(user.senderNickname)">
               <div class="d-flex align-items-center">
                 <span class="me-2">
@@ -69,10 +69,10 @@
             <div v-if="category.length !== 0">
               <b-list-group>
                 <b-list-group-item
-                  class="border-0 my-1" v-for="user in category" :key="user.detail"
+                  class="border-0 my-1" v-for="user in category" :key="user.detail" id="app"
                   @click="goToPromise(user.detail)">
                   <div class="d-flex align-items-center">
-                    <span class="fw-bold fs-2 me-4">{{ idx }}
+                    <span class="fw-bold fs-6 me-4">{{ idx }}
                       <!-- <b-avatar class="me-2"
                         :src="getPromiseThumbnailImgUrl({ idx }).thumbnail"></b-avatar> -->
                     </span>

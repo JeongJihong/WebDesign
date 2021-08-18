@@ -23,7 +23,7 @@
         </b-form-group>
         <br>
             <form enctype = "multipart/form-data" method="post" >
-            <div class="d-flex flex-row">
+            <div class="d-flex flex-row" style="margin:10px height:5rem">
               <button style="display:inline-block; margin-right:5%; margin-left:2%; height:70px" @click.prevent="clickInputTag()" id='addimage'><b-icon-plus-square id="icon" class="h1"></b-icon-plus-square><p id="icon">이미지 업로드</p></button>
               <input hidden ref="plus" id="file" type="file"  accept="image/*" @change.prevent="uploadImage($event)" multiple>
               <div id="image_container"></div>
@@ -50,8 +50,8 @@
         </div>
         <br>
         <div class="d-flex justify-content-between align-items-center" >
-          <h5 class="mt-3" style="font-size:1rem;">화상회의 여부</h5>
-          <b-button :pressed.sync="virtual" variant="primary" style="d-flex align-items-center justify-content-center height: 2.5rem;">{{ virtual }}</b-button>
+          <h5 class=" d-flex justify-content-between align-items-center" style="font-size:1rem;">화상회의 여부</h5>
+          <b-button :pressed.sync="virtual" variant="primary" class="shadow-none btn btn-primary d-flex justify-content-center align-items-center" style="d-flex align-items-center justify-content-center height: width:6rem; height:2rem;">{{ virtual }}</b-button>
         </div>
         <br>
         <b-form-group id="input-group-5">
@@ -68,7 +68,7 @@
         <div v-if="!virtual">
           <div class="d-flex justify-content-between align-items-center">
             <label class="me-1" for="around">주변 장소</label><input id='around'  v-model="promiseAroundPlace" type="text">
-            <button class="m-3" type="button" @click='initMap()' id='around'>검색</button>
+            <button class="m-3" type="button" @click='initMap()' id='around icon'>검색</button>
           </div>
           <hr>
           <br>
@@ -82,7 +82,7 @@
           <br>
         </div>
         <div class="d-flex justify-content-center">
-          <b-button @click="promiseCreate()" variant="primary" style="width:40%;">Submit</b-button>
+          <button @click="promiseCreate()" class="shadow-none btn btn-primary d-flex justify-content-center align-items-center"  style=" height:3rem; width:40%;">Submit</button>
         </div>
       </b-form>
     </div>
