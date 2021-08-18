@@ -23,7 +23,7 @@ public class Promise {
 
     @Id
     @Column(name = "promiseid")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long promiseid;
 
     private Long createruid;

@@ -8,7 +8,7 @@
           다들 어디
         </h2>
       </div>
-      <b-icon @click="updateLocations" icon="arrow-clockwise" animation="" font-scale="2"></b-icon>
+      <b-icon @click="initMap" icon="arrow-clockwise" animation="" font-scale="2"></b-icon>
     </div>
     <hr>
     <div class="my-2">

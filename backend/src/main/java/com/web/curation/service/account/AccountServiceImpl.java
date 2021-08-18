@@ -6,13 +6,13 @@ import com.web.curation.dao.follow.FollowDao;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.article.Article;
 import com.web.curation.model.follow.Follow;
-import com.web.curation.model.user.*;
-import lombok.AllArgsConstructor;
+import com.web.curation.model.user.ChangePasswordRequest;
+import com.web.curation.model.user.LoginRequest;
+import com.web.curation.model.user.SignupRequest;
+import com.web.curation.model.user.User;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,8 +20,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.swing.text.html.Option;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -76,7 +74,6 @@ String basePath = rootPath.substring(0, rootPath.length()-5) + "/b302/dist/img/"
         return pathName;
     }
 
-
     @Override
     public String test() {
         return "hello";
@@ -96,7 +93,7 @@ String basePath = rootPath.substring(0, rootPath.length()-5) + "/b302/dist/img/"
     @Transactional
     public Long signup(SignupRequest request) {
         Long uid = null;
-        if(request.getPassword().equals(null)){
+        if(request.getPassword().isEmpty()){
             uid = userDao.save(User.builder()
                     .uid(null)
                     .introduction("")
