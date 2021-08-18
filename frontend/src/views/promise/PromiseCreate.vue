@@ -112,8 +112,6 @@ export default {
     }
   },
   mounted() {
-    vm.$forceUpdate()
-    
     if (window.kakao && window.kakao.maps) {
       this.initMap();
     } else {
@@ -131,6 +129,8 @@ export default {
         this.location.lon = position.coords.longitude
       })
     }
+
+    this.initMap()
   },
   computed: {
     nameState() {

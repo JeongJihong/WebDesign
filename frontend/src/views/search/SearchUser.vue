@@ -26,8 +26,6 @@
                 <b-link
                   class="text-decoration-none text-dark pe-5 me-5">
                   <span class="d-flex align-items-center" @click="searchPost({token, user})">
-                    test {{ user }}
-                    test {{ idx }}
                     <b-avatar v-if="user.thumbnail" class="me-2"
                       :src="getThumbnailImgUrl({ idx, imgURL: user.thumbnail }).thumbnail"></b-avatar>
                     <b-avatar v-else class="me-2"></b-avatar>
@@ -51,8 +49,6 @@
             class="border-0 my-1" v-for="(user, idx) in searchLive" :key="user.searchid"
             @click="searchPost({token, user})">
             <div class="d-flex align-items-center">
-              test {{ user }}
-              test {{ idx }}
               <b-avatar v-if="user.thumbnail" class="me-2"
                 :src="getLiveThumbnailImgUrl({ idx, imgURL: user.thumbnail }).thumbnail"></b-avatar>
               <b-avatar v-else class="me-2"></b-avatar>
@@ -119,13 +115,13 @@ export default {
               this.$store.dispatch('searchGet', token)
               this.$router.push({ name: 'ProfileDetail', params: { nickname: user.name } })
             })
-            .catch(err => {
-              alert(err)
-            })
+            // .catch(err => {
+            //   alert(err)
+            // })
         })
-        .catch(err => {
-          alert('JWT 인증 실패', err)
-        })
+        // .catch(err => {
+        //   alert('JWT 인증 실패', err)
+        // })
     },
     searchDelete({ token, user }) {
       axios({
@@ -151,13 +147,13 @@ export default {
             .then(() => {
               this.$store.dispatch('searchGet', token)
             })
-            .catch(err => {
-              alert(err)
-            })
+            // .catch(err => {
+            //   alert(err)
+            // })
         })
-        .catch(err => {
-          alert('JWT 인증 실패', err)
-        })
+        // .catch(err => {
+        //   alert('JWT 인증 실패', err)
+        // })
     },
     goBack() {
       this.$router.go(-1)
