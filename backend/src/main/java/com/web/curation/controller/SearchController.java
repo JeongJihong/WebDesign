@@ -4,6 +4,7 @@ import com.web.curation.dao.search.SearchDao;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.search.Search;
+import com.web.curation.model.search.SearchLive;
 import com.web.curation.model.user.User;
 import com.web.curation.service.search.SearchServiceImpl;
 import io.swagger.annotations.ApiOperation;
@@ -44,8 +45,8 @@ public class SearchController {
 
     @GetMapping("/live")
     @ApiOperation(value = "실시간으로 검색 창 결과 반환")
-    public ResponseEntity<List<Search>> list(@RequestParam String nickname){
-        List<Search> result = searchService.list(nickname);
+    public ResponseEntity<List<SearchLive>> list(@RequestParam String nickname){
+        List<SearchLive> result = searchService.list(nickname);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
@@ -58,8 +59,8 @@ public class SearchController {
 
     @GetMapping("")
     @ApiOperation(value = "검색 버튼 클릭 시 최근 검색 반환")
-    public ResponseEntity<List<Search>> searchList(){
-        List<Search> result = searchService.searchList();
+    public ResponseEntity<List<SearchLive>> searchList(){
+        List<SearchLive> result = searchService.searchList();
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }

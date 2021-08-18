@@ -112,6 +112,8 @@ export default {
     }
   },
   mounted() {
+    this.$forceUpdate()
+    
     if (window.kakao && window.kakao.maps) {
       this.initMap();
     } else {

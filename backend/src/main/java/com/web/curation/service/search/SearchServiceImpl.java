@@ -3,6 +3,7 @@ package com.web.curation.service.search;
 import com.web.curation.dao.search.SearchDao;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.search.Search;
+import com.web.curation.model.search.SearchLive;
 import com.web.curation.model.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,11 +47,11 @@ public class SearchServiceImpl implements SearchService{
     }
 
     @Override
-    public List<Search> list(String nickname) {
+    public List<SearchLive> list(String nickname) {
         List<User> user = userDao.findByNicknameIsContaining(nickname);
-        List<Search> live = new ArrayList<>();
+        List<SearchLive> live = new ArrayList<>();
         for(int i = 0; i < user.size(); i++){
-            live.add(new Search(user.get(i).getUid(), user.get(i).getNickname(), user.get(i).getThumbnail()));
+            live.add(new SearchLive(user.get(i).getUid(), user.get(i).getNickname(), user.get(i).getThumbnail()));
         }
         return live;
     }
@@ -64,17 +65,17 @@ public class SearchServiceImpl implements SearchService{
     }
 
     @Override
-    public List<Search> searchList() {
+    public List<SearchLive> searchList() {
         Optional<User> userOpt = Authentication();
         List<Search> list = searchDao.findById(userOpt.get().getUid());
-        List<Search> result = new ArrayList<>();
+        List<SearchLive> result = new ArrayList<>();
         for(int i = 0; i < list.size(); i++){
             Optional<User> user = userDao.findByNickname(list.get(i).getName());
-            result.add(new Search(list.get(i).getSearchid(), list.get(i).getId(),
-                    list.get(i).getSearchDate(), list.get(i).getName(), user.get().getThumbnail()));
+            result.add(new SearchLive(list.get(i).getId(), list.get(i).getSearchDate(),
+                    list.get(i).getName(), user.get().getThumbnail()));
         }
 
-        Collections.sort(result, Comparator.comparing(Search::getSearchDate));
-        return list;
+        Collections.sort(result, Comparator.comparing(SearchLive::getSearchDate));
+        return result;
     }
 }
