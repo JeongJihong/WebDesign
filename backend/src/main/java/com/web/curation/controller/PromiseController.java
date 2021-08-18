@@ -75,7 +75,7 @@ public class PromiseController {
     @PutMapping("/place/{promiseid}")
     @ApiOperation(value = "특정 약속 참가자의 위도, 경도를 업데이트")
     public ResponseEntity<Map> participatePromise(@PathVariable final Long promiseid,
-                                     @RequestParam(required = true) BigDecimal lat, @RequestParam(required = true) BigDecimal lon) {
+                                                  @RequestParam(required = true) BigDecimal lat, @RequestParam(required = true) BigDecimal lon) {
         Map result = promiseService.participatePromise(promiseid, lat, lon);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
