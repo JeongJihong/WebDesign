@@ -1,35 +1,18 @@
 package com.web.curation.controller;
 
-import com.google.api.Http;
-import com.web.curation.dao.follow.FollowDao;
-import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
-import com.web.curation.model.article.Article;
-import com.web.curation.model.article.ViewArticleRequest;
-import com.web.curation.model.follow.Follow;
 import com.web.curation.model.follow.FollowRequest;
-import com.web.curation.model.search.Search;
 import com.web.curation.model.user.User;
 import com.web.curation.service.follow.FollowServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.support.PagedListHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @ApiResponses(value = { @ApiResponse(code = 401, message = "Unauthorized", response = BasicResponse.class),
         @ApiResponse(code = 403, message = "Forbidden", response = BasicResponse.class),
