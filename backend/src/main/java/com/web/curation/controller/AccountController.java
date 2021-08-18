@@ -1,27 +1,24 @@
 package com.web.curation.controller;
 
-import com.web.curation.config.security.JwtTokenProvider;
-import com.web.curation.dao.article.ArticleDao;
-import com.web.curation.dao.follow.FollowDao;
-import com.web.curation.dao.image.ImageDao;
-import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
-import com.web.curation.model.user.*;
+import com.web.curation.model.user.ChangePasswordRequest;
+import com.web.curation.model.user.LoginRequest;
+import com.web.curation.model.user.SignupRequest;
+import com.web.curation.model.user.User;
 import com.web.curation.service.account.AccountServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.util.*;
+import java.util.Map;
+import java.util.Optional;
 
 @ApiResponses(value = { @ApiResponse(code = 401, message = "Unauthorized", response = BasicResponse.class),
         @ApiResponse(code = 403, message = "Forbidden", response = BasicResponse.class),
@@ -36,12 +33,6 @@ import java.util.*;
 public class AccountController {
 
     private final AccountServiceImpl accountService;
-
-    @GetMapping("/test")
-    public String test(){
-        System.out.println(accountService.test());
-        return "test Success";
-    }
 
     @PostMapping("/login")
     @ApiOperation(value = "로그인")
