@@ -15,10 +15,16 @@
       <form enctype = "multipart/form-data" method="patch" >
         <!-- 프로필 사진 수정 -->
         <div class="mt-5 mx-3 d-flex justify-content-center">
-          <img v-if="this.thumbnail" @click.prevent="clickInputTag()" id='addimage' style="border: 2px solid black"
-          :src="getThumbnailImgUrl({ imgURL: this.thumbnail }).thumbnail"
-          alt="image" class="dot">
-          <b-avatar v-else @click.prevent="clickInputTag()" id='addimage'></b-avatar>
+          <img 
+            v-if="this.thumbnail" 
+            @click.prevent="clickInputTag()" 
+            id='addimage' 
+            style="border: 2px solid black"
+            :src="getThumbnailImgUrl({ imgURL: this.thumbnail }).thumbnail"
+            alt="image" 
+            class="dot"
+          >
+          <b-avatar v-else @click.prevent="clickInputTag()" id='addimage' class="dot"></b-avatar>
           <input hidden ref="plus" id="file" type="file"  accept="image/*" @change.prevent="uploadImage($event)" multiple>
         </div>
         
@@ -113,7 +119,6 @@ export default {
       })
     },
     getUserInfo: function () {
-      console.log('getUserInfo에 있는 닉네임',this.userInfo.nickname)
       axios({
         method: 'get',
         url: `https://i5b302.p.ssafy.io/api/account/profile/${this.userInfo.nickname}`,
@@ -127,8 +132,11 @@ export default {
         this.userInfo.nickname = res.data.userProfile.nickname
         this.userInfo.introduction = res.data.userProfile.introduction
         this.thumbnail = res.data.userProfile.thumbnail
-        if (typeof this.thumbnail === 'undefined') {
-          this.thumbnail = 'profile_default.png'
+        // if (typeof this.thumbnail === 'undefined') {
+        //   this.thumbnail = 'profile_default.png'
+        // }
+        if (this.userInfo.introduction === 'undefined') {
+          this.userInfo.introduction = ""
         }
       })
     },
