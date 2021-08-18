@@ -3,9 +3,11 @@
     <div class="wrapB">
       <div v-for="(article,idx) in articles" :key="idx">
         <div>
-          <b-avatar v-if="article.articleDetail.user.thumbnail" class="mx-3"
-            :src="getThumbnailImgUrl({ idx, imgURL: article.articleDetail.user.thumbnail }).thumbnail"></b-avatar>
-          <b-avatar v-else class="mx-3"></b-avatar>
+          <router-link :to="{ name: 'ProfileDetail' , params: { nickname: article.articleDetail.user.nickname } }">
+            <b-avatar v-if="article.articleDetail.user.thumbnail" class="mx-3"
+              :src="getThumbnailImgUrl({ idx, imgURL: article.articleDetail.user.thumbnail }).thumbnail"></b-avatar>
+            <b-avatar v-else class="mx-3"></b-avatar>
+          </router-link>
 
           <span>{{article.articleDetail.user.nickname}}</span>
           <b-carousel
@@ -55,8 +57,8 @@
 
           <div>
             <ul class="ms-3 pt-2 d-flex justify-content-left article" style="padding-left:3px;">
-              <li class="me-4" v-if="article.likeCheck" ><b-icon @click="articleLike({ articleid: article.articleDetail.articleid, nickname: article.articleDetail.user.nickname, likeCheck:article.likeCheck, idx:idx  })" icon="hand-thumbs-up" scale="1.5" variant="danger"></b-icon></li>
-              <li class="me-4" v-else ><b-icon id="icon" @click="articleLike({ articleid: article.articleDetail.articleid, nickname: article.articleDetail.user.nickname,idx:idx })"  icon="hand-thumbs-up" scale="1.5"></b-icon></li>
+              <li class="me-4" v-if="article.likeCheck" ><b-icon @click="articleLike({ articleid: article.articleDetail.articleid, nickname: article.articleDetail.user.nickname, likeCheck:article.likeCheck, idx:idx  })" icon="heart-fill" scale="1.5" variant="danger"></b-icon></li>
+              <li class="me-4" v-else ><b-icon id="icon" @click="articleLike({ articleid: article.articleDetail.articleid, nickname: article.articleDetail.user.nickname,idx:idx })"  icon="heart" scale="1.5"></b-icon></li>
               
               <li class="me-4" v-if="article.scrapCheck"><b-icon @click="undoScrap({ articleid: article.articleDetail.articleid, idx: idx })" icon="tags-fill" scale="1.5" ></b-icon></li>
               <li class="me-4" v-else><b-icon id="icon" @click="doScrap({ articleid: article.articleDetail.articleid, idx: idx })" icon="tags" scale="1.5" ></b-icon></li>

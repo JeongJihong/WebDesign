@@ -8,7 +8,6 @@
       </span>
     </div>
 
-    <!-- 검색 : POST search 로직을 생각해보면 검색 버튼 없어도 될 것 같다. -->
     <div class="mt-4 mx-3">
       <b-form-input v-model="nickname" placeholder="검색" type="text"></b-form-input>
     </div>
@@ -22,7 +21,6 @@
             <b-list-group-item
               class="border-0 my-1" v-for="(user, idx) in searchGet" :key="user.searchid" id="app">
               <div class="d-flex justify-content-between">
-                <!-- <b-link :href="`/#/account/profile/${user.name}`" -->
                 <b-link
                   class="text-decoration-none text-dark pe-5 me-5">
                   <span class="d-flex align-items-center" @click="searchPost({token, user})">
@@ -44,7 +42,6 @@
       <div v-else>
         <p class="fw-bold mx-3">검색 결과</p>
         <b-list-group>
-          <!-- <b-list-group-item :href="`/#/account/profile/${user.name}`" -->
           <b-list-group-item
             class="border-0 my-1" v-for="(user, idx) in searchLive" :key="user.searchid"
             @click="searchPost({token, user})">
@@ -52,7 +49,7 @@
               <b-avatar v-if="user.thumbnail !== null" class="me-2"
                 :src="getLiveThumbnailImgUrl({ idx, imgURL: user.thumbnail }).thumbnail"></b-avatar>
               <b-avatar v-else class="me-2"></b-avatar>
-              <span>{{ user.name }}</span>
+              <span id="app">{{ user.name }}</span>
             </div>
           </b-list-group-item>
         </b-list-group>  

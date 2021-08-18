@@ -25,7 +25,6 @@
 
       <form @submit.prevent="changepassword" @submit="checkForm">
         <div v-if="activeButton() && !isSubmit">
-          <!-- <button @click="PopUpEmailModal" class="btn-bottom" >가입하기</button> -->
           <button class="btn-bottom">변경하기</button>
         </div>
         <div v-else>

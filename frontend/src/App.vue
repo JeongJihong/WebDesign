@@ -115,7 +115,7 @@ export default {
         this.bottomNavShow= false
         this.commentNavShow= false
       }
-      else if( this.$route.name === 'ArticleCreate' || this.$route.name === 'ArticleDetail' || this.$route.name === 'Comments' || this.$route.name === 'FollowList' || this.$route.name === 'ProfileDetail' || this.$route.name === 'ProfileUpdate' || this.$route.name === 'Scrap' || this.$route.name === 'PromiseCreate' || this.$route.name === 'PromiseLsit'|| this.$route.name === 'PromiseLocation'|| this.$route.name === 'SearchUser'|| this.$route.name === 'ChangePassword'|| this.$route.name === 'PromiseDetail' ){
+      else if( this.$route.name === 'ArticleCreate' || this.$route.name === 'ArticleDetail' || this.$route.name === 'FollowList' || this.$route.name === 'ProfileDetail' || this.$route.name === 'ProfileUpdate' || this.$route.name === 'Scrap' || this.$route.name === 'PromiseCreate' || this.$route.name === 'PromiseLsit'|| this.$route.name === 'PromiseLocation'|| this.$route.name === 'SearchUser'|| this.$route.name === 'ChangePassword'|| this.$route.name === 'PromiseDetail' ){
         this.navShow = false
         this.bottomNavShow= true
         this.commentNavShow= false
