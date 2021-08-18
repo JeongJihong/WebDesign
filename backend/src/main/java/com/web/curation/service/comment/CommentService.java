@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface CommentService {
 
-    public void postComment(Long articleid, Comment request);
+    public void postComment(Long articleid, String request);
     public List<CommentResponse> commentList(Long articleid);
-    public void changeComment(Long commentid, Comment request);
+    public void changeComment(Long commentid, String request);
     public void deleteComment(Long commentid);
 }
