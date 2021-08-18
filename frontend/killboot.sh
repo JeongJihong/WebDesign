@@ -1,1 +1,2 @@
-sudo pkill -9 -f webcuration
+sudo pkill -9 -f webcuration;
+sleep 3
