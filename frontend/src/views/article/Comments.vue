@@ -93,7 +93,7 @@ export default {
         headers: {
           'x-auth-token': `${localStorage.getItem('token')}`,
         },
-        data:{
+        params:{
           comment: this.content,
         }
       })
@@ -131,7 +131,7 @@ export default {
         headers: {
           'x-auth-token': `${localStorage.getItem('token')}`,
         },
-        data:{
+        params:{
           comment: this.newcontent,
         }
       })
