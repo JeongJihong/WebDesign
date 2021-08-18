@@ -1,5 +1,5 @@
 <template>
-  <div style="margin-bottom:60px;">
+  <div style="margin-bottom:80px;">
     <div class="mt-3 mb-3 mx-4 d-flex justify-content-between align-items-center">
       <span>
         <button @click="goBack"><b-icon id="icon" icon="arrow-left" class="fs-1 me-4"></b-icon></button>
@@ -40,13 +40,13 @@
       </div>
       <div class="d-grid pt-3">
         <button @click="goToFollow" v-if="this.nickname !== this.myNickname && this.didIrequestFollowToYou === false" class="btn btn-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">팔로우</button>
-        <button v-if="this.nickname !== this.myNickname && this.didIrequestFollowToYou === true && this.doIFollowYou === false" @click="cancelFollow" class="btn btn-outline-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">팔로우 요청 보냄</button>
-        <button @click="unfollow" v-if="this.doIFollowYou === true" class="btn btn-outline-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">팔로우 취소</button>
+        <button v-if="this.nickname !== this.myNickname && this.didIrequestFollowToYou === true && this.doIFollowYou === false" @click="cancelFollow" class="btn btn-outline-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center; color: #0d6efd;">팔로우 요청 보냄</button>
+        <button @click="unfollow" v-if="this.doIFollowYou === true" class="btn btn-outline-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center; color: #0d6efd;">팔로우 취소</button>
       </div>
       <div v-if="this.didYouRequestFollowToMe === true">
         <p class="pt-2 pb-0 mb-0">{{ this.nickname }}님의 팔로우 요청</p>
         <div class="d-flex">
-          <button @click="approveFollowRequest" class="col-6 btn btn-outline-secondary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">승인</button>
+          <button @click="approveFollowRequest" class="col-6 btn btn-outline-secondary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center; color: #0d6efd;">승인</button>
           <button @click="rejectFollowRequest" class="col-6 btn btn-dark shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">거절</button>
         </div>
       </div>

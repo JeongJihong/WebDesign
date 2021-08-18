@@ -1,5 +1,5 @@
 <template>
-  <div style="margin-bottom:60px;">
+  <div style="margin-bottom:80px;">
     <div class="mt-3 mx-4 d-flex justify-content-between align-items-center">
       <span class="fs-1">
         <button @click="goBack"><b-icon id="icon" icon="arrow-left" class="me-4"></b-icon></button>
@@ -9,7 +9,7 @@
     <div style="margin-left:10%; margin-right:10%; page">
       <br>
       <b-form>
-        <b-form-group id="input-group-1" label="Title:" label-for="input-1">
+        <b-form-group id="input-group-1" label="Title" label-for="input-1">
           <b-form-input
             id="input-1"
             v-model="title"
@@ -24,42 +24,52 @@
         <br>
             <form enctype = "multipart/form-data" method="post" >
             <div class="d-flex flex-row">
-              <button style="display:inline-block; margin-right:5%; margin-left:2%" @click.prevent="clickInputTag()" id='addimage'><b-icon-plus class="h1"></b-icon-plus></button>
+              <button style="display:inline-block; margin-right:5%; margin-left:2%; height:70px" @click.prevent="clickInputTag()" id='addimage'><b-icon-plus-square id="icon" class="h1"></b-icon-plus-square><p id="icon">이미지 업로드</p></button>
               <input hidden ref="plus" id="file" type="file"  accept="image/*" @change.prevent="uploadImage($event)" multiple>
               <div id="image_container"></div>
             </div>
             <div>
-              <b-textarea v-model="content"  placeholder="Tall textarea" rows="8"></b-textarea>
+              <b-textarea v-model="content"  placeholder="게시글 내용을 적어주세요!" rows="8"></b-textarea>
             </div>
           </form>     
         <br>
-        <b-form-group id="input-group-2" label="Type:" label-for="input-2">
-          <b-form-select
-            id="input-2"
-            v-model="Type"
-            :options="Types"
-            required
-          ></b-form-select>
-        </b-form-group>
+        <div class="d-flex justify-content-between align-items-center">
+          <b-form-group id="input-group-2" label="Type" label-for="input-2">
+            <b-form-select
+              id="input-2"
+              v-model="Type"
+              :options="Types"
+              required
+              style="height:2rem"
+            ></b-form-select>
+          </b-form-group>
+          <br>
+          <b-form-group  id="input-group-3" label="인원" label-for="input-3">
+            <b-form-spinbutton  id="input-3" v-model="headCount" min="2" max="100" style="height:2rem"></b-form-spinbutton>
+          </b-form-group>
+        </div>
         <br>
-        <b-form-group id="input-group-3" label="인원" label-for="input-3">
-          <b-form-spinbutton id="input-3" v-model="headCount" min="2" max="100"></b-form-spinbutton>
-        </b-form-group>
-        <br>
-        
-        <h5 class="mt-3">화상회의 여부</h5>
-        <b-button :pressed.sync="virtual" variant="primary">{{ virtual }}</b-button>
+        <div class="d-flex justify-content-between align-items-center" >
+          <h5 class="mt-3" style="font-size:1rem;">화상회의 여부</h5>
+          <b-button :pressed.sync="virtual" variant="primary" style="d-flex align-items-center justify-content-center height: 2.5rem;">{{ virtual }}</b-button>
+        </div>
         <br>
         <b-form-group id="input-group-5">
-          <label :for="`type-date`">날짜:</label>
-          <b-form-datepicker id=type-date v-model="promiseDate" :min="min"></b-form-datepicker>
-          <label :for="`type-time`">시간:</label>
-          <b-time id=type-time  v-model="promiseTime" ></b-time>
+          <div class="mb-3">
+            <label :for="`type-date`">날짜 시간</label>
+            <b-form-datepicker id=type-date v-model="promiseDate" :min="min"></b-form-datepicker>
+          </div>
+          <div class="d-flex justify-content-center">
+            <!-- <label :for="`type-time`">시간 </label> -->
+            <b-time id=type-time  v-model="promiseTime" ></b-time>
+          </div>
         </b-form-group>
         <br>
         <div v-if="!virtual">
-          <label for="around">주변 장소 검색</label><input id='around'  v-model="promiseAroundPlace" type="text">
-          <button type="button" @click='initMap()' id='around'>검색</button>
+          <div class="d-flex justify-content-between align-items-center">
+            <label class="me-1" for="around">주변 장소</label><input id='around'  v-model="promiseAroundPlace" type="text">
+            <button class="m-3" type="button" @click='initMap()' id='around'>검색</button>
+          </div>
           <hr>
           <br>
           <div>
@@ -108,7 +118,8 @@ export default {
         lat: 0.0,
         lon: 0.0
       },
-      min: minDate
+      min: minDate,
+      count: 1
     }
   },
   mounted() {
@@ -192,6 +203,11 @@ export default {
           }   
         });
       });
+
+      if (this.count === 1) {
+        this.count = 0
+        this.initMap()
+      }
     },
     clickInputTag() {
       this.$refs['plus'].click()

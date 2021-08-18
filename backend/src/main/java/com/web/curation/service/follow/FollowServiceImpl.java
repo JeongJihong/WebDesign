@@ -2,13 +2,11 @@ package com.web.curation.service.follow;
 
 import com.web.curation.dao.follow.FollowDao;
 import com.web.curation.dao.user.UserDao;
-import com.web.curation.model.BasicResponse;
 import com.web.curation.model.follow.Follow;
 import com.web.curation.model.follow.FollowRequest;
 import com.web.curation.model.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -5,19 +5,13 @@ import com.web.curation.dao.article.ArticleDao;
 import com.web.curation.dao.follow.FollowDao;
 import com.web.curation.dao.promise.PromiseDao;
 import com.web.curation.dao.promise.PromisepeopleDao;
-import com.web.curation.dao.scrap.ScrapDao;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.alarm.Alarm;
-import com.web.curation.model.promise.Promise;
-import com.web.curation.model.promise.PromiseLocationInfo;
-import com.web.curation.model.promise.PromiseResponse;
-import com.web.curation.model.promise.Promisepeople;
+import com.web.curation.model.promise.*;
 import com.web.curation.model.user.User;
 import com.web.curation.service.alarm.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -39,9 +33,6 @@ public class PromiseServiceImpl implements PromiseService{
 
     @Autowired
     ArticleDao articleDao;
-
-    @Autowired
-    ScrapDao scrapDao;
 
     @Autowired
     UserDao userDao;
@@ -69,7 +60,7 @@ public class PromiseServiceImpl implements PromiseService{
     }
 
     @Override
-    public Long createPromise(Promise promise) {
+    public Long createPromise(PromiseRequest promise) {
         Optional<User> userOpt = Authentication();
         // 약속 정보 Promise table에 저장
         Long promiseID =  promiseDao.save(Promise.builder()

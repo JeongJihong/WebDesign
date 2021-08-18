@@ -44,7 +44,6 @@ public class CommentServiceImpl implements CommentService{
     public void postComment(Long articleid, Comment request) {
         Optional<User> userOpt = Authentication();
         commentDao.save(Comment.builder()
-                .commentid(null)
                 .articleid(articleid)
                 .id(userOpt.get().getUid())
                 .nickname(userOpt.get().getNickname())
@@ -71,7 +70,7 @@ public class CommentServiceImpl implements CommentService{
         Comment oldComment = commentDao.findByCommentid(commentid);
 
         // 만약 현재 로그인한 유저와 수정요청한 유저가 같을때만 수정한다
-        if(userOpt.get().getUid() == oldComment.getId()) {
+        if(userOpt.get().getUid().equals(oldComment.getId())) {
             Comment newComment = new Comment(oldComment.getCommentid(), oldComment.getArticleid(), userOpt.get().getUid(),
                     userOpt.get().getNickname(), request.getCreatedtime(), request.getUpdatedtime(), request.getComment(), oldComment.getArticle());
             commentDao.save(newComment);

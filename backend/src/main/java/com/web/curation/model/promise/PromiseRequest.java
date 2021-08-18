@@ -2,25 +2,22 @@ package com.web.curation.model.promise;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Builder
-public class PromiseResponse {
-
-    private Long promiseid;
-
+public class PromiseRequest {
     private String type;
     private String place;
     private int num;
-    private int peopleNum;
     private String title;
     private LocalDateTime promisetime;
+    private BigDecimal lat;
+    private BigDecimal lon;
 }

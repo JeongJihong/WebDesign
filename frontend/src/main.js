@@ -58,19 +58,22 @@ Notification.requestPermission().then((permission) => {
 // TODO: Send token to server for send notification
 // messaging.getToken().then(console.log);
 messaging.getToken().then((res) => {
-  // console.log(res);
+  console.log(res);
   store.dispatch("firebaseTokenGet", res);
 });
 
 // Handle received push notification at foreground (수정)
 messaging.onMessage((payload) => {
-  const title = payload.notification.title;
-  const options = {
-    body: payload.notification.body,
-  };
-  navigator.serviceWorker.ready.then((registration) => {
-    registration.showNotification(title, options);
-  });
+  // const title = payload.notification.title;
+  // const options = {
+  //   body: payload.notification.body,
+  // };
+  // navigator.serviceWorker.ready.then((registration) => {
+  //   registration.showNotification(title, options);
+  // });
+  console.log(payload);
+  alert(payload.Notification.title);
+  alert(payload.Notification.body);
 });
 
 // 카카오 소셜 로그인

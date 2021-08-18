@@ -1,5 +1,5 @@
 <template>
-  <div class="m-4 page" style="margin-bottom:60px;">
+  <div class="m-4 page" style="margin-bottom:80px;">
     <div class="d-flex" style="justify-content: space-between">
       <div class="d-flex">
         <button @click="goBack"><b-icon icon="arrow-left" class="fs-1 me-4"></b-icon></button>
@@ -61,6 +61,7 @@ export default {
       // centerLat: 50,
       // centerLon: 120,
       // level: 10,
+      count: 1
     }
   },
   created() {
@@ -70,6 +71,8 @@ export default {
     }
     this.$store.dispatch('updateLocations', payload)
     this.$store.dispatch('promiseDetailGet', payload)
+
+    this.initMap()
   },
   computed: {
     ...mapState([
@@ -312,6 +315,10 @@ export default {
       this.places = placeList
       this.times = timeList
 
+      if (this.count === 1) {
+        this.count = 0
+        this.initMap()
+      }
     },
     updateLocations () {
       let payload = {

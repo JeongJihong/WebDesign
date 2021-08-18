@@ -1,39 +1,20 @@
 package com.web.curation.controller;
 
-import com.web.curation.dao.alarm.AlarmDao;
-import com.web.curation.dao.article.ArticleDao;
-import com.web.curation.dao.follow.FollowDao;
-import com.web.curation.dao.promise.PromiseDao;
-import com.web.curation.dao.promise.PromisepeopleDao;
-import com.web.curation.dao.scrap.ScrapDao;
-import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
-import com.web.curation.model.alarm.Alarm;
-import com.web.curation.model.article.Article;
-import com.web.curation.model.article.ViewArticleRequest;
-import com.web.curation.model.promise.Promise;
 import com.web.curation.model.promise.PromiseLocationInfo;
-import com.web.curation.model.promise.PromiseResponse;
-import com.web.curation.model.promise.Promisepeople;
-import com.web.curation.model.user.User;
-import com.web.curation.service.alarm.NotificationService;
+import com.web.curation.model.promise.PromiseRequest;
 import com.web.curation.service.promise.PromiseServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.List;
+import java.util.Map;
 
 @ApiResponses(value = { @ApiResponse(code = 401, message = "Unauthorized", response = BasicResponse.class),
         @ApiResponse(code = 403, message = "Forbidden", response = BasicResponse.class),
@@ -51,7 +32,7 @@ public class PromiseController {
 
     @PostMapping("")
     @ApiOperation(value = "약속 생성하기")
-    public ResponseEntity<Long> createPromise(@RequestBody Promise promise) {
+    public ResponseEntity<Long> createPromise(@RequestBody PromiseRequest promise) {
         Long result = promiseService.createPromise(promise);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
