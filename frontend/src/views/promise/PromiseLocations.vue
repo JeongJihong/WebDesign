@@ -61,6 +61,7 @@ export default {
       // centerLat: 50,
       // centerLon: 120,
       // level: 10,
+      count: 1
     }
   },
   created() {
@@ -314,6 +315,10 @@ export default {
       this.places = placeList
       this.times = timeList
 
+      if (this.count === 1) {
+        this.count = 0
+        this.initMap()
+      }
     },
     updateLocations () {
       let payload = {

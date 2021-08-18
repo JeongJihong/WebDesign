@@ -1,9 +1,7 @@
 package com.web.curation.model.follow;
 
 import lombok.*;
-
 import javax.persistence.*;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @Getter

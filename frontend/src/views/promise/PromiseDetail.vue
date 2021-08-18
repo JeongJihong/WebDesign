@@ -121,7 +121,8 @@ export default {
       location: {
         lat: 50,
         lon: 120
-      }
+      },
+      count: 1
     }
   },
   mounted() {
@@ -149,8 +150,6 @@ export default {
         this.location.lon = position.coords.longitude
       })
     }
-
-    this.initMap()
   },
   computed: {
     ...mapState([
@@ -236,6 +235,11 @@ export default {
         var marker = new kakao.maps.Marker({ position: markerPosition })
         marker.setMap(map)
       // }
+
+      if (this.count === 1) {
+        this.count = 0
+        this.initMap()
+      }
     },
     goToProfile(nickname) {
       this.$router.push({ name: 'ProfileDetail', params: { nickname } })
