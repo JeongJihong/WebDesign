@@ -63,17 +63,18 @@ messaging.getToken().then((res) => {
 });
 
 // Handle received push notification at foreground (수정)
-// messaging.onMessage((payload) => {
-//   // const title = payload.notification.title;
-//   // const options = {
-//   //   body: payload.notification.body,
-//   // };
-//   // navigator.serviceWorker.ready.then((registration) => {
-//   //   registration.showNotification(title, options);
-//   // });
-//   console.log(payload);
-//   alert(payload.data.message);
-// });
+messaging.onMessage((payload) => {
+  // const title = payload.notification.title;
+  // const options = {
+  //   body: payload.notification.body,
+  // };
+  // navigator.serviceWorker.ready.then((registration) => {
+  //   registration.showNotification(title, options);
+  // });
+  console.log(payload);
+  alert(payload.Notification.title);
+  alert(payload.Notification.body);
+});
 
 // 카카오 소셜 로그인
 window.Kakao.init("6d8be51fab4c89e30255e5df438f02d6");
