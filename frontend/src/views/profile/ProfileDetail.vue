@@ -10,59 +10,102 @@
       </span>
     </div>
     <div class="m-4">
-      <div class="d-flex">
+      <div class="d-flex align-items-center">
         <b-avatar v-if="thumbnail" class="me-2" size="4rem" style="border: 1px solid black;"
           :src="getThumbnailImgUrl({ imgURL: thumbnail }).thumbnail"></b-avatar>
         <b-avatar v-else class="me-2" size="4rem"></b-avatar>
-        <div class="mx-4">
-          <div class="d-flex justify-content-between">
+        <div class="d-flex flex-column" style="margin-left: 1rem;">
+          <div class="align-items-center">
             <span class="fs-4">{{ this.nickname }}</span>
           </div>
-          <div class="d-flex" style="justify-content: space-between">
-            <button class="d-flex" @click="goToFollowList">
-              <h5 id="app">팔로잉</h5>&nbsp;&nbsp;
-              <h5 style="color:blue;">{{ this.followings }}</h5>
-            </button>
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            <button class="d-flex" @click="goToFollowList">
-              <h5 id="app">팔로워</h5>&nbsp;&nbsp;
-              <h5 style="color:blue;">{{ this.followers }}</h5>
-            </button>
+          <div v-if="introduction" class="align-items-center" style="margin-top: 0.5rem; margin-botton: 0">
+            <p style="font-size: 0.85rem;">{{ this.introduction }}</p>
           </div>
         </div>
       </div>
-      <div class="mt-2">
+      <div v-if="this.nickname !== this.myNickname">
+        <div class="d-grid pt-3">
+          <button @click="goToFollow" v-if="this.nickname !== this.myNickname && this.didIrequestFollowToYou === false" class="btn btn-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">팔로우</button>
+          <button v-if="this.nickname !== this.myNickname && this.didIrequestFollowToYou === true && this.doIFollowYou === false" @click="cancelFollow" class="btn btn-outline-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center; color: #0d6efd;">팔로우 요청 보냄</button>
+          <button @click="unfollow" v-if="this.doIFollowYou === true" class="btn btn-outline-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center; color: #0d6efd;">팔로우 취소</button>
+        </div>
+        <div v-if="this.didYouRequestFollowToMe === true">
+          <p class="pt-2 pb-0 mb-0">{{ this.nickname }}님의 팔로우 요청</p>
+          <div class="d-flex">
+            <button @click="approveFollowRequest" class="col-6 btn btn-outline-secondary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center; color: #0d6efd;">승인</button>
+            <button @click="rejectFollowRequest" class="col-6 btn btn-dark shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">거절</button>
+          </div>
+        </div>
+      </div>
+      <div class="mt-3">
         <div class="d-flex justify-content-between">
-          <span style="font-size: 0.9rem">피플포인트</span>
-          <span style="font-size: 0.9rem; color: #AAAAAA;">{{this.status + 10.0}}p</span>
+          <span :style="{'font-size': '0.9rem', 'color' : textColor}" >피플포인트<b-icon icon="emoji-heart-eyes" style="margin-left: 0.5rem;"></b-icon></span>
+          <span :style="{'font-size': '0.9rem', 'color' : textColor}">{{this.status + 10.0}}p</span>
         </div>
-        <b-progress :value="status+10" :max="30" class="mb-1" variant="info" height="0.5rem"></b-progress>
+        <b-progress :value="status+10" :max="30" class="mb-1" :variant="variant" height="0.4rem"></b-progress>
       </div>
-      <div class="d-grid pt-3">
-        <button @click="goToFollow" v-if="this.nickname !== this.myNickname && this.didIrequestFollowToYou === false" class="btn btn-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">팔로우</button>
-        <button v-if="this.nickname !== this.myNickname && this.didIrequestFollowToYou === true && this.doIFollowYou === false" @click="cancelFollow" class="btn btn-outline-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center; color: #0d6efd;">팔로우 요청 보냄</button>
-        <button @click="unfollow" v-if="this.doIFollowYou === true" class="btn btn-outline-primary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center; color: #0d6efd;">팔로우 취소</button>
-      </div>
-      <div v-if="this.didYouRequestFollowToMe === true">
-        <p class="pt-2 pb-0 mb-0">{{ this.nickname }}님의 팔로우 요청</p>
-        <div class="d-flex">
-          <button @click="approveFollowRequest" class="col-6 btn btn-outline-secondary shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center; color: #0d6efd;">승인</button>
-          <button @click="rejectFollowRequest" class="col-6 btn btn-dark shadow-none" style="display: flex; height: 30px; justify-content: center; align-items: center;">거절</button>
-        </div>
-      </div>
-      <div class="pt-4">
-        <p>본인소개글</p>
-        <p>{{ this.introduction }}</p>
+      <div style="margin-top: 2rem;" class="d-flex justify-content-between">
+        <span id="app" :style="{'font-size': '0.8rem', 'color' : textColor}">{{ this.recommendedExpressions }}</span>
+        <span id="app" :style="{'font-size': '0.8rem', 'color' : textColor}">=></span>
+        <router-link id="app" to="/promise/create" class="btn--text" style="font-size: 0.8rem;">약속 잡기</router-link>
       </div>
       <hr>
-      <div 
+      <div class="d-flex mx-2" style="justify-content: space-between; margin-top: 2rem;">
+        <button class="d-flex flex-column justify-content-center align-items-center">
+          <span style="font-size: 1.2rem;" id="app">생성한 약속</span>
+          <span style="font-size: 1rem;" id="app">{{this.promisesLength}}회</span>
+        </button>
+        <div style="border-left: 1px solid #999999"></div>
+        <button class="d-flex flex-column justify-content-center align-items-center" @click="goToFollowList">
+          <span style="font-size: 1.2rem;" id="app">팔로워</span>
+          <span style="font-size: 1rem;" id="app">{{ this.followers }}</span>
+          <!-- <span style="color:blue;">{{ this.followings }}</span> -->
+        </button>
+        <div style="border-left: 1px solid #999999"></div>
+        <button class="d-flex flex-column justify-content-center align-items-center" @click="goToFollowList">
+          <span style="font-size: 1.2rem;" id="app">팔로잉</span>
+          <span style="font-size: 1rem;" id="app">{{ this.followings }}</span>
+          <!-- <span style="color:blue;">{{ this.followers }}</span> -->
+        </button>
+      </div>
+      <!-- <div class="pt-4">
+        <p>본인소개글</p>
+        <p>{{ this.introduction }}</p>
+      </div> -->
+      
+      <div class="mt-3">
+        <b-tabs content-class="mt-3" fill>
+          <b-tab class="" :title="'내가 쓴 게시글 (' + nonPromisesLength + ')'" active>
+            <div 
+              v-for="image in this.nonPromisesLength" 
+              :key="image" 
+              @click="goToArticleDetail(justArticles[image-1].articleid)" 
+              class="square" 
+              :style="{ backgroundImage: 'url(' + getArticleImgUrl({ idx: justArticlesIndex[image-1], imgURL: justArticles[image-1].images }).thumbnail + ')' }"
+            >
+            </div>
+          </b-tab>
+          <b-tab :title="'내가 잡은 약속 (' + promisesLength + ')'" active>
+            <div 
+              v-for="image in this.promisesLength" 
+              :key="image" 
+              @click="goToArticleDetail(promiseArticles[image-1].articleid)" 
+              class="square" 
+              :style="{ backgroundImage: 'url(' + getArticleImgUrl({ idx: promiseArticlesIndex[image-1], imgURL: promiseArticles[image-1].images }).thumbnail + ')' }"
+            >
+              <span style="margin-top: 40%" class="d-flex justify-content-center align-items-center">{{ promiseArticles[image-1].review }}</span>
+            </div>
+          </b-tab>
+        </b-tabs>
+      </div>
+      <!-- <div 
         v-for="image in this.articlesLength" 
         :key="image" 
         @click="goToArticleDetail(articles[image-1].articleid)" 
         class="square" 
         :style="{ backgroundImage: 'url(' + getArticleImgUrl({ idx: image-1, imgURL: articles[image-1].images }).thumbnail + ')' }"
       >
-      </div>
+      </div> -->
 
     </div>
   </div>
@@ -90,6 +133,15 @@ export default {
       thumbnail: '',
       doIFollowYou: false,
       status: 0, // Pipl 지수
+      promisesLength: 0,
+      nonPromisesLength: 0,
+      recommendedExpressions: '',
+      variant: '',
+      textColor: '',
+      promiseArticles: [],
+      justArticles: [],
+      promiseArticlesIndex: [],
+      justArticlesIndex: [],
     }
   },
   methods: {
@@ -169,6 +221,59 @@ export default {
         // if (typeof this.thumbnail === 'undefined') {
         //   this.thumbnail = `https://i5b302.p.ssafy.io/img/profile_default.png`)
         // }
+        // 약속 수 계산
+        let i = 0;
+        let promiseNum = 0;
+        for (i = 0; i < this.articlesLength; i++) {
+          if (this.articles[i].promiseid) {
+            promiseNum++;
+            this.promiseArticles.push(this.articles[i])
+            this.promiseArticlesIndex.push(i)
+          }
+          else {
+            this.justArticles.push(this.articles[i])
+            this.justArticlesIndex.push(i)
+          }
+        }
+        this.promisesLength = promiseNum;
+        this.nonPromisesLength = this.articlesLength - promiseNum;
+        // 추천 문구 만들기
+        if (this.status > 15) {
+          this.recommendedExpressions = "핵인싸인 당신에게 주어지는 Pipl 목걸이!"
+          this.variant = "orange"
+          this.textColor = "#FF8657"
+        }
+        else if (this.status > 10) {
+          this.recommendedExpressions = "이미 인싸인 당신! 핵인싸가 멀지 않았다..!"
+          this.variant = "warning"
+          this.textColor = "#FFC107"
+        }
+        else if (this.status > 5) {
+          this.recommendedExpressions = "조금만 더 달려서 인싸의 길로 가즈아!"
+          this.variant = "success"
+          this.textColor = "#4CAF50"
+        }
+        else if (this.status > 1) {
+          this.recommendedExpressions = "오늘도 Pipl과 함께 약속을 만들어 봐요!"
+          this.variant = "primary"
+          this.textColor = "#14C6FF"
+        }
+        else if (this.status === 1) {
+          this.recommendedExpressions = "첫 약속은 어떠셨나요? 두 번째 약속도 Pipl!"
+          this.variant = "primary"
+          this.textColor = "#14C6FF"
+        }
+        else if (this.status === 0) {
+          this.recommendedExpressions = "Pipl과 함께 새로운 약속을 만들고 싶다면?"
+          this.variant = "info"
+          this.textColor = "#14c6FF"
+        }
+        else {
+          this.recommendedExpressions = "Pipl에서 잡은 약속은 꼭 지켜주세요!"
+          this.variant = "secondary"
+          this.textColor = "#424242"
+        }
+
         this.checkFollowRequest()
         this.followerList()
       })
