@@ -15,33 +15,38 @@
       <form enctype = "multipart/form-data" method="patch" >
         <!-- 프로필 사진 수정 -->
         <div class="mt-5 mx-3 d-flex justify-content-center">
-          <b-avatar 
-            v-if="thumbnail" 
+          <div v-if="thumbnail && !newUpdateImage" 
             @click.prevent="clickInputTag()" 
-            id='addimage' 
-            size="10rem" 
-            style="border: 2px solid black;"
-            :src="getThumbnailImgUrl({ imgURL: this.thumbnail }).thumbnail"
-          >
-          </b-avatar>
-          <b-avatar 
-            v-else 
+             > 
+
+            <b-avatar 
+              id='addimage' 
+              size="10rem" 
+              style="border: 2px solid black;"
+              :src="getThumbnailImgUrl({ imgURL: this.thumbnail }).thumbnail"
+            >
+            </b-avatar>
+          </div>
+          <div v-if="!thumbnail && !newUpdateImage" 
             @click.prevent="clickInputTag()" 
-            id='addimage' 
-            size="10rem"
-            style="background-color: #bbb"
           >
-          </b-avatar>
-          <!-- <img 
-            v-if="this.thumbnail" 
+            <b-avatar 
+              id='addimage'
+              size="10rem"
+              style="background-color: #bbb;"
+            >
+            </b-avatar>
+          </div>
+          <img 
+            v-if="newUpdateImage" 
             @click.prevent="clickInputTag()" 
             id='addimage' 
             style="border: 2px solid black"
-            :src="getThumbnailImgUrl({ imgURL: this.thumbnail }).thumbnail"
+            :src="thumbnail"
             alt="image"
             class="dot"
           >
-          <b-avatar v-else @click.prevent="clickInputTag()" id='addimage' class="dot2"></b-avatar> -->
+          <!-- <b-avatar v-else @click.prevent="clickInputTag()" id='addimage' class="dot2"></b-avatar> -->
           <input hidden ref="plus" id="file" type="file"  accept="image/*" @change.prevent="uploadImage($event)" multiple>
         </div>
         
@@ -95,6 +100,7 @@ export default {
       nicknameConfirm: true,
       originalNickname: '',
       checkNicknameValidation: true,
+      newUpdateImage: false,
     }
   },
   methods: {
@@ -113,6 +119,7 @@ export default {
         img.setAttribute("src", event.target.result)
       }
       reader.readAsDataURL(event.target.files[0])
+      this.newUpdateImage = true
     },
     updateProfileInfo: function () {
       const formData = new FormData();
@@ -229,6 +236,7 @@ export default {
       this.userInfo.nickname = this.$store.state.username
       this.originalNickname = this.$store.state.username
       this.isLoginByKakao = this.$store.state.isLoginByKakao
+      this.newUpdateImage = false
       this.getUserInfo()
     })
   }
@@ -238,8 +246,8 @@ export default {
 <style>
 /* 프로필 이미지 들어가기 전 디버깅 용 */
 .dot {
-  height: 200px;
-  width: 200px;
+  height: 10rem;
+  width: 10rem;
   background-color: #bbb;
   border-radius: 50%;
   display: inline-block;
