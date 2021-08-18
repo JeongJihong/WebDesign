@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Builder
 public class Scrap {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private Long scrapid;
 
     private Long id;

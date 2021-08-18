@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class Search {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long searchid;
     @Column(name = "id", nullable = false)
     private Long id;

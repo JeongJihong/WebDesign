@@ -1,15 +1,14 @@
 package com.web.curation.model.image;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.web.curation.model.article.Article;
-import com.web.curation.model.user.User;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-
-import java.io.File;
 
 @Getter
 @Entity
@@ -20,7 +19,7 @@ import java.io.File;
 @Builder
 public class Image{
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long imageid;
 
 

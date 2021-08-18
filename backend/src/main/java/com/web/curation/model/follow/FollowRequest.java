@@ -2,7 +2,6 @@ package com.web.curation.model.follow;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.ToString;
-
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 

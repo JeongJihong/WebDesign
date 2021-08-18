@@ -1,9 +1,7 @@
 package com.web.curation.model.follow;
 
 import lombok.*;
-
 import javax.persistence.*;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @Getter
@@ -14,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @Builder
 public class Follow{
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long followid;
 
     private Long srcid;
