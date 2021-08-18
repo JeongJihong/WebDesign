@@ -50,8 +50,8 @@
         </div>
         <br>
         <div class="d-flex justify-content-between align-items-center" >
-          <h5 class="mt-3">화상회의 여부</h5>
-          <b-button :pressed.sync="virtual" variant="primary" style="height: 2.5rem;">{{ virtual }}</b-button>
+          <h5 class="mt-3" style="font-size:1rem;">화상회의 여부</h5>
+          <b-button :pressed.sync="virtual" variant="primary" style="d-flex align-items-center justify-content-center height: 2.5rem;">{{ virtual }}</b-button>
         </div>
         <br>
         <b-form-group id="input-group-5">
