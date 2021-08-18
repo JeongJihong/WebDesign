@@ -30,10 +30,10 @@
             </div>
             <div style="margin:10px">
               <b-textarea v-model="content"  placeholder="게시글 내용을 적어주세요!" rows="10"></b-textarea>
-              <b-button style="height: 2.7rem; width: 100%; margin-bottom:10px; background-color:#002E4F;"
+              <!-- <b-button style="height: 2.7rem; width: 100%; margin-bottom:10px; background-color:#002E4F;"
                 class="d-flex justify-content-center align-items-center"
                 @click="articleCreate()">
-                전송</b-button>
+                전송</b-button> -->
             </div>
           </form>     
         <br>
@@ -86,7 +86,7 @@
           <br>
         </div>
         <div class="d-flex justify-content-center">
-          <button @click="promiseCreate(); promiseArticleCreate();" class="shadow-none btn btn-primary d-flex justify-content-center align-items-center"  style=" height:3rem; width:40%;">Submit</button>
+          <button @click="promiseCreate()" class="shadow-none btn btn-primary d-flex justify-content-center align-items-center"  style=" height:3rem; width:40%;">Submit</button>
         </div>
       </b-form>
     </div>
@@ -252,6 +252,7 @@ export default {
           })
     },
     promiseArticleCreate(){
+      alert('Promise Article Create 호출!')
       this.formData.append("content", this.content);
       this.formData.append("promiseid", this.promiseid);
       axios({
