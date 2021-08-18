@@ -11,18 +11,16 @@
 
     <!-- 댓글들 -->
     <b-list-group class="mt-4">
-      <b-list-group-item class="d-flex justify-content-left align-items-center border-0 my-1"
-        v-for="comment in comments" :key="comment.commentid" :comment="comment">
+      <b-list-group-item class="d-flex justify-content-left align-items-center border-0 my-1" id="app"
+        v-for="(comment, idx) in comments" :key="comment.commentid" :comment="comment">
         <b-avatar v-if="comment.thumbnail" class="me-2"
           :src="getThumbnailImgUrl({ imgURL: comment.thumbnail }).thumbnail"></b-avatar>
         <b-avatar v-else class="me-2"></b-avatar>
-        <span class="d-flex justify-content-between" style="width: 100%;">
+        <span  class="d-flex justify-content-between align-items-center" style="width: 100%;">
           <span>{{ comment.comment }}</span>
-          <span v-if="comment.createdtime == comment.updatedtime ">생성시간:{{ comment.createdtime}}</span>
-          <span v-else>수정시간:{{ comment.updatedtime}}</span>
           <span>
-            <button v-if="comment.nickname === username" v-b-modal.modal-1 variant="none" class="btn-warning badge text-dark fw-bold me-2">수정</button>
-            <b-modal id="modal-1" title="댓글수정">
+            <button v-if="comment.nickname === username" v-b-modal="idx.toString()" variant="none" class="btn-warning badge text-dark fw-bold me-2">수정</button>
+            <b-modal  :id="idx.toString()" title="댓글수정">
                 <form @submit.prevent="UpdateComment(comment.commentid)">
                   <input type="text" v-model="newcontent" :placeholder="comment.comment">
                   <button class="btn btn-primary btn-sm">수정하기</button>
@@ -156,5 +154,5 @@ export default {
 }
 </script>
 
-<style>
+<style src="../../App.css">
 </style>

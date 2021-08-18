@@ -45,7 +45,7 @@
           </b-carousel-slide>
         </b-carousel>
     </div>
-    <div v-if="article.articleDetail.promiseid" style="positon:relative;">
+    <div v-if="article.articleDetail.promiseid">
         <div id="demo">
           <div class="post-it">
             <div class="inner" style="color:black;" >
@@ -58,13 +58,15 @@
           </div>
         </div>
     </div>
-    <p style="margin:10px">{{ article.articleDetail.review }}</p>
-    <p>생성시간: {{ article.articleDetail.createdtime }} </p>
-    <p>수정시간: {{ article.articleDetail.updatedtime }} </p>
-    <p>{{ article.likeCount }} 명이 좋아해요!
-    <b-button style="height:35px">스크랩하기</b-button></p>
-    <li v-if="article.scrapCheck"><b-icon @click="undoScrap({ articleid: detail.articleid })" icon="tags-fill" scale="1.5" variant="primary"></b-icon></li>
-      <li v-else><b-icon @click="doScrap({ articleid: detail.articleid })" icon="tags" scale="1.5" variant="secondary"></b-icon></li>
+    <p style="margin:10px">{{ detail.review }}</p>
+    <div class="d-flex justify-content-start text-align-center m-2">
+      <li class="me-3 mw-3">{{ article.likeCount }} 명이 좋아해요!
+      <li v-if="article.scrapCheck"><b-icon id="icon" @click="undoScrap({ articleid: detail.articleid })" icon="tags-fill" scale="1.5" ></b-icon></li>
+      <li v-else><b-icon id="icon" @click="doScrap({ articleid: detail.articleid })" icon="tags" scale="1.5" ></b-icon></li>
+    </div>
+    <div style=" font-size:0.7rem; display:inline; float:right; margin:0 0 5px 5px; height:10px">
+      <p style="margin:0 8px 8px 5px;">생성시간: {{ detail.createdtime.substr(0,4) }}.{{ detail.createdtime.substr(5,2) }}.{{ detail.createdtime.substr(8,2) }} {{ detail.createdtime.substr(11,5) }} </p>
+    </div>
     <hr>
     <Comments/>
   </div>

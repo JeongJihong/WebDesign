@@ -47,7 +47,6 @@ export default {
 p {
   height: 69px;
   margin: 37px 0 37px 0px;
-  font-family: Roboto;
   font-size: 22px;
   font-weight: bold;
   font-stretch: normal;
