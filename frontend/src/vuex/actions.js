@@ -313,7 +313,7 @@ export default {
       url: `https://i5b302.p.ssafy.io/api/promise/place/${payload.promiseid}`,
       headers: {
         'Content-Type': 'application/json',
-        'X-AUTH-TOKEN' : this.$store.state.token
+        'X-AUTH-TOKEN' : payload.token
       },
     })
     .then((res) => {
