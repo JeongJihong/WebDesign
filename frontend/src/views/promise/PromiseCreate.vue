@@ -112,7 +112,7 @@ export default {
     }
   },
   mounted() {
-    vm.$forceUpdate()
+    this.$forceUpdate()
     
     if (window.kakao && window.kakao.maps) {
       this.initMap();
