@@ -390,7 +390,7 @@ export default {
 
       const typeIdx = typeList.indexOf(type)
       const typeHash = hashList[typeIdx]
-
+      console.log('TypeIcon', `${this.promiseDetail.type}-icon.${typeHash}`)
       return {
         ...this.promiseDetail,
         icon: this.promiseDetail.type && `https://i5b302.p.ssafy.io/img/${this.promiseDetail.type}-icon.${typeHash}.svg`

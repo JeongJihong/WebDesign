@@ -217,7 +217,7 @@ export default {
 
       const typeIdx = typeList.indexOf(type)
       const typeHash = hashList[typeIdx]
-
+      console.log('TypeIcon', `${payload.idx}-icon.${typeHash}`)
       return {
         thumbnail: payload.idx && `https://i5b302.p.ssafy.io/img/${payload.idx}-icon.${typeHash}.svg`
       }
