@@ -247,6 +247,7 @@ export default {
           }
         })
           .then(res=>{
+            console.log(res.data)
             this.promiseid = res.data
             this.promiseArticleCreate()
           })
