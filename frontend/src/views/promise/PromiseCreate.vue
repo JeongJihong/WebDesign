@@ -121,7 +121,6 @@ export default {
         `https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${process.env.VUE_APP_MAP_API}&libraries=services,clusterer`
       document.head.appendChild(script)
     }
-    console.log(`${process.env.VUE_APP_MAP_API}`)
   },
   created() {
     if (localStorage.getItem('token')) {
@@ -210,7 +209,6 @@ export default {
         }; 
         reader.readAsDataURL(image);
       } 
-      console.log(this.files, typeof this.files)
     },
     promiseCreate(){
       axios({
@@ -230,13 +228,8 @@ export default {
           }
         })
           .then(res=>{
-            console.log(res.data)
             this.promiseid = res.data
             this.promiseArticleCreate()
-            // this.$router.push({ name:'PromiseList'})
-          })
-          .catch(err=>{
-            console.log(err)
           })
     },
     promiseArticleCreate(){
@@ -253,14 +246,6 @@ export default {
       })
         .then(res=>{
           this.$router.push({ name:'FeedMain'})
-          console.log(res.data)
-          console.log(this.files)
-        })
-        .catch(err=>{
-          console.log(`${localStorage.getItem('token')}`)
-          console.log(this.files)
-          console.log(this.content)
-          console.log(err)
         })
       },
   }

@@ -18,10 +18,11 @@
         </router-link>
       </b-nav-item>
         <b-nav-item>
-        <b-dropdown id="dropdownMenuButton" size="sm" right variant="link" toggle-class="text-decoration-none d-flex flex-column align-items-center" no-caret>
+        <b-dropdown id="dropdownMenuButton" size="sm" right variant="link"
+          toggle-class="text-decoration-none d-flex flex-column align-items-center p-0" no-caret>
           <template #button-content >
             <b-icon id="icon"  icon="person-fill"></b-icon>
-            <p style="font-size:0.8rem">프로필</p>
+            <p style="font-size:0.8rem padding-top: 0.1rem;">프로필</p>
           </template>
           <b-dropdown-item id="dropdownitem" :to="{ name: 'ProfileDetail', params: { nickname: username } }">자신의 프로필</b-dropdown-item>
           <b-dropdown-item id="dropdownitem" :to="{ name: 'Scrap'}">자신의 스크랩</b-dropdown-item>

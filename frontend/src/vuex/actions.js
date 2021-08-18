@@ -307,4 +307,24 @@ export default {
       },
     });
   },
+  updateLocations ({ commit }, payload) {
+    axios({
+      method: 'get',
+      url: `https://i5b302.p.ssafy.io/api/promise/place/${payload.promiseid}`,
+      headers: {
+        'Content-Type': 'application/json',
+        'X-AUTH-TOKEN' : payload.token
+      },
+    })
+    .then((res) => {
+      commit("UPDATE_LOCATIONS", res.data);
+      commit("GET_ATTENDANTS_NUM", res.data.length);
+      // this.attendantsInfo = res.data
+      // this.attendantsLength = res.data.length
+      // this.getPromiseInfo()
+    })
+    .catch((err) => {
+      alert(err)
+    })
+  },
 };

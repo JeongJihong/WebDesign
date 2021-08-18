@@ -68,16 +68,10 @@ export default {
         },
       })
       .then((res) => {
-        console.log('팔로워 불러오기')
-        console.log(res.data)
         this.followerLs = res.data
-        console.log(this.followerLs)
         this.followers = this.followerLs.length
 
         this.followingList()
-      })
-      .catch((err) => {
-        alert(err)
       })
     },
     followingList () {
@@ -90,13 +84,8 @@ export default {
         },
       })
       .then((res) => {
-        console.log('팔로잉 불러오기')
-        console.log(res.data)
         this.followingLs = res.data
         this.followings = this.followingLs.length
-      })
-      .catch((err) => {
-        alert(err)
       })
     },
     goToProfileDetailFromFollower ({person}) {

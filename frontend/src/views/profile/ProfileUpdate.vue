@@ -1,13 +1,5 @@
 <template>
   <div style="margin-bottom:60px;">
-    <!-- 헤더 -->
-    <!-- <div class="mt-3 mx-4 d-flex justify-content-between align-items-center">
-      <span class="fs-1">
-        <button @click="goBack"><b-icon icon="arrow-left" class="fs-1 me-4"></b-icon></button>
-        <span class="fw-bold">프로필 정보 수정</span>
-      </span>
-      <button class="text-decoration-none" v-if="activeButton()" @click="updateProfileInfo">저장하기</button>
-    </div> -->
     <div class="mt-3 mb-3 mx-4 d-flex justify-content-between align-items-center">
       <span>
         <button @click="goBack"><b-icon id="icon" icon="arrow-left" class="fs-1 me-4"></b-icon></button>
@@ -90,15 +82,10 @@ export default {
       this.$refs['plus'].click()
     },
     uploadImage(event) { 
-      console.log(event.target.files)
-      console.log(event.target.files[0], typeof event.target.files[0])
       this.userInfo.file = event.target.files[0]
-      console.log(this.userInfo.file)
-
 
       var reader = new FileReader();
       reader.onload = function(event) {
-        console.log(event.target)
         var img = document.querySelector("#addimage")
         img.setAttribute("src", event.target.result)
       }
@@ -109,7 +96,6 @@ export default {
       formData.append("nickname", this.userInfo.nickname);
       formData.append("introduction", this.userInfo.introduction);
       formData.append("thumbnail", this.userInfo.file);
-      console.log(typeof this.userInfo.file, this.userInfo.file)
       axios({
         method: 'post',
         url: 'https://i5b302.p.ssafy.io/api/account/profile/',
@@ -125,9 +111,6 @@ export default {
           params: {nickname: this.userInfo.nickname}
         })
       })
-      .catch((err) => {
-        alert(err)
-      })
     },
     getUserInfo: function () {
       console.log('getUserInfo에 있는 닉네임',this.userInfo.nickname)
@@ -140,7 +123,6 @@ export default {
         },
       })
       .then((res) => {
-        console.log(res.data)
         this.userInfo.uid = res.data.userProfile.uid
         this.userInfo.nickname = res.data.userProfile.nickname
         this.userInfo.introduction = res.data.userProfile.introduction
@@ -148,11 +130,6 @@ export default {
         if (typeof this.thumbnail === 'undefined') {
           this.thumbnail = 'profile_default.png'
         }
-        console.log(this.thumbnail)
-        // this.fixThumbnailURL()
-      })
-      .catch((err) => {
-        console.log(err)
       })
     },
     goToChangePassword () {
@@ -160,13 +137,6 @@ export default {
         name: 'ChangePassword',
       })
     },
-    // fixThumbnailURL () {
-    //   var tmp = this.thumbnail.split('Desktop/')[1];
-    //   console.log('이건 왜 안돼', tmp)
-    //   tmp = 'http://localhost:3000/' + tmp;
-    //   this.thumbnail = tmp;
-    //   console.log('새로 바뀐 이미지 url', this.thumbnail)
-    // }
     getThumbnailImgUrl (payload) {
       return {
         ...this.thumbnail,
@@ -194,18 +164,12 @@ export default {
         }
       })
         .then(res=>{
-          console.log(res)
           if (res.data === 'Fail'){
             alert('중복된 닉네임 입니다!')
-            // this.userInfo.nickname=""
-            
           }else{
             alert('사용 가능한 닉네임 입니다.')
             this.nicknameConfirm=true
           }
-        })
-        .catch(err=>{
-          console.log(err)
         })
     },
     activeButton: function(){
@@ -216,7 +180,6 @@ export default {
   },
   watch : {
     checkNicknameValidation: function () {
-      console.log('실시간', this.userInfo.nickname, this.originalNickname)
       if (this.userInfo.nickname === this.originalNickname) {
         return true;
       }
@@ -239,13 +202,9 @@ export default {
     })
     .then((res) => {
       this.userInfo.nickname = this.$store.state.username
-      console.log('너 이름이 뭔데 ',this.userInfo.nickname)
       this.originalNickname = this.$store.state.username
       this.isLoginByKakao = this.$store.state.isLoginByKakao
       this.getUserInfo()
-    })
-    .catch((err) => {
-      console.log(err)
     })
   }
 }

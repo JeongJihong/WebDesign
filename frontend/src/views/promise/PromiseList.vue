@@ -10,7 +10,7 @@
 
     <ul class="p-0">
       <p class="mt-3 my-0 mx-3 fs-4 fw-bold">Waiting</p>
-      <div class="mt-2 mx-3 px-3 border rounded bg-light">
+      <div v-if="waitingPromises.length !== 0" class="mt-2 mx-3 px-3 border rounded bg-light">
         <div v-for="(waitingPromise,idx) in waitingPromises"
           :key="waitingPromise.promiseid" class="my-4 mx-1">
           <router-link class="text-decoration-none"
@@ -36,6 +36,9 @@
           </router-link>
         </div>
       </div>
+      <div v-else>
+        <p class="mt-2 mx-3 px-3">대기중인 약속이 없습니다.</p>
+      </div>
     </ul>
 
     <div class="d-flex justify-content-center">
@@ -44,7 +47,7 @@
 
     <ul class="p-0">
       <p class="mt-3 my-0 mx-3 fs-4 fw-bold">Upcoming</p>
-      <div class="mt-2 mx-3 px-3 border rounded bg-light">
+      <div v-if="upcomingPromises.length !== 0" class="mt-2 mx-3 px-3 border rounded bg-light">
         <div v-for="(upcomingPromise,idx) in upcomingPromises"
           :key="upcomingPromise.promiseid" class="my-4 mx-1">
           <router-link class="text-decoration-none"
@@ -69,6 +72,9 @@
             </li>
           </router-link>
         </div>
+      </div>
+      <div v-else>
+        <p class="mt-2 mx-3 px-3">대기중인 약속이 없습니다.</p>
       </div>
     </ul>
   </div>
@@ -100,23 +106,12 @@ export default {
       this.$router.push({ name: 'PromiseCreate' })
     },
     getwaitingPromiseFeeImgUrl(payload) {
-
-      const firstChar = payload.imgURL[0];
-      const firstCharUpper = firstChar.toUpperCase();
-      const leftChar = payload.imgURL.slice(1, payload.imgURL.length); 
-      payload.imgURL = firstCharUpper + leftChar; 
-      
       return {
         ...this.waitingPromises,
         icon: this.waitingPromises[payload.idx] && `https://i5b302.p.ssafy.io/img/${payload.imgURL}-icon.svg`
       }
     },
     getupcomingPromisesFeeImgUrl(payload) {
-      const firstChar = payload.imgURL[0];
-      const firstCharUpper = firstChar.toUpperCase();
-      const leftChar = payload.imgURL.slice(1, payload.imgURL.length); 
-      payload.imgURL = firstCharUpper + leftChar; 
-      
       return {
         ...this.upcomingPromises,
         icon: this.upcomingPromises[payload.idx] && `https://i5b302.p.ssafy.io/img/${payload.imgURL}-icon.svg`

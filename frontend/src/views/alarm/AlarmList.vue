@@ -201,8 +201,25 @@ export default {
       }
     },
     getPromiseThumbnailImgUrl (payload) {
+      const typeList = ['Travel', 'Restaurante', 'study', 'Art', 'game', 'Exercise', 'Etc']
+      const hashList = ['d51b70dd', '47b19d87', '611d4729', '8a36a18c', '0dc95fa8', '9324f5ac', '4abb6ca0']
+
+      let type = payload.idx
+      if (payload.idx) {
+        if (payload.idx.charAt(0) === 'G') {
+          const l = payload.idx.length
+          type = 'g' + payload.idx.substr(1, l-1)
+        } else if (payload.idx.charAt(0) === 'S') {
+          const l = payload.idx.length
+          type = 's' + payload.idx.substr(1, l)
+        }
+      }
+
+      const typeIdx = typeList.indexOf(type)
+      const typeHash = hashList[typeIdx]
+      console.log('TypeIcon', `${payload.idx}-icon.${typeHash}`)
       return {
-        thumbnail: payload.idx && `https://i5b302.p.ssafy.io/img/${payload.idx}-icon.svg`
+        thumbnail: payload.idx && `https://i5b302.p.ssafy.io/img/${payload.idx}-icon.${typeHash}.svg`
       }
     }
   }

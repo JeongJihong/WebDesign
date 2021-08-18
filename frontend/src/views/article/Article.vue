@@ -1,11 +1,11 @@
 <template>
-  <div class="feed newsfeed app" style="margin-top:60px; margin-bottom:60px;">
+  <div class="feed newsfeed app" style="margin-top: 5rem; margin-bottom:60px;">
     <div class="wrapB">
       <div v-for="(article,idx) in articles" :key="idx">
         <div>
-          <b-avatar v-if="article.articleDetail.user.thumbnail" class="me-2"
+          <b-avatar v-if="article.articleDetail.user.thumbnail" class="mx-3"
             :src="getThumbnailImgUrl({ idx, imgURL: article.articleDetail.user.thumbnail }).thumbnail"></b-avatar>
-          <b-avatar v-else class="me-2"></b-avatar>
+          <b-avatar v-else class="mx-3"></b-avatar>
           <span>{{article.articleDetail.user.nickname}}</span>
           <b-carousel
             id="carousel-1"
@@ -18,7 +18,6 @@
             style="text-shadow: 1px 1px 2px #333; position:relative;"
             @sliding-start="onSlideStart"
             @sliding-end="onSlideEnd"
-            
           >
             <b-carousel-slide v-for="(image,idnum) in article.articleDetail.images" :key="idnum"
               > 
@@ -33,13 +32,11 @@
               </template>
             </b-carousel-slide>
           </b-carousel>
-          <div style="margin:10px;">
-            <p> {{ article.articleDetail.review }}</p>
-          </div>
+
           <div v-if="article.articleDetail.promiseid" style="positon:relative;">
               <div id="demo">
                 <div class="post-it">
-                  <div class="inner" style="color:black;" >
+                  <div class="inner" style="color:black; font-size: 1.1rem;">
                     Title : {{ article.promiseDetail.title }} <br>
                     약속 인원 : {{ article.promiseDetail.num }} 명<br>
                     약속 장소 : {{ article.promiseDetail.place }} <br>
@@ -49,17 +46,22 @@
                 </div>
               </div>
           </div>
+
+          <div style="margin: 1.5rem;">
+            <p> {{ article.articleDetail.review }}</p>
+          </div>
+
           <div style="positon:relative;">
-            <ul class="d-flex justify-content-left article" style="padding-left:3px;">
-              <li v-if="article.likeCheck" ><b-icon @click="articleLike({ articleid: article.articleDetail.articleid, nickname: article.articleDetail.user.nickname, likeCheck:article.likeCheck, idx:idx  })" icon="hand-thumbs-up" scale="1.5" variant="danger"></b-icon></li>
-              <li v-else ><b-icon id="icon" @click="articleLike({ articleid: article.articleDetail.articleid, nickname: article.articleDetail.user.nickname,idx:idx })"  icon="hand-thumbs-up" scale="1.5"></b-icon></li>
+            <ul class="ms-3 pt-2 d-flex justify-content-left article" style="padding-left:3px;">
+              <li class="me-4" v-if="article.likeCheck" ><b-icon @click="articleLike({ articleid: article.articleDetail.articleid, nickname: article.articleDetail.user.nickname, likeCheck:article.likeCheck, idx:idx  })" icon="hand-thumbs-up" scale="1.5" variant="danger"></b-icon></li>
+              <li class="me-4" v-else ><b-icon id="icon" @click="articleLike({ articleid: article.articleDetail.articleid, nickname: article.articleDetail.user.nickname,idx:idx })"  icon="hand-thumbs-up" scale="1.5"></b-icon></li>
               
-              <li v-if="article.scrapCheck"><b-icon @click="undoScrap({ articleid: article.articleDetail.articleid, idx: idx })" icon="tags-fill" scale="1.5" ></b-icon></li>
-              <li v-else><b-icon id="icon" @click="doScrap({ articleid: article.articleDetail.articleid, idx: idx })" icon="tags" scale="1.5" ></b-icon></li>
+              <li class="me-4" v-if="article.scrapCheck"><b-icon @click="undoScrap({ articleid: article.articleDetail.articleid, idx: idx })" icon="tags-fill" scale="1.5" ></b-icon></li>
+              <li class="me-4" v-else><b-icon id="icon" @click="doScrap({ articleid: article.articleDetail.articleid, idx: idx })" icon="tags" scale="1.5" ></b-icon></li>
               <li @click="getComments(article.articleDetail.articleid)"><b-icon icon="chat-dots-fill" scale="1.5" style="color:10598D;"></b-icon></li><span>{{ article.articleDetail.comments.length }}</span>
             </ul>
           </div>
-          <p>{{ article.likeCount }} 명의 유저가 이글을 좋아합니다.</p>
+          <p class="mx-3 mt-2">{{ article.likeCount }} 명의 유저가 이글을 좋아합니다.</p>
         </div>
         <hr>
       </div>
@@ -108,11 +110,11 @@ export default {
         })
         .then(res => {
           if(res.data.totalPages == this.pageNum){
-              console.log($state)
+              // console.log($state)
               $state.complete();
           }else{
               setTimeout(() => {
-                  console.log(res.data)
+                  // console.log(res.data)
                   const data = res.data.pageList;
                             for(let key in data){
                               if(data[key].articleDetail.promiseid){
@@ -121,11 +123,11 @@ export default {
                                   }
                                 }
                                 this.articles.push(data[key])
-                                console.log(this.articles)
+                                // console.log(this.articles)
                             }
                   this.pageNum++;
                   $state.loaded();
-                  console.log($state)
+                  // console.log($state)
               }, 1000)
           }
       })
@@ -147,14 +149,14 @@ export default {
               },
         })
         .then(res=>{
-          console.log(res.data)
+          // console.log(res.data)
           this.articles[payload.idx].likeCheck = !this.articles[payload.idx].likeCheck
           this.articles[payload.idx].likeCount +=1
-          console.log("싫어요 -> 좋아요")
+          // console.log("싫어요 -> 좋아요")
         })
-        .catch(err=>{
-          console.log(err)
-        })
+        // .catch(err=>{
+        //   console.log(err)
+        // })
 
         // Like Alarm POST
         if (payload.nickname !== this.username) {
@@ -183,14 +185,14 @@ export default {
               },
         })
         .then(res=>{
-          console.log(res.data)
-          console.log("좋아요 -> 싫어요")
+          // console.log(res.data)
+          // console.log("좋아요 -> 싫어요")
           this.articles[payload.idx].likeCheck = !this.articles[payload.idx].likeCheck
           this.articles[payload.idx].likeCount -= 1
         })
-        .catch(err=>{
-          console.log(err)
-        })
+        // .catch(err=>{
+        //   console.log(err)
+        // })
       }
     },
     doScrap(payload) {
@@ -251,7 +253,7 @@ export default {
     },
     getArticleFeeImgUrl (payload) {
       // console.log( this.articles[payload.idx] && require(`https://i5b302.p.ssafy.io/img/${payload.imgURL}`))
-      console.log( this.articles[payload.idx] && `https://i5b302.p.ssafy.io/img/${payload.imgURL}`)
+      // console.log( this.articles[payload.idx] && `https://i5b302.p.ssafy.io/img/${payload.imgURL}`)
       return {
         ...this.articles,
         icon: this.articles[payload.idx] && `https://i5b302.p.ssafy.io/img/${payload.imgURL}`

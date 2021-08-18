@@ -8,7 +8,7 @@
           다들 어디
         </h2>
       </div>
-      <b-icon @click="updateLocations" icon="arrow-clockwise" animation="spin 1s" font-scale="2"></b-icon>
+      <b-icon @click="initMap" icon="arrow-clockwise" animation="" font-scale="2"></b-icon>
     </div>
     <hr>
     <div class="my-2">
@@ -43,52 +43,149 @@
 <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 <script>
 import axios from 'axios'
-
+import { mapState } from 'vuex'
 
 export default {
   data () {
     return {
       promiseid : this.$route.params.promiseid,
-      attendantsInfo: '',
-      attendantsLength: 0,
-      promiseLat: 0,
-      promiseLon: 0,
+      // attendantsInfo: '',
+      // attendantsLength: 0,
+      // promiseLat: 50,
+      // promiseLon: 120,
       thumbnails: [],
       nicknames : [],
       times: [],
       places: [],
       promiseType: '',
-      attendantsLat: [],
-      attendantsLon: [],
-      centerLat: 0,
-      centerLon: 0,
-      level: 10,
+      // centerLat: 50,
+      // centerLon: 120,
+      // level: 10,
     }
+  },
+  created() {
+    let payload = {
+      token: this.token,
+      promiseid: this.$route.params.promiseid
+    }
+    this.$store.dispatch('updateLocations', payload)
+    this.$store.dispatch('promiseDetailGet', payload)
+  },
+  computed: {
+    ...mapState([
+      'token',
+      'username',
+      'promiseDetail',
+      'attendantsInfo',
+      'attendantsLength'
+    ]),
+    promiseLat: function () {
+      return this.promiseDetail.lat;
+    },
+    promiseLon: function () {
+      return this.promiseDetail.lon;
+    },
+    centerLat: function () {
+      let promiseLat = this.promiseDetail.lat;
+
+      var attendantsLat = [];
+      attendantsLat.push(promiseLat);
+
+      for (var i = 0; i < this.attendantsLength; i++) {
+        const lat = this.attendantsInfo[i].lat;
+        attendantsLat.push(lat);
+      }
+      
+      var maxLat = Math.max.apply(null, attendantsLat);
+      var minLat = Math.min.apply(null, attendantsLat);
+
+      const avgLat = (maxLat + minLat) / 2;
+
+      return avgLat;
+    },
+    centerLon: function () {
+      let promiseLon = this.promiseDetail.lon;
+
+      var attendantsLon = [];
+      attendantsLon.push(promiseLon);
+
+      for (var i = 0; i < this.attendantsLength; i++) {
+        const lon = this.attendantsInfo[i].lon;
+        attendantsLon.push(lon);
+      }
+      
+      var maxLon = Math.max.apply(null, attendantsLon);
+      var minLon = Math.min.apply(null, attendantsLon);
+
+      const avgLon = (maxLon + minLon) / 2;
+
+      return avgLon;
+    },
+    level: function () {
+      let promiseLat = this.promiseDetail.lat;
+      let promiseLon = this.promiseDetail.lon;
+
+      var attendantsLat = [];
+      attendantsLat.push(promiseLat);
+      var attendantsLon = [];
+      attendantsLon.push(promiseLon);
+
+      for (var i = 0; i < this.attendantsLength; i++) {
+        const lat = this.attendantsInfo[i].lat;
+        const lon = this.attendantsInfo[i].lon;
+
+        attendantsLat.push(lat);
+        attendantsLon.push(lon);
+      }
+      
+      var maxLat = Math.max.apply(null, attendantsLat);
+      var minLat = Math.min.apply(null, attendantsLat);
+      var maxLon = Math.max.apply(null, attendantsLon);
+      var minLon = Math.min.apply(null, attendantsLon);
+
+      var differenceLat = maxLat - minLat;
+      var differenceLon = maxLon - minLon;
+
+      var maxDifference = Math.max.apply(null, [differenceLat, differenceLon]);
+
+      if (maxDifference > 0.2) {
+        return 13
+      }
+      else if (maxDifference > 0.15) {
+        return 12
+      }
+      else if (maxDifference > 0.11) {
+        return 11
+      }
+      else if (maxDifference > 0.06) {
+        return 10
+      }
+      else if (maxDifference > 0.03) {
+        return 9
+      }
+      else if (maxDifference > 0.01) {
+        return 8
+      }
+      else {
+        return 7
+      }
+    },
   },
   mounted () {
     if (window.kakao && window.kakao.maps) {
-      this.updateLocations();
+      this.initMap();
     } else {
-      this.addKakaoMapScript();
-      // const script = document.createElement('script')
-      // /* global kakao */
-      // script.onload = () => kakao.maps.load(this.initMap)
-      // script.src =
-      //   `http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${process.env.VUE_APP_MAP_API}&libraries=services,clusterer`
-      // document.head.appendChild(script)
-    }
-  },
-  methods: {
-    goBack() {
-      this.$router.go(-1)
-    },
-    addKakaoMapScript () {
       const script = document.createElement('script')
       /* global kakao */
       script.onload = () => kakao.maps.load(this.initMap)
       script.src =
         `https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${process.env.VUE_APP_MAP_API}&libraries=services,clusterer`
       document.head.appendChild(script)
+    }
+  },
+  methods: {
+    goBack() {
+      this.$router.go(-1)
     },
     initMap() {
       // 마커 중심, 지도 범위 설정을 위한 배열
@@ -98,7 +195,7 @@ export default {
       var mapContainer = document.getElementById('map') // 지도를 표시할 div
       var mapOption = {
         center: new kakao.maps.LatLng(50, 120), // 지도의 중심좌표
-        level: this.level, // 지도의 확대 레벨
+        level: 10, // 지도의 확대 레벨
       }
       if (this.places) {
         mapOption.center = new kakao.maps.LatLng(this.centerLat, this.centerLon)
@@ -115,7 +212,7 @@ export default {
 
       var point = 0;
 
-      var imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png', // 마커이미지의 주소입니다    
+      var imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png', // 마커이미지의 주소입니다    
           imageSize = new kakao.maps.Size(44, 50), // 마커이미지의 크기입니다
           imageOption = {offset: new kakao.maps.Point(27, 27)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
             
@@ -217,23 +314,13 @@ export default {
 
     },
     updateLocations () {
-      axios({
-        method: 'get',
-        url: `https://i5b302.p.ssafy.io/api/promise/place/${this.promiseid}`,
-        headers: {
-          'Content-Type': 'application/json',
-          'X-AUTH-TOKEN' : this.$store.state.token
-        },
-      })
-      .then((res) => {
-        console.log(res.data)
-        this.attendantsInfo = res.data
-        this.attendantsLength = res.data.length
-        this.getPromiseInfo()
-      })
-      .catch((err) => {
-        alert(err)
-      })
+      let payload = {
+        token: this.token,
+        promiseid: this.$route.params.promiseid
+      }
+      this.$store.dispatch('updateLocations', payload)
+      this.getPromiseInfo()
+      
     },
     getThumbnailImgUrl (payload) {
       return {
@@ -242,76 +329,11 @@ export default {
       }
     },
     getPromiseInfo () {
-      axios({
-        method: 'get',
-        url: `https://i5b302.p.ssafy.io/api/promise/${this.promiseid}`,
-        headers: {
-          'Content-Type': 'application/json',
-          'X-AUTH-TOKEN' : this.$store.state.token
-        },
-      })
-      .then((res) => {
-        console.log(res.data)
-        this.promiseLat = res.data.lat
-        this.promiseLon = res.data.lon
-
-        // -----------------------------------------------------------------------
-        // 지도 중앙 좌표, 범위 설정
-        this.attendantsLat = [];
-        this.attendantsLon = [];
-        this.attendantsLat.push(res.data.lat);
-        this.attendantsLon.push(res.data.lon);
-
-        for (var i = 0; i < this.attendantsLength; i++) {
-          const lat = this.attendantsInfo[i].lat;
-          const lon = this.attendantsInfo[i].lon;
-
-          this.attendantsLat.push(lat);
-          this.attendantsLon.push(lon);
-        }
-        
-        // 마커 중심, 지도 범위 설정을 위한 계산
-        var maxLat = Math.max.apply(null, this.attendantsLat);
-        var minLat = Math.min.apply(null, this.attendantsLat);
-        var maxLon = Math.max.apply(null, this.attendantsLon);
-        var minLon = Math.min.apply(null, this.attendantsLon);
-
-        var differenceLat = maxLat - minLat;
-        var differenceLon = maxLon - minLon;
-
-        var maxDifference = Math.max.apply(null, [differenceLat, differenceLon]);
-        console.log(maxDifference);
-        
-        console.log(this.attendantsLat, '최대값은', Math.max.apply(null, this.attendantsLat))
-        const avgLat = (maxLat + minLat) / 2;
-        const avgLon = (maxLon + minLon) / 2;
-        console.log('센터좌표', avgLat, avgLon);
-
-        if (maxDifference > 0.11) {
-          this.level = 11
-        }
-        else if (maxDifference > 0.06) {
-          this.level = 10
-        }
-        else if (maxDifference > 0.03) {
-          this.level = 9
-        }
-        else if (maxDifference > 0.01) {
-          this.level = 8
-        }
-        else {
-          this.level = 7
-        }
-
-        this.centerLat = avgLat;
-        this.centerLon = avgLon;
-
-        // -----------------------------------------------------------------------
-        this.initMap()
-      })
-      .catch((err) => {
-        alert(err)
-      })
+      let payload = {
+        token: this.token,
+        promiseid: this.$route.params.promiseid
+      }
+      this.$store.dispatch('promiseDetailGet', payload)
     }
   },
 }
