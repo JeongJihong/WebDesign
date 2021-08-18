@@ -71,6 +71,7 @@ public class SearchServiceImpl implements SearchService{
         List<SearchLive> result = new ArrayList<>();
         for(int i = 0; i < list.size(); i++){
             Optional<User> user = userDao.findByNickname(list.get(i).getName());
+
             result.add(new SearchLive(list.get(i).getId(), list.get(i).getSearchDate(),
                     list.get(i).getName(), user.get().getThumbnail()));
         }

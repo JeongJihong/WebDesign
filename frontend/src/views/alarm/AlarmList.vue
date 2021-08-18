@@ -72,7 +72,7 @@
                   class="border-0 my-1" v-for="user in category" :key="user.detail"
                   @click="goToPromise(user.detail)">
                   <div class="d-flex align-items-center">
-                    <span class="fw-bold fs-1 me-4">{{ idx }}
+                    <span class="fw-bold fs-6 me-4">{{ idx }}
                       <!-- <b-avatar class="me-2"
                         :src="getPromiseThumbnailImgUrl({ idx }).thumbnail"></b-avatar> -->
                     </span>
