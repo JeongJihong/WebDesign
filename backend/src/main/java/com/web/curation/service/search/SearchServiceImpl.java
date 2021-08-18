@@ -75,6 +75,6 @@ public class SearchServiceImpl implements SearchService{
         }
 
         Collections.sort(result, Comparator.comparing(Search::getSearchDate));
-        return list;
+        return result;
     }
 }
