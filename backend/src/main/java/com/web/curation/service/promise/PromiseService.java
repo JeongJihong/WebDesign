@@ -1,14 +1,14 @@
 package com.web.curation.service.promise;
 
-import com.web.curation.model.promise.Promise;
 import com.web.curation.model.promise.PromiseLocationInfo;
+import com.web.curation.model.promise.PromiseRequest;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
 public interface PromiseService {
-    public Long createPromise(Promise promise);
+    public Long createPromise(PromiseRequest promise);
     public Map getPromiseList();
     public void deletePromise(Long promiseid);
     public Map getPromiseList(Long promiseid);
