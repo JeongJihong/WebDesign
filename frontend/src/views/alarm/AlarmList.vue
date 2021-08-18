@@ -72,10 +72,9 @@
                   class="border-0 my-1" v-for="user in category" :key="user.detail"
                   @click="goToPromise(user.detail)">
                   <div class="d-flex align-items-center">
-                    <span class="me-2">
-                      <b-avatar class="me-2"
-                        :src="getPromiseThumbnailImgUrl({ idx }).thumbnail"></b-avatar>
-                      <!-- <b-avatar v-else class="me-2"></b-avatar> -->
+                    <span class="fw-bold fs-1 me-4">{{ idx }}
+                      <!-- <b-avatar class="me-2"
+                        :src="getPromiseThumbnailImgUrl({ idx }).thumbnail"></b-avatar> -->
                     </span>
                     <span>{{ user.senderNickname }}님의 약속 초대가 왔습니다.</span>
                   </div>
@@ -202,7 +201,7 @@ export default {
     },
     getPromiseThumbnailImgUrl (payload) {
       const typeList = ['Travel', 'Restaurante', 'study', 'Art', 'game', 'Exercise', 'Etc']
-      const hashList = ['d51b70dd', '47b19d87', '611d4729', '8a36a18c', 'c33764ce', '9324f5ac', '4abb6ca0']
+      const hashList = ['d51b70dd', '47b19d87', '611d4729', '8a36a18c', '0dc95fa8', '9324f5ac', '4abb6ca0']
 
       let type = payload.idx
       if (payload.idx) {
@@ -217,7 +216,7 @@ export default {
 
       const typeIdx = typeList.indexOf(type)
       const typeHash = hashList[typeIdx]
-
+      console.log('TypeIcon', `${payload.idx}-icon.${typeHash}`)
       return {
         thumbnail: payload.idx && `https://i5b302.p.ssafy.io/img/${payload.idx}-icon.${typeHash}.svg`
       }

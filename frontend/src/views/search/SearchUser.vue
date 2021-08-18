@@ -115,13 +115,13 @@ export default {
               this.$store.dispatch('searchGet', token)
               this.$router.push({ name: 'ProfileDetail', params: { nickname: user.name } })
             })
-            .catch(err => {
-              alert(err)
-            })
+            // .catch(err => {
+            //   alert(err)
+            // })
         })
-        .catch(err => {
-          alert('JWT 인증 실패', err)
-        })
+        // .catch(err => {
+        //   alert('JWT 인증 실패', err)
+        // })
     },
     searchDelete({ token, user }) {
       axios({
@@ -147,24 +147,26 @@ export default {
             .then(() => {
               this.$store.dispatch('searchGet', token)
             })
-            .catch(err => {
-              alert(err)
-            })
+            // .catch(err => {
+            //   alert(err)
+            // })
         })
-        .catch(err => {
-          alert('JWT 인증 실패', err)
-        })
+        // .catch(err => {
+        //   alert('JWT 인증 실패', err)
+        // })
     },
     goBack() {
       this.$router.go(-1)
     },
     getThumbnailImgUrl (payload) {
+      console.log('getThumbnailImgUrl', payload)
       return {
         ...this.searchGet,
         thumbnail: this.searchGet[payload.idx].thumbnail && `https://i5b302.p.ssafy.io/img/${payload.imgURL}`
       }
     },
     getLiveThumbnailImgUrl (payload) {
+      console.log('getLiveThumbnailImgUrl', payload)
       return {
         ...this.searchGet,
         thumbnail: this.searchGet[payload.idx].thumbnail && `https://i5b302.p.ssafy.io/img/${payload.imgURL}`

@@ -1,6 +1,5 @@
 package com.web.curation.model.article;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.web.curation.model.comment.Comment;
 import com.web.curation.model.image.Image;
@@ -22,7 +21,7 @@ import java.util.List;
 @Builder
 public class Article {   // 게시글 보여줄 때 필요한 정보
     @Id @Column(name = "articleid")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long articleid;
     private Long id;
     private Long promiseid;
@@ -39,10 +38,6 @@ public class Article {   // 게시글 보여줄 때 필요한 정보
 
     @OneToMany(mappedBy = "article", cascade={CascadeType.ALL})
     private List<Comment> comments = new ArrayList<>();
-
-//    @OneToMany
-//    @JoinColumn(name="articleid")
-//    private List<ArticleLike> articlelikes = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "id", insertable = false, updatable = false)

@@ -1,5 +1,3 @@
-// Give the service worker access to Firebase Messaging.
-// Note that you can only use Firebase Messaging here, other Firebase libraries
 // are not available in the service worker.
 importScripts("https://www.gstatic.com/firebasejs/7.6.1/firebase-app.js");
 importScripts("https://www.gstatic.com/firebasejs/7.6.1/firebase-messaging.js");
@@ -9,7 +7,7 @@ importScripts("https://www.gstatic.com/firebasejs/7.6.1/firebase-messaging.js");
 firebase.initializeApp({
   apiKey: "AIzaSyBF2i3yoTsOyPq8ftdBLVtxrSCUTMX1cvM",
   projectId: "fcm-springboot-dbe2f",
-  messagingSenderId: "9263809922923",
+  messagingSenderId: "263809922923",
   appId: "1:263809922923:web:cd880ed771dc7122813e2e",
 });
 
@@ -26,16 +24,5 @@ messaging.setBackgroundMessageHandler((payload) => {
     body: "Background Message body.",
     icon: "/firebase-logo.png",
   };
-
   return self.registration.showNotification(notificationTitle, notificationOptions);
-});
-
-messaging.onMessage((payload) => {
-  const title = payload.notification.title;
-  const options = {
-    body: payload.notification.body,
-  };
-  navigator.serviceWorker.ready.then((registration) => {
-    registration.showNotification(title, options);
-  });
 });

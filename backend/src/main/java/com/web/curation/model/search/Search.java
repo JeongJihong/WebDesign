@@ -12,8 +12,6 @@ import java.time.LocalDateTime;
 @Getter
 @Table(name = "Search")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@AllArgsConstructor
-@Builder
 public class Search {
 
     @Id
@@ -28,9 +26,11 @@ public class Search {
     private String name;
 
 
-//    @Builder
-    public Search(Long searchid, String name){
+    @Builder
+    public Search(Long searchid, Long id, LocalDateTime searchDate, String name, String thumbnail) {
         this.searchid = searchid;
+        this.id = id;
+        this.searchDate = searchDate;
         this.name = name;
     }
 

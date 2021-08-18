@@ -1,6 +1,5 @@
 package com.web.curation.dao.promise;
 
-import com.web.curation.model.promise.Promise;
 import com.web.curation.model.promise.Promisepeople;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

@@ -8,7 +8,7 @@
           다들 어디
         </h2>
       </div>
-      <b-icon @click="updateLocations" icon="arrow-clockwise" animation="spin 1s" font-scale="2"></b-icon>
+      <b-icon @click="initMap" icon="arrow-clockwise" animation="" font-scale="2"></b-icon>
     </div>
     <hr>
     <div class="my-2">
@@ -70,6 +70,8 @@ export default {
     }
     this.$store.dispatch('updateLocations', payload)
     this.$store.dispatch('promiseDetailGet', payload)
+
+    this.initMap()
   },
   computed: {
     ...mapState([
@@ -198,8 +200,8 @@ export default {
         level: 10, // 지도의 확대 레벨
       }
       if (this.places) {
-        mapOption.center = new kakao.maps.LatLng(this.centerLat(), this.centerLon())
-        mapOption.level = this.level()
+        mapOption.center = new kakao.maps.LatLng(this.centerLat, this.centerLon)
+        mapOption.level = this.level
       }
 
       var map = new kakao.maps.Map(mapContainer, mapOption)
@@ -218,7 +220,7 @@ export default {
             
       // 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
       var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption),
-          markerPosition = new kakao.maps.LatLng(this.promiseLat(), this.promiseLon()); // 마커가 표시될 위치입니다
+          markerPosition = new kakao.maps.LatLng(this.promiseLat, this.promiseLon); // 마커가 표시될 위치입니다
 
       // 마커를 생성합니다
       var marker = new kakao.maps.Marker({
@@ -251,9 +253,9 @@ export default {
         // 직선 거리, 시간 계산
         function deg2rad(deg) { return deg * (Math.PI/180) }
         var R = 6371; // Radius of the earth in km 
-        var dLon = deg2rad(this.promiseLat()-lat); // deg2rad below 
-        var dLat = deg2rad(this.promiseLon()-lon); 
-        var a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(deg2rad(lon)) * Math.cos(deg2rad(this.promiseLon())) * Math.sin(dLon/2) * Math.sin(dLon/2); 
+        var dLon = deg2rad(this.promiseLat-lat); // deg2rad below 
+        var dLat = deg2rad(this.promiseLon-lon); 
+        var a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(deg2rad(lon)) * Math.cos(deg2rad(this.promiseLon)) * Math.sin(dLon/2) * Math.sin(dLon/2); 
         var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
         var d = R * c; // Distance in km
         var time = parseInt(d / 15 * 60); // 평균 시속 15km/h로 나누고 분으로 환산
@@ -313,104 +315,28 @@ export default {
       this.times = timeList
 
     },
-    // updateLocations () {
-    //   axios({
-    //     method: 'get',
-    //     url: `https://i5b302.p.ssafy.io/api/promise/place/${this.promiseid}`,
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //       'X-AUTH-TOKEN' : this.$store.state.token
-    //     },
-    //   })
-    //   .then((res) => {
-    //     this.attendantsInfo = res.data
-    //     this.attendantsLength = res.data.length
-    //     this.getPromiseInfo()
-    //   })
-    //   .catch((err) => {
-    //     alert(err)
-    //   })
-    // },
+    updateLocations () {
+      let payload = {
+        token: this.token,
+        promiseid: this.$route.params.promiseid
+      }
+      this.$store.dispatch('updateLocations', payload)
+      this.getPromiseInfo()
+      
+    },
     getThumbnailImgUrl (payload) {
       return {
         ...this.thumbnails,
         thumbnail: this.thumbnails[payload.idx] && `https://i5b302.p.ssafy.io/img/${payload.imgURL}`
       }
     },
-    // getPromiseInfo () {
-    //   axios({
-    //     method: 'get',
-    //     url: `https://i5b302.p.ssafy.io/api/promise/${this.promiseid}`,
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //       'X-AUTH-TOKEN' : this.$store.state.token
-    //     },
-    //   })
-    //   .then((res) => {
-    //     this.promiseLat = res.data.lat
-    //     this.promiseLon = res.data.lon
-
-    //     // -----------------------------------------------------------------------
-    //     // 지도 중앙 좌표, 범위 설정
-    //     this.attendantsLat = [];
-    //     this.attendantsLon = [];
-    //     this.attendantsLat.push(res.data.lat);
-    //     this.attendantsLon.push(res.data.lon);
-
-    //     for (var i = 0; i < this.attendantsLength; i++) {
-    //       const lat = this.attendantsInfo[i].lat;
-    //       const lon = this.attendantsInfo[i].lon;
-
-    //       this.attendantsLat.push(lat);
-    //       this.attendantsLon.push(lon);
-    //     }
-        
-    //     // 마커 중심, 지도 범위 설정을 위한 계산
-    //     var maxLat = Math.max.apply(null, this.attendantsLat);
-    //     var minLat = Math.min.apply(null, this.attendantsLat);
-    //     var maxLon = Math.max.apply(null, this.attendantsLon);
-    //     var minLon = Math.min.apply(null, this.attendantsLon);
-
-    //     var differenceLat = maxLat - minLat;
-    //     var differenceLon = maxLon - minLon;
-
-    //     var maxDifference = Math.max.apply(null, [differenceLat, differenceLon]);
-        
-    //     const avgLat = (maxLat + minLat) / 2;
-    //     const avgLon = (maxLon + minLon) / 2;
-
-    //     if (maxDifference > 0.2) {
-    //       this.level = 13
-    //     }
-    //     else if (maxDifference > 0.15) {
-    //       this.level = 12
-    //     }
-    //     else if (maxDifference > 0.11) {
-    //       this.level = 11
-    //     }
-    //     else if (maxDifference > 0.06) {
-    //       this.level = 10
-    //     }
-    //     else if (maxDifference > 0.03) {
-    //       this.level = 9
-    //     }
-    //     else if (maxDifference > 0.01) {
-    //       this.level = 8
-    //     }
-    //     else {
-    //       this.level = 7
-    //     }
-
-    //     this.centerLat = avgLat;
-    //     this.centerLon = avgLon;
-
-    //     // -----------------------------------------------------------------------
-    //     this.initMap()
-    //   })
-    //   .catch((err) => {
-    //     alert(err)
-    //   })
-    // }
+    getPromiseInfo () {
+      let payload = {
+        token: this.token,
+        promiseid: this.$route.params.promiseid
+      }
+      this.$store.dispatch('promiseDetailGet', payload)
+    }
   },
 }
 </script>

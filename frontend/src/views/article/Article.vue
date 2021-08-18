@@ -110,11 +110,11 @@ export default {
         })
         .then(res => {
           if(res.data.totalPages == this.pageNum){
-              console.log($state)
+              // console.log($state)
               $state.complete();
           }else{
               setTimeout(() => {
-                  console.log(res.data)
+                  // console.log(res.data)
                   const data = res.data.pageList;
                             for(let key in data){
                               if(data[key].articleDetail.promiseid){
@@ -123,11 +123,11 @@ export default {
                                   }
                                 }
                                 this.articles.push(data[key])
-                                console.log(this.articles)
+                                // console.log(this.articles)
                             }
                   this.pageNum++;
                   $state.loaded();
-                  console.log($state)
+                  // console.log($state)
               }, 1000)
           }
       })
@@ -149,14 +149,14 @@ export default {
               },
         })
         .then(res=>{
-          console.log(res.data)
+          // console.log(res.data)
           this.articles[payload.idx].likeCheck = !this.articles[payload.idx].likeCheck
           this.articles[payload.idx].likeCount +=1
-          console.log("싫어요 -> 좋아요")
+          // console.log("싫어요 -> 좋아요")
         })
-        .catch(err=>{
-          console.log(err)
-        })
+        // .catch(err=>{
+        //   console.log(err)
+        // })
 
         // Like Alarm POST
         if (payload.nickname !== this.username) {
@@ -185,14 +185,14 @@ export default {
               },
         })
         .then(res=>{
-          console.log(res.data)
-          console.log("좋아요 -> 싫어요")
+          // console.log(res.data)
+          // console.log("좋아요 -> 싫어요")
           this.articles[payload.idx].likeCheck = !this.articles[payload.idx].likeCheck
           this.articles[payload.idx].likeCount -= 1
         })
-        .catch(err=>{
-          console.log(err)
-        })
+        // .catch(err=>{
+        //   console.log(err)
+        // })
       }
     },
     doScrap(payload) {
@@ -253,7 +253,7 @@ export default {
     },
     getArticleFeeImgUrl (payload) {
       // console.log( this.articles[payload.idx] && require(`https://i5b302.p.ssafy.io/img/${payload.imgURL}`))
-      console.log( this.articles[payload.idx] && `https://i5b302.p.ssafy.io/img/${payload.imgURL}`)
+      // console.log( this.articles[payload.idx] && `https://i5b302.p.ssafy.io/img/${payload.imgURL}`)
       return {
         ...this.articles,
         icon: this.articles[payload.idx] && `https://i5b302.p.ssafy.io/img/${payload.imgURL}`

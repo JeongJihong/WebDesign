@@ -139,6 +139,8 @@ export default {
         this.location.lon = position.coords.longitude
       })
     }
+
+    this.initMap()
   },
   computed: {
     nameState() {
