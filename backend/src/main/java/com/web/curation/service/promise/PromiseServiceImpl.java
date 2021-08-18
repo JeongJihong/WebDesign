@@ -5,8 +5,10 @@ import com.web.curation.dao.article.ArticleDao;
 import com.web.curation.dao.follow.FollowDao;
 import com.web.curation.dao.promise.PromiseDao;
 import com.web.curation.dao.promise.PromisepeopleDao;
+import com.web.curation.dao.scrap.ScrapDao;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.alarm.Alarm;
+import com.web.curation.model.article.Article;
 import com.web.curation.model.promise.*;
 import com.web.curation.model.user.User;
 import com.web.curation.service.alarm.NotificationService;
@@ -33,6 +35,9 @@ public class PromiseServiceImpl implements PromiseService{
 
     @Autowired
     ArticleDao articleDao;
+
+    @Autowired
+    ScrapDao scrapDao;
 
     @Autowired
     UserDao userDao;
@@ -123,8 +128,8 @@ public class PromiseServiceImpl implements PromiseService{
         // List<Promise>를 peopleNum을 추가한 List<PromiseResponse>로 변환
         Stream<Promise> waitingStream = waitingList.stream();
         List<PromiseResponse> waiting = waitingStream.map(promise -> new PromiseResponse(promise.getPromiseid(),
-                promise.getType(), promise.getPlace(),promise.getNum(), promisePeopleDao.findAllByPromiseidAndApprove(promise.getPromiseid(), 1).size(),
-                promise.getTitle(), promise.getPromisetime()))
+                        promise.getType(), promise.getPlace(),promise.getNum(), promisePeopleDao.findAllByPromiseidAndApprove(promise.getPromiseid(), 1).size(),
+                        promise.getTitle(), promise.getPromisetime()))
                 .collect(Collectors.toList());
 
         // 아직 약속 인원이 채워지지 않은 리스트 구하기
@@ -140,12 +145,12 @@ public class PromiseServiceImpl implements PromiseService{
         // List<Promisepeople>를 peopleNum을 추가한 List<PromiseResponse>로 변환
         Stream<Promisepeople> upcomingStream = upcomingList.stream();
         List<PromiseResponse> upcoming = upcomingStream.map(promisepeople -> new PromiseResponse(promisepeople.getPromiseid(),
-                promiseDao.findByPromiseid(promisepeople.getPromiseid()).getType(),
-                promiseDao.findByPromiseid(promisepeople.getPromiseid()).getPlace(),
-                promiseDao.findByPromiseid(promisepeople.getPromiseid()).getNum(),
-                promisePeopleDao.findAllByPromiseidAndApprove(promisepeople.getPromiseid(), 1).size(),
-                promiseDao.findByPromiseid(promisepeople.getPromiseid()).getTitle(),
-                promiseDao.findByPromiseid(promisepeople.getPromiseid()).getPromisetime()))
+                        promiseDao.findByPromiseid(promisepeople.getPromiseid()).getType(),
+                        promiseDao.findByPromiseid(promisepeople.getPromiseid()).getPlace(),
+                        promiseDao.findByPromiseid(promisepeople.getPromiseid()).getNum(),
+                        promisePeopleDao.findAllByPromiseidAndApprove(promisepeople.getPromiseid(), 1).size(),
+                        promiseDao.findByPromiseid(promisepeople.getPromiseid()).getTitle(),
+                        promiseDao.findByPromiseid(promisepeople.getPromiseid()).getPromisetime()))
                 .collect(Collectors.toList());
 
         Map result = new HashMap<String, Object>();
@@ -173,6 +178,7 @@ public class PromiseServiceImpl implements PromiseService{
         Optional<User> userOpt = Authentication();
         // 내가 확인하고 싶은 약속
         Promise promise = promiseDao.findByPromiseid(promiseid);
+        Article article = articleDao.findByPromiseid(promiseid);
 
         // 해당 약속에 관련된 나의 정보
         Promisepeople myPromise = promisePeopleDao.findByPromiseidAndUid(promiseid, userOpt.get().getUid());
@@ -203,6 +209,7 @@ public class PromiseServiceImpl implements PromiseService{
         result.put("lat", promise.getLat());
         result.put("lon", promise.getLon());
         result.put("approve", approve);
+        result.put("articleId", article.getArticleid());
         return result;
     }
 
@@ -215,27 +222,19 @@ public class PromiseServiceImpl implements PromiseService{
     @Override
     public Map participatePromise(Long promiseid) {
         Optional<User> userOpt = Authentication();
-        Promise promise = promiseDao.findByPromiseid(promiseid);
         Promisepeople promisepeople = promisePeopleDao.findByPromiseidAndUid(promiseid, userOpt.get().getUid());
+        Promisepeople newpeople = new Promisepeople(promisepeople.getPromisepeopleid(),
+                promisepeople.getUid(), promisepeople.getPromiseid(), promisepeople.getCreateruid(),
+                promisepeople.getUpdatedtime(), promisepeople.getNickname(), promisepeople.getLat(),
+                promisepeople.getLon(), promisepeople.getThumbnail(), 1);
 
-        // 해당 약속에 참여하는 사람
-        List<Promisepeople> promisepeopleList = promisePeopleDao.findAllByPromiseidAndApprove(promiseid, 1);
-
-        // 만약 참가자 모집이 완료되지 않은 약속이라면 참속 참여로 변환
-        if(promise.getNum() > promisepeopleList.size()) {
-            Promisepeople newpeople = new Promisepeople(promisepeople.getPromisepeopleid(),
-                    promisepeople.getUid(), promisepeople.getPromiseid(), promisepeople.getCreateruid(),
-                    promisepeople.getUpdatedtime(), promisepeople.getNickname(), promisepeople.getLat(),
-                    promisepeople.getLon(), promisepeople.getThumbnail(), 1);
-
-            promisePeopleDao.save(newpeople);
-        }
+        promisePeopleDao.save(newpeople);
 
         Map result = new HashMap<String, Object>();
-        result.put("nickname", promisepeople.getNickname());
-        result.put("updatedtime",promisepeople.getUpdatedtime());
-        result.put("lat", promisepeople.getLat());
-        result.put("lon", promisepeople.getLon());
+        result.put("nickname", newpeople.getNickname());
+        result.put("updatedtime",newpeople.getUpdatedtime());
+        result.put("lat", newpeople.getLat());
+        result.put("lon", newpeople.getLon());
         return result;
     }
 
