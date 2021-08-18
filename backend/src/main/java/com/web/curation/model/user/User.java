@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 @Builder
 public class User implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long uid;
 
     private String nickname;

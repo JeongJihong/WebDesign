@@ -3,7 +3,7 @@
     <!-- 헤더 -->
     <div class="mt-3 mx-4 d-flex justify-content-between align-items-center">
       <span class="fs-1">
-        <button @click="goBack"><b-icon icon="arrow-left" class="me-4"></b-icon></button>
+        <button @click="goBack"><b-icon id="icon" icon="arrow-left" class="me-4"></b-icon></button>
         <span class="fw-bold">알림</span>
       </span>
     </div>
@@ -17,7 +17,7 @@
         <div v-else>
           <b-list-group>
             <b-list-group-item
-              class="border-0 my-1" v-for="(user, idx) in likeList" :key="user.detail"
+              class="border-0 my-1" v-for="(user, idx) in likeList" :key="user.detail" id="app"
               @click="goToArticle(user.detail)">
               <div class="d-flex align-items-center">
                 <span class="me-2">
@@ -72,7 +72,7 @@
                   class="border-0 my-1" v-for="user in category" :key="user.detail"
                   @click="goToPromise(user.detail)">
                   <div class="d-flex align-items-center">
-                    <span class="fw-bold fs-1 me-4">{{ idx }}
+                    <span class="fw-bold fs-6 me-4">{{ idx }}
                       <!-- <b-avatar class="me-2"
                         :src="getPromiseThumbnailImgUrl({ idx }).thumbnail"></b-avatar> -->
                     </span>

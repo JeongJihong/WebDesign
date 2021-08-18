@@ -1,5 +1,5 @@
 <template>
-  <div style="margin-bottom:60px;">
+  <div style="margin-bottom:80px;">
     <div class="mt-3 mx-4 d-flex justify-content-between align-items-center">
       <span class="fs-1">
         <button @click="goBack"><b-icon id="icon" icon="arrow-left" class="me-4"></b-icon></button>

@@ -1,11 +1,11 @@
 <template>
-  <div class="page" style="margin-bottom:60px;">
+  <div class="page" style="margin-bottom:80px;">
     <div class="mt-3 mx-4 d-flex justify-content-between align-items-center">
       <span class="fs-1">
-        <button @click="goBack"><b-icon icon="arrow-left" class="me-4"></b-icon></button>
+        <button @click="goBack"><b-icon id="icon" icon="arrow-left" class="me-4"></b-icon></button>
         <span class="fw-bold">약속 정보</span>
       </span>
-      <button @click="goToPromiseCreate" style="color: #0d6efd;">약속 생성</button>
+      <button @click="goToPromiseCreate" style="color:#0d6efd;">약속 생성</button>
     </div>
 
     <ul class="p-0">
@@ -17,7 +17,7 @@
             :to="{ name: 'PromiseDetail', params: { promiseid: waitingPromise.promiseid } }">
             <li>
               <span class="d-flex justify-content-start align-items-center">
-                <span class="fw-bold fs-1 me-4" style="color: black;">{{ waitingPromise.type }}
+                <span class="fw-bold fs-6 me-4" style="color: black;">{{ waitingPromise.type }}
                   <!-- <img class="me-4"
                     :src="getwaitingPromiseFeeImgUrl({idx, imgURL: waitingPromise.type }).icon"
                     :alt="waitingPromise.type"> -->
@@ -54,7 +54,7 @@
             :to="{ name: 'PromiseDetail', params: { promiseid: upcomingPromise.promiseid } }">
             <li>
               <span class="d-flex justify-content-start align-items-center">
-                <span class="fw-bold fs-1 me-4" style="color: black;">{{ waitingPromise.type }}
+                <span class="fw-bold fs-6 me-4" style="color: black;">{{ upcomingPromise.type }}
                   <!-- <img class="me-4"
                     :src="getupcomingPromisesFeeImgUrl({ idx, imgURL: upcomingPromise.type }).icon"
                     :alt="upcomingPromise.type"> -->

@@ -1,5 +1,5 @@
 <template>
-  <div class="page" style="margin-bottom:60px;">
+  <div class="page" style="margin-bottom:80px;">
     <!-- 헤더 -->
     <div class="mt-3 mx-4 d-flex justify-content-between align-items-center">
       <span class="fs-1">
@@ -18,7 +18,7 @@
       <span class="me-4 d-flex align-items-center">
         <!-- <img :src="getImgUrl.icon"
           :alt="promiseDetail.type"> -->
-          <span class="fw-bold fs-1">{{ promiseDetail.type }}</span>
+          <span class="fw-bold fs-2">{{ promiseDetail.type }}</span>
       </span>
       <!-- 약속 정보 Text -->
       <span class="d-flex flex-column justify-content-between">
@@ -121,7 +121,8 @@ export default {
       location: {
         lat: 50,
         lon: 120
-      }
+      },
+      count: 1
     }
   },
   mounted() {
@@ -149,8 +150,6 @@ export default {
         this.location.lon = position.coords.longitude
       })
     }
-
-    this.initMap()
   },
   computed: {
     ...mapState([
@@ -236,6 +235,11 @@ export default {
         var marker = new kakao.maps.Marker({ position: markerPosition })
         marker.setMap(map)
       // }
+
+      if (this.count === 1) {
+        this.count = 0
+        this.initMap()
+      }
     },
     goToProfile(nickname) {
       this.$router.push({ name: 'ProfileDetail', params: { nickname } })

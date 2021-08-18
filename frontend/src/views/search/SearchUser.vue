@@ -1,5 +1,5 @@
 <template>
-  <div style="margin-bottom:60px;">
+  <div style="margin-bottom:80px;">
     <!-- 헤더 -->
     <div class="mt-3 mx-4 d-flex justify-content-between align-items-center">
       <span class="fs-1">
@@ -20,13 +20,13 @@
         <div v-if="this.searchLive.length !== 0">
           <b-list-group>
             <b-list-group-item
-              class="border-0 my-1" v-for="(user, idx) in searchGet" :key="user.searchid">
+              class="border-0 my-1" v-for="(user, idx) in searchGet" :key="user.searchid" id="app">
               <div class="d-flex justify-content-between">
                 <!-- <b-link :href="`/#/account/profile/${user.name}`" -->
                 <b-link
                   class="text-decoration-none text-dark pe-5 me-5">
                   <span class="d-flex align-items-center" @click="searchPost({token, user})">
-                    <b-avatar v-if="user.thumbnail" class="me-2"
+                    <b-avatar v-if="user.thumbnail !== null" class="me-2"
                       :src="getThumbnailImgUrl({ idx, imgURL: user.thumbnail }).thumbnail"></b-avatar>
                     <b-avatar v-else class="me-2"></b-avatar>
                     <span>{{ user.name }}</span>
@@ -49,7 +49,7 @@
             class="border-0 my-1" v-for="(user, idx) in searchLive" :key="user.searchid"
             @click="searchPost({token, user})">
             <div class="d-flex align-items-center">
-              <b-avatar v-if="user.thumbnail" class="me-2"
+              <b-avatar v-if="user.thumbnail !== null" class="me-2"
                 :src="getLiveThumbnailImgUrl({ idx, imgURL: user.thumbnail }).thumbnail"></b-avatar>
               <b-avatar v-else class="me-2"></b-avatar>
               <span>{{ user.name }}</span>
@@ -159,17 +159,15 @@ export default {
       this.$router.go(-1)
     },
     getThumbnailImgUrl (payload) {
-      console.log('getThumbnailImgUrl', payload)
       return {
         ...this.searchGet,
-        thumbnail: this.searchGet[payload.idx].thumbnail && `https://i5b302.p.ssafy.io/img/${payload.imgURL}`
+        thumbnail: this.searchGet.length && `https://i5b302.p.ssafy.io/img/${payload.imgURL}`
       }
     },
     getLiveThumbnailImgUrl (payload) {
-      console.log('getLiveThumbnailImgUrl', payload)
       return {
         ...this.searchGet,
-        thumbnail: this.searchGet[payload.idx].thumbnail && `https://i5b302.p.ssafy.io/img/${payload.imgURL}`
+        thumbnail: this.searchGet.length && `https://i5b302.p.ssafy.io/img/${payload.imgURL}`
       }
     }
   }
