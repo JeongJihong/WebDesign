@@ -8,7 +8,7 @@
           다들 어디
         </h2>
       </div>
-      <b-icon @click="updateLocations" icon="arrow-clockwise" animation="spin 1s" font-scale="2"></b-icon>
+      <b-icon @click="updateLocations" icon="arrow-clockwise" animation="" font-scale="2"></b-icon>
     </div>
     <hr>
     <div class="my-2">
@@ -313,104 +313,28 @@ export default {
       this.times = timeList
 
     },
-    // updateLocations () {
-    //   axios({
-    //     method: 'get',
-    //     url: `https://i5b302.p.ssafy.io/api/promise/place/${this.promiseid}`,
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //       'X-AUTH-TOKEN' : this.$store.state.token
-    //     },
-    //   })
-    //   .then((res) => {
-    //     this.attendantsInfo = res.data
-    //     this.attendantsLength = res.data.length
-    //     this.getPromiseInfo()
-    //   })
-    //   .catch((err) => {
-    //     alert(err)
-    //   })
-    // },
+    updateLocations () {
+      let payload = {
+        token: this.token,
+        promiseid: this.$route.params.promiseid
+      }
+      this.$store.dispatch('updateLocations', payload)
+      this.getPromiseInfo()
+      
+    },
     getThumbnailImgUrl (payload) {
       return {
         ...this.thumbnails,
         thumbnail: this.thumbnails[payload.idx] && `https://i5b302.p.ssafy.io/img/${payload.imgURL}`
       }
     },
-    // getPromiseInfo () {
-    //   axios({
-    //     method: 'get',
-    //     url: `https://i5b302.p.ssafy.io/api/promise/${this.promiseid}`,
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //       'X-AUTH-TOKEN' : this.$store.state.token
-    //     },
-    //   })
-    //   .then((res) => {
-    //     this.promiseLat = res.data.lat
-    //     this.promiseLon = res.data.lon
-
-    //     // -----------------------------------------------------------------------
-    //     // 지도 중앙 좌표, 범위 설정
-    //     this.attendantsLat = [];
-    //     this.attendantsLon = [];
-    //     this.attendantsLat.push(res.data.lat);
-    //     this.attendantsLon.push(res.data.lon);
-
-    //     for (var i = 0; i < this.attendantsLength; i++) {
-    //       const lat = this.attendantsInfo[i].lat;
-    //       const lon = this.attendantsInfo[i].lon;
-
-    //       this.attendantsLat.push(lat);
-    //       this.attendantsLon.push(lon);
-    //     }
-        
-    //     // 마커 중심, 지도 범위 설정을 위한 계산
-    //     var maxLat = Math.max.apply(null, this.attendantsLat);
-    //     var minLat = Math.min.apply(null, this.attendantsLat);
-    //     var maxLon = Math.max.apply(null, this.attendantsLon);
-    //     var minLon = Math.min.apply(null, this.attendantsLon);
-
-    //     var differenceLat = maxLat - minLat;
-    //     var differenceLon = maxLon - minLon;
-
-    //     var maxDifference = Math.max.apply(null, [differenceLat, differenceLon]);
-        
-    //     const avgLat = (maxLat + minLat) / 2;
-    //     const avgLon = (maxLon + minLon) / 2;
-
-    //     if (maxDifference > 0.2) {
-    //       this.level = 13
-    //     }
-    //     else if (maxDifference > 0.15) {
-    //       this.level = 12
-    //     }
-    //     else if (maxDifference > 0.11) {
-    //       this.level = 11
-    //     }
-    //     else if (maxDifference > 0.06) {
-    //       this.level = 10
-    //     }
-    //     else if (maxDifference > 0.03) {
-    //       this.level = 9
-    //     }
-    //     else if (maxDifference > 0.01) {
-    //       this.level = 8
-    //     }
-    //     else {
-    //       this.level = 7
-    //     }
-
-    //     this.centerLat = avgLat;
-    //     this.centerLon = avgLon;
-
-    //     // -----------------------------------------------------------------------
-    //     this.initMap()
-    //   })
-    //   .catch((err) => {
-    //     alert(err)
-    //   })
-    // }
+    getPromiseInfo () {
+      let payload = {
+        token: this.token,
+        promiseid: this.$route.params.promiseid
+      }
+      this.$store.dispatch('promiseDetailGet', payload)
+    }
   },
 }
 </script>
