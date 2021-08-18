@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Table(name = "articlelike")
 public class ArticleLike {
     @Id @Column(name = "articlelikeid")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long articlelikeid;
 
     private Long id;
