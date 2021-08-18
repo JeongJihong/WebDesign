@@ -198,8 +198,8 @@ export default {
         level: 10, // 지도의 확대 레벨
       }
       if (this.places) {
-        mapOption.center = new kakao.maps.LatLng(this.centerLat(), this.centerLon())
-        mapOption.level = this.level()
+        mapOption.center = new kakao.maps.LatLng(this.centerLat, this.centerLon)
+        mapOption.level = this.level
       }
 
       var map = new kakao.maps.Map(mapContainer, mapOption)
@@ -218,7 +218,7 @@ export default {
             
       // 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
       var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption),
-          markerPosition = new kakao.maps.LatLng(this.promiseLat(), this.promiseLon()); // 마커가 표시될 위치입니다
+          markerPosition = new kakao.maps.LatLng(this.promiseLat, this.promiseLon); // 마커가 표시될 위치입니다
 
       // 마커를 생성합니다
       var marker = new kakao.maps.Marker({
@@ -251,9 +251,9 @@ export default {
         // 직선 거리, 시간 계산
         function deg2rad(deg) { return deg * (Math.PI/180) }
         var R = 6371; // Radius of the earth in km 
-        var dLon = deg2rad(this.promiseLat()-lat); // deg2rad below 
-        var dLat = deg2rad(this.promiseLon()-lon); 
-        var a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(deg2rad(lon)) * Math.cos(deg2rad(this.promiseLon())) * Math.sin(dLon/2) * Math.sin(dLon/2); 
+        var dLon = deg2rad(this.promiseLat-lat); // deg2rad below 
+        var dLat = deg2rad(this.promiseLon-lon); 
+        var a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(deg2rad(lon)) * Math.cos(deg2rad(this.promiseLon)) * Math.sin(dLon/2) * Math.sin(dLon/2); 
         var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
         var d = R * c; // Distance in km
         var time = parseInt(d / 15 * 60); // 평균 시속 15km/h로 나누고 분으로 환산
