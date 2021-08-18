@@ -6,8 +6,6 @@ import com.web.curation.model.search.Search;
 import com.web.curation.model.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -52,7 +50,7 @@ public class SearchServiceImpl implements SearchService{
         List<User> user = userDao.findByNicknameIsContaining(nickname);
         List<Search> live = new ArrayList<>();
         for(int i = 0; i < user.size(); i++){
-            live.add(new Search(user.get(i).getUid(), user.get(i).getNickname()));
+            live.add(new Search(user.get(i).getUid(), user.get(i).getNickname(), user.get(i).getThumbnail()));
         }
         return live;
     }
@@ -69,7 +67,14 @@ public class SearchServiceImpl implements SearchService{
     public List<Search> searchList() {
         Optional<User> userOpt = Authentication();
         List<Search> list = searchDao.findById(userOpt.get().getUid());
-        Collections.sort(list, Comparator.comparing(Search::getSearchDate));
+        List<Search> result = new ArrayList<>();
+        for(int i = 0; i < list.size(); i++){
+            Optional<User> user = userDao.findByNickname(list.get(i).getName());
+            result.add(new Search(list.get(i).getSearchid(), list.get(i).getId(),
+                    list.get(i).getSearchDate(), list.get(i).getName(), user.get().getThumbnail()));
+        }
+
+        Collections.sort(result, Comparator.comparing(Search::getSearchDate));
         return list;
     }
 }
