@@ -1,27 +1,18 @@
 package com.web.curation.controller;
 
-import com.web.curation.dao.article.ArticleDao;
-import com.web.curation.dao.comment.CommentDao;
-import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.comment.Comment;
 import com.web.curation.model.comment.CommentResponse;
-import com.web.curation.model.user.User;
 import com.web.curation.service.comment.CommentServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @ApiResponses(value = { @ApiResponse(code = 401, message = "Unauthorized", response = BasicResponse.class),
         @ApiResponse(code = 403, message = "Forbidden", response = BasicResponse.class),
@@ -39,8 +30,8 @@ public class CommentController {
 
     @PostMapping("/{articleid}/comment")
     @ApiOperation(value = "댓글 작성하기")
-    public ResponseEntity<String> postComment(@PathVariable Long articleid, @RequestBody Comment request) {
-        commentService.postComment(articleid, request);
+    public ResponseEntity<String> postComment(@PathVariable Long articleid, @RequestParam(required = true) final String comment) {
+        commentService.postComment(articleid, comment);
         return new ResponseEntity<>("댓글 작성 완료", HttpStatus.OK);
     }
 
@@ -53,8 +44,8 @@ public class CommentController {
 
     @PutMapping("/comment/{commentid}")
     @ApiOperation(value = "댓글 수정하기")
-    public ResponseEntity<String> changeComment(@PathVariable Long commentid, @RequestBody Comment request){
-        commentService.changeComment(commentid, request);
+    public ResponseEntity<String> changeComment(@PathVariable Long commentid, @RequestParam(required = true) final String comment){
+        commentService.changeComment(commentid, comment);
         return new ResponseEntity<>("댓글 수정 완료", HttpStatus.OK);
     }
 
