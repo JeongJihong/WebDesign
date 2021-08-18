@@ -73,7 +73,6 @@ export default {
   },
   created() {
     this.$store.dispatch('searchGet', this.token)
-    console.log(this.searchLive)
   },
   computed: {
     ...mapState([
@@ -160,14 +159,12 @@ export default {
       this.$router.go(-1)
     },
     getThumbnailImgUrl (payload) {
-      console.log('getThumbnailImgUrl', payload)
       return {
         ...this.searchGet,
         thumbnail: this.searchGet.length && `https://i5b302.p.ssafy.io/img/${payload.imgURL}`
       }
     },
     getLiveThumbnailImgUrl (payload) {
-      console.log('getLiveThumbnailImgUrl', payload)
       return {
         ...this.searchGet,
         thumbnail: this.searchGet.length && `https://i5b302.p.ssafy.io/img/${payload.imgURL}`
