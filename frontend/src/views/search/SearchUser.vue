@@ -26,6 +26,8 @@
                 <b-link
                   class="text-decoration-none text-dark pe-5 me-5">
                   <span class="d-flex align-items-center" @click="searchPost({token, user})">
+                    test {{ user }}
+                    test {{ idx }}
                     <b-avatar v-if="user.thumbnail" class="me-2"
                       :src="getThumbnailImgUrl({ idx, imgURL: user.thumbnail }).thumbnail"></b-avatar>
                     <b-avatar v-else class="me-2"></b-avatar>
@@ -49,6 +51,8 @@
             class="border-0 my-1" v-for="(user, idx) in searchLive" :key="user.searchid"
             @click="searchPost({token, user})">
             <div class="d-flex align-items-center">
+              test {{ user }}
+              test {{ idx }}
               <b-avatar v-if="user.thumbnail" class="me-2"
                 :src="getLiveThumbnailImgUrl({ idx, imgURL: user.thumbnail }).thumbnail"></b-avatar>
               <b-avatar v-else class="me-2"></b-avatar>
