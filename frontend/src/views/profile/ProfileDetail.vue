@@ -33,8 +33,8 @@
       </div>
       <div class="mt-2">
         <div class="d-flex justify-content-between">
-          <span style="font-size: 0.9rem">피플온도</span>
-          <span style="font-size: 0.9rem">{{this.status + 10.0}}℃</span>
+          <span style="font-size: 0.9rem">피플포인트</span>
+          <span style="font-size: 0.9rem; color: #AAAAAA;">{{this.status + 10.0}}p</span>
         </div>
         <b-progress :value="status+10" :max="30" class="mb-1" variant="info" height="0.5rem"></b-progress>
       </div>
