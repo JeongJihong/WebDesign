@@ -2,7 +2,7 @@
   <div class="user d-flex flex-column justify-content-between mt-2" id="login" >
     <br>
       <div class="jb-text">
-          <h1 class="d-flex flex-column justify-content-center" style="font-family: 'Pacifico', cursive;">Pipl.</h1>
+          <h1 class="d-flex flex-column align-items-center" style="font-family: 'Pacifico', cursive;">Pipl.</h1>
         <br>
         <div class="wrapC">
           <div class="input-with-label">
