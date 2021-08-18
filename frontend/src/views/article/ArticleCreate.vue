@@ -69,15 +69,15 @@
       })
         .then(res=>{
           this.$router.push({ name:'FeedMain'})
-          console.log(res.data)
-          console.log(this.files)
+          // console.log(res.data)
+          // console.log(this.files)
         })
-        .catch(err=>{
-          console.log(`${localStorage.getItem('token')}`)
-          console.log(this.files)
-          console.log(this.content)
-          console.log(err)
-        })
+        // .catch(err=>{
+        //   console.log(`${localStorage.getItem('token')}`)
+        //   console.log(this.files)
+        //   console.log(this.content)
+        //   console.log(err)
+        // })
       },
     }
   }

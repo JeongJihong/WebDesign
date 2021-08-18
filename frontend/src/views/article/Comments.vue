@@ -57,14 +57,8 @@ export default {
         },
       })
         .then(res=>{
-          console.log(res.data)
           this.comments = res.data
-          console.log(this.comment)
           this.username = `${localStorage.getItem('username')}`
-        })
-        .catch(err=>{
-          console.log(err.response.data)
-          console.log("에러임?")
         })
   },
   methods: {
@@ -84,9 +78,6 @@ export default {
           this.username = `${localStorage.getItem('username')}`
           
         })
-        .catch(err => {
-          console.log(err)
-        })
     },
     createComment(){
       axios({
@@ -100,12 +91,8 @@ export default {
         }
       })
         .then(res=>{
-          console.log(res.data)
           this.content = ''
           this.getComments()
-        })
-        .catch(err=>{
-          console.log(err)
         })
     },
     CommentDelete(commentid){
@@ -117,11 +104,7 @@ export default {
         }
       })
         .then(res=>{
-          console.log(res)
           this.getComments()
-        })
-        .catch(err=>{
-          console.log(err)
         })
     },
     UpdateComment(commentid){
@@ -138,12 +121,8 @@ export default {
         }
       })
         .then(res=>{
-          console.log(res)
           this.content =''
           this.getComments()
-        })
-        .catch(err=>{
-          console.log(err)
         })
     },
     getThumbnailImgUrl (payload) {
