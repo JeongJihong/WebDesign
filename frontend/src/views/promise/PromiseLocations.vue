@@ -176,7 +176,7 @@ export default {
   },
   mounted () {
     if (window.kakao && window.kakao.maps) {
-      this.initMap();
+      this.updateLocations();
     } else {
       const script = document.createElement('script')
       /* global kakao */

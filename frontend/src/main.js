@@ -58,7 +58,6 @@ Notification.requestPermission().then((permission) => {
 // TODO: Send token to server for send notification
 // messaging.getToken().then(console.log);
 messaging.getToken().then((res) => {
-  console.log(res);
   store.dispatch("firebaseTokenGet", res);
 });
 
@@ -71,7 +70,6 @@ messaging.onMessage((payload) => {
   // navigator.serviceWorker.ready.then((registration) => {
   //   registration.showNotification(title, options);
   // });
-  console.log(payload);
   alert(payload.Notification.title);
   alert(payload.Notification.body);
 });

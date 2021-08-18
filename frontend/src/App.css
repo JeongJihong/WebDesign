@@ -241,6 +241,19 @@
 }
 
 
+#custom-button-tab {
+  overflow: hidden;
+  position: fixed;
+  bottom: 0;
+  width: 100%
+}
+
+
+#custom-button-tab button {
+  float: left;
+  display: block;
+}
+
 
 /*  Promise Create  */
 @import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');

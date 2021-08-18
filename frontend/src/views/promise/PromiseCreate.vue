@@ -192,7 +192,6 @@ export default {
 
         var message = '클릭한 위치의 위도는 ' + latlng.getLat() + ' 이고, ';
         message += '경도는 ' + latlng.getLng() + ' 입니다';
-        console.log(message)
 
         this.lat = latlng.getLat()
         this.lon = latlng.getLng()

@@ -102,10 +102,6 @@ export default {
         this.article = res.data
         this.detail = res.data.articleDetail
         this.imgOn= res.data.articleDetail.images.length
-        console.log(res)
-      })
-      .catch(err=>{
-        console.log(err)
       })
   },
   methods:{
@@ -125,10 +121,6 @@ export default {
       })
       .then(res=>{
         this.article= res.data
-        console.log(res.data)
-      })
-      .catch(err=>{
-        console.log(err)
       })
     },
     articleDelete(){
@@ -140,12 +132,7 @@ export default {
         }
       })
       .then(res=>{
-        console.log(res.data)
         this.$router.push({ name:'FeedMain'})
-      })
-      .catch(err=>{
-        console.log(err)
-        console.log(this.$route.params.articleid)
       })
     },
     onSlideStart(slide) {
@@ -176,8 +163,6 @@ export default {
         }
       })
         .then(res => {
-          console.log(res)
-          console.log(payload.articleid)
           let scrapid = -1
           for (let i = 0; i < res.data.length; i++) {
             if (res.data[i].articleid === payload.articleid) {

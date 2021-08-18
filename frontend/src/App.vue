@@ -181,8 +181,6 @@ export default {
       var darkmode = document.getElementById("mode")
 
       if (window) {
-        console.log(window.matchMedia('(prefers-color-scheme: dark)').matches);
-
         if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
           if(document.documentElement.classList.contains('darkmode')) {
             document.documentElement.classList.remove("darkmode");

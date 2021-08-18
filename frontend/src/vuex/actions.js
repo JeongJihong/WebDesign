@@ -2,11 +2,6 @@ import axios from "axios";
 import router from "../routes";
 
 export default {
-  // 뒤로가기 -형식
-  // back() {
-  //   this.$router.go(-1)
-  // },
-
   // 로그인 - 두호
   login({ commit }, credentials) {
     axios({
@@ -47,18 +42,8 @@ export default {
             },
             data: localStorage.getItem("firebaseToken"),
           }).then(() => router.push({ name: "FeedMain" }));
-          // .catch((err) => {
-          //   console.log('Firebase Token POST Failed' + err)
-          // })
         });
-        // .catch((err) => {
-        //   alert(err);
-        // });
       })
-      .catch((err) => {
-        // console.log('에러!', err)
-        // alert(err);
-      });
   },
   firebaseTokenGet({ commit }, firebaseToken) {
     localStorage.setItem("firebaseToken", firebaseToken);
@@ -76,7 +61,6 @@ export default {
     })
       .then((res) => {
         axios({
-          // url: `https://i5b302.p.ssafy.io/api/search?id=${res.data.uid}`,
           url: "https://i5b302.p.ssafy.io/api/search",
           method: "get",
           headers: {
@@ -88,13 +72,7 @@ export default {
             console.log(res.data)
             commit("SEARCH_GET", res.data);
           })
-          .catch((err) => {
-            alert("JWT는 인증했지만 SEARCH 로그 GET 실패", err);
-          });
       })
-      .catch((err) => {
-        alert("JWT 인증 실패", err);
-      });
   },
   searchLive({ commit }, data) {
     axios({
@@ -105,9 +83,6 @@ export default {
         console.log(res.data)
         commit("SEARCH_LIVE", res.data);
       })
-      .catch((err) => {
-        alert(err);
-      });
   },
 
   alarmLikeGet({ commit }, token) {
@@ -122,9 +97,6 @@ export default {
       .then((res) => {
         commit("ALARM_LIKE_GET", res.data);
       })
-      .catch((err) => {
-        alert(err);
-      });
   },
   alarmFollowGet({ commit }, token) {
     axios({
@@ -138,9 +110,6 @@ export default {
       .then((res) => {
         commit("ALARM_FOLLOW_GET", res.data);
       })
-      .catch((err) => {
-        alert(err);
-      });
   },
   alarmPromiseGet({ commit }, token) {
     axios({
@@ -153,11 +122,7 @@ export default {
     })
       .then((res) => {
         commit("ALARM_PROMISE_GET", res.data);
-        console.log(res.data)
       })
-      .catch((err) => {
-        alert(err);
-      });
   },
 
   scrapGet({ commit }, token) {
@@ -181,13 +146,7 @@ export default {
           .then((res) => {
             commit("SCRAP_GET", res.data);
           })
-          .catch((err) => {
-            alert("JWT 인증했지만 SCRAP GET 실패", err);
-          });
       })
-      .catch((err) => {
-        alert("JWT 인증 실패", err);
-      });
   },
   scrapDeleteMode({ commit }) {
     commit("SCRAP_DELETE_MODE");
@@ -205,7 +164,6 @@ export default {
     });
   },
   promiseDetailGet({ commit }, payload) {
-    // payload: { token, promiseid }
     axios({
       url: `https://i5b302.p.ssafy.io/api/promise/${payload.promiseid}`,
       method: "get",
@@ -216,9 +174,6 @@ export default {
     }).then((res) => {
       commit("PROMISE_DETAIL_GET", res.data);
     });
-    // .catch(() => {
-    //   router.push({ name: 'PromiseList' })
-    // });
   },
 
   logout({ commit }) {
@@ -285,29 +240,13 @@ export default {
                       .then(() => {
                         router.push({ name: "FeedMain" });
                       })
-                      .catch((err) => {
-                        console.log("Firebase Token POST Failed" + err);
-                      });
                   })
-                  .catch((err) => {
-                    alert(err);
-                  });
               })
-              .catch((err) => {
-                console.log(err);
-                console.log("데이터베이스에 회원 정보가 없음!");
-              });
-            alert("로그인 성공!");
-            // this.$bvModal.hide("bv-modal-example");
           },
           fail: (error) => {
             this.$router.push("/errorPage");
-            console.log(error);
           },
         });
-      },
-      fail: (error) => {
-        console.log(error);
       },
     });
   },
@@ -323,12 +262,6 @@ export default {
       .then((res) => {
         commit("UPDATE_LOCATIONS", res.data);
         commit("GET_ATTENDANTS_NUM", res.data.length);
-        // this.attendantsInfo = res.data
-        // this.attendantsLength = res.data.length
-        // this.getPromiseInfo()
       })
-      .catch((err) => {
-        alert(err);
-      });
   },
 };
