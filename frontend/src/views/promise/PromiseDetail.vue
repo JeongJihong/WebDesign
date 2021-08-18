@@ -375,7 +375,7 @@ export default {
     },
     getImgUrl () {
       const typeList = ['Travel', 'Restaurante', 'study', 'Art', 'game', 'Exercise', 'Etc']
-      const hashList = ['d51b70dd', '47b19d87', '611d4729', '8a36a18c', 'c33764ce', '9324f5ac', '4abb6ca0']
+      const hashList = ['d51b70dd', '47b19d87', '611d4729', '8a36a18c', '0dc95fa8', '9324f5ac', '4abb6ca0']
 
       let type = this.promiseDetail.type
       if (this.promiseDetail.type) {
@@ -390,7 +390,7 @@ export default {
 
       const typeIdx = typeList.indexOf(type)
       const typeHash = hashList[typeIdx]
-
+      console.log('TypeIcon', `${this.promiseDetail.type}-icon.${typeHash}`)
       return {
         ...this.promiseDetail,
         icon: this.promiseDetail.type && `https://i5b302.p.ssafy.io/img/${this.promiseDetail.type}-icon.${typeHash}.svg`

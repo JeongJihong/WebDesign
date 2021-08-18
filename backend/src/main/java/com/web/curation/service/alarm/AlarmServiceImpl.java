@@ -77,7 +77,7 @@ public class AlarmServiceImpl implements AlarmService {
     @Override
     public List<LikeFollowRequest> getLikeAlarm() {
         Optional<User> loginUser = Authentication();
-        List<Alarm> alarm = alarmDao.findAllByReceiveuidAndCategory(loginUser.get().getUid(), "Like");
+        List<Alarm> alarm = alarmDao.findAllByReceiveuidAndCategoryOrderByAlarmidDesc(loginUser.get().getUid(), "Like");
         List<LikeFollowRequest> result = new ArrayList<>();
         for (int i = 0; i < alarm.size(); i++) {
             Optional<User> tempUser = userDao.findByUid(alarm.get(i).getSenderuid());
@@ -91,7 +91,7 @@ public class AlarmServiceImpl implements AlarmService {
     @Override
     public List<LikeFollowRequest> getFollowAlarm() {
         Optional<User> loginUser = Authentication();
-        List<Alarm> alarm = alarmDao.findAllByReceiveuidAndCategory(loginUser.get().getUid(), "Follow");
+        List<Alarm> alarm = alarmDao.findAllByReceiveuidAndCategoryOrderByAlarmidDesc(loginUser.get().getUid(), "Follow");
         List<LikeFollowRequest> result = new ArrayList<>();
         for (int i = 0; i < alarm.size(); i++) {
             Optional<User> tempUser = userDao.findByUid(alarm.get(i).getSenderuid());
@@ -105,7 +105,7 @@ public class AlarmServiceImpl implements AlarmService {
     @Override
     public Map getPromiseAlarm() {
         Optional<User> loginUser = Authentication();
-        List<Alarm> alarm = alarmDao.findAllByReceiveuidAndCategory(loginUser.get().getUid(), "Promise");
+        List<Alarm> alarm = alarmDao.findAllByReceiveuidAndCategoryOrderByAlarmidDesc(loginUser.get().getUid(), "Promise");
         Map mapResult = new HashMap<String, Object>();
         List<LikeFollowRequest> Game = new ArrayList<>();
         List<LikeFollowRequest> Travel = new ArrayList<>();
