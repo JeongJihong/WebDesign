@@ -6,6 +6,7 @@
           <b-avatar v-if="article.articleDetail.user.thumbnail" class="mx-3"
             :src="getThumbnailImgUrl({ idx, imgURL: article.articleDetail.user.thumbnail }).thumbnail"></b-avatar>
           <b-avatar v-else class="mx-3"></b-avatar>
+
           <span>{{article.articleDetail.user.nickname}}</span>
           <b-carousel
             id="carousel-1"
