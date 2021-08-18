@@ -18,7 +18,7 @@
       <span class="me-4 d-flex align-items-center">
         <!-- <img :src="getImgUrl.icon"
           :alt="promiseDetail.type"> -->
-          <span class="fw-bold fs-1">{{ promiseDetail.type }}</span>
+          <span class="fw-bold fs-2">{{ promiseDetail.type }}</span>
       </span>
       <!-- 약속 정보 Text -->
       <span class="d-flex flex-column justify-content-between">

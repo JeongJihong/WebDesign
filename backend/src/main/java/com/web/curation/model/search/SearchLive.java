@@ -11,19 +11,19 @@ import java.time.LocalDateTime;
 @Getter
 public class SearchLive {
 
-    private Long id;
+    private Long searchid;
     private LocalDateTime searchDate;
     private String name;
     private String thumbnail;
 
-    public SearchLive(Long id, String name, String thumbnail) {
-        this.id = id;
+    public SearchLive(Long searchid, String name, String thumbnail) {
+        this.searchid = searchid;
         this.name = name;
         this.thumbnail = thumbnail;
     }
 
-    public SearchLive(Long id, LocalDateTime searchDate, String name, String thumbnail) {
-        this.id = id;
+    public SearchLive(Long searchid, LocalDateTime searchDate, String name, String thumbnail) {
+        this.searchid = searchid;
         this.searchDate = searchDate;
         this.name = name;
         this.thumbnail = thumbnail;

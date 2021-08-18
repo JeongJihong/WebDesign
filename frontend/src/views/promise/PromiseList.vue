@@ -17,7 +17,7 @@
             :to="{ name: 'PromiseDetail', params: { promiseid: waitingPromise.promiseid } }">
             <li>
               <span class="d-flex justify-content-start align-items-center">
-                <span class="fw-bold fs-1 me-4" style="color: black;">{{ waitingPromise.type }}
+                <span class="fw-bold fs-6 me-4" style="color: black;">{{ waitingPromise.type }}
                   <!-- <img class="me-4"
                     :src="getwaitingPromiseFeeImgUrl({idx, imgURL: waitingPromise.type }).icon"
                     :alt="waitingPromise.type"> -->
@@ -54,7 +54,7 @@
             :to="{ name: 'PromiseDetail', params: { promiseid: upcomingPromise.promiseid } }">
             <li>
               <span class="d-flex justify-content-start align-items-center">
-                <span class="fw-bold fs-1 me-4" style="color: black;">{{ upcomingPromise.type }}
+                <span class="fw-bold fs-6 me-4" style="color: black;">{{ upcomingPromise.type }}
                   <!-- <img class="me-4"
                     :src="getupcomingPromisesFeeImgUrl({ idx, imgURL: upcomingPromise.type }).icon"
                     :alt="upcomingPromise.type"> -->

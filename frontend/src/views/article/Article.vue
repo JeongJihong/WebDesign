@@ -9,6 +9,7 @@
 
           <span>{{article.articleDetail.user.nickname}}</span>
           <b-carousel
+            class="mt-3"
             id="carousel-1"
             v-model="slide"
             :interval="0"
@@ -57,8 +58,8 @@
               <li class="me-4" v-if="article.likeCheck" ><b-icon @click="articleLike({ articleid: article.articleDetail.articleid, nickname: article.articleDetail.user.nickname, likeCheck:article.likeCheck, idx:idx  })" icon="hand-thumbs-up" scale="1.5" variant="danger"></b-icon></li>
               <li class="me-4" v-else ><b-icon id="icon" @click="articleLike({ articleid: article.articleDetail.articleid, nickname: article.articleDetail.user.nickname,idx:idx })"  icon="hand-thumbs-up" scale="1.5"></b-icon></li>
               
-              <li v-if="article.scrapCheck"><b-icon @click="undoScrap({ articleid: article.articleDetail.articleid, idx: idx })" icon="tags-fill" scale="1.5" ></b-icon></li>
-              <li v-else><b-icon id="icon" @click="doScrap({ articleid: article.articleDetail.articleid, idx: idx })" icon="tags" scale="1.5" ></b-icon></li>
+              <li class="me-4" v-if="article.scrapCheck"><b-icon @click="undoScrap({ articleid: article.articleDetail.articleid, idx: idx })" icon="tags-fill" scale="1.5" ></b-icon></li>
+              <li class="me-4" v-else><b-icon id="icon" @click="doScrap({ articleid: article.articleDetail.articleid, idx: idx })" icon="tags" scale="1.5" ></b-icon></li>
               <li @click="getComments(article.articleDetail.articleid)"><b-icon icon="chat-dots-fill" scale="1.5" style="color:#10598;"></b-icon></li><span>{{ article.articleDetail.comments.length }}</span>
             </ul>
           </div>
