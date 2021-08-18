@@ -4,6 +4,7 @@ import com.web.curation.dao.search.SearchDao;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.search.Search;
 import com.web.curation.model.search.SearchLive;
+import com.web.curation.model.search.SearchRequest;
 import com.web.curation.model.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ public class SearchServiceImpl implements SearchService{
     }
 
     @Override
-    public void saveSearch(Search request) {
+    public void saveSearch(SearchRequest request) {
         if(!searchDao.existsByIdAndName(request.getId(), request.getName())){
             searchDao.save(Search.builder()
                     .searchid(null)

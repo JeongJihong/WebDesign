@@ -3,6 +3,7 @@ package com.web.curation.controller;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.search.Search;
 import com.web.curation.model.search.SearchLive;
+import com.web.curation.model.search.SearchRequest;
 import com.web.curation.service.search.SearchServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -30,7 +31,7 @@ public class SearchController {
 
     @PostMapping("")
     @ApiOperation(value = "검색 시 정보 저장")
-    public ResponseEntity<String> saveSearch(@RequestBody Search request){
+    public ResponseEntity<String> saveSearch(@RequestBody SearchRequest request){
         searchService.saveSearch(request);
         return new ResponseEntity<>("Success", HttpStatus.OK);
     }

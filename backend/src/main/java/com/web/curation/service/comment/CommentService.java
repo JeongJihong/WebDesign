@@ -1,6 +1,5 @@
 package com.web.curation.service.comment;
 
-import com.web.curation.model.comment.Comment;
 import com.web.curation.model.comment.CommentResponse;
 
 import java.util.List;
