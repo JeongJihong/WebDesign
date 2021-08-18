@@ -20,12 +20,12 @@
           </div>
           <div class="d-flex" style="justify-content: space-between">
             <button class="d-flex" @click="goToFollowList">
-              <h5>팔로잉</h5>&nbsp;&nbsp;
+              <h5 id="app">팔로잉</h5>&nbsp;&nbsp;
               <h5 style="color:blue;">{{ this.followings }}</h5>
             </button>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <button class="d-flex" @click="goToFollowList">
-              <h5>팔로워</h5>&nbsp;&nbsp;
+              <h5 id="app">팔로워</h5>&nbsp;&nbsp;
               <h5 style="color:blue;">{{ this.followers }}</h5>
             </button>
           </div>

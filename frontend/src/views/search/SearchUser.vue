@@ -27,7 +27,7 @@
                     <b-avatar v-if="user.thumbnail !== null" class="me-2"
                       :src="getThumbnailImgUrl({ idx, imgURL: user.thumbnail }).thumbnail"></b-avatar>
                     <b-avatar v-else class="me-2"></b-avatar>
-                    <span>{{ user.name }}</span>
+                    <span id="app">{{ user.name }}</span>
                   </span>
                 </b-link>
                 <span class="d-flex align-items-center me-2">

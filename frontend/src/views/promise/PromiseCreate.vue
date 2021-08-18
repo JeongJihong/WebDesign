@@ -86,7 +86,7 @@
           <br>
         </div>
         <div class="d-flex justify-content-center">
-          <button @click="promiseCreate()" class="shadow-none btn btn-primary d-flex justify-content-center align-items-center"  style=" height:3rem; width:40%;">Submit</button>
+          <button @click="promiseCreate(); promiseArticleCreate();" class="shadow-none btn btn-primary d-flex justify-content-center align-items-center"  style=" height:3rem; width:40%;">Submit</button>
         </div>
       </b-form>
     </div>
