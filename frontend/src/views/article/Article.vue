@@ -3,9 +3,11 @@
     <div class="wrapB">
       <div v-for="(article,idx) in articles" :key="idx">
         <div>
-          <b-avatar v-if="article.articleDetail.user.thumbnail" class="mx-3"
-            :src="getThumbnailImgUrl({ idx, imgURL: article.articleDetail.user.thumbnail }).thumbnail"></b-avatar>
-          <b-avatar v-else class="mx-3"></b-avatar>
+          <router-link :to="{ name: 'ProfileDetail' , params: { nickname: article.articleDetail.user.nickname } }">
+            <b-avatar v-if="article.articleDetail.user.thumbnail" class="mx-3"
+              :src="getThumbnailImgUrl({ idx, imgURL: article.articleDetail.user.thumbnail }).thumbnail"></b-avatar>
+            <b-avatar v-else class="mx-3"></b-avatar>
+          </router-link>
 
           <span>{{article.articleDetail.user.nickname}}</span>
           <b-carousel

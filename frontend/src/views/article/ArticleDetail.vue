@@ -10,9 +10,11 @@
       <span class="fw-bold"></span>
     </div>
     <div class="mb-2">
-      <b-avatar v-if="article.articleDetail" class="m-2"
-        :src="getThumbnailImgUrl({ imgURL: article.articleDetail.user.thumbnail }).thumbnail"></b-avatar>
-      <b-avatar v-else class="m-2"></b-avatar>
+       <router-link :to="{ name: 'ProfileDetail' , params: { nickname: article.articleDetail.user.nickname } }">
+        <b-avatar v-if="article.articleDetail" class="m-2"
+          :src="getThumbnailImgUrl({ imgURL: article.articleDetail.user.thumbnail }).thumbnail"></b-avatar>
+        <b-avatar v-else class="m-2"></b-avatar>
+       </router-link>
       <span> {{ article.articleDetail.user.nickname }}</span>
       <span style = "float: right; ">
         <button v-if="article.userId === detail.id" @click="articleDelete()" class="btn-danger badge" style="margin:5px;">삭제</button>

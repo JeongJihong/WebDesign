@@ -13,17 +13,19 @@
     <b-list-group class="mt-4">
       <b-list-group-item class="d-flex justify-content-left align-items-center border-0 my-1" id="app"
         v-for="(comment, idx) in comments" :key="comment.commentid" :comment="comment">
-        <b-avatar v-if="comment.thumbnail" class="me-2"
-          :src="getThumbnailImgUrl({ imgURL: comment.thumbnail }).thumbnail"></b-avatar>
-        <b-avatar v-else class="me-2"></b-avatar>
+        <router-link :to="{ name: 'ProfileDetail' , params: { nickname: comment.nickname } }">
+          <b-avatar v-if="comment.thumbnail" class="me-2"
+            :src="getThumbnailImgUrl({ imgURL: comment.thumbnail }).thumbnail"></b-avatar>
+          <b-avatar v-else class="me-2"></b-avatar>
+        </router-link>
         <span  class="d-flex justify-content-between align-items-center" style="width: 100%;">
           <span>{{ comment.comment }}</span>
           <span>
             <button v-if="comment.nickname === username" v-b-modal="idx.toString()" variant="none" class="btn-warning badge text-dark fw-bold me-2">수정</button>
             <b-modal  :id="idx.toString()" title="댓글수정">
-                <form @submit.prevent="UpdateComment(comment.commentid)">
+                <form @submit.prevent="UpdateComment(comment.commentid)" class="modal-body d-flex justify-content-between align-items-center">
                   <input type="text" v-model="newcontent" :placeholder="comment.comment">
-                  <button class="btn btn-primary btn-sm">수정하기</button>
+                  <button class="btn btn-primary btn-sm d-flex justify-content-between align-items-center" style="height:3rem;">수정하기</button>
                 </form>
             </b-modal>
             <button v-if="comment.nickname === username" @click ="CommentDelete(comment.commentid)" class="btn-danger badge">삭제</button>
