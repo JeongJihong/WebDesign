@@ -321,12 +321,13 @@ export default {
       }
     },
     updateLocations () {
-      let payload = {
-        token: this.token,
-        promiseid: this.$route.params.promiseid
-      }
-      this.$store.dispatch('updateLocations', payload)
-      this.getPromiseInfo()
+      this.$router.go();
+      // let payload = {
+      //   token: this.token,
+      //   promiseid: this.$route.params.promiseid
+      // }
+      // this.$store.dispatch('updateLocations', payload)
+      // this.getPromiseInfo()
       
     },
     getThumbnailImgUrl (payload) {
