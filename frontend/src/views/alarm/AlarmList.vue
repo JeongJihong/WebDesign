@@ -72,10 +72,9 @@
                   class="border-0 my-1" v-for="user in category" :key="user.detail"
                   @click="goToPromise(user.detail)">
                   <div class="d-flex align-items-center">
-                    <span class="me-2">
-                      <b-avatar class="me-2"
-                        :src="getPromiseThumbnailImgUrl({ idx }).thumbnail"></b-avatar>
-                      <!-- <b-avatar v-else class="me-2"></b-avatar> -->
+                    <span class="fw-bold fs-1 me-4">{{ idx }}
+                      <!-- <b-avatar class="me-2"
+                        :src="getPromiseThumbnailImgUrl({ idx }).thumbnail"></b-avatar> -->
                     </span>
                     <span>{{ user.senderNickname }}님의 약속 초대가 왔습니다.</span>
                   </div>

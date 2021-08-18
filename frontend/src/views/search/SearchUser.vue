@@ -159,14 +159,14 @@ export default {
       this.$router.go(-1)
     },
     getThumbnailImgUrl (payload) {
-      // console.log('getThumbnailImgUrl', payload)
+      console.log('getThumbnailImgUrl', payload)
       return {
         ...this.searchGet,
         thumbnail: this.searchGet[payload.idx].thumbnail && `https://i5b302.p.ssafy.io/img/${payload.imgURL}`
       }
     },
     getLiveThumbnailImgUrl (payload) {
-      // console.log('getLiveThumbnailImgUrl', payload)
+      console.log('getLiveThumbnailImgUrl', payload)
       return {
         ...this.searchGet,
         thumbnail: this.searchGet[payload.idx].thumbnail && `https://i5b302.p.ssafy.io/img/${payload.imgURL}`

@@ -70,6 +70,8 @@ export default {
     }
     this.$store.dispatch('updateLocations', payload)
     this.$store.dispatch('promiseDetailGet', payload)
+
+    this.initMap()
   },
   computed: {
     ...mapState([
@@ -172,8 +174,6 @@ export default {
     },
   },
   mounted () {
-    this.$forceUpdate()
-    
     if (window.kakao && window.kakao.maps) {
       this.initMap();
     } else {
