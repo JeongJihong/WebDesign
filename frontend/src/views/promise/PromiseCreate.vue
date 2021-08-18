@@ -22,14 +22,18 @@
           </b-form-invalid-feedback>
         </b-form-group>
         <br>
-            <form enctype = "multipart/form-data" method="post" >
+          <form enctype = "multipart/form-data" method="post" >
             <div class="d-flex flex-row" style="margin:10px height:5rem">
-              <button style="display:inline-block; margin-right:5%; margin-left:2%; height:70px" @click.prevent="clickInputTag()" id='addimage'><b-icon-plus-square id="icon" class="h1"></b-icon-plus-square><p id="icon">이미지 업로드</p></button>
+              <button style="display:inline-block; margin-right:5%; margin-left:2%; height:6rem;" @click.prevent="clickInputTag()" id='addimage'><b-icon-plus-square id="icon" class="h1"></b-icon-plus-square><p id="icon">이미지 업로드</p></button>
               <input hidden ref="plus" id="file" type="file"  accept="image/*" @change.prevent="uploadImage($event)" multiple>
               <div id="image_container"></div>
             </div>
-            <div>
-              <b-textarea v-model="content"  placeholder="게시글 내용을 적어주세요!" rows="8"></b-textarea>
+            <div style="margin:10px">
+              <b-textarea v-model="content"  placeholder="게시글 내용을 적어주세요!" rows="10"></b-textarea>
+              <b-button style="height: 2.7rem; width: 100%; margin-bottom:10px; background-color:#002E4F;"
+                class="d-flex justify-content-center align-items-center"
+                @click="articleCreate()">
+                전송</b-button>
             </div>
           </form>     
         <br>
