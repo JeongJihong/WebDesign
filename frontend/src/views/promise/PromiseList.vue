@@ -1,11 +1,11 @@
 <template>
-  <div class="page" style="margin-bottom:60px;">
+  <div class="page" style="margin-bottom:80px;">
     <div class="mt-3 mx-4 d-flex justify-content-between align-items-center">
       <span class="fs-1">
-        <button @click="goBack"><b-icon icon="arrow-left" class="me-4"></b-icon></button>
+        <button @click="goBack"><b-icon id="icon" icon="arrow-left" class="me-4"></b-icon></button>
         <span class="fw-bold">약속 정보</span>
       </span>
-      <button @click="goToPromiseCreate" style="color: #0d6efd;">약속 생성</button>
+      <button @click="goToPromiseCreate" style="color:#0d6efd;">약속 생성</button>
     </div>
 
     <ul class="p-0">

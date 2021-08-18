@@ -1,8 +1,8 @@
 <template>
-  <div style="margin-bottom:60px;">
+  <div style="margin-bottom:80px;">
     <div class="mt-3 mb-3 mx-4 d-flex justify-content-between align-items-center">
       <span>
-        <button @click="goBack"><b-icon icon="arrow-left" class="fs-1 me-4"></b-icon></button>
+        <button @click="goBack"><b-icon id="icon" icon="arrow-left" class="fs-1 me-4"></b-icon></button>
         <span class="fs-1 fw-bold">스크랩한 게시물</span>
       </span>
       <span>
