@@ -175,7 +175,6 @@ export default {
     },
     disableScroll() {
       window.onscroll = () => {
-        // empty
       }
     },
     goToArticle(articleid) {
@@ -216,7 +215,6 @@ export default {
 
       const typeIdx = typeList.indexOf(type)
       const typeHash = hashList[typeIdx]
-      console.log('TypeIcon', `${payload.idx}-icon.${typeHash}`)
       return {
         thumbnail: payload.idx && `https://i5b302.p.ssafy.io/img/${payload.idx}-icon.${typeHash}.svg`
       }
@@ -225,16 +223,6 @@ export default {
 }
 </script>
 
-<style scoped>
-#custom-button-tab {
-  overflow: hidden;
-  position: fixed;
-  bottom: 0;
-  width: 100%
-}
+<style src="../../App.css">
 
-#custom-button-tab button {
-  float: left;
-  display: block;
-}
 </style>

@@ -59,8 +59,8 @@
             <div class="d-flex flex-row">
               <b-form-input @change="reNickname()" v-model="userInfo.nickname" id="nickname" placeholder="username" type="text"></b-form-input>
               &nbsp;&nbsp;
-              <b-button class="shadow-none" v-if="!checkNicknameValidation" @click="confirmNickname()" style="height:80%" >중복확인</b-button>
-              <b-button class="shadow-none" v-if="checkNicknameValidation" @click="confirmNickname()" style="height:80%" disabled>중복확인</b-button>
+              <b-button class="shadow-none d-flex justify-content-center align-items-center" v-if="!checkNicknameValidation" @click="confirmNickname()" style="height:3rem%" >중복확인</b-button>
+              <b-button class="shadow-none d-flex justify-content-center align-items-center" v-if="checkNicknameValidation" @click="confirmNickname()" style="height:3rem%" disabled>중복확인</b-button>
             </div>
           </div>
           <div class="mt-3 mx-3">
@@ -73,8 +73,7 @@
 
       <!-- 비밀번호 변경 버튼 -->
       <div class="mt-4 mx-3 d-grid" v-if="!isLoginByKakao">
-        <!-- <b-button squared variant="danger">비밀번호 변경</b-button> -->
-          <button @click="goToChangePassword" class="btn btn-danger shadow-none" style="height: 45px;">비밀번호 변경</button>
+          <button @click="goToChangePassword" class="btn btn-danger shadow-none d-flex justify-content-center align-items-center" style="height: 45px;">비밀번호 변경</button>
       </div>
     </div>
   </div>

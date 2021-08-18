@@ -85,7 +85,6 @@ export default {
       this.$router.go(-1)
     },
     goToArticleDetail(articleid) {
-      console.log(articleid+'클릭!')
       this.$router.push({ name: 'ArticleDetail', params: { articleid: articleid } })
     },
     // 애매한 상태관리여서 직접 작성

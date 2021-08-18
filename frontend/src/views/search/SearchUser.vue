@@ -43,7 +43,7 @@
         <p class="fw-bold mx-3">검색 결과</p>
         <b-list-group>
           <b-list-group-item
-            class="border-0 my-1" v-for="(user, idx) in searchLive" :key="user.searchid"
+            class="border-0 my-1" v-for="(user, idx) in searchLive" :key="user.searchid" id="app"
             @click="searchPost({token, user})">
             <div class="d-flex align-items-center">
               <b-avatar v-if="user.thumbnail !== null" class="me-2"
@@ -112,13 +112,7 @@ export default {
               this.$store.dispatch('searchGet', token)
               this.$router.push({ name: 'ProfileDetail', params: { nickname: user.name } })
             })
-            // .catch(err => {
-            //   alert(err)
-            // })
         })
-        // .catch(err => {
-        //   alert('JWT 인증 실패', err)
-        // })
     },
     searchDelete({ token, user }) {
       axios({
@@ -144,13 +138,7 @@ export default {
             .then(() => {
               this.$store.dispatch('searchGet', token)
             })
-            // .catch(err => {
-            //   alert(err)
-            // })
         })
-        // .catch(err => {
-        //   alert('JWT 인증 실패', err)
-        // })
     },
     goBack() {
       this.$router.go(-1)
@@ -171,13 +159,5 @@ export default {
 }
 </script>
 
-<style scoped>
-/* 프로필 이미지 들어가기 전 디버깅 용 */
-.dot {
-  height: 50px;
-  width: 50px;
-  background-color: #bbb;
-  border-radius: 50%;
-  display: inline-block;
-}
+<style src="../../App.css">
 </style>
