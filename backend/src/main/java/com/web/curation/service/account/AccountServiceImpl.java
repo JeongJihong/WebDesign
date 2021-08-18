@@ -93,7 +93,7 @@ String basePath = rootPath.substring(0, rootPath.length()-5) + "/b302/dist/img/"
     @Transactional
     public Long signup(SignupRequest request) {
         Long uid = null;
-        if(request.getPassword().isEmpty()){
+        if(request.getPassword().equals(null)){
             uid = userDao.save(User.builder()
                     .uid(null)
                     .introduction("")
