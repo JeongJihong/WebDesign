@@ -86,7 +86,7 @@
           <br>
         </div>
         <div class="d-flex justify-content-center">
-          <button @click="promiseCreate()" class="shadow-none btn btn-primary d-flex justify-content-center align-items-center"  style=" height:3rem; width:40%;">Submit</button>
+          <button @click.prevent="promiseCreate()" class="shadow-none btn btn-primary d-flex justify-content-center align-items-center"  style=" height:3rem; width:40%;">Submit</button>
         </div>
       </b-form>
     </div>
@@ -246,29 +246,28 @@ export default {
             place: this.promiseDetailPlace                
           }
         })
-          .then(res=>{
-            console.log(res.data)
+          .then(res => {
             this.promiseid = res.data
-            this.promiseArticleCreate()
+            // this.promiseArticleCreate()
+            return res.data
           })
-    },
-    promiseArticleCreate(){
-      alert('Promise Article Create 호출!')
-      this.formData.append("content", this.content);
-      this.formData.append("promiseid", this.promiseid);
-      axios({
-        url:'https://i5b302.p.ssafy.io/api/article',
-        method:'post',
-        headers: {
-          'x-auth-token': `${localStorage.getItem('token')}`,
-          'Content-Type': 'multipart/form-data'
-        },
-        data:this.formData,
-      })
-        .then(res=>{
-          this.$router.push({ name:'FeedMain'})
-        })
-      },
+          .then(res => {
+            this.formData.append("content", this.content);
+            this.formData.append("promiseid", res);
+            axios({
+              url:'https://i5b302.p.ssafy.io/api/article',
+              method:'post',
+              headers: {
+                'x-auth-token': `${localStorage.getItem('token')}`,
+                'Content-Type': 'multipart/form-data'
+              },
+              data:this.formData,
+            })
+              .then(() => {
+                this.$router.push({ name:'FeedMain'})
+              })
+          })
+    }
   }
 }
 </script>
