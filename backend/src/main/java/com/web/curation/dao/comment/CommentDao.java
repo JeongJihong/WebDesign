@@ -13,4 +13,6 @@ public interface CommentDao extends JpaRepository<Comment, Long> {
 
     @Transactional
     void deleteByCommentid(Long commentid);
+
+    void deleteByArticleid(Long articleid);
 }
