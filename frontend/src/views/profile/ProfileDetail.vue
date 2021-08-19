@@ -45,9 +45,9 @@
         <b-progress :value="status+10" :max="30" class="mb-1" :variant="variant" height="0.4rem"></b-progress>
       </div>
       <div style="margin-top: 2rem;" class="d-flex justify-content-between">
-        <span id="app" :style="{'font-size': '0.8rem', 'color' : textColor}">{{ this.recommendedExpressions }}</span>
-        <span id="app" :style="{'font-size': '0.8rem', 'color' : textColor}">=></span>
-        <router-link id="app" to="/promise/create" class="btn--text" style="font-size: 0.8rem;">약속 잡기</router-link>
+        <span id="app" v-if="this.nickname === this.myNickname" :style="{'font-size': '0.8rem', 'color' : textColor}">{{ this.recommendedExpressions }}</span>
+        <span id="app" v-if="this.nickname === this.myNickname" :style="{'font-size': '0.8rem', 'color' : textColor}">=></span>
+        <router-link id="app" v-if="this.nickname === this.myNickname" to="/promise/create" class="btn--text" style="font-size: 0.8rem;">약속 잡기</router-link>
       </div>
       <hr>
       <div class="d-flex mx-2" style="justify-content: space-between; margin-top: 2rem;">
