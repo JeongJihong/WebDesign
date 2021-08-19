@@ -212,7 +212,10 @@ String basePath = rootPath.substring(0, rootPath.length()-5) + "/b302/dist/img/"
         }else{
             List<Article> articleList = articleDao.findAllById(otherUser.get().getUid());
             Stream<Article> articleStream = articleList.stream();
-            requestList = articleStream.map(article -> new ArticleType(article,
+            requestList = articleStream.map(article -> new ArticleType(article.getArticleid(),
+                            article.getId(), article.getPromiseid(), article.getCreatedtime(),
+                            article.getUpdatedtime(), article.getReview(), article.getImages(),
+                            article.getComments(), article.getUser(),
                             article.getPromiseid() != null ? promiseDao.findByPromiseid(article.getPromiseid()).getType() : null))
                     .collect(Collectors.toList());
         }
