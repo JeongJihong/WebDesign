@@ -17,14 +17,18 @@
     "bootstrap-vue": "^2.21.2",
     "core-js": "^3.4.3",
     "email-validator": "^2.0.4",
+    "firebase": "^7.6.1",
     "jwt-decode": "^3.1.2",
     "local-lib": "^0.1.0",
     "node-sass": "^6.0.1",
     "password-validator": "^5.0.3",
     "sass-loader": "^10.2.0",
     "vue": "^2.6.14",
+    "vue-infinite-loading": "^2.4.5",
     "vue-jwt-decode": "^0.1.0",
+    "vue-kakao-login": "^1.0.5",
     "vue-router": "^3.5.2",
+    "vue-slick-carousel": "^1.0.6",
     "vuex": "^3.6.2"
   },
   "devDependencies": {

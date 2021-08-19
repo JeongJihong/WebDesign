@@ -2,13 +2,9 @@ package com.web.curation.model.user;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.ToString;
-
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-
-
-
 
 @Valid
 @ToString
@@ -62,13 +58,4 @@ public class SignupRequest {
     public void setThumbnail(String thumbnail) {
         this.thumbnail = thumbnail;
     }
-
-    public String getIntroduction() {
-        return introduction;
-    }
-
-    public void setIntroduction(String introduction) {
-        this.introduction = introduction;
-    }
-
 }

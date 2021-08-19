@@ -1,8 +1,11 @@
 <template>
-  <div>
-    <h1>
-      패스워드 변경페이지
-    </h1>
+  <div style="margin-bottom:80px;">
+    <div class="mt-3 mx-4 d-flex justify-content-between align-items-center">
+      <span class="fs-1">
+        <button @click="goBack"><b-icon id="icon" icon="arrow-left" class="me-4"></b-icon></button>
+        <span class="fw-bold">패스워드 변경하기</span>
+      </span>
+    </div>
     <div class="form-wrap">
       <div class="input-with-label">
         <input name="email" v-model="email" id="email" placeholder="이메일을 입력하세요." type="text" />
@@ -22,7 +25,6 @@
 
       <form @submit.prevent="changepassword" @submit="checkForm">
         <div v-if="activeButton() && !isSubmit">
-          <!-- <button @click="PopUpEmailModal" class="btn-bottom" >가입하기</button> -->
           <button class="btn-bottom">변경하기</button>
         </div>
         <div v-else>
@@ -68,9 +70,12 @@ export default {
     },
   },
   methods:{
+    goBack() {
+      this.$router.go(-1)
+    },
     changepassword(){
         axios({
-          url:'http://127.0.0.1:8080/account/changePassword',
+          url:'https://i5b302.p.ssafy.io/api/account/changePassword',
           method:'put',
           data:{
             email: this.email,

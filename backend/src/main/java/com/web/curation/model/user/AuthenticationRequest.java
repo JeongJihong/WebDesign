@@ -1,6 +1,5 @@
 package com.web.curation.model.user;
 
-
 import lombok.*;
 
 @Data

@@ -1,11 +1,9 @@
 <template>
-  <div class="user" id="login">
-    <div class="jb-box">
-      <video muted autoplay loop>
-        <source src="../../assets/videos/Sky.mp4" type="video/mp4">
-      </video>
+  <div class="user d-flex flex-column justify-content-between mt-2" id="login" >
+    <br>
       <div class="jb-text">
-        <h1 >Pipl.</h1>
+          <h1 class="d-flex flex-column align-items-center" style="font-family: 'Pacifico', cursive;">Pipl.</h1>
+        <br>
         <div class="wrapC">
           <div class="input-with-label">
             <input
@@ -33,40 +31,35 @@
           </div>
           <div>
             <button
-              class="btn btn-primary shadow-none"
+              class="d-flex align-items-center justify-content-center btn btn-primary shadow-none"
               @click="login({ email, password })"
               :disabled="!isSubmit"
-              style="height: 2.7rem; width: 100%;"
+              style="height: 2.7rem; width: 100%; margin-bottom: 2rem;"
             >로그인</button>
           </div>
-
-          <div class="sns-login">
-            <div class="text">
-              <p>SNS 간편 로그인</p>
-              <kakaoLogin :component="component" />
-              <GoogleLogin :component="component" />
-              <div class="bar"></div>
-            </div>
+          <div class="hr-sect">OR</div>
+          <div style="margin-top:10px; width:100%;">
+              <KakaoLogin :component="component" />
           </div>
-          
+          <br>
+          <br>
           <div class="add-option">
-            <div class="text">
+            <!-- <div class="text">
               <p>혹시</p>
               <div class="bar"></div>
-            </div>
-            <div class="wrap">
-              <p>비밀번호를 잊으셨나요?</p>
-              <!-- 수정 필요 -->
-              <router-link to="/user/ResetPassword" class="btn--text">비밀번호 변경하기</router-link>
-            </div>
-            <div class="wrap">
-              <p>아직 회원이 아니신가요?</p>
+            </div> -->
+            <div class="wrap d-flex justify-content-between align-items-center">
+              <p class="m-0">아직 회원이 아니신가요?</p>
               <router-link to="/account/signup" class="btn--text">가입하기</router-link>
             </div>
           </div>
         </div>
       </div>
-    </div>
+      <div style="height: 8vh;"></div>
+      <div class="d-flex flex-column align-items-center">
+          <p class="my-1" style="font-size: 0.85rem;">made by</p>
+          <p style="font-size: 1.1rem; font-weight: 1000;">지금 어디시조</p>
+      </div>
   </div>
 </template>
 
@@ -75,7 +68,6 @@ import "../../components/css/user.scss";
 import PV from "password-validator";
 import * as EmailValidator from "email-validator";
 import KakaoLogin from "../../components/user/snsLogin/Kakao.vue";
-import GoogleLogin from "../../components/user/snsLogin/Google.vue";
 
 import { mapActions, mapState } from 'vuex'
 
@@ -83,9 +75,12 @@ export default {
   name:'Login',
   components: {
     KakaoLogin,
-    GoogleLogin
   },
   created() {
+    if (this.token !== '') {
+      this.$router.push({ name: 'FeedMain' })
+    }
+    
     this.component = this;
 
     this.passwordSchema
@@ -100,7 +95,9 @@ export default {
   },
   computed: {
     ...mapState([
-      'loginState'
+      'loginState',
+      'token',
+      'loginFailed'
     ])
   },
   watch: {
@@ -126,7 +123,7 @@ export default {
         this.password.length >= 0 &&
         !this.passwordSchema.validate(this.password)
       )
-        this.error.password = "영문,숫자 포함 8 자리이상이어야 합니다.";
+        this.error.password = "영문,숫자,특수문자 포함 8 자리이상이어야 합니다.";
       else this.error.password = false;
 
       let isSubmit = true;
@@ -158,8 +155,26 @@ export default {
   @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
   template { padding: 0px; margin: 0px; }
   .jb-box {  width: 100%; overflow: hidden; margin: 0px auto; position: fixed; }
-  video { height: 150vh;  overflow: hidden;  position: relative; }
-  .jb-text { position: absolute; top: 5%; width: 100%; }
-  .jb-text p {color: #ffffff; }
-  .jb-text h1 { text-align: center; color: #ffffff !important; font-family: 'Pacifico',cursive; }
+  /* .jb-text { position: absolute; top: 5%; width: 100%; } */
+  .jb-text { top: 5%; width: 100%; }
+  .jb-text p {color: black; }
+  .main-icon { width: 130px; margin-bottom: 10px; }
+  .hr-sect {
+        display: flex;
+        flex-basis: 100%;
+        align-items: center;
+        color: rgba(0, 0, 0, 0.35);
+        font-size: 12px;
+        margin: 8px 0px;
+      }
+      .hr-sect::before,
+      .hr-sect::after {
+        content: "";
+        flex-grow: 1;
+        background: rgba(0, 0, 0, 0.35);
+        height: 1px;
+        font-size: 0px;
+        line-height: 0px;
+        margin: 0px 16px;
+      }
 </style>
