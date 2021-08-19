@@ -241,8 +241,6 @@ String basePath = rootPath.substring(0, rootPath.length()-5) + "/b302/dist/img/"
         Long othersid = otherUser.get().getUid();
         Long myid = loginUser.get().getUid();
 
-        System.out.println("Srcid: " + othersid);
-        System.out.println("Dstid: " + myid);
         if(!followDao.existsBySrcidAndDstidAndApprove(othersid, myid, false)){
             otherToMe = false;
             System.out.println("팔로잉 없음");
