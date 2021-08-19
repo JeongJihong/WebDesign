@@ -2,6 +2,7 @@ package com.web.curation.service.article;
 
 import com.web.curation.dao.article.ArticleDao;
 import com.web.curation.dao.article.ArticleLikeDao;
+import com.web.curation.dao.comment.CommentDao;
 import com.web.curation.dao.follow.FollowDao;
 import com.web.curation.dao.image.ImageDao;
 import com.web.curation.dao.promise.PromiseDao;
@@ -52,6 +53,9 @@ public class ArticleServiceImpl implements ArticleService{
 
     @Autowired
     private PromiseDao promiseDao;
+
+    @Autowired
+    private CommentDao commentDao;
 
     @Autowired
     private ArticleLikeDao articleLikeDao;
@@ -200,6 +204,8 @@ public class ArticleServiceImpl implements ArticleService{
     @Override
     public void deleteArticle(Long articleid) {
         Optional<User> userOpt = Authentication();
+        commentDao.deleteByArticleid(articleid);
+        articleLikeDao.deleteByArticleid(articleid);
         articleDao.deleteByArticleid(articleid);
     }
 
