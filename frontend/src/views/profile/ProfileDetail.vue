@@ -75,7 +75,7 @@
       
       <div class="mt-3">
         <b-tabs content-class="mt-3" fill>
-          <b-tab class="" :title="'내가 쓴 게시글 (' + nonPromisesLength + ')'" active>
+          <b-tab class="" :title="'게시글 (' + nonPromisesLength + ')'" active>
             <div 
               v-for="image in this.nonPromisesLength" 
               :key="image" 
@@ -85,7 +85,7 @@
             >
             </div>
           </b-tab>
-          <b-tab :title="'내가 잡은 약속 (' + promisesLength + ')'" active>
+          <b-tab :title="'약속 (' + promisesLength + ')'" active>
             <div 
               v-for="image in this.promisesLength" 
               :key="image" 
@@ -93,7 +93,8 @@
               class="square" 
               :style="{ backgroundImage: 'url(' + getArticleImgUrl({ idx: promiseArticlesIndex[image-1], imgURL: promiseArticles[image-1].images }).thumbnail + ')' }"
             >
-              <span style="margin-top: 40%" class="d-flex justify-content-center align-items-center">{{ promiseArticles[image-1].review }}</span>
+              <span style="position: absolute; margin-top:35%; justify-content:center">{{ promiseArticles[image-1].review }}</span>
+              <span>{{ promiseArticles[image-1] }}</span>
             </div>
           </b-tab>
         </b-tabs>
