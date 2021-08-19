@@ -206,6 +206,8 @@ public class ArticleServiceImpl implements ArticleService{
         Optional<User> userOpt = Authentication();
         commentDao.deleteByArticleid(articleid);
         articleLikeDao.deleteByArticleid(articleid);
+        scrapDao.deleteByArticleid(articleid);
+        imageDao.deleteByArticleid(articleid);
         articleDao.deleteByArticleid(articleid);
     }
 
