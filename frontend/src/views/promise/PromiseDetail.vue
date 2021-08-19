@@ -69,7 +69,7 @@
       </div>
       <b-list-group>
         <b-list-group-item
-          class="border-0 my-1" v-for="user in promiseDetail.promisePeople" :key="user.uid"
+          class="border-0 my-1" v-for="user in promiseDetail.promisePeople" :key="user.uid" id="app"
           @click="goToProfile(user.nickname)">
           <div class="d-flex align-items-center">
             <span>
@@ -77,7 +77,7 @@
                 :src="getThumbnailImgUrl({ imgURL: user.thumbnail }).thumbnail"></b-avatar>
               <b-avatar v-else class="me-2"></b-avatar>
             </span>
-            <span>{{ user.nickname }}</span>
+            <span id="app">{{ user.nickname }}</span>
           </div>
         </b-list-group-item>
       </b-list-group>
