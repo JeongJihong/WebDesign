@@ -68,6 +68,7 @@ public class PromiseServiceImpl implements PromiseService{
     public Long createPromise(PromiseRequest promise) {
         Optional<User> userOpt = Authentication();
         // 약속 정보 Promise table에 저장
+
         Long promiseID =  promiseDao.save(Promise.builder()
                 .createruid(userOpt.get().getUid())
                 .promisetime(promise.getPromisetime())
