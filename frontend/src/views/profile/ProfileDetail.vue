@@ -240,7 +240,6 @@ export default {
             this.justArticlesIndex.push(i)
           }
         }
-        console.log(this.articles)
         this.promisesLength = promiseNum;
         this.nonPromisesLength = this.articlesLength - promiseNum;
         // 추천 문구 만들기
