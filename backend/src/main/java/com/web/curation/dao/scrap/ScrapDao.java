@@ -12,7 +12,10 @@ import java.util.List;
 public interface ScrapDao extends JpaRepository<Scrap, Long> {
     @Transactional
     void deleteByScrapid(Long scrapid);
+    @Transactional
+    void deleteByArticleid(Long articleid);
     boolean existsByArticleidAndId(Long articleid, Long id);
 
     List<Scrap> findAllById(Long id);
+
 }
