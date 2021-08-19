@@ -64,7 +64,6 @@
 </template>
 
 <script>
-
 import "../../components/css/user.scss";
 import PV from "password-validator";
 import * as EmailValidator from "email-validator";
@@ -107,6 +106,11 @@ export default {
     },
     email: function(v) {
       this.checkForm();
+    },
+    loginState: function() {
+      if (this.loginState === true) {
+        this.$router.push({ name: "FeedMain" })
+      }
     }
   },
   methods: {

@@ -1,5 +1,5 @@
 export default {
-  searchGet: state => {
-    return state.searchGet.slice().reverse()
-  }
-}
+  searchGet: (state) => {
+    return state.searchGet.slice().reverse();
+  },
+};
