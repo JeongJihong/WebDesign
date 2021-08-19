@@ -3,8 +3,11 @@ package com.web.curation.service.account;
 import com.web.curation.config.security.JwtTokenProvider;
 import com.web.curation.dao.article.ArticleDao;
 import com.web.curation.dao.follow.FollowDao;
+import com.web.curation.dao.promise.PromiseDao;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.article.Article;
+import com.web.curation.model.article.ArticleType;
+import com.web.curation.model.article.ViewArticleRequest;
 import com.web.curation.model.follow.Follow;
 import com.web.curation.model.user.ChangePasswordRequest;
 import com.web.curation.model.user.LoginRequest;
@@ -23,6 +26,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 @Service
@@ -34,6 +39,8 @@ public class AccountServiceImpl implements AccountService{
     private ArticleDao articleDao;
     @Autowired
     private FollowDao followDao;
+    @Autowired
+    private PromiseDao promiseDao;
 
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
@@ -199,11 +206,15 @@ String basePath = rootPath.substring(0, rootPath.length()-5) + "/b302/dist/img/"
     public Map viewOtherFeed(String nickname) {
         Optional<User> loginUser = Authentication();
         Optional<User> otherUser = userDao.findByNickname(nickname);
-        List<Article> article = null;
+        List<ArticleType> requestList = null;
         if(!articleDao.existsArticleById(otherUser.get().getUid())){
             System.out.println("none");
         }else{
-            article = articleDao.findAllById(otherUser.get().getUid());
+            List<Article> articleList = articleDao.findAllById(otherUser.get().getUid());
+            Stream<Article> articleStream = articleList.stream();
+            requestList = articleStream.map(article -> new ArticleType(article,
+                            article.getPromiseid() != null ? promiseDao.findByPromiseid(article.getPromiseid()).getType() : null))
+                    .collect(Collectors.toList());
         }
         boolean follow = false;
         Optional<Follow> followUser;
@@ -217,7 +228,7 @@ String basePath = rootPath.substring(0, rootPath.length()-5) + "/b302/dist/img/"
         }
         result.put("follow", follow);
         result.put("userProfile", otherUser);
-        result.put("article", article);
+        result.put("article", requestList);
         return result;
     }
 
