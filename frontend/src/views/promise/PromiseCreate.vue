@@ -247,13 +247,11 @@ export default {
           }
         })
           .then(res => {
-            console.log(res.data)
             this.promiseid = res.data
             // this.promiseArticleCreate()
             return res.data
           })
           .then(res => {
-            console.log('Promise Article Create 호출!')
             this.formData.append("content", this.content);
             this.formData.append("promiseid", res);
             axios({
@@ -269,24 +267,7 @@ export default {
                 this.$router.push({ name:'FeedMain'})
               })
           })
-    },
-    // promiseArticleCreate(){
-    //   alert('Promise Article Create 호출!')
-    //   this.formData.append("content", this.content);
-    //   this.formData.append("promiseid", this.promiseid);
-    //   axios({
-    //     url:'https://i5b302.p.ssafy.io/api/article',
-    //     method:'post',
-    //     headers: {
-    //       'x-auth-token': `${localStorage.getItem('token')}`,
-    //       'Content-Type': 'multipart/form-data'
-    //     },
-    //     data:this.formData,
-    //   })
-    //     .then(res=>{
-    //       this.$router.push({ name:'FeedMain'})
-    //     })
-    //   },
+    }
   }
 }
 </script>
