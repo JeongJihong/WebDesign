@@ -75,25 +75,29 @@
       
       <div class="mt-3">
         <b-tabs content-class="mt-3" fill>
-          <b-tab class="" :title="'내가 쓴 게시글 (' + nonPromisesLength + ')'" active>
+          <b-tab class="" :title="'게시글 (' + nonPromisesLength + ')'" active>
             <div 
               v-for="image in this.nonPromisesLength" 
               :key="image" 
-              @click="goToArticleDetail(justArticles[image-1].articleid)" 
+              @click="goToArticleDetail(justArticles[image-1].article.articleid)" 
               class="square" 
-              :style="{ backgroundImage: 'url(' + getArticleImgUrl({ idx: justArticlesIndex[image-1], imgURL: justArticles[image-1].images }).thumbnail + ')' }"
+              :style="{ backgroundImage: 'url(' + getArticleImgUrl({ idx: justArticlesIndex[image-1], imgURL: justArticles[image-1].article.images }).thumbnail + ')' }"
             >
             </div>
           </b-tab>
-          <b-tab :title="'내가 잡은 약속 (' + promisesLength + ')'" active>
+          <b-tab :title="'약속 (' + promisesLength + ')'" active>
             <div 
               v-for="image in this.promisesLength" 
               :key="image" 
-              @click="goToArticleDetail(promiseArticles[image-1].articleid)" 
+              @click="goToArticleDetail(promiseArticles[image-1].article.articleid)" 
               class="square" 
-              :style="{ backgroundImage: 'url(' + getArticleImgUrl({ idx: promiseArticlesIndex[image-1], imgURL: promiseArticles[image-1].images }).thumbnail + ')' }"
+              :style="{ backgroundImage: 'url(' + getArticleImgUrl({ idx: promiseArticlesIndex[image-1], imgURL: promiseArticles[image-1].article.images }).thumbnail + ')' }"
             >
-              <span style="margin-top: 40%" class="d-flex justify-content-center align-items-center">{{ promiseArticles[image-1].review }}</span>
+              <div v-if="!promiseArticles[image-1].article.images">
+                <span class="d-flex justify-content-center align-items-center" style="position: absolute; height:100%; width:100%">{{ promiseArticles[image-1].type }}</span>
+              </div>
+              <!-- <span class="square" style="position: absolute; margin-top:35%;">{{ promiseArticles[image-1].type }}</span> -->
+              <!-- <span>{{ promiseArticles[image-1] }}</span> -->
             </div>
           </b-tab>
         </b-tabs>
@@ -208,24 +212,24 @@ export default {
         this.introduction = res.data.userProfile.introduction
         this.articles = res.data.article
         this.doIFollowYou = res.data.followBoolean
-        if (this.articles === null) {
+        if (!this.articles) {
           this.articlesLength = 0
         }
         else {
           this.articlesLength = this.articles.length
         }
         this.thumbnail = res.data.userProfile.thumbnail
-        if (this.introduction === 'undefined') {
+        if (!this.introduction) {
           this.introduction = ''
         }
         // if (typeof this.thumbnail === 'undefined') {
         //   this.thumbnail = `https://i5b302.p.ssafy.io/img/profile_default.png`)
         // }
-        // 약속 수 계산
+        // 약속 수 계산 s
         let i = 0;
         let promiseNum = 0;
         for (i = 0; i < this.articlesLength; i++) {
-          if (this.articles[i].promiseid) {
+          if (this.articles[i].article.promiseid) {
             promiseNum++;
             this.promiseArticles.push(this.articles[i])
             this.promiseArticlesIndex.push(i)
@@ -273,7 +277,6 @@ export default {
           this.variant = "secondary"
           this.textColor = "#424242"
         }
-
         this.checkFollowRequest()
         this.followerList()
       })
@@ -364,8 +367,12 @@ export default {
       })
       .then((res) => {
         this.followerLs = res.data
-        this.followers = this.followerLs.length
-
+        if (this.followerLs) {
+          this.followers = this.followerLs.length
+        }
+        else {
+          this.followers = 0
+        }
         this.followingList()
       })
     },
@@ -380,7 +387,12 @@ export default {
       })
       .then((res) => {
         this.followingLs = res.data
-        this.followings = this.followingLs.length
+        if (this.followingLs) {
+          this.followings = this.followingLs.length
+        }
+        else {
+          this.followings = 0
+        }
       })
     },
     cancelFollow () {
@@ -413,15 +425,19 @@ export default {
       }
     },
     getArticleImgUrl (payload) {
-      if (this.articles[payload.idx].images.length !== 0) {
+      // if (this.articles[payload.idx].images.length !== 0) {
+      if (!this.articles[payload.idx].article.images) {
         return {
-          ...this.articles,
-          thumbnail: this.articles[payload.idx].images.length && `https://i5b302.p.ssafy.io/img/${payload.imgURL[0].imgURL}`
+          thumbnail: '@/assets/images/img-placeholder.png'
         }
       }
-      return {
-        thumbnail: '@/assets/images/img-placeholder.png'
+      else {
+        return {
+          ...this.articles,
+          thumbnail: this.articles[payload.idx].article.images.length && `https://i5b302.p.ssafy.io/img/${payload.imgURL[0].imgURL}`
+        }
       }
+      
     }
   },
   created () {
