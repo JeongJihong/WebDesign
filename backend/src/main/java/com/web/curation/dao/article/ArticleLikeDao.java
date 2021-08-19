@@ -16,4 +16,7 @@ public interface ArticleLikeDao extends JpaRepository<ArticleLike, Long> {
 
     @Transactional
     void deleteByIdAndArticleid(Long uid, Long articleid);
+
+    @Transactional
+    void deleteByArticleid(Long articleid);
 }
