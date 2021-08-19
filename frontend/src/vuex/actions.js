@@ -69,7 +69,6 @@ export default {
           },
         })
           .then((res) => {
-            console.log(res.data)
             commit("SEARCH_GET", res.data);
           })
       })
@@ -80,7 +79,6 @@ export default {
       method: "get",
     })
       .then((res) => {
-        console.log(res.data)
         commit("SEARCH_LIVE", res.data);
       })
   },
