@@ -79,9 +79,9 @@
             <div 
               v-for="image in this.nonPromisesLength" 
               :key="image" 
-              @click="goToArticleDetail(justArticles[image-1].article.articleid)" 
+              @click="goToArticleDetail(justArticles[image-1].articleid)" 
               class="square" 
-              :style="{ backgroundImage: 'url(' + getArticleImgUrl({ idx: justArticlesIndex[image-1], imgURL: justArticles[image-1].article.images }).thumbnail + ')' }"
+              :style="{ backgroundImage: 'url(' + getArticleImgUrl({ idx: justArticlesIndex[image-1], imgURL: justArticles[image-1].images }).thumbnail + ')' }"
             >
             </div>
           </b-tab>
@@ -89,11 +89,11 @@
             <div 
               v-for="image in this.promisesLength" 
               :key="image" 
-              @click="goToArticleDetail(promiseArticles[image-1].article.articleid)" 
+              @click="goToArticleDetail(promiseArticles[image-1].articleid)" 
               class="square" 
-              :style="{ backgroundImage: 'url(' + getArticleImgUrl({ idx: promiseArticlesIndex[image-1], imgURL: promiseArticles[image-1].article.images }).thumbnail + ')' }"
+              :style="{ backgroundImage: 'url(' + getArticleImgUrl({ idx: promiseArticlesIndex[image-1], imgURL: promiseArticles[image-1].images }).thumbnail + ')' }"
             >
-              <div v-if="!promiseArticles[image-1].article.images">
+              <div v-if="!promiseArticles[image-1].images[0]">
                 <span class="d-flex justify-content-center align-items-center" style="position: absolute; height:100%; width:100%">{{ promiseArticles[image-1].type }}</span>
               </div>
               <!-- <span class="square" style="position: absolute; margin-top:35%;">{{ promiseArticles[image-1].type }}</span> -->
@@ -226,10 +226,11 @@ export default {
         //   this.thumbnail = `https://i5b302.p.ssafy.io/img/profile_default.png`)
         // }
         // 약속 수 계산 s
+
         let i = 0;
         let promiseNum = 0;
         for (i = 0; i < this.articlesLength; i++) {
-          if (this.articles[i].article.promiseid) {
+          if (this.articles[i].promiseid) {
             promiseNum++;
             this.promiseArticles.push(this.articles[i])
             this.promiseArticlesIndex.push(i)
@@ -426,7 +427,7 @@ export default {
     },
     getArticleImgUrl (payload) {
       // if (this.articles[payload.idx].images.length !== 0) {
-      if (!this.articles[payload.idx].article.images) {
+      if (!this.articles[payload.idx].images) {
         return {
           thumbnail: '@/assets/images/img-placeholder.png'
         }
@@ -434,7 +435,7 @@ export default {
       else {
         return {
           ...this.articles,
-          thumbnail: this.articles[payload.idx].article.images.length && `https://i5b302.p.ssafy.io/img/${payload.imgURL[0].imgURL}`
+          thumbnail: this.articles[payload.idx].images.length && `https://i5b302.p.ssafy.io/img/${payload.imgURL[0].imgURL}`
         }
       }
       
