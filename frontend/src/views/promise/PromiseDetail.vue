@@ -4,14 +4,16 @@
     <div class="mt-3 mx-4 d-flex justify-content-between align-items-center">
       <span class="fs-1">
         <button @click="goBack"><b-icon id="icon" icon="arrow-left" class="me-4"></b-icon></button>
-        <span class="fw-bold">{{ promiseDetail.title }}</span>
+        <span class="fw-bold">약속 상세</span>
       </span>
       <button v-if="promiseDetail.place && aHourAgo" style="color: #0d6efd;"
         @click="goToPromiseLocations()">
         지금 어디?</button>
       <button v-else style="color: grey;">지금 어디?</button>
     </div>
-
+    <div class="mt-4 mx-4">
+      <span style="font-size: 1.3rem">{{ promiseDetail.title }}</span>
+    </div>
     <!-- 상단 약속 정보 -->
     <div class="mt-4 mx-4 d-flex flex-row justify-content-start">
       <!-- 약속 유형 Icon -->
