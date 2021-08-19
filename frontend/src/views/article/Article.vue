@@ -4,14 +4,14 @@
       <div v-for="(article,idx) in articles" :key="idx">
         <div>
           <router-link :to="{ name: 'ProfileDetail' , params: { nickname: article.articleDetail.user.nickname } }">
-            <b-avatar v-if="article.articleDetail.user.thumbnail" class="mx-3"
+            <b-avatar v-if="article.articleDetail.user.thumbnail" class="mx-2"
               :src="getThumbnailImgUrl({ idx, imgURL: article.articleDetail.user.thumbnail }).thumbnail"></b-avatar>
-            <b-avatar v-else class="mx-3"></b-avatar>
+            <b-avatar v-else class="mx-2" style="background-color: #bbb; color: #555555;"></b-avatar>
           </router-link>
 
           <span>{{article.articleDetail.user.nickname}}</span>
           <b-carousel
-            class="mt-3"
+            class="mt-2"
             id="carousel-1"
             v-model="slide"
             :interval="0"
