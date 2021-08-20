@@ -1,0 +1,282 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+-- -----------------------------------------------------
+-- Schema commonpjt
+-- -----------------------------------------------------
+DROP SCHEMA IF EXISTS `commonpjt` ;
+
+-- -----------------------------------------------------
+-- Schema commonpjt
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `commonpjt` DEFAULT CHARACTER SET utf8 COLLATE utf8_bin ;
+USE `commonpjt` ;
+
+-- -----------------------------------------------------
+-- Table `commonpjt`.`user`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `commonpjt`.`user` (
+  `uid` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `nickname` VARCHAR(128) NOT NULL,
+  `email` VARCHAR(128) NOT NULL,
+  `password` VARCHAR(128) NULL,
+  `introduction` VARCHAR(128) NULL DEFAULT NULL,
+  `thumbnail` VARCHAR(512) NULL DEFAULT NULL,
+  `status` INT UNSIGNED NULL DEFAULT 0,
+  `alarmtoken` VARCHAR(512) NULL DEFAULT NULL,
+  PRIMARY KEY (`uid`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 2
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_bin;
+
+
+-- -----------------------------------------------------
+-- Table `commonpjt`.`alarm`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `commonpjt`.`alarm` (
+  `receiveuid` INT UNSIGNED NULL DEFAULT NULL,
+  `alarmid` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `senderuid` INT UNSIGNED NULL DEFAULT NULL,
+  `title` VARCHAR(128) NULL DEFAULT NULL,
+  `body` VARCHAR(128) NULL DEFAULT NULL,
+  `checkalarm` TINYINT(1) NULL DEFAULT NULL,
+  `category` VARCHAR(128) NULL DEFAULT NULL,
+  `detail` INT UNSIGNED NULL DEFAULT NULL,
+  PRIMARY KEY (`alarmid`),
+  INDEX `fk_table1_user1_idx` (`receiveuid` ASC) VISIBLE,
+  CONSTRAINT `fk_table1_user1`
+    FOREIGN KEY (`receiveuid`)
+    REFERENCES `commonpjt`.`user` (`uid`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_bin;
+
+
+-- -----------------------------------------------------
+-- Table `commonpjt`.`article`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `commonpjt`.`article` (
+  `articleid` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `id` INT UNSIGNED NULL DEFAULT NULL,
+  `promiseid` INT UNSIGNED NULL DEFAULT NULL,
+  `createdtime` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  `updatedtime` TIMESTAMP NULL DEFAULT NULL,
+  `review` VARCHAR(2048) NULL DEFAULT NULL,
+  PRIMARY KEY (`articleid`),
+  INDEX `id` (`id` ASC) VISIBLE,
+  CONSTRAINT `article_ibfk_1`
+    FOREIGN KEY (`id`)
+    REFERENCES `commonpjt`.`user` (`uid`),
+  CONSTRAINT `article_ibfk_2`
+    FOREIGN KEY (`promiseid`)
+    REFERENCES `commonpjt`.`promise` (`promiseid`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 2
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_bin;
+
+
+-- -----------------------------------------------------
+-- Table `commonpjt`.`articlelike`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `commonpjt`.`articlelike` (
+  `articlelikeid` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `id` INT UNSIGNED NULL DEFAULT NULL,
+  `articleid` INT UNSIGNED NULL DEFAULT NULL,
+  PRIMARY KEY (`articlelikeid`),
+  INDEX `id` (`id` ASC) VISIBLE,
+  INDEX `articleid` (`articleid` ASC) VISIBLE,
+  CONSTRAINT `articlelike_ibfk_1`
+    FOREIGN KEY (`id`)
+    REFERENCES `commonpjt`.`user` (`uid`),
+  CONSTRAINT `articlelike_ibfk_2`
+    FOREIGN KEY (`articleid`)
+    REFERENCES `commonpjt`.`article` (`articleid`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_bin;
+
+
+-- -----------------------------------------------------
+-- Table `commonpjt`.`comment`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `commonpjt`.`comment` (
+  `commentid` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `articleid` INT UNSIGNED NULL DEFAULT NULL,
+  `id` INT UNSIGNED NULL DEFAULT NULL,
+  `nickname` VARCHAR(128) NOT NULL,
+  `createdtime` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  `updatedtime` TIMESTAMP NULL DEFAULT NULL,
+  `comment` VARCHAR(1024) NULL DEFAULT NULL,
+  PRIMARY KEY (`commentid`),
+  INDEX `articleid` (`articleid` ASC) VISIBLE,
+  INDEX `id` (`id` ASC) VISIBLE,
+  CONSTRAINT `comment_ibfk_1`
+    FOREIGN KEY (`articleid`)
+    REFERENCES `commonpjt`.`article` (`articleid`),
+  CONSTRAINT `comment_ibfk_2`
+    FOREIGN KEY (`id`)
+    REFERENCES `commonpjt`.`user` (`uid`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_bin;
+
+
+-- -----------------------------------------------------
+-- Table `commonpjt`.`follow`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `commonpjt`.`follow` (
+  `followid` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `approve` TINYINT(1) NULL DEFAULT '0',
+  `srcid` INT UNSIGNED NULL DEFAULT NULL,
+  `dstid` INT UNSIGNED NULL DEFAULT NULL,
+  PRIMARY KEY (`followid`),
+  INDEX `srcid` (`srcid` ASC) VISIBLE,
+  INDEX `dstid` (`dstid` ASC) VISIBLE,
+  CONSTRAINT `follow_ibfk_1`
+    FOREIGN KEY (`srcid`)
+    REFERENCES `commonpjt`.`user` (`uid`),
+  CONSTRAINT `follow_ibfk_2`
+    FOREIGN KEY (`dstid`)
+    REFERENCES `commonpjt`.`user` (`uid`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_bin;
+
+
+-- -----------------------------------------------------
+-- Table `commonpjt`.`image`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `commonpjt`.`image` (
+  `imageid` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `articleid` INT UNSIGNED NULL DEFAULT NULL,
+  `imgURL` VARCHAR(512) NULL DEFAULT NULL,
+  PRIMARY KEY (`imageid`),
+  INDEX `articleid` (`articleid` ASC) VISIBLE,
+  CONSTRAINT `image_ibfk_1`
+    FOREIGN KEY (`articleid`)
+    REFERENCES `commonpjt`.`article` (`articleid`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 2
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_bin;
+
+
+-- -----------------------------------------------------
+-- Table `commonpjt`.`promise`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `commonpjt`.`promise` (
+  `promiseid` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `createruid` INT UNSIGNED NULL DEFAULT NULL,
+  `promisetime` TIMESTAMP NULL DEFAULT NULL,
+  `createdtime` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  `type` VARCHAR(20) NULL DEFAULT NULL,
+  `place` VARCHAR(2048) NULL DEFAULT NULL,
+  `title` VARCHAR(20) NULL DEFAULT NULL,
+  `num` INT UNSIGNED NULL DEFAULT '0',
+  `lat` DECIMAL(16,14) NULL DEFAULT '0.00000000000000',
+  `lon` DECIMAL(17,14) NULL DEFAULT '0.00000000000000',
+  `nickname` VARCHAR(128) NULL DEFAULT NULL,
+  PRIMARY KEY (`promiseid`),
+  INDEX `promise_ibfk_1` (`createruid` ASC) VISIBLE,
+  CONSTRAINT `promise_ibfk_1`
+    FOREIGN KEY (`createruid`)
+    REFERENCES `commonpjt`.`user` (`uid`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_bin;
+
+
+-- -----------------------------------------------------
+-- Table `commonpjt`.`promisepeople`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `commonpjt`.`promisepeople` (
+  `promisepeopleid` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `uid` INT UNSIGNED NULL DEFAULT NULL,
+  `promiseid` INT UNSIGNED NULL DEFAULT NULL,
+  `createruid` INT UNSIGNED NULL DEFAULT NULL,
+  `updatedtime` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  `nickname` VARCHAR(128) NULL DEFAULT NULL,
+  `lat` DECIMAL(16,14) NULL DEFAULT '0.00000000000000',
+  `lon` DECIMAL(17,14) NULL DEFAULT '0.00000000000000',
+  `thumbnail` VARCHAR(512) NULL DEFAULT NULL,
+  `approve` INT NULL DEFAULT NULL,
+  PRIMARY KEY (`promisepeopleid`),
+  INDEX `promisepeople_ibfk_1` (`uid` ASC) VISIBLE,
+  INDEX `promisepeople_ibfk_2` (`promiseid` ASC) VISIBLE,
+  CONSTRAINT `promisepeople_ibfk_1`
+    FOREIGN KEY (`uid`)
+    REFERENCES `commonpjt`.`user` (`uid`),
+  CONSTRAINT `promisepeople_ibfk_2`
+    FOREIGN KEY (`promiseid`)
+    REFERENCES `commonpjt`.`promise` (`promiseid`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_bin;
+
+
+-- -----------------------------------------------------
+-- Table `commonpjt`.`scrap`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `commonpjt`.`scrap` (
+  `scrapid` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `id` INT UNSIGNED NULL DEFAULT NULL,
+  `articleid` INT UNSIGNED NULL DEFAULT NULL,
+  `thumnailURL` VARCHAR(512) NULL DEFAULT NULL,
+  PRIMARY KEY (`scrapid`),
+  INDEX `id` (`id` ASC) VISIBLE,
+  INDEX `articleid` (`articleid` ASC) VISIBLE,
+  CONSTRAINT `scrap_ibfk_1`
+    FOREIGN KEY (`id`)
+    REFERENCES `commonpjt`.`user` (`uid`),
+  CONSTRAINT `scrap_ibfk_2`
+    FOREIGN KEY (`articleid`)
+    REFERENCES `commonpjt`.`article` (`articleid`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_bin;
+
+
+-- -----------------------------------------------------
+-- Table `commonpjt`.`search`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `commonpjt`.`search` (
+  `searchid` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `id` INT UNSIGNED NULL DEFAULT NULL,
+  `searchdate` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  `name` VARCHAR(128) NULL DEFAULT NULL,
+  PRIMARY KEY (`searchid`),
+  INDEX `id` (`id` ASC) VISIBLE,
+  CONSTRAINT `search_ibfk_1`
+    FOREIGN KEY (`id`)
+    REFERENCES `commonpjt`.`user` (`uid`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_bin;
+
+
+-- -----------------------------------------------------
+-- Table `commonpjt`.`user_roles`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `commonpjt`.`user_roles` (
+  `User_uid` INT UNSIGNED NOT NULL,
+  `roles` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`User_uid`),
+  CONSTRAINT `fk_User_roles_User1`
+    FOREIGN KEY (`User_uid`)
+    REFERENCES `commonpjt`.`user` (`uid`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_bin;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
