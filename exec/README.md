@@ -191,7 +191,7 @@
 
 username : ubuntu
 
-1. nginx
+2. nginx
 
 ```bash
 sudo certbot --nginx -d example.com$ sudo apt-get update
@@ -300,7 +300,7 @@ server {
                                                                                                                       205,0-1       Bot
 ```
 
-1. CertBot(SSL)
+3. CertBot(SSL)
 - Firebase Alarm(FCM), KakaoMap, Social Login을 사용하려면 Https 요청이 필요.
 - CertBot을 사용하여 무료 SSL(Let's Encrypt) 인증서를 발급받고 서버에 적용
 
@@ -317,7 +317,7 @@ sudo certbot renew --dry-run
 sudo certbot renew
 ```
 
-1. Maria-db(Docker)
+4. Maria-db(Docker)
 - Docker를 사용하여 MariaDB 설치(Docker설치는 따로 설명하지 않음)
 
 ```bash
@@ -334,7 +334,7 @@ MariaDB [(none)]> show databases;
 # "commonpjt" table이 보이면 성공
 ```
 
-1. java
+5. java
 - 설치
 
 ```bash
@@ -373,7 +373,7 @@ export JAVA_HOME=/usr/lib/jvm/zulu-8-amd64
 ...
 ```
 
-1. 외부 서비스
+6. 외부 서비스
 - 카카오 로그인 : 카카오API서비스 페이지 내에서 설정. (i5b302.p.ssafy.io로 설정)
 
 - FirebaseCloudMessage
@@ -387,7 +387,7 @@ firebase.initializeApp({
 });
 ```
 
-1. Folder Path
+7. Folder Path
 - 기존 nginx dist 경로는 "/var/www/dist/html"  ,  nginx설정을 /home/ubuntu/b302/~ 로 해놓았기 때문에 "/home/ubuntu/ 폴더안에 b302 폴더를 생성
 
 ## 배포하는 방법
