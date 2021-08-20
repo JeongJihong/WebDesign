@@ -18,4 +18,8 @@ public interface PromiseDao extends JpaRepository<Promise, Long> {
 
     @Transactional
     void deleteByPromiseid(Long promiseid);
+
+    boolean existsByPromiseid(Long promiseid);
+
+
 }
