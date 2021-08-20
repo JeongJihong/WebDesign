@@ -592,7 +592,7 @@ pipeline {
 - 서비스를 이용하기 전 항상 온보딩 화면을 보여주며 총 4페이지로 구성되어 있습니다.
 - 각 페이지에서는 모두 로그인, 회원하기 버튼이 있으며, 해당 버튼을 클릭하면 기능에 해당하는 페이지로 이동합니다.
 
-![Untitled](%Image/Untitled.png)
+![Untitled](./Image/Untitled.png)
 
 **[ 회원가입 ]**
 
@@ -605,21 +605,21 @@ pipeline {
 - 비밀번호는 영문, 숫자, 특수문자 포함 8자리 이상이어야 하고, 아니라면 ‘영문, 숫자, 특수문자 포함 8자리 이상이어야 합니다.’라는 문구를 출력합니다.
 - 비밀번호와 비밀번호 확인까지 일치하면 가입하기 버튼이 활성화됩니다.
 
-![Untitled](%Image/Untitled%201.png)
+![Untitled](./Image/Untitled%201.png)
 
 **[ 로그인 ]**
 
 - 로그인 창에 회원가입된 이메일과 비밀번호를 입력하고 로그인 버튼을 클릭하면 로그인이 되며 메인 피드로 이동합니다.
 - 카카오계정으로 로그인을 클릭하면 카카오 로그인 기능 사용가능 합니다. 처음 가입하는 사용자라면 닉네임, 프로필 사진, 이메일 사용 권한 동의 창이 뜨고 동의를 진행합니다. 동의하면 자동으로 가입이 완료되고 사용가능 합니다. 이미 카카오 계정으로 가입한 계정이라면 바로 로그인 되고 서비스를 이용할 수 있습니다.
 
-![Untitled](%Image/Untitled%202.png)
+![Untitled](./Image/Untitled%202.png)
 
 **[ 유저검색 ]**
 
 - 상단 네비게이션 바 중앙에 있는 유저검색 버튼을 클릭하면, 닉네임을 통해 검색할 수 있습니다.
 - 최근검색에서는 사용자가 최근에 검색한 닉네임을 나타내줍니다.
 
-![Untitled](%Image/Untitled%203.png)
+![Untitled](./Image/Untitled%203.png)
 
 **[ 프로필 페이지 ]**
 
@@ -628,9 +628,9 @@ pipeline {
 - 유저가 작성한 게시글, 약속을 볼수있습니다.
 - 팔로워, 팔로우에 대한 생성한 게시글,약속 역시 파악할 수 있습니다.
 
-![Untitled](%Image/Untitled%204.png)
+![Untitled](./Image/Untitled%204.png)
 
-![Untitled](%Image/Untitled%205.png)
+![Untitled](./Image/Untitled%205.png)
 
 **[ 게시글 작성 ]**
 
@@ -639,7 +639,7 @@ pipeline {
 - 사진과 글은 모두 필수로 입력해야 하며, 둘 중 하나라도 입력되지 않았다면 게시글 생성이 되지 않습니다.
 - 사진과 글을 모두 작성한 뒤 전송 버튼을 클릭하면 게시글이 작성되고, 메인 피드에서 바로 확인할 수 있습니다.
 
-![Untitled](%Image/Untitled%206.png)
+![Untitled](./Image/Untitled%206.png)
 
 **[ Home ]**
 
@@ -651,7 +651,7 @@ pipeline {
 - 알람 페이지에서는 좋아요, 팔로우, 팔로우들의 약속생성의 알림이 기록됩니다.
 - 제 글에 좋아요가 눌리면 Like 탭에, 팔로우 신청이 오면 Follow 탭에, 그리고 약속 초대가 오면 Promise 탭에 기록이 생깁니다.
 
-![Untitled](%Image/Untitled%207.png)
+![Untitled](./Image/Untitled%207.png)
 
 **[ 약속리스트 ]**
 
@@ -661,7 +661,7 @@ pipeline {
   - upcoming 약속 : 자신 포함 다른 유저가 생성한 약속
   - waiting 약속 : 참여한 약속
 
-  ![Untitled](%Image/Untitled%208.png)
+  ![Untitled](./Image/Untitled%208.png)
 
 **[ 약속 생성 페이지]**
 
@@ -669,9 +669,9 @@ pipeline {
   - 제목, 사진, 내용, 시간, 장소, 인원, 타입을 입력함으로써 약속의 정보를 구체화합니다.
 - 장소 검색시 주변검색을 먼저 검색한 후 나온 지도에서 약속장소를 클릭하여 정확한 장소를 정합니다.
 
-![Untitled](%Image/Untitled%209.png)
+![Untitled](./Image/Untitled%209.png)
 
-![Untitled](%Image/Untitled%2010.png)
+![Untitled](./Image/Untitled%2010.png)
 
 **[약속 생성 후 메인피드]**
 
@@ -684,11 +684,11 @@ pipeline {
 - 참가자의 위치와 약속 장소까지의 거리를 계산하여 얼마나 걸리는지를 시간으로 나타내줍니다.
 - 약속 시간이 한 시간 안으로 다가왔을 때만 '다들 어디' 항목이 활성화 됩니다.
 
-![Untitled](%Image/Untitled%2011.png)
+![Untitled](./Image/Untitled%2011.png)
 
 **[ 약속참가 후 -  프로필- 피플포인트 ]**
 
 - 약속을 참가한 후에 프로필에 들어가면 프로필사진 하단에 피플 포인트가 있습니다.
 - 약속에 참여하게 되면 피플 포인트가 쌓이게 됩니다. 반대로 약속을 취소하거나 파기를하면 그반대로 피플포인트가 감소됩니다.
 
-![Untitled](%Image/Untitled%204.png)
+![Untitled](./Image/Untitled%204.png)
