@@ -69,7 +69,7 @@
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
 		</dependency>
-	
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -93,7 +93,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
-		
+
 		<dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
@@ -187,7 +187,7 @@
   },
 ```
 
-1. aws-ec2 서버를 사용하여 배포를 진행. 
+1. aws-ec2 서버를 사용하여 배포를 진행.
 
 username : ubuntu
 
@@ -283,14 +283,14 @@ server {
 	    ssl_certificate_key /etc/letsencrypt/live/i5b302.p.ssafy.io/privkey.pem; # managed by Certbot
 	    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
 	    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
-	
+
 }
 server {
 	    if ($host = i5b302.p.ssafy.io) {
 	        return 301 https://$host$request_uri;
 	    } # managed by Certbot
-	
-	
+
+
 	        listen 80 ;
 	        listen [::]:80 ;
 	    server_name i5b302.p.ssafy.io;
@@ -301,6 +301,7 @@ server {
 ```
 
 1. CertBot(SSL)
+
 - Firebase Alarm(FCM), KakaoMap, Social Login을 사용하려면 Https 요청이 필요.
 - CertBot을 사용하여 무료 SSL(Let's Encrypt) 인증서를 발급받고 서버에 적용
 
@@ -318,6 +319,7 @@ sudo certbot renew
 ```
 
 1. Maria-db(Docker)
+
 - Docker를 사용하여 MariaDB 설치(Docker설치는 따로 설명하지 않음)
 
 ```bash
@@ -335,20 +337,21 @@ MariaDB [(none)]> show databases;
 ```
 
 1. java
+
 - 설치
 
 ```bash
 # install the necessary dependencies
 sudo apt-get -q update
-sudo apt-get -yq install gnupg curl 
+sudo apt-get -yq install gnupg curl
 
 # add Azul's public key
 sudo apt-key adv \
   --keyserver hkp://keyserver.ubuntu.com:80 \
   --recv-keys 0xB1998361219BD9C9
 
-# download and install the package that adds 
-# the Azul APT repository to the list of sources 
+# download and install the package that adds
+# the Azul APT repository to the list of sources
 curl -O https://cdn.azul.com/zulu/bin/zulu-repo_1.0.0-2_all.deb
 
 # install the package
@@ -374,6 +377,7 @@ export JAVA_HOME=/usr/lib/jvm/zulu-8-amd64
 ```
 
 1. 외부 서비스
+
 - 카카오 로그인 : 카카오API서비스 페이지 내에서 설정. (i5b302.p.ssafy.io로 설정)
 
 - FirebaseCloudMessage
@@ -388,11 +392,13 @@ firebase.initializeApp({
 ```
 
 1. Folder Path
-- 기존 nginx dist 경로는 "/var/www/dist/html"  ,  nginx설정을 /home/ubuntu/b302/~ 로 해놓았기 때문에 "/home/ubuntu/ 폴더안에 b302 폴더를 생성
+
+- 기존 nginx dist 경로는 "/var/www/dist/html" , nginx설정을 /home/ubuntu/b302/~ 로 해놓았기 때문에 "/home/ubuntu/ 폴더안에 b302 폴더를 생성
 
 ## 배포하는 방법
 
 1. 수동배포(준비물)
+
 - dist폴더
 - .jar file
 
@@ -420,14 +426,14 @@ sudo java -jar webcuration-0.0.1-SNAPSHOT.jar
 ```bash
 docker run -d -u root -p 5000:8080 --name=jenkins jenkins/jenkins
 #5000포트로 오픈
-docker logs jenkins 
+docker logs jenkins
 # 패스워드 확인 후 설치
 
 ```
 
 - Nodejs, Gitlab, Publish over SSH 등 필요한 요소 설치
 - Global Tool Configuration 에서 maven과 nodejs 경로를 설정해줌.
-참고로 jenkins docker 내부에 maven과 nodejs를 설치해야함
+  참고로 jenkins docker 내부에 maven과 nodejs를 설치해야함
 
 ```bash
 apt update
@@ -451,7 +457,7 @@ pipeline {
         maven "mvn"
         nodejs "nodejs"
     }
-    
+
     stages{
         stage("clone"){
             steps{
@@ -505,7 +511,7 @@ pipeline {
                     ]
                 )
             }
-            
+
         }
             post{
                 success{
@@ -515,7 +521,7 @@ pipeline {
         }
         stage('jar transfer') {
             steps([$class: 'BapSshPromotionPublisherPlugin']) {
-                dir("frontend"){                
+                dir("frontend"){
                     sshPublisher(
                         continueOnError: false, failOnError: true,
                         publishers: [
@@ -524,13 +530,13 @@ pipeline {
                                 verbose: true,
                                 transfers: [
                                     sshTransfer(
-                                        sourceFiles: "**/*.jar", 
-                                        removePrefix: "", 
-                                        remoteDirectory: "/", 
+                                        sourceFiles: "**/*.jar",
+                                        removePrefix: "",
+                                        remoteDirectory: "/",
                                         execCommand: "sudo chmod 744 /home/ubuntu/b302/killboot.sh"
                                     ),
                                     sshTransfer(execCommand : "sh /home/ubuntu/b302/killboot.sh;")
-                                    
+
                                 ]
                             )
                         ]
@@ -556,7 +562,7 @@ pipeline {
                                     sshTransfer(execCommand:"sh /home/ubuntu/b302/deploy.sh")
 		                                sshTransfer(execCommand:"ps -ef | grep java")
                                 // sshTransfer(execCommand:"sudo rm /home/ubuntu/b302/deploy.sh")
-                                
+
                             ]
                         )
                     ]
@@ -586,45 +592,45 @@ pipeline {
 - 서비스를 이용하기 전 항상 온보딩 화면을 보여주며 총 4페이지로 구성되어 있습니다.
 - 각 페이지에서는 모두 로그인, 회원하기 버튼이 있으며, 해당 버튼을 클릭하면 기능에 해당하는 페이지로 이동합니다.
 
-![Untitled](%E1%84%8B%E1%85%AE%E1%86%AB%E1%84%8B%E1%85%A7%E1%86%BC%20813c21def18548fdaf3a80a90d1ee2f4/Untitled.png)
+![Untitled](%Image/Untitled.png)
 
 **[ 회원가입 ]**
 
 - 닉네임과 이메일을 입력한 뒤 중복확인 버튼을 선택하여 중복인지 확인해줍니다.
 - 닉네임
-    - 중복확인 버튼을 눌렀을 때 중복이 아니라면 ‘사용 가능한 닉네임입니다.’ 중복이라면 ‘중복된 닉네임 입니다!’ 라는 알림창을 띄워줍니다.
+  - 중복확인 버튼을 눌렀을 때 중복이 아니라면 ‘사용 가능한 닉네임입니다.’ 중복이라면 ‘중복된 닉네임 입니다!’ 라는 알림창을 띄워줍니다.
 - 이메일
-    - 형식이 다르다면 ‘이메일 형식이 아닙니다.’라는 문구가 출력됩니다.
-    - 형식이 맞지만 이미 존재하는 이메일이라면 ‘중복된 이메일입니다.’는 알림창을 띄워주고, 새로운 이메일이라면 ‘사용 가능한 이메일 입니다.’ 라는 알림창을 띄워줍니다.
+  - 형식이 다르다면 ‘이메일 형식이 아닙니다.’라는 문구가 출력됩니다.
+  - 형식이 맞지만 이미 존재하는 이메일이라면 ‘중복된 이메일입니다.’는 알림창을 띄워주고, 새로운 이메일이라면 ‘사용 가능한 이메일 입니다.’ 라는 알림창을 띄워줍니다.
 - 비밀번호는 영문, 숫자, 특수문자 포함 8자리 이상이어야 하고, 아니라면 ‘영문, 숫자, 특수문자 포함 8자리 이상이어야 합니다.’라는 문구를 출력합니다.
 - 비밀번호와 비밀번호 확인까지 일치하면 가입하기 버튼이 활성화됩니다.
 
-![Untitled](%E1%84%8B%E1%85%AE%E1%86%AB%E1%84%8B%E1%85%A7%E1%86%BC%20813c21def18548fdaf3a80a90d1ee2f4/Untitled%201.png)
+![Untitled](%Image/Untitled%201.png)
 
 **[ 로그인 ]**
 
 - 로그인 창에 회원가입된 이메일과 비밀번호를 입력하고 로그인 버튼을 클릭하면 로그인이 되며 메인 피드로 이동합니다.
 - 카카오계정으로 로그인을 클릭하면 카카오 로그인 기능 사용가능 합니다. 처음 가입하는 사용자라면 닉네임, 프로필 사진, 이메일 사용 권한 동의 창이 뜨고 동의를 진행합니다. 동의하면 자동으로 가입이 완료되고 사용가능 합니다. 이미 카카오 계정으로 가입한 계정이라면 바로 로그인 되고 서비스를 이용할 수 있습니다.
 
-![Untitled](%E1%84%8B%E1%85%AE%E1%86%AB%E1%84%8B%E1%85%A7%E1%86%BC%20813c21def18548fdaf3a80a90d1ee2f4/Untitled%202.png)
+![Untitled](%Image/Untitled%202.png)
 
 **[ 유저검색 ]**
 
 - 상단 네비게이션 바 중앙에 있는 유저검색 버튼을 클릭하면, 닉네임을 통해 검색할 수 있습니다.
 - 최근검색에서는 사용자가 최근에 검색한 닉네임을 나타내줍니다.
 
-![Untitled](%E1%84%8B%E1%85%AE%E1%86%AB%E1%84%8B%E1%85%A7%E1%86%BC%20813c21def18548fdaf3a80a90d1ee2f4/Untitled%203.png)
+![Untitled](%Image/Untitled%203.png)
 
 **[ 프로필 페이지 ]**
 
-[https://lh4.googleusercontent.com/cvCcQkpgk5PTlwO42wrSWKEcPH6KHv5DQjJ3176NeVblXc_CYLjmsFp5hkaA1SfQQFD8rXQrj7pE8i9p8LdU3KyyHwUXZMMo6KFfNhN5HHpBB_dmRtjuzn0rNIsI_cNmg-srbbAn](https://lh4.googleusercontent.com/cvCcQkpgk5PTlwO42wrSWKEcPH6KHv5DQjJ3176NeVblXc_CYLjmsFp5hkaA1SfQQFD8rXQrj7pE8i9p8LdU3KyyHwUXZMMo6KFfNhN5HHpBB_dmRtjuzn0rNIsI_cNmg-srbbAn)
-
-[https://lh4.googleusercontent.com/VBhCJjD5Gp8qK9RQevhtHuaD-kz9ZNSL6ZCC_IPbezjbFTEQMEJkVNT6NoCdNfeC_rcI7WIqHyYMJCzTMmMjxqk_RnfJ84llkg2Ye0XBfCqxOy8MrkIQVgIRANaGFACTKwTHVokX](https://lh4.googleusercontent.com/VBhCJjD5Gp8qK9RQevhtHuaD-kz9ZNSL6ZCC_IPbezjbFTEQMEJkVNT6NoCdNfeC_rcI7WIqHyYMJCzTMmMjxqk_RnfJ84llkg2Ye0XBfCqxOy8MrkIQVgIRANaGFACTKwTHVokX)
-
 - 프로필 페이지에서는 우측상단의 프로필 수정 버튼을 누르면 자신의 프로필사진 수정과 소개글을 비밀번호까지 변경할 수 있습니다.
-    - 수정 이 후 저장하기 버튼을 누르면 자신의 프로필이 수정됩니다.
+  - 수정 이 후 저장하기 버튼을 누르면 자신의 프로필이 수정됩니다.
 - 유저가 작성한 게시글, 약속을 볼수있습니다.
 - 팔로워, 팔로우에 대한 생성한 게시글,약속 역시 파악할 수 있습니다.
+
+![Untitled](%Image/Untitled%204.png)
+
+![Untitled](%Image/Untitled%205.png)
 
 **[ 게시글 작성 ]**
 
@@ -633,38 +639,39 @@ pipeline {
 - 사진과 글은 모두 필수로 입력해야 하며, 둘 중 하나라도 입력되지 않았다면 게시글 생성이 되지 않습니다.
 - 사진과 글을 모두 작성한 뒤 전송 버튼을 클릭하면 게시글이 작성되고, 메인 피드에서 바로 확인할 수 있습니다.
 
-![Untitled](%E1%84%8B%E1%85%AE%E1%86%AB%E1%84%8B%E1%85%A7%E1%86%BC%20813c21def18548fdaf3a80a90d1ee2f4/Untitled%204.png)
+![Untitled](%Image/Untitled%206.png)
 
 **[ Home ]**
 
 - 본인이 작성한글은 피드에 올라옵니다.
-    - 해당 피드는 저를 팔로우 하고 있는 사람들에게만 보여집니다.
+  - 해당 피드는 저를 팔로우 하고 있는 사람들에게만 보여집니다.
 
 **[ 알람 ]**
 
 - 알람 페이지에서는 좋아요, 팔로우, 팔로우들의 약속생성의 알림이 기록됩니다.
 - 제 글에 좋아요가 눌리면 Like 탭에, 팔로우 신청이 오면 Follow 탭에, 그리고 약속 초대가 오면 Promise 탭에 기록이 생깁니다.
 
-![Untitled](%E1%84%8B%E1%85%AE%E1%86%AB%E1%84%8B%E1%85%A7%E1%86%BC%20813c21def18548fdaf3a80a90d1ee2f4/Untitled%205.png)
+![Untitled](%Image/Untitled%207.png)
 
 **[ 약속리스트 ]**
 
 - 약속이 생성되면은 약속들을 정리해주는 페이지입니다.
 - upcoming 약속과 waiting 약속으로 구분이 됩니다.
-    - upcoming 약속 : 자신 포함 다른 유저가 생성한 약속
-    - waiting 약속 : 참여한 약속
 
-    ![Untitled](%E1%84%8B%E1%85%AE%E1%86%AB%E1%84%8B%E1%85%A7%E1%86%BC%20813c21def18548fdaf3a80a90d1ee2f4/Untitled%206.png)
+  - upcoming 약속 : 자신 포함 다른 유저가 생성한 약속
+  - waiting 약속 : 참여한 약속
+
+  ![Untitled](%Image/Untitled%208.png)
 
 **[ 약속 생성 페이지]**
 
 - 약속 생성페이지는 말 그대로 약속을 생성할 수 있습니다.
-    - 제목, 사진, 내용, 시간, 장소, 인원, 타입을 입력함으로써 약속의 정보를 구체화합니다.
+  - 제목, 사진, 내용, 시간, 장소, 인원, 타입을 입력함으로써 약속의 정보를 구체화합니다.
 - 장소 검색시 주변검색을 먼저 검색한 후 나온 지도에서 약속장소를 클릭하여 정확한 장소를 정합니다.
 
-![Untitled](%E1%84%8B%E1%85%AE%E1%86%AB%E1%84%8B%E1%85%A7%E1%86%BC%20813c21def18548fdaf3a80a90d1ee2f4/Untitled%207.png)
+![Untitled](%Image/Untitled%209.png)
 
-![Untitled](%E1%84%8B%E1%85%AE%E1%86%AB%E1%84%8B%E1%85%A7%E1%86%BC%20813c21def18548fdaf3a80a90d1ee2f4/Untitled%208.png)
+![Untitled](%Image/Untitled%2010.png)
 
 **[약속 생성 후 메인피드]**
 
@@ -677,11 +684,11 @@ pipeline {
 - 참가자의 위치와 약속 장소까지의 거리를 계산하여 얼마나 걸리는지를 시간으로 나타내줍니다.
 - 약속 시간이 한 시간 안으로 다가왔을 때만 '다들 어디' 항목이 활성화 됩니다.
 
-![Untitled](%E1%84%8B%E1%85%AE%E1%86%AB%E1%84%8B%E1%85%A7%E1%86%BC%20813c21def18548fdaf3a80a90d1ee2f4/Untitled%209.png)
+![Untitled](%Image/Untitled%2011.png)
 
 **[ 약속참가 후 -  프로필- 피플포인트 ]**
 
 - 약속을 참가한 후에 프로필에 들어가면 프로필사진 하단에 피플 포인트가 있습니다.
 - 약속에 참여하게 되면 피플 포인트가 쌓이게 됩니다. 반대로 약속을 취소하거나 파기를하면 그반대로 피플포인트가 감소됩니다.
 
-[https://lh4.googleusercontent.com/cvCcQkpgk5PTlwO42wrSWKEcPH6KHv5DQjJ3176NeVblXc_CYLjmsFp5hkaA1SfQQFD8rXQrj7pE8i9p8LdU3KyyHwUXZMMo6KFfNhN5HHpBB_dmRtjuzn0rNIsI_cNmg-srbbAn](https://lh4.googleusercontent.com/cvCcQkpgk5PTlwO42wrSWKEcPH6KHv5DQjJ3176NeVblXc_CYLjmsFp5hkaA1SfQQFD8rXQrj7pE8i9p8LdU3KyyHwUXZMMo6KFfNhN5HHpBB_dmRtjuzn0rNIsI_cNmg-srbbAn)
+![Untitled](%Image/Untitled%204.png)
