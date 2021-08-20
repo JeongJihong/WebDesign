@@ -20,4 +20,6 @@ public interface PromiseDao extends JpaRepository<Promise, Long> {
     void deleteByPromiseid(Long promiseid);
 
     boolean existsByPromiseid(Long promiseid);
+
+
 }
