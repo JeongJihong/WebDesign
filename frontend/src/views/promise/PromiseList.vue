@@ -10,7 +10,7 @@
 
     <ul class="p-0">
       <p class="mt-3 my-0 mx-3 fs-4 fw-bold">Waiting</p>
-      <div v-if="waitingPromises" class="mt-2 mx-3 px-3 border rounded bg-light">
+      <div v-if="waitingPromises.length !== 0" class="mt-2 mx-3 px-3 border rounded bg-light">
         <div v-for="waitingPromise in waitingPromises"
           :key="waitingPromise.promiseid" class="my-4 mx-1">
           <router-link class="text-decoration-none"
@@ -47,7 +47,7 @@
 
     <ul class="p-0">
       <p class="mt-3 my-0 mx-3 fs-4 fw-bold">Upcoming</p>
-      <div v-if="upcomingPromises" class="mt-2 mx-3 px-3 border rounded bg-light">
+      <div v-if="upcomingPromises.length !== 0" class="mt-2 mx-3 px-3 border rounded bg-light">
         <div v-for="upcomingPromise in upcomingPromises"
           :key="upcomingPromise.promiseid" class="my-4 mx-1">
           <router-link class="text-decoration-none"
