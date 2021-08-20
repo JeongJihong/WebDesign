@@ -118,38 +118,38 @@ public class AlarmServiceImpl implements AlarmService {
         for (int i = 0; i < alarm.size(); i++) {
             if(alarm.get(i).getCategory().equals("Promise")) {
                 Optional<User> tempUser = userDao.findByUid(alarm.get(i).getSenderuid());
-                System.out.println("detail : " + alarm.get(i).getDetail());
-                Promise promiseUser = promiseDao.findByPromiseid(alarm.get(i).getDetail());
-                System.out.println("name" + promiseUser.getNickname() + "type : " + promiseUser.getType());
-                String type = promiseUser.getType();
-                if (type.equals("Game")) {
-                    Game.add(new LikeFollowRequest(tempUser.get().getUid(), tempUser.get().getNickname(),
-                            tempUser.get().getThumbnail(), alarm.get(i).getTitle(), alarm.get(i).getBody(),
-                            alarm.get(i).getCheckalarm(), alarm.get(i).getCategory(), alarm.get(i).getDetail()));
-                } else if (type.equals("Travel")) {
-                    Travel.add(new LikeFollowRequest(tempUser.get().getUid(), tempUser.get().getNickname(),
-                            tempUser.get().getThumbnail(), alarm.get(i).getTitle(), alarm.get(i).getBody(),
-                            alarm.get(i).getCheckalarm(), alarm.get(i).getCategory(), alarm.get(i).getDetail()));
-                } else if (type.equals("Restaurant")) {
-                    Restaurant.add(new LikeFollowRequest(tempUser.get().getUid(), tempUser.get().getNickname(),
-                            tempUser.get().getThumbnail(), alarm.get(i).getTitle(), alarm.get(i).getBody(),
-                            alarm.get(i).getCheckalarm(), alarm.get(i).getCategory(), alarm.get(i).getDetail()));
-                } else if (type.equals("Exercise")) {
-                    Exercise.add(new LikeFollowRequest(tempUser.get().getUid(), tempUser.get().getNickname(),
-                            tempUser.get().getThumbnail(), alarm.get(i).getTitle(), alarm.get(i).getBody(),
-                            alarm.get(i).getCheckalarm(), alarm.get(i).getCategory(), alarm.get(i).getDetail()));
-                } else if (type.equals("Study")) {
-                    Study.add(new LikeFollowRequest(tempUser.get().getUid(), tempUser.get().getNickname(),
-                            tempUser.get().getThumbnail(), alarm.get(i).getTitle(), alarm.get(i).getBody(),
-                            alarm.get(i).getCheckalarm(), alarm.get(i).getCategory(), alarm.get(i).getDetail()));
-                } else if (type.equals("Art")) {
-                    Art.add(new LikeFollowRequest(tempUser.get().getUid(), tempUser.get().getNickname(),
-                            tempUser.get().getThumbnail(), alarm.get(i).getTitle(), alarm.get(i).getBody(),
-                            alarm.get(i).getCheckalarm(), alarm.get(i).getCategory(), alarm.get(i).getDetail()));
-                } else {
-                    Etc.add(new LikeFollowRequest(tempUser.get().getUid(), tempUser.get().getNickname(),
-                            tempUser.get().getThumbnail(), alarm.get(i).getTitle(), alarm.get(i).getBody(),
-                            alarm.get(i).getCheckalarm(), alarm.get(i).getCategory(), alarm.get(i).getDetail()));
+                if (promiseDao.existsByPromiseid(alarm.get(i).getDetail())) {
+                    Promise promiseUser = promiseDao.findByPromiseid(alarm.get(i).getDetail());
+                    String type = promiseUser.getType();
+                    if (type.equals("Game")) {
+                        Game.add(new LikeFollowRequest(tempUser.get().getUid(), tempUser.get().getNickname(),
+                                tempUser.get().getThumbnail(), alarm.get(i).getTitle(), alarm.get(i).getBody(),
+                                alarm.get(i).getCheckalarm(), alarm.get(i).getCategory(), alarm.get(i).getDetail()));
+                    } else if (type.equals("Travel")) {
+                        Travel.add(new LikeFollowRequest(tempUser.get().getUid(), tempUser.get().getNickname(),
+                                tempUser.get().getThumbnail(), alarm.get(i).getTitle(), alarm.get(i).getBody(),
+                                alarm.get(i).getCheckalarm(), alarm.get(i).getCategory(), alarm.get(i).getDetail()));
+                    } else if (type.equals("Restaurant")) {
+                        Restaurant.add(new LikeFollowRequest(tempUser.get().getUid(), tempUser.get().getNickname(),
+                                tempUser.get().getThumbnail(), alarm.get(i).getTitle(), alarm.get(i).getBody(),
+                                alarm.get(i).getCheckalarm(), alarm.get(i).getCategory(), alarm.get(i).getDetail()));
+                    } else if (type.equals("Exercise")) {
+                        Exercise.add(new LikeFollowRequest(tempUser.get().getUid(), tempUser.get().getNickname(),
+                                tempUser.get().getThumbnail(), alarm.get(i).getTitle(), alarm.get(i).getBody(),
+                                alarm.get(i).getCheckalarm(), alarm.get(i).getCategory(), alarm.get(i).getDetail()));
+                    } else if (type.equals("Study")) {
+                        Study.add(new LikeFollowRequest(tempUser.get().getUid(), tempUser.get().getNickname(),
+                                tempUser.get().getThumbnail(), alarm.get(i).getTitle(), alarm.get(i).getBody(),
+                                alarm.get(i).getCheckalarm(), alarm.get(i).getCategory(), alarm.get(i).getDetail()));
+                    } else if (type.equals("Art")) {
+                        Art.add(new LikeFollowRequest(tempUser.get().getUid(), tempUser.get().getNickname(),
+                                tempUser.get().getThumbnail(), alarm.get(i).getTitle(), alarm.get(i).getBody(),
+                                alarm.get(i).getCheckalarm(), alarm.get(i).getCategory(), alarm.get(i).getDetail()));
+                    } else {
+                        Etc.add(new LikeFollowRequest(tempUser.get().getUid(), tempUser.get().getNickname(),
+                                tempUser.get().getThumbnail(), alarm.get(i).getTitle(), alarm.get(i).getBody(),
+                                alarm.get(i).getCheckalarm(), alarm.get(i).getCategory(), alarm.get(i).getDetail()));
+                    }
                 }
             }
         }
