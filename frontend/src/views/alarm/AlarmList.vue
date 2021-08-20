@@ -9,8 +9,8 @@
     </div>
 
     <div class="mt-4 pt-4">
-        <div v-if="this.click === 'Like'">
-          <div v-if="this.likeList.length === 0"
+        <div v-if="click === 'Like'">
+          <div v-if="!likeList"
             class="d-flex justify-content-center">
           <p>좋아요 알람이 존재하지 않습니다. 😥</p>
         </div>
@@ -32,7 +32,7 @@
         </div>
       </div>
       <div v-else-if="this.click === 'Follow'">
-        <div v-if="this.followList.length === 0"
+        <div v-if="!this.followList"
           class="d-flex justify-content-center">
           <p>팔로우 요청이 존재하지 않습니다. 😥</p>
         </div>
@@ -54,19 +54,19 @@
         </div>
       </div>
       <div v-else>
-        <div v-if="promiseList.length !== 0 && promiseList.Travel.length === 0
-          && promiseList.Restaurant.length === 0
-          && promiseList.Study.length === 0
-          && promiseList.Art.length === 0
-          && promiseList.Game.length === 0
-          && promiseList.Exercise.length === 0
-          && promiseList.Etc.length === 0"
+        <div v-if="promiseList && !promiseList.Travel
+          && !promiseList.Restaurant
+          && !promiseList.Study
+          && !promiseList.Art
+          && !promiseList.Game
+          && !promiseList.Exercise
+          && !promiseList.Etc"
           class="d-flex justify-content-center">
           <p>약속 요청이 존재하지 않습니다. 😥</p>
         </div>
         <div v-else>
           <div v-for="(category, idx) in promiseList" :key="'category'+idx">
-            <div v-if="category.length !== 0">
+            <div v-if="category">
               <b-list-group>
                 <b-list-group-item
                   class="border-0 my-1" v-for="user in category" :key="user.detail" id="app"
