@@ -191,7 +191,7 @@
 
 username : ubuntu
 
-2. nginx
+1. nginx
 
 ```bash
 sudo certbot --nginx -d example.com$ sudo apt-get update
@@ -300,7 +300,7 @@ server {
                                                                                                                       205,0-1       Bot
 ```
 
-3. CertBot(SSL)
+1. CertBot(SSL)
 - Firebase Alarm(FCM), KakaoMap, Social Login을 사용하려면 Https 요청이 필요.
 - CertBot을 사용하여 무료 SSL(Let's Encrypt) 인증서를 발급받고 서버에 적용
 
@@ -317,7 +317,7 @@ sudo certbot renew --dry-run
 sudo certbot renew
 ```
 
-4. Maria-db(Docker)
+1. Maria-db(Docker)
 - Docker를 사용하여 MariaDB 설치(Docker설치는 따로 설명하지 않음)
 
 ```bash
@@ -334,7 +334,7 @@ MariaDB [(none)]> show databases;
 # "commonpjt" table이 보이면 성공
 ```
 
-5. java
+1. java
 - 설치
 
 ```bash
@@ -373,7 +373,7 @@ export JAVA_HOME=/usr/lib/jvm/zulu-8-amd64
 ...
 ```
 
-6. 외부 서비스
+1. 외부 서비스
 - 카카오 로그인 : 카카오API서비스 페이지 내에서 설정. (i5b302.p.ssafy.io로 설정)
 
 - FirebaseCloudMessage
@@ -387,7 +387,7 @@ firebase.initializeApp({
 });
 ```
 
-7. Folder Path
+1. Folder Path
 - 기존 nginx dist 경로는 "/var/www/dist/html"  ,  nginx설정을 /home/ubuntu/b302/~ 로 해놓았기 때문에 "/home/ubuntu/ 폴더안에 b302 폴더를 생성
 
 ## 배포하는 방법
@@ -578,3 +578,110 @@ pipeline {
 - 접속 후 아무행동없이 5시간이 지났을 때 Token만료 오류 발생 가능성 → 로그아웃 후 재로그인
 - 알람이 foreground 상태에서 안옵니다! → 정상입니다. background 상태일 때만 알람이 나타납니다.
 - 약속 목록을 보는데 지도가 오류가 나서 안나옵니다! → 지도 우측상단에 새로고침 버튼 클릭
+
+# 시연시나리오
+
+**[ 온보딩 화면 ]**
+
+- 서비스를 이용하기 전 항상 온보딩 화면을 보여주며 총 4페이지로 구성되어 있습니다.
+- 각 페이지에서는 모두 로그인, 회원하기 버튼이 있으며, 해당 버튼을 클릭하면 기능에 해당하는 페이지로 이동합니다.
+
+![Untitled](%E1%84%8B%E1%85%AE%E1%86%AB%E1%84%8B%E1%85%A7%E1%86%BC%20813c21def18548fdaf3a80a90d1ee2f4/Untitled.png)
+
+**[ 회원가입 ]**
+
+- 닉네임과 이메일을 입력한 뒤 중복확인 버튼을 선택하여 중복인지 확인해줍니다.
+- 닉네임
+    - 중복확인 버튼을 눌렀을 때 중복이 아니라면 ‘사용 가능한 닉네임입니다.’ 중복이라면 ‘중복된 닉네임 입니다!’ 라는 알림창을 띄워줍니다.
+- 이메일
+    - 형식이 다르다면 ‘이메일 형식이 아닙니다.’라는 문구가 출력됩니다.
+    - 형식이 맞지만 이미 존재하는 이메일이라면 ‘중복된 이메일입니다.’는 알림창을 띄워주고, 새로운 이메일이라면 ‘사용 가능한 이메일 입니다.’ 라는 알림창을 띄워줍니다.
+- 비밀번호는 영문, 숫자, 특수문자 포함 8자리 이상이어야 하고, 아니라면 ‘영문, 숫자, 특수문자 포함 8자리 이상이어야 합니다.’라는 문구를 출력합니다.
+- 비밀번호와 비밀번호 확인까지 일치하면 가입하기 버튼이 활성화됩니다.
+
+![Untitled](%E1%84%8B%E1%85%AE%E1%86%AB%E1%84%8B%E1%85%A7%E1%86%BC%20813c21def18548fdaf3a80a90d1ee2f4/Untitled%201.png)
+
+**[ 로그인 ]**
+
+- 로그인 창에 회원가입된 이메일과 비밀번호를 입력하고 로그인 버튼을 클릭하면 로그인이 되며 메인 피드로 이동합니다.
+- 카카오계정으로 로그인을 클릭하면 카카오 로그인 기능 사용가능 합니다. 처음 가입하는 사용자라면 닉네임, 프로필 사진, 이메일 사용 권한 동의 창이 뜨고 동의를 진행합니다. 동의하면 자동으로 가입이 완료되고 사용가능 합니다. 이미 카카오 계정으로 가입한 계정이라면 바로 로그인 되고 서비스를 이용할 수 있습니다.
+
+![Untitled](%E1%84%8B%E1%85%AE%E1%86%AB%E1%84%8B%E1%85%A7%E1%86%BC%20813c21def18548fdaf3a80a90d1ee2f4/Untitled%202.png)
+
+**[ 유저검색 ]**
+
+- 상단 네비게이션 바 중앙에 있는 유저검색 버튼을 클릭하면, 닉네임을 통해 검색할 수 있습니다.
+- 최근검색에서는 사용자가 최근에 검색한 닉네임을 나타내줍니다.
+
+![Untitled](%E1%84%8B%E1%85%AE%E1%86%AB%E1%84%8B%E1%85%A7%E1%86%BC%20813c21def18548fdaf3a80a90d1ee2f4/Untitled%203.png)
+
+**[ 프로필 페이지 ]**
+
+[https://lh4.googleusercontent.com/cvCcQkpgk5PTlwO42wrSWKEcPH6KHv5DQjJ3176NeVblXc_CYLjmsFp5hkaA1SfQQFD8rXQrj7pE8i9p8LdU3KyyHwUXZMMo6KFfNhN5HHpBB_dmRtjuzn0rNIsI_cNmg-srbbAn](https://lh4.googleusercontent.com/cvCcQkpgk5PTlwO42wrSWKEcPH6KHv5DQjJ3176NeVblXc_CYLjmsFp5hkaA1SfQQFD8rXQrj7pE8i9p8LdU3KyyHwUXZMMo6KFfNhN5HHpBB_dmRtjuzn0rNIsI_cNmg-srbbAn)
+
+[https://lh4.googleusercontent.com/VBhCJjD5Gp8qK9RQevhtHuaD-kz9ZNSL6ZCC_IPbezjbFTEQMEJkVNT6NoCdNfeC_rcI7WIqHyYMJCzTMmMjxqk_RnfJ84llkg2Ye0XBfCqxOy8MrkIQVgIRANaGFACTKwTHVokX](https://lh4.googleusercontent.com/VBhCJjD5Gp8qK9RQevhtHuaD-kz9ZNSL6ZCC_IPbezjbFTEQMEJkVNT6NoCdNfeC_rcI7WIqHyYMJCzTMmMjxqk_RnfJ84llkg2Ye0XBfCqxOy8MrkIQVgIRANaGFACTKwTHVokX)
+
+- 프로필 페이지에서는 우측상단의 프로필 수정 버튼을 누르면 자신의 프로필사진 수정과 소개글을 비밀번호까지 변경할 수 있습니다.
+    - 수정 이 후 저장하기 버튼을 누르면 자신의 프로필이 수정됩니다.
+- 유저가 작성한 게시글, 약속을 볼수있습니다.
+- 팔로워, 팔로우에 대한 생성한 게시글,약속 역시 파악할 수 있습니다.
+
+**[ 게시글 작성 ]**
+
+- 하단 우측의 Create 버튼을 클릭하면 게시글 생성 페이지로 이동하여 게시글을 작성할 수 있습니다.
+- 게시글 작성에서는 말 그대로 게시글을 작성할 수 있으며, 이미지 업로드 버튼을 클릭하여 사진을 업로드 하고, 아래의 글 입력 박스에서 게시글 내용을 입력할 수 있습니다.
+- 사진과 글은 모두 필수로 입력해야 하며, 둘 중 하나라도 입력되지 않았다면 게시글 생성이 되지 않습니다.
+- 사진과 글을 모두 작성한 뒤 전송 버튼을 클릭하면 게시글이 작성되고, 메인 피드에서 바로 확인할 수 있습니다.
+
+![Untitled](%E1%84%8B%E1%85%AE%E1%86%AB%E1%84%8B%E1%85%A7%E1%86%BC%20813c21def18548fdaf3a80a90d1ee2f4/Untitled%204.png)
+
+**[ Home ]**
+
+- 본인이 작성한글은 피드에 올라옵니다.
+    - 해당 피드는 저를 팔로우 하고 있는 사람들에게만 보여집니다.
+
+**[ 알람 ]**
+
+- 알람 페이지에서는 좋아요, 팔로우, 팔로우들의 약속생성의 알림이 기록됩니다.
+- 제 글에 좋아요가 눌리면 Like 탭에, 팔로우 신청이 오면 Follow 탭에, 그리고 약속 초대가 오면 Promise 탭에 기록이 생깁니다.
+
+![Untitled](%E1%84%8B%E1%85%AE%E1%86%AB%E1%84%8B%E1%85%A7%E1%86%BC%20813c21def18548fdaf3a80a90d1ee2f4/Untitled%205.png)
+
+**[ 약속리스트 ]**
+
+- 약속이 생성되면은 약속들을 정리해주는 페이지입니다.
+- upcoming 약속과 waiting 약속으로 구분이 됩니다.
+    - upcoming 약속 : 자신 포함 다른 유저가 생성한 약속
+    - waiting 약속 : 참여한 약속
+
+    ![Untitled](%E1%84%8B%E1%85%AE%E1%86%AB%E1%84%8B%E1%85%A7%E1%86%BC%20813c21def18548fdaf3a80a90d1ee2f4/Untitled%206.png)
+
+**[ 약속 생성 페이지]**
+
+- 약속 생성페이지는 말 그대로 약속을 생성할 수 있습니다.
+    - 제목, 사진, 내용, 시간, 장소, 인원, 타입을 입력함으로써 약속의 정보를 구체화합니다.
+- 장소 검색시 주변검색을 먼저 검색한 후 나온 지도에서 약속장소를 클릭하여 정확한 장소를 정합니다.
+
+![Untitled](%E1%84%8B%E1%85%AE%E1%86%AB%E1%84%8B%E1%85%A7%E1%86%BC%20813c21def18548fdaf3a80a90d1ee2f4/Untitled%207.png)
+
+![Untitled](%E1%84%8B%E1%85%AE%E1%86%AB%E1%84%8B%E1%85%A7%E1%86%BC%20813c21def18548fdaf3a80a90d1ee2f4/Untitled%208.png)
+
+**[약속 생성 후 메인피드]**
+
+- 생성한 약속은 메인 피드에서도 확인이 가능하며, 약속 리스트에서도 확인이 가능합니다.
+- 메인피드에서 약속정보는 포스트잇의 형태로 기존 게시글과 구별되게 해놓았습니다.
+
+**[ 다들 어디 ]**
+
+- 지금어디는 약속리스트에서 약속을 클릭한 후 우측상단의 ‘다들 어디’를 클릭하면 참가한 분들의 위치를 지도로 볼 수 있습니다.
+- 참가자의 위치와 약속 장소까지의 거리를 계산하여 얼마나 걸리는지를 시간으로 나타내줍니다.
+- 약속 시간이 한 시간 안으로 다가왔을 때만 '다들 어디' 항목이 활성화 됩니다.
+
+![Untitled](%E1%84%8B%E1%85%AE%E1%86%AB%E1%84%8B%E1%85%A7%E1%86%BC%20813c21def18548fdaf3a80a90d1ee2f4/Untitled%209.png)
+
+**[ 약속참가 후 -  프로필- 피플포인트 ]**
+
+- 약속을 참가한 후에 프로필에 들어가면 프로필사진 하단에 피플 포인트가 있습니다.
+- 약속에 참여하게 되면 피플 포인트가 쌓이게 됩니다. 반대로 약속을 취소하거나 파기를하면 그반대로 피플포인트가 감소됩니다.
+
+[https://lh4.googleusercontent.com/cvCcQkpgk5PTlwO42wrSWKEcPH6KHv5DQjJ3176NeVblXc_CYLjmsFp5hkaA1SfQQFD8rXQrj7pE8i9p8LdU3KyyHwUXZMMo6KFfNhN5HHpBB_dmRtjuzn0rNIsI_cNmg-srbbAn](https://lh4.googleusercontent.com/cvCcQkpgk5PTlwO42wrSWKEcPH6KHv5DQjJ3176NeVblXc_CYLjmsFp5hkaA1SfQQFD8rXQrj7pE8i9p8LdU3KyyHwUXZMMo6KFfNhN5HHpBB_dmRtjuzn0rNIsI_cNmg-srbbAn)
