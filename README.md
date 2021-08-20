@@ -64,20 +64,15 @@ Pipl 은 SNS 상에서 모임/약속을 쉽게 잡아주는 소셜 플랫폼입�
 
 #### 배포 환경
 
-<p align="center">
-    <img src="./assets/deploy-main.gif" width="50%">
-</p>
-
 <br>
 
 - **URL** : http://i5b302.p.ssafy.io/
 - **배포 여부** : O
 - **접속 가능** : O
-- **HTTPS 적용** : X
+- **HTTPS 적용** : O
 - **PORT** : Vue (3000), Spring-Boot (8080)
 - **배포 방식**
-  - 현재 배포 테스트 상황입니다. (Frontend, Backend 연결 확인)
-  - 추후 CI/CD 를 구축하여 애자일 방식으로
+  - 하단에 작성했습니다
 
 <br>
 
@@ -198,11 +193,11 @@ Commit 메세지는 중요 사항을 간결하게 작성하는 것을 규칙으�
 | account/changePassword               |  PUT   | 본인의 비밀번호를 변경합니다.<br />**(Need Token)**                                                                                                                           | Done |
 |                                      |        |                                                                                                                                                                               |      |
 | article/                             |  GET   | 메인페이지(피드: 최신 글 순)를 반환합니다.                                                                                                                                    | Done |
-| article/                             |  GET   | 유저의 전체 게시글 정보(간략)를 반환합니다.<br />**(Need Token)**                                                                                                             |      |
-| article/                             |  POST  | 해당 유저의 새로운 게시글을 생성합니다.<br />**(Need Token)**                                                                                                                 |      |
-| article/{nickname}                   |  GET   | 해당 유저의 프로필 정보, 팔로잉 유무, 피드 정보를 얻어옵니다.                                                                                                                 |      |
+| article/                             |  GET   | 유저의 전체 게시글 정보(간략)를 반환합니다.<br />**(Need Token)**                                                                                                             | Done |
+| article/                             |  POST  | 해당 유저의 새로운 게시글을 생성합니다.<br />**(Need Token)**                                                                                                                 | Done |
+| article/{nickname}                   |  GET   | 해당 유저의 프로필 정보, 팔로잉 유무, 피드 정보를 얻어옵니다.                                                                                                                 | Done |
 | article/{articleid}                  |  GET   | 해당 유저의 특정 게시글의 상세정보(좋아요 수, 댓글 수 포함)를 반환합니다.                                                                                                     | Done |
-| article/{articleid}                  |  PUT   | 해당 유저의 특정 게시글의 정보를 수정합니다.<br />**(Need Token)**                                                                                                            |      |
+| article/{articleid}                  |  PUT   | 해당 유저의 특정 게시글의 정보를 수정합니다.<br />**(Need Token)**                                                                                                            | Done |
 | article/{articleid}                  | DELETE | 해당 유저의 특정 게시글을 삭제합니다.<br />**(Need Token)**                                                                                                                   | Done |
 | article/{articleid}/like             |  POST  | 해당 유저의 특정 게시글을 좋아요 요청을 보냅니다.                                                                                                                             | Done |
 | article/{articleid}/like             | DELETE | 해당 유저의 특정 게시글을 좋아요 취소 요청을 보냅니다.                                                                                                                        | Done |
@@ -214,22 +209,22 @@ Commit 메세지는 중요 사항을 간결하게 작성하는 것을 규칙으�
 | search/                              |  GET   | (검색어와 유사한 or 이미 검색했던) 유저 닉네임을 검색합니다                                                                                                                   | Done |
 | search/                              |  POST  | (최근 검색, 검색한 결과 정보를 얻기 위해) 검색한 값을 DB에 저장합니다.                                                                                                        | Done |
 |                                      |        |                                                                                                                                                                               |      |
-| alarm/                               |  GET   | 1. 다른 사용자가 내 게시글에 단 댓글 정보를 최신순 ???개로 반환합니다.<br />2. 팔로우 요청 리스트를 반환합니다.                                                               |      |
-| alarm/{nickname}                     | DELETE | Follow DB 상에서 해당 팔로우 요청을 삭제합니다.                                                                                                                               |      |
-| alarm/{nickname}                     |  POST  | Follow DB 상에서 해당 팔로우 요청을 수락(False → True) 합니다.                                                                                                                |      |
+| alarm/                               |  GET   | 1. 다른 사용자가 내 게시글에 단 댓글 정보를 최신순 ???개로 반환합니다.<br />2. 팔로우 요청 리스트를 반환합니다.                                                               | Done |
+| alarm/{nickname}                     | DELETE | Follow DB 상에서 해당 팔로우 요청을 삭제합니다.                                                                                                                               | Done |
+| alarm/{nickname}                     |  POST  | Follow DB 상에서 해당 팔로우 요청을 수락(False → True) 합니다.                                                                                                                | Done |
 |                                      |        |                                                                                                                                                                               |      |
 | scrap/                               |  GET   | 본인이 스크랩한 게시글 리스트를 반환합니다.<br />**(Need Token)**                                                                                                             | Done |
 | scrap/{articleid}                    |  POST  | 해당 게시글을 본인의 스크랩 리스트에 추가합니다.<br />**(Need Token)**                                                                                                        | Done |
 | scrap/{scrapid}                      | DELETE | 스크랩한 해당 게시글을 삭제합니다.<br />**(Need Token)**                                                                                                                      | Done |
 |                                      |        |                                                                                                                                                                               |      |
-| promise/                             |  GET   | 악속 목록을 보여줍니다.<br /><br />대기중인 약속: 본인이 생성하였지만, 약속 시간 전이면서 인원이 다 차지 않은 약속<br />다가오는 약속: 내가 참가한 약속<br />**(Need Token)** |      |
-| promise/                             |  POST  | 약속을 생성합니다.<br />**(Need Token)**                                                                                                                                      |      |
-| promise/{promiseid}                  | DELETE | 약속에 불참합니다.<br />**(Need Token)**                                                                                                                                      |      |
-| promise/{promiseid}                  |  GET   | 특정 약속 정보를 가져옵니다.<br />**(Need Token)**                                                                                                                            |      |
-| promise/people/{promiseid}           | DELETE | 약속에 불참합니다.<br />**(Need Token)**                                                                                                                                      |      |
-| promise/people/{promiseid}           |  POST  | 약속에 참가합니다.<br />**(Need Token)**                                                                                                                                      |      |
-| promise/people/{promiseid}           |  PUT   | 특정 약속 참가자의 위도 경도를 업데이트합니다.<br />**(Need Token)**                                                                                                          |      |
-| promise/people/{promiseid}           |  GET   | 약속 참가자들의 최근위치, 목적지 정보를 가져옵니다.<br />**(Need Token)**                                                                                                     |      |
+| promise/                             |  GET   | 악속 목록을 보여줍니다.<br /><br />대기중인 약속: 본인이 생성하였지만, 약속 시간 전이면서 인원이 다 차지 않은 약속<br />다가오는 약속: 내가 참가한 약속<br />**(Need Token)** | Done |
+| promise/                             |  POST  | 약속을 생성합니다.<br />**(Need Token)**                                                                                                                                      | Done |
+| promise/{promiseid}                  | DELETE | 약속에 불참합니다.<br />**(Need Token)**                                                                                                                                      | Done |
+| promise/{promiseid}                  |  GET   | 특정 약속 정보를 가져옵니다.<br />**(Need Token)**                                                                                                                            | Done |
+| promise/people/{promiseid}           | DELETE | 약속에 불참합니다.<br />**(Need Token)**                                                                                                                                      | Done |
+| promise/people/{promiseid}           |  POST  | 약속에 참가합니다.<br />**(Need Token)**                                                                                                                                      | Done |
+| promise/people/{promiseid}           |  PUT   | 특정 약속 참가자의 위도 경도를 업데이트합니다.<br />**(Need Token)**                                                                                                          | Done |
+| promise/people/{promiseid}           |  GET   | 약속 참가자들의 최근위치, 목적지 정보를 가져옵니다.<br />**(Need Token)**                                                                                                     | Done |
 
 <br>
 
