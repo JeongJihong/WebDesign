@@ -118,7 +118,9 @@ public class AlarmServiceImpl implements AlarmService {
         for (int i = 0; i < alarm.size(); i++) {
             if(alarm.get(i).getCategory().equals("Promise")) {
                 Optional<User> tempUser = userDao.findByUid(alarm.get(i).getSenderuid());
+                System.out.println("detail : " + alarm.get(i).getDetail());
                 Promise promiseUser = promiseDao.findByPromiseid(alarm.get(i).getDetail());
+                System.out.println("name" + promiseUser.getNickname() + "type : " + promiseUser.getType());
                 String type = promiseUser.getType();
                 if (type.equals("Game")) {
                     Game.add(new LikeFollowRequest(tempUser.get().getUid(), tempUser.get().getNickname(),
