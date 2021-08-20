@@ -11,11 +11,26 @@ const state = {
   // 로그인 관련 - 두호
   token: localStorage.getItem("token") || "",
   username: localStorage.getItem("username") || "",
+  firebaseToken: localStorage.getItem('firebaseToken') || '',
+  promiseDeleteMode: false,
+
+  likeList: [],
+  followList: [],
+  promiseList: [],
 
   searchGet: [],
   searchLive: {},
   scrapList: [],
   scrapMode: false,
+
+  upcomingPromises: [],
+  waitingPromises: [],
+  promiseDetail: {},
+
+  isLoginByKakao: false,
+
+  attendantsInfo: {},
+  attendantsLength: 0,
 };
 
 export default new Vuex.Store({
